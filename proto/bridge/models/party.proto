@@ -3,7 +3,6 @@ package core.bridge;
 
 import "google/protobuf/any.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
-import "google/api/annotations.proto";
 import "gogoproto/gogo.proto";
 
 option go_package = "github.com/hyle-team/bridgeless-core/v12/x/bridge/types";

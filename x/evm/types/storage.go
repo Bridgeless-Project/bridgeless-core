@@ -17,6 +17,7 @@ package types
 
 import (
 	"fmt"
+	bridgeTypes "github.com/hyle-team/bridgeless-core/v12/types"
 	"strings"
 
 	errorsmod "cosmossdk.io/errors"
@@ -32,7 +33,7 @@ func (s Storage) Validate() error {
 	seenStorage := make(map[string]bool)
 	for i, state := range s {
 		if seenStorage[state.Key] {
-			return errorsmod.Wrapf(ErrInvalidState, "duplicate state key %d: %s", i, state.Key)
+			return errorsmod.Wrapf(bridgeTypes.ErrDuplicatedValue, "duplicate state key %d: %s", i, state.Key)
 		}
 
 		if err := state.Validate(); err != nil {

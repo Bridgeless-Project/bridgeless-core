@@ -28,4 +28,5 @@ message Token {
   TokenMetadata metadata = 2 [(gogoproto.nullable) = false];
   // info is the token information on different chains
   repeated TokenInfo info = 3 [(gogoproto.nullable) = false];
+  string commission_rate = 4;
 }

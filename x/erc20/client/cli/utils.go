@@ -17,7 +17,7 @@
 package cli
 
 import (
-	"fmt"
+	errorsmod "cosmossdk.io/errors"
 	"os"
 	"path/filepath"
 
@@ -32,11 +32,11 @@ func ParseMetadata(cdc codec.JSONCodec, metadataFile string) ([]banktypes.Metada
 
 	contents, err := os.ReadFile(filepath.Clean(metadataFile))
 	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "failed to read metadata file")
 	}
 
 	if err = cdc.UnmarshalJSON(contents, &proposalMetadata); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal proposal metadata: %w", err)
+		return nil, errorsmod.Wrap(err, "failed to unmarshal proposal metadata")
 	}
 
 	return proposalMetadata.Metadata, nil

@@ -17,6 +17,7 @@
 package ibctesting
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -70,7 +71,7 @@ func NewTestChain(t *testing.T, coord *ibcgotesting.Coordinator, chainID string)
 	// generate genesis account
 	senderPrivKey, err := ethsecp256k1.GenerateKey()
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to generate"))
 	}
 
 	baseAcc := authtypes.NewBaseAccount(senderPrivKey.PubKey().Address().Bytes(), senderPrivKey.PubKey(), 0, 0)

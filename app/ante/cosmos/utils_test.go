@@ -1,6 +1,7 @@
 package cosmos_test
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	"time"
 
 	sdkmath "cosmossdk.io/math"
@@ -35,7 +36,7 @@ func newMsgExec(grantee sdk.AccAddress, msgs []sdk.Msg) *authz.MsgExec {
 func newMsgGrant(granter sdk.AccAddress, grantee sdk.AccAddress, a authz.Authorization, expiration *time.Time) *authz.MsgGrant {
 	msg, err := authz.NewMsgGrant(granter, grantee, a, expiration)
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to init new msg grant"))
 	}
 	return msg
 }

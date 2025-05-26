@@ -17,9 +17,10 @@ package keeper
 
 import (
 	"context"
+	errorsmod "cosmossdk.io/errors"
 	"encoding/json"
 	"errors"
-	"fmt"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"math/big"
 	"time"
 
@@ -120,7 +121,7 @@ func (k Keeper) ValidatorAccount(c context.Context, req *types.QueryValidatorAcc
 
 	validator, found := k.stakingKeeper.GetValidatorByConsAddr(ctx, consAddr)
 	if !found {
-		return nil, fmt.Errorf("validator not found for %s", consAddr.String())
+		return nil, errorsmod.Wrapf(sdkerrors.ErrNotFound, "validator not found for %s", consAddr.String())
 	}
 
 	accAddr := sdk.AccAddress(validator.GetOperator())
@@ -385,7 +386,7 @@ func (k Keeper) EstimateGas(c context.Context, req *types.EthCallRequest) (*type
 				return nil, errors.New(result.VmError)
 			}
 			// Otherwise, the specified gas cap is too low
-			return nil, fmt.Errorf("gas required exceeds allowance (%d)", gasCap)
+			return nil, errorsmod.Wrapf(types.ErrInvalidGasCap, "gas required exceeds allowance (%d)", gasCap)
 		}
 	}
 	return &types.EstimateGasResponse{Gas: hi}, nil

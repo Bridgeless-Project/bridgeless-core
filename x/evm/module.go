@@ -17,8 +17,8 @@ package evm
 
 import (
 	"context"
+	errorsmod "cosmossdk.io/errors"
 	"encoding/json"
-	"fmt"
 	"math/rand"
 
 	"github.com/gorilla/mux"
@@ -72,7 +72,7 @@ func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, _ client.TxEncodingConfig, bz json.RawMessage) error {
 	var genesisState types.GenesisState
 	if err := cdc.UnmarshalJSON(bz, &genesisState); err != nil {
-		return fmt.Errorf("failed to unmarshal %s genesis state: %w", types.ModuleName, err)
+		return errorsmod.Wrapf(err, "failed to unmarshal %s genesis state", types.ModuleName)
 	}
 
 	return genesisState.Validate()
@@ -85,7 +85,7 @@ func (AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router) {
 
 func (b AppModuleBasic) RegisterGRPCGatewayRoutes(c client.Context, serveMux *runtime.ServeMux) {
 	if err := types.RegisterQueryHandlerClient(context.Background(), serveMux, types.NewQueryClient(c)); err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to register grpc gateway routes"))
 	}
 }
 
@@ -144,11 +144,11 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 	m := keeper.NewMigrator(*am.keeper, am.legacySubspace)
 	err := cfg.RegisterMigration(types.ModuleName, 3, m.Migrate3to4)
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to register services"))
 	}
 
 	if err := cfg.RegisterMigration(types.ModuleName, 4, m.Migrate4to5); err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to register migrations"))
 	}
 }
 

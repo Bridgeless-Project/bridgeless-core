@@ -28,7 +28,11 @@ func (k queryServer) TransactionById(goCtx context.Context, req *types.QueryTran
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	tx, found := k.GetTransaction(ctx, req.Id)
+	tx, found := k.GetTransaction(ctx, types.TransactionId(&types.Transaction{
+		DepositChainId: req.ChainId,
+		DepositTxHash:  req.TxHash,
+		DepositTxIndex: req.TxNonce,
+	}))
 	if !found {
 		return nil, status.Error(codes.NotFound, "transaction not found")
 	}

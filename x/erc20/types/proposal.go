@@ -18,6 +18,7 @@ package types
 
 import (
 	"fmt"
+	bridgetypes "github.com/hyle-team/bridgeless-core/v12/types"
 	"strings"
 
 	errorsmod "cosmossdk.io/errors"
@@ -82,7 +83,7 @@ func (*RegisterCoinProposal) ProposalType() string {
 func (rtbp *RegisterCoinProposal) ValidateBasic() error {
 	for _, metadata := range rtbp.Metadata {
 		if err := metadata.Validate(); err != nil {
-			return err
+			return errorsmod.Wrap(err, "invalid metadata")
 		}
 
 		// Prohibit denominations that contain the evm denom
@@ -93,11 +94,11 @@ func (rtbp *RegisterCoinProposal) ValidateBasic() error {
 		}
 
 		if err := ibctransfertypes.ValidateIBCDenom(metadata.Base); err != nil {
-			return err
+			return errorsmod.Wrap(err, "invalid IBC denomination")
 		}
 
 		if err := validateIBCVoucherMetadata(metadata); err != nil {
-			return err
+			return errorsmod.Wrap(err, "invalid IBC voucher metadata")
 		}
 	}
 
@@ -117,7 +118,7 @@ func validateIBCVoucherMetadata(metadata banktypes.Metadata) error {
 
 	if len(denomSplit) != 2 || denomSplit[0] != ibctransfertypes.DenomPrefix {
 		// NOTE: should be unaccessible (covered on ValidateIBCDenom)
-		return fmt.Errorf("invalid metadata. %s denomination should be prefixed with the format 'ibc/", metadata.Base)
+		return errorsmod.Wrapf(bridgetypes.ErrInvalidDenom, "%s denomination should be prefixed with the format 'ibc/", metadata.Base)
 	}
 
 	return nil
@@ -129,7 +130,7 @@ func ValidateErc20Denom(denom string) error {
 	denomSplit := strings.SplitN(denom, "/", 2)
 
 	if len(denomSplit) != 2 || denomSplit[0] != ModuleName {
-		return fmt.Errorf("invalid denom. %s denomination should be prefixed with the format 'erc20/", denom)
+		return errorsmod.Wrapf(bridgetypes.ErrInvalidDenom, "%s denomination should be prefixed with the format 'erc20/", denom)
 	}
 
 	return evmostypes.ValidateAddress(denomSplit[1])
@@ -186,7 +187,7 @@ func (ttcp *ToggleTokenConversionProposal) ValidateBasic() error {
 	// denom
 	if err := evmostypes.ValidateAddress(ttcp.Token); err != nil {
 		if err := sdk.ValidateDenom(ttcp.Token); err != nil {
-			return err
+			return errorsmod.Wrap(err, "invalid denom")
 		}
 	}
 

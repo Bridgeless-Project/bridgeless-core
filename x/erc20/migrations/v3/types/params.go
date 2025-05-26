@@ -17,7 +17,8 @@
 package v3types
 
 import (
-	"fmt"
+	errorsmod "cosmossdk.io/errors"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/hyle-team/bridgeless-core/v12/x/erc20/types"
@@ -70,7 +71,7 @@ func DefaultParams() V3Params {
 func validateBool(i interface{}) error {
 	_, ok := i.(bool)
 	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
 	}
 
 	return nil

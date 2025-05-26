@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - 'chains/mainnet'
-      - 'chains/mainnet-beta'
+      - 'chains/testnet'
       - 'chains/devnet'
 
 env:

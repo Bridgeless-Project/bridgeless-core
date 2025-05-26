@@ -2,8 +2,8 @@ package bridge
 
 import (
 	"context"
+	errorsmod "cosmossdk.io/errors"
 	"encoding/json"
-	"fmt"
 	// this line is used by starport scaffolding # 1
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -63,7 +63,7 @@ func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncodingConfig, bz json.RawMessage) error {
 	var genState types.GenesisState
 	if err := cdc.UnmarshalJSON(bz, &genState); err != nil {
-		return fmt.Errorf("failed to unmarshal %s genesis state: %w", types.ModuleName, err)
+		return errorsmod.Wrapf(err, "failed to unmarshal %s genesis state", types.ModuleName)
 	}
 	return genState.Validate()
 }

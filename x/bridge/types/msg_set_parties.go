@@ -1,6 +1,7 @@
 package types
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -36,10 +37,10 @@ func (msg *MsgSetParties) GetSignBytes() []byte {
 func (msg *MsgSetParties) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 	if len(msg.Parties) == 0 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no parties specified")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "no parties specified")
 	}
 
 	return nil

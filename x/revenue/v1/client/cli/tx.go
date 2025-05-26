@@ -17,9 +17,8 @@
 package cli
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	"encoding/json"
-	"fmt"
-
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -70,18 +69,18 @@ func NewRegisterRevenue() *cobra.Command {
 
 			contract := args[0]
 			if err := evmostypes.ValidateNonZeroAddress(contract); err != nil {
-				return fmt.Errorf("invalid contract hex address %w", err)
+				return errorsmod.Wrap(err, "invalid contract hex address")
 			}
 
 			var nonces []uint64
 			if err = json.Unmarshal([]byte("["+args[1]+"]"), &nonces); err != nil {
-				return fmt.Errorf("invalid nonces %w", err)
+				return errorsmod.Wrap(err, "invalid nonces")
 			}
 
 			if len(args) == 3 {
 				withdrawer = args[2]
 				if _, err := sdk.AccAddressFromBech32(withdrawer); err != nil {
-					return fmt.Errorf("invalid withdrawer bech32 address %w", err)
+					return errorsmod.Wrap(err, "invalid withdrawer bech32 address")
 				}
 			}
 
@@ -128,7 +127,7 @@ func NewCancelRevenue() *cobra.Command {
 
 			contract := args[0]
 			if err := evmostypes.ValidateNonZeroAddress(contract); err != nil {
-				return fmt.Errorf("invalid contract hex address %w", err)
+				return errorsmod.Wrap(err, "invalid contract hex address")
 			}
 
 			msg := &types.MsgCancelRevenue{
@@ -166,12 +165,12 @@ func NewUpdateRevenue() *cobra.Command {
 
 			contract := args[0]
 			if err := evmostypes.ValidateNonZeroAddress(contract); err != nil {
-				return fmt.Errorf("invalid contract hex address %w", err)
+				return errorsmod.Wrap(err, "invalid contract hex address")
 			}
 
 			withdrawer := args[1]
 			if _, err := sdk.AccAddressFromBech32(withdrawer); err != nil {
-				return fmt.Errorf("invalid withdrawer bech32 address %w", err)
+				return errorsmod.Wrap(err, "invalid withdrawer bech32 address")
 			}
 
 			msg := &types.MsgUpdateRevenue{

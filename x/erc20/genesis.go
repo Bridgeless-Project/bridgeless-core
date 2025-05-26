@@ -17,8 +17,7 @@
 package erc20
 
 import (
-	"fmt"
-
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 
@@ -35,7 +34,7 @@ func InitGenesis(
 ) {
 	err := k.SetParams(ctx, data.Params)
 	if err != nil {
-		panic(fmt.Errorf("error setting params %s", err))
+		panic(errorsmod.Wrap(err, "failed to set params"))
 	}
 
 	// ensure erc20 module account is set on genesis

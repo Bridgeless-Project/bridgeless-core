@@ -20,7 +20,7 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	errortypes "github.com/cosmos/cosmos-sdk/types/errors"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	ibctransfertypes "github.com/cosmos/ibc-go/v6/modules/apps/transfer/types"
 	"github.com/ethereum/go-ethereum/common"
@@ -61,14 +61,14 @@ func (msg MsgConvertCoin) ValidateBasic() error {
 	}
 
 	if !msg.Coin.Amount.IsPositive() {
-		return errorsmod.Wrapf(errortypes.ErrInvalidCoins, "cannot mint a non-positive amount")
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "cannot mint a non-positive amount")
 	}
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return errorsmod.Wrap(err, "invalid sender address")
 	}
 	if !common.IsHexAddress(msg.Receiver) {
-		return errorsmod.Wrapf(errortypes.ErrInvalidAddress, "invalid receiver hex address %s", msg.Receiver)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid receiver hex address %s", msg.Receiver)
 	}
 	return nil
 }
@@ -103,17 +103,17 @@ func (msg MsgConvertERC20) Type() string { return TypeMsgConvertERC20 }
 // ValidateBasic runs stateless checks on the message
 func (msg MsgConvertERC20) ValidateBasic() error {
 	if !common.IsHexAddress(msg.ContractAddress) {
-		return errorsmod.Wrapf(errortypes.ErrInvalidAddress, "invalid contract hex address '%s'", msg.ContractAddress)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid contract hex address '%s'", msg.ContractAddress)
 	}
 	if !msg.Amount.IsPositive() {
-		return errorsmod.Wrapf(errortypes.ErrInvalidCoins, "cannot mint a non-positive amount")
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "cannot mint a non-positive amount")
 	}
 	_, err := sdk.AccAddressFromBech32(msg.Receiver)
 	if err != nil {
 		return errorsmod.Wrap(err, "invalid receiver address")
 	}
 	if !common.IsHexAddress(msg.Sender) {
-		return errorsmod.Wrapf(errortypes.ErrInvalidAddress, "invalid sender hex address %s", msg.Sender)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender hex address %s", msg.Sender)
 	}
 	return nil
 }

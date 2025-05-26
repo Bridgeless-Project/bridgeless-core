@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	errorsmod "cosmossdk.io/errors"
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -14,16 +15,16 @@ func (k msgServer) SubmitProposal(goCtx context.Context, msg *types.MsgSubmitPro
 
 	group, found := k.GetGroup(ctx, msg.Group)
 	if !found {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrNotFound, "group (%s) not found", msg.Group)
+		return nil, errorsmod.Wrapf(sdkerrors.ErrNotFound, "group (%s) not found", msg.Group)
 	}
 
 	msgs, err := msg.GetMsgs()
 	if err != nil {
-		return nil, sdkerrors.Wrap(err, "request msgs")
+		return nil, errorsmod.Wrap(err, "request msgs")
 	}
 
 	if !group.HasMember(msg.Creator) {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrUnauthorized, "not a member of group (%s)", msg.Group)
+		return nil, errorsmod.Wrapf(sdkerrors.ErrUnauthorized, "not a member of group (%s)", msg.Group)
 	}
 
 	// Check that if the messages require signers, they are all equal to the given account address of group.
@@ -44,7 +45,7 @@ func (k msgServer) SubmitProposal(goCtx context.Context, msg *types.MsgSubmitPro
 
 	err = proposal.SetMsgs(msgs)
 	if err != nil {
-		return nil, sdkerrors.Wrap(err, "failed to set proposal msgs")
+		return nil, errorsmod.Wrap(err, "failed to set proposal msgs")
 	}
 
 	params.ProposalSequence++

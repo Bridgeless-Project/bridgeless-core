@@ -22,15 +22,17 @@ const (
 	// ----- Param Keys -----
 	ParamModuleAdminKey   = "ModuleAdmin"
 	ParamModulePartiesKey = "Parties"
+	ParamTssThresholdKey  = "TssThreshold"
 
 	// ---- Store Prefixes ------
-	StoreTokenPrefix       = "token"
-	StoreTokenInfoPrefix   = "token-info"
-	StoreTokenPairsPrefix  = "token-pairs"
-	StoreChainPrefix       = "chain"
-	StoreTransactionPrefix = "transaction"
+	StoreTokenPrefix                  = "token"
+	StoreTokenInfoPrefix              = "token-info"
+	StoreTokenPairsPrefix             = "token-pairs"
+	StoreChainPrefix                  = "chain"
+	StoreTransactionPrefix            = "transaction"
+	StoreTransactionSubmissionsPrefix = "transaction-submissions"
 
-	//Attributes keys for bridge events
+	// Attributes keys for bridge events
 	AttributeKeyDepositTxHash     = "deposit_tx_hash"
 	AttributeKeyDepositNonce      = "deposit_nonce"
 	AttributeKeyDepositChainId    = "deposit_chain_id"
@@ -45,6 +47,7 @@ const (
 	AttributeKeyWithdrawalToken   = "withdrawal_token"
 	AttributeKeySignature         = "signature"
 	AttributeKeyIsWrapped         = "is_wrapped"
+	AttributeKeyCommissionAmount  = "commission_amount"
 )
 
 func Prefix(p string) []byte {

@@ -16,6 +16,7 @@
 package keeper
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	"math/big"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -49,7 +50,7 @@ func NewKeeper(
 ) Keeper {
 	// ensure authority account is correctly formatted
 	if err := sdk.VerifyAddressFormat(authority); err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to verify address"))
 	}
 
 	return Keeper{

@@ -18,6 +18,7 @@ package app
 
 import (
 	"context"
+	errorsmod "cosmossdk.io/errors"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -90,13 +91,13 @@ func (tpc *tpsCounter) start(ctx context.Context) error {
 			if err == nil {
 				nTxn += nSuccess
 			} else {
-				panic(err)
+				panic(errorsmod.Wrap(err, "failed to record value"))
 			}
 			nFailed, err := tpc.recordValue(ctx, latestNFailed, lastNFailed, statusFailure)
 			if err == nil {
 				nTxn += nFailed
 			} else {
-				panic(err)
+				panic(errorsmod.Wrap(err, "failed to record value"))
 			}
 
 			if nTxn != 0 {

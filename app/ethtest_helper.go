@@ -16,6 +16,7 @@
 package app
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	"encoding/json"
 	"time"
 
@@ -82,7 +83,7 @@ func EthSetupWithDB(isCheckTx bool, patchGenesis func(*Bridge, simapp.GenesisSta
 
 		stateBytes, err := json.MarshalIndent(genesisState, "", " ")
 		if err != nil {
-			panic(err)
+			panic(errorsmod.Wrap(err, "failed to marshal genesis state"))
 		}
 
 		// Initialize the chain
@@ -104,7 +105,7 @@ func NewTestGenesisState(codec codec.Codec) simapp.GenesisState {
 	privVal := mock.NewPV()
 	pubKey, err := privVal.GetPubKey()
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to get pub key"))
 	}
 	// create validator set with single validator
 	validator := tmtypes.NewValidator(pubKey, 1)
@@ -138,11 +139,11 @@ func genesisStateWithValSet(codec codec.Codec, genesisState simapp.GenesisState,
 	for _, val := range valSet.Validators {
 		pk, err := cryptocodec.FromTmPubKeyInterface(val.PubKey)
 		if err != nil {
-			panic(err)
+			panic(errorsmod.Wrap(err, "failed to get validator pubkey"))
 		}
 		pkAny, err := codectypes.NewAnyWithValue(pk)
 		if err != nil {
-			panic(err)
+			panic(errorsmod.Wrap(err, "failed to get validator pubkey"))
 		}
 		validator := stakingtypes.Validator{
 			OperatorAddress:   sdk.ValAddress(val.Address).String(),

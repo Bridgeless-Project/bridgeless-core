@@ -23,4 +23,11 @@ message Transaction {
   string signature = 12;
   bool is_wrapped = 13;
   string withdrawal_amount = 14;
+  string commission_amount = 15;
+  string tx_data = 16;
+}
+
+message TransactionSubmissions{
+  string tx_hash = 1;
+  repeated string submitters = 2;
 }

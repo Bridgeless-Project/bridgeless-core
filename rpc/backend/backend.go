@@ -17,6 +17,7 @@ package backend
 
 import (
 	"context"
+	errorsmod "cosmossdk.io/errors"
 	"math/big"
 	"time"
 
@@ -166,12 +167,12 @@ func NewBackend(
 ) *Backend {
 	chainID, err := evmostypes.ParseChainID(clientCtx.ChainID)
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to parse chain id"))
 	}
 
 	appConf, err := config.GetConfig(ctx.Viper)
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to get config"))
 	}
 
 	return &Backend{

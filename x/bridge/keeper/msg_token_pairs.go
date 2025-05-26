@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/hyle-team/bridgeless-core/v12/x/bridge/types"
@@ -11,17 +12,17 @@ func (m msgServer) AddTokenInfo(goCtx context.Context, msg *types.MsgAddTokenInf
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if msg.Creator != m.GetParams(ctx).ModuleAdmin {
-		return nil, sdkerrors.Wrap(types.ErrPermissionDenied, "msg sender is not module admin")
+		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "msg sender is not module admin")
 	}
 
 	token, found := m.GetToken(ctx, msg.Info.TokenId)
 	if !found {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrNotFound, "token not found")
+		return nil, errorsmod.Wrap(sdkerrors.ErrNotFound, "token not found")
 	}
 
 	for _, info := range token.Info {
 		if info.ChainId == msg.Info.ChainId {
-			return nil, sdkerrors.Wrap(sdkerrors.ErrConflict, "token info already exists")
+			return nil, errorsmod.Wrap(sdkerrors.ErrConflict, "token info already exists")
 		}
 	}
 
@@ -42,12 +43,12 @@ func (m msgServer) RemoveTokenInfo(goCtx context.Context, msg *types.MsgRemoveTo
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if msg.Creator != m.GetParams(ctx).ModuleAdmin {
-		return nil, sdkerrors.Wrap(types.ErrPermissionDenied, "msg sender is not module admin")
+		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "msg sender is not module admin")
 	}
 
 	token, found := m.GetToken(ctx, msg.TokenId)
 	if !found {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrNotFound, "token not found")
+		return nil, errorsmod.Wrap(sdkerrors.ErrNotFound, "token not found")
 	}
 
 	var idx = -1
@@ -58,7 +59,7 @@ func (m msgServer) RemoveTokenInfo(goCtx context.Context, msg *types.MsgRemoveTo
 		}
 	}
 	if idx == -1 {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrNotFound, "token info not found")
+		return nil, errorsmod.Wrap(sdkerrors.ErrNotFound, "token info not found")
 	}
 
 	// mapping src chain -> dest chain

@@ -17,7 +17,9 @@
 package types
 
 import (
-	"fmt"
+	errorsmod "cosmossdk.io/errors"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	bridgeTypes "github.com/hyle-team/bridgeless-core/v12/types"
 	"time"
 )
 
@@ -52,7 +54,7 @@ func DefaultParams() Params {
 func validateBool(i interface{}) error {
 	_, ok := i.(bool)
 	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
 	}
 
 	return nil
@@ -61,11 +63,11 @@ func validateBool(i interface{}) error {
 func validateDuration(i interface{}) error {
 	duration, ok := i.(time.Duration)
 	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
 	}
 
 	if duration < 0 {
-		return fmt.Errorf("packet timout duration cannot be negative")
+		return errorsmod.Wrap(bridgeTypes.ErrInvalidTimeout, "packet timout duration cannot be negative")
 	}
 
 	return nil

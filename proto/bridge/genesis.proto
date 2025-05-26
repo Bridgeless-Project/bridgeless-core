@@ -16,5 +16,6 @@ message GenesisState {
   repeated core.bridge.Chain chains = 2 [(gogoproto.nullable) = false];
   repeated core.bridge.Token tokens = 3 [(gogoproto.nullable) = false];
   repeated core.bridge.Transaction transactions = 4 [(gogoproto.nullable) = false];
+  repeated core.bridge.TransactionSubmissions transactions_submissions = 5 [(gogoproto.nullable) = false];
   // this line is used by starport scaffolding # genesis/proto/state
 }

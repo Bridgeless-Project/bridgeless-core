@@ -30,6 +30,7 @@ service Msg {
     rpc RemoveTokenInfo(MsgRemoveTokenInfo) returns (MsgRemoveTokenInfoResponse);
 
     rpc SetParties(MsgSetParties) returns (MsgSetPartiesResponse);
+    rpc SetTssThreshold(MsgSetTssThreshold) returns (MsgSetTssThresholdResponse);
 }
 
 // this line is used by starport scaffolding # proto/tx/message
@@ -107,3 +108,11 @@ message MsgSetParties {
 }
 
 message MsgSetPartiesResponse {}
+
+
+message MsgSetTssThreshold {
+  string creator = 1;
+  uint32 threshold = 2;
+}
+
+message MsgSetTssThresholdResponse {}

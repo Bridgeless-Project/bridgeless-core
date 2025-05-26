@@ -1,7 +1,7 @@
 package types
 
 import (
-	"fmt"
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
@@ -21,6 +21,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 	return paramtypes.ParamSetPairs{
 		paramtypes.NewParamSetPair([]byte(ParamModuleAdminKey), &p.ModuleAdmin, validateModuleAdmin),
 		paramtypes.NewParamSetPair([]byte(ParamModulePartiesKey), &p.Parties, validateModuleParties),
+		paramtypes.NewParamSetPair([]byte(ParamTssThresholdKey), &p.TssThreshold, validateTssThreshold),
 	}
 }
 
@@ -40,11 +41,11 @@ func DefaultParams() Params {
 // Validate validates the set of params
 func (p Params) Validate() error {
 	if err := validateModuleAdmin(p.ModuleAdmin); err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid module admin address (%s)", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid module admin address (%s)", err)
 	}
 
 	if err := validateModuleParties(p.Parties); err != nil {
-		return sdkerrors.Wrapf(ErrInvalidPartiesList, "invalid parties list (%s)", err)
+		return errorsmod.Wrapf(ErrInvalidPartiesList, "invalid parties list (%s)", err)
 	}
 
 	return nil
@@ -53,12 +54,12 @@ func (p Params) Validate() error {
 func validateModuleAdmin(i interface{}) error {
 	adm, ok := i.(string)
 	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
 	}
 
 	_, err := sdk.AccAddressFromBech32(adm)
 	if err != nil {
-		return fmt.Errorf("failed to parse address: %w", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid module admin address: %s", err.Error())
 	}
 
 	return nil
@@ -66,14 +67,23 @@ func validateModuleAdmin(i interface{}) error {
 func validateModuleParties(i interface{}) error {
 	parties, ok := i.([]*Party)
 	if !ok {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
 	}
 
 	for _, party := range parties {
 		_, err := sdk.AccAddressFromBech32(party.Address)
 		if err != nil {
-			return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid party address (%s)", err)
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid party address (%s)", err.Error())
 		}
+	}
+
+	return nil
+}
+
+func validateTssThreshold(i interface{}) error {
+	_, ok := i.(uint32)
+	if !ok {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
 	}
 
 	return nil

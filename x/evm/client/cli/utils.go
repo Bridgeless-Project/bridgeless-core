@@ -16,10 +16,10 @@
 package cli
 
 import (
-	"fmt"
+	errorsmod "cosmossdk.io/errors"
 	"strings"
 
-	"github.com/pkg/errors"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/ethereum/go-ethereum/common"
 
@@ -31,7 +31,7 @@ func accountToHex(addr string) (string, error) {
 		// Check to see if address is Cosmos bech32 formatted
 		toAddr, err := sdk.AccAddressFromBech32(addr)
 		if err != nil {
-			return "", errors.Wrap(err, "must provide a valid Bech32 address")
+			return "", errorsmod.Wrap(err, "must provide a valid Bech32 address")
 		}
 		ethAddr := common.BytesToAddress(toAddr.Bytes())
 		return ethAddr.Hex(), nil
@@ -43,7 +43,7 @@ func accountToHex(addr string) (string, error) {
 
 	valid := common.IsHexAddress(addr)
 	if !valid {
-		return "", fmt.Errorf("%s is not a valid Ethereum or Cosmos address", addr)
+		return "", errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "%s is not a valid Ethereum or Cosmos address", addr)
 	}
 
 	ethAddr := common.HexToAddress(addr)

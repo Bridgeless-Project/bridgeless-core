@@ -18,8 +18,8 @@ package erc20
 
 import (
 	"context"
+	errorsmod "cosmossdk.io/errors"
 	"encoding/json"
-	"fmt"
 	"math/rand"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -77,7 +77,7 @@ func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 func (b AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, _ client.TxEncodingConfig, bz json.RawMessage) error {
 	var genesisState types.GenesisState
 	if err := cdc.UnmarshalJSON(bz, &genesisState); err != nil {
-		return fmt.Errorf("failed to unmarshal %s genesis state: %w", types.ModuleName, err)
+		return errorsmod.Wrapf(err, "failed to unmarshal %s genesis state", types.ModuleName)
 	}
 
 	return genesisState.Validate()
@@ -89,7 +89,7 @@ func (AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router) {}
 
 func (b AppModuleBasic) RegisterGRPCGatewayRoutes(c client.Context, serveMux *runtime.ServeMux) {
 	if err := types.RegisterQueryHandlerClient(context.Background(), serveMux, types.NewQueryClient(c)); err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed register query client"))
 	}
 }
 
@@ -158,7 +158,7 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 
 	// register v2 -> v3 migration
 	if err := cfg.RegisterMigration(types.ModuleName, 2, migrator.Migrate2to3); err != nil {
-		panic(fmt.Errorf("failed to migrate %s to v2: %w", types.ModuleName, err))
+		panic(errorsmod.Wrapf(err, "failed to migrate %s to v2", types.ModuleName))
 	}
 }
 

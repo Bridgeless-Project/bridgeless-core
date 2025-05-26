@@ -17,6 +17,7 @@ package net
 
 import (
 	"context"
+	errorsmod "cosmossdk.io/errors"
 	"fmt"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -35,7 +36,7 @@ func NewPublicAPI(clientCtx client.Context) *PublicAPI {
 	// parse the chainID from a integer string
 	chainIDEpoch, err := types.ParseChainID(clientCtx.ChainID)
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to parse chain id"))
 	}
 
 	return &PublicAPI{

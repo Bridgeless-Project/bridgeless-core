@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/hyle-team/bridgeless-core/v12/x/multisig/types"
@@ -16,7 +17,7 @@ func (k msgServer) ChangeGroup(goCtx context.Context, msg *types.MsgChangeGroup)
 
 	group, found := k.GetGroup(ctx, msg.Group)
 	if !found {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrNotFound, "group (%s) not found", msg.Group)
+		return nil, errorsmod.Wrapf(sdkerrors.ErrNotFound, "group (%s) not found", msg.Group)
 	}
 
 	group.Members = msg.Members

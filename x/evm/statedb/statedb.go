@@ -16,7 +16,8 @@
 package statedb
 
 import (
-	"fmt"
+	"errors"
+	bridgeTypes "github.com/hyle-team/bridgeless-core/v12/types"
 	"math/big"
 	"sort"
 
@@ -117,7 +118,7 @@ func (s *StateDB) AddRefund(gas uint64) {
 func (s *StateDB) SubRefund(gas uint64) {
 	s.journal.append(refundChange{prev: s.refund})
 	if gas > s.refund {
-		panic(fmt.Sprintf("Refund counter below zero (gas: %d > refund: %d)", gas, s.refund))
+		panic(errorsmod.Wrapf(bridgeTypes.ErrInvalidAmount, "Refund counter below zero (gas: %d > refund: %d)", gas, s.refund))
 	}
 	s.refund -= gas
 }
@@ -444,7 +445,7 @@ func (s *StateDB) RevertToSnapshot(revid int) {
 		return s.validRevisions[i].id >= revid
 	})
 	if idx == len(s.validRevisions) || s.validRevisions[idx].id != revid {
-		panic(fmt.Errorf("revision id %v cannot be reverted", revid))
+		panic(errorsmod.Wrapf(errors.New("cant revert revision"), "revision id %v cannot be reverted", revid))
 	}
 	snapshot := s.validRevisions[idx].journalIndex
 

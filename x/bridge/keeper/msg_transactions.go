@@ -2,8 +2,8 @@ package keeper
 
 import (
 	"context"
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/hyle-team/bridgeless-core/v12/x/bridge/types"
 	"math/big"
 	"strconv"
@@ -13,13 +13,10 @@ func (m msgServer) SubmitTransactions(goCtx context.Context, msg *types.MsgSubmi
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if !m.IsParty(msg.Submitter, ctx) {
-		return nil, sdkerrors.Wrap(types.ErrPermissionDenied, "submitter isn`t an authorized party")
+		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "submitter isn`t an authorized party")
 	}
 
 	for _, tx := range msg.Transactions {
-		if _, found := m.GetTransaction(ctx, types.TransactionId(&tx)); found {
-			return nil, types.ErrTranscationAlreadySubmitted
-		}
 		chain, found := m.GetChain(ctx, tx.DepositChainId)
 		if !found {
 			return nil, types.ErrSourceChainNotSupported
@@ -31,14 +28,12 @@ func (m msgServer) SubmitTransactions(goCtx context.Context, msg *types.MsgSubmi
 		// Custom validation of transaction for certain chain type
 		err := types.ValidateChainTransaction(&tx, chain.Type)
 		if err != nil {
-			return nil, sdkerrors.Wrap(types.InvalidTransaction, err.Error())
+			return nil, errorsmod.Wrap(types.InvalidTransaction, err.Error())
 		}
 
-		m.SetTransaction(ctx, tx)
-
-		// emit submit deposit event to notify users about new submitted deposit
-		emitSubmitEvent(ctx, tx)
-
+		if err = m.SubmitTx(ctx, &tx, msg.Submitter); err != nil {
+			return nil, errorsmod.Wrap(types.InvalidTransaction, err.Error())
+		}
 	}
 
 	return &types.MsgSubmitTransactionsResponse{}, nil
@@ -59,5 +54,7 @@ func emitSubmitEvent(sdkCtx sdk.Context, transaction types.Transaction) {
 		sdk.NewAttribute(types.AttributeKeyWithdrawalTxHash, transaction.WithdrawalTxHash),
 		sdk.NewAttribute(types.AttributeKeyWithdrawalToken, transaction.WithdrawalToken),
 		sdk.NewAttribute(types.AttributeKeySignature, transaction.Signature),
-		sdk.NewAttribute(types.AttributeKeyIsWrapped, strconv.FormatBool(transaction.IsWrapped))))
+		sdk.NewAttribute(types.AttributeKeyIsWrapped, strconv.FormatBool(transaction.IsWrapped)),
+		sdk.NewAttribute(types.AttributeKeyCommissionAmount, transaction.CommissionAmount)))
+
 }

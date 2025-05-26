@@ -17,9 +17,8 @@
 package claims
 
 import (
-	"fmt"
-
 	errorsmod "cosmossdk.io/errors"
+	bridgeTypes "github.com/hyle-team/bridgeless-core/v12/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -46,7 +45,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, data types.GenesisState) {
 
 	err := k.SetParams(ctx, data.Params)
 	if err != nil {
-		panic(errorsmod.Wrapf(err, "error setting params"))
+		panic(errorsmod.Wrapf(err, "failed to set params"))
 	}
 
 	escrowedCoins := k.GetModuleAccountBalances(ctx)
@@ -62,7 +61,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, data types.GenesisState) {
 		}
 
 		if len(cr.ActionsCompleted) != len(types.Action_name)-1 {
-			panic(fmt.Errorf("invalid actions completed length for address %s", claimsRecord.Address))
+			panic(errorsmod.Wrapf(bridgeTypes.ErrInvalidActionLength, "invalid actions completed length for address %s", claimsRecord.Address))
 		}
 
 		initialClaimablePerAction := claimsRecord.InitialClaimableAmount.Quo(numActions)
@@ -80,7 +79,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, data types.GenesisState) {
 	// check for equal only for unclaimed actions
 	if !sumUnclaimed.Equal(totalEscrowed) {
 		panic(
-			fmt.Errorf(
+			errorsmod.Wrapf(bridgeTypes.ErrInvalidAmount,
 				"sum of unclaimed amount ≠ escrowed module account amount (%s ≠ %s)",
 				sumUnclaimed, totalEscrowed,
 			),

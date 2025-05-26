@@ -17,7 +17,10 @@
 package cli
 
 import (
+	errorsmod "cosmossdk.io/errors"
+
 	"fmt"
+	bridgetypes "github.com/hyle-team/bridgeless-core/v12/types"
 
 	"github.com/spf13/cobra"
 
@@ -76,7 +79,7 @@ func NewConvertCoinCmd() *cobra.Command {
 			if len(args) == 2 {
 				receiver = args[1]
 				if err := evmostypes.ValidateAddress(receiver); err != nil {
-					return fmt.Errorf("invalid receiver hex address %w", err)
+					return errorsmod.Wrap(err, "invalid receiver hex address")
 				}
 			} else {
 				receiver = common.BytesToAddress(sender).Hex()
@@ -114,12 +117,12 @@ func NewConvertERC20Cmd() *cobra.Command {
 
 			contract := args[0]
 			if err := evmostypes.ValidateAddress(contract); err != nil {
-				return fmt.Errorf("invalid ERC20 contract address %w", err)
+				return errorsmod.Wrap(err, "invalid ERC20 contract address")
 			}
 
 			amount, ok := sdk.NewIntFromString(args[1])
 			if !ok {
-				return fmt.Errorf("invalid amount %s", args[1])
+				return errorsmod.Wrapf(bridgetypes.ErrInvalidAmount, "invalid amount %s", args[1])
 			}
 
 			from := common.BytesToAddress(cliCtx.GetFromAddress().Bytes())
@@ -239,13 +242,13 @@ Where metadata.json contains (example):
 	cmd.Flags().String(cli.FlagDescription, "", "description of proposal")
 	cmd.Flags().String(cli.FlagDeposit, "1abridge", "deposit of proposal")
 	if err := cmd.MarkFlagRequired(cli.FlagTitle); err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to mark title flag as required"))
 	}
 	if err := cmd.MarkFlagRequired(cli.FlagDescription); err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to mark description flag as required"))
 	}
 	if err := cmd.MarkFlagRequired(cli.FlagDeposit); err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to mark deposit flag as required"))
 	}
 	return cmd
 }
@@ -307,13 +310,14 @@ func NewRegisterERC20ProposalCmd() *cobra.Command {
 	cmd.Flags().String(cli.FlagDescription, "", "description of proposal")
 	cmd.Flags().String(cli.FlagDeposit, "1abridge", "deposit of proposal")
 	if err := cmd.MarkFlagRequired(cli.FlagTitle); err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to mark title flag as required"))
 	}
 	if err := cmd.MarkFlagRequired(cli.FlagDescription); err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to mark description flag as required"))
 	}
+
 	if err := cmd.MarkFlagRequired(cli.FlagDeposit); err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to mark deposit flag as required"))
 	}
 	return cmd
 }
@@ -375,13 +379,13 @@ func NewToggleTokenConversionProposalCmd() *cobra.Command {
 	cmd.Flags().String(cli.FlagDescription, "", "description of proposal")
 	cmd.Flags().String(cli.FlagDeposit, "1abridge", "deposit of proposal")
 	if err := cmd.MarkFlagRequired(cli.FlagTitle); err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to mark title flag as required"))
 	}
 	if err := cmd.MarkFlagRequired(cli.FlagDescription); err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to mark description flag as required"))
 	}
 	if err := cmd.MarkFlagRequired(cli.FlagDeposit); err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to mark deposit flag as required"))
 	}
 	return cmd
 }

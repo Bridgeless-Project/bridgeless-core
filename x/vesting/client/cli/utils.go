@@ -18,6 +18,7 @@ package cli
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -55,7 +56,7 @@ func ReadScheduleFile(path string) (int64, sdkvesting.Periods, error) {
 
 	for i, p := range data.Periods {
 		if p.Length < 1 {
-			return 0, nil, fmt.Errorf("invalid period length of %d in period %d, length must be greater than 0", p.Length, i)
+			return 0, nil, errors.New(fmt.Sprintf("invalid period length of %d in period %d, length must be greater than 0", p.Length, i))
 		}
 
 		amount, err := sdk.ParseCoinsNormalized(p.Coins)

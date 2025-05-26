@@ -1,6 +1,9 @@
 package types
 
 import (
+	errorsmod "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
+	"errors"
 	"fmt"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/ethereum/go-ethereum/common"
@@ -8,7 +11,21 @@ import (
 
 func validateToken(token *Token) error {
 	if token == nil {
-		return fmt.Errorf("token is nil")
+		return errors.New("token is nil")
+	}
+
+	rate, err := sdkmath.LegacyNewDecFromStr(token.CommissionRate)
+
+	if err != nil {
+		return errorsmod.Wrap(ErrInvalidCommissionRate, err.Error())
+	}
+
+	if rate.IsNegative() {
+		return errorsmod.Wrap(ErrInvalidCommissionRate, "commission rate must be positive")
+	}
+
+	if rate.GT(sdkmath.LegacyNewDec(1)) {
+		return errorsmod.Wrap(ErrInvalidCommissionRate, "commission rate must be <= 100%")
 	}
 
 	return validateTokenMetadata(&token.Metadata)
@@ -16,17 +33,17 @@ func validateToken(token *Token) error {
 
 func validateTokenMetadata(metadata *TokenMetadata) error {
 	if metadata == nil {
-		return fmt.Errorf("metadata is nil")
+		return errors.New("metadata is nil")
 	}
 
 	if metadata.Name == "" {
-		return fmt.Errorf("name cannot be empty")
+		return errors.New("name cannot be empty")
 	}
 	if metadata.Symbol == "" {
-		return fmt.Errorf("symbol cannot be empty")
+		return errors.New("symbol cannot be empty")
 	}
 	if metadata.Uri == "" {
-		return fmt.Errorf("uri cannot be empty")
+		return errors.New("uri cannot be empty")
 	}
 
 	return nil
@@ -34,14 +51,14 @@ func validateTokenMetadata(metadata *TokenMetadata) error {
 
 func validateTokenInfo(info *TokenInfo, chainType *ChainType) error {
 	if info == nil {
-		return fmt.Errorf("info is nil")
+		return errors.New("info is nil")
 	}
 	if info.ChainId == "" {
-		return fmt.Errorf("chain id cannot be empty")
+		return errors.New("chain id cannot be empty")
 
 	}
 	if info.Address == "" {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "token address is empty")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "token address is empty")
 	}
 	if chainType == nil {
 		return nil
@@ -50,17 +67,17 @@ func validateTokenInfo(info *TokenInfo, chainType *ChainType) error {
 	switch *chainType {
 	case ChainType_EVM:
 		if !common.IsHexAddress(info.Address) {
-			return fmt.Errorf("invalid token address: %s", info.Address)
+			return errors.New(fmt.Sprintf("invalid token address: %s", info.Address))
 		}
 		if info.Decimals == 0 {
-			return fmt.Errorf("invalid token decimals: %v", info.Decimals)
+			return errors.New(fmt.Sprintf("invalid token decimals: %v", info.Decimals))
 		}
 	case ChainType_BITCOIN:
 	case ChainType_COSMOS:
 	case ChainType_ZANO:
 	case ChainType_OTHER:
 	default:
-		return fmt.Errorf("invalid chain type: %v", *chainType)
+		return errors.New(fmt.Sprintf("invalid chain type: %v", *chainType))
 	}
 
 	return nil

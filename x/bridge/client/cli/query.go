@@ -34,6 +34,8 @@ func GetQueryCmd(queryRoute string) *cobra.Command {
 		CmdQueryTokenById(),
 		CmdQueryTokenPair(),
 		CmdQueryTokenInfo(),
+		CmdQueryTransactionsSubmissions(),
+		CmdQueryTransactionSubmissionsByHash(),
 	)
 
 	// this line is used by starport scaffolding # 1

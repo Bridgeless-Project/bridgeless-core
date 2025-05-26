@@ -28,4 +28,5 @@ var (
 	ErrRevenueNoContractDeployed    = errorsmod.Register(ModuleName, 5, "no contract deployed")
 	ErrRevenueContractNotRegistered = errorsmod.Register(ModuleName, 6, "no revenue registered for contract")
 	ErrRevenueDeployerIsNotEOA      = errorsmod.Register(ModuleName, 7, "no revenue registered for contract")
+	ErrInvalidShares                = errorsmod.Register(ModuleName, 8, "invalid shares")
 )

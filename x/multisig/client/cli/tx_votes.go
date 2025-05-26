@@ -1,6 +1,8 @@
 package cli
 
 import (
+	errorsmod "cosmossdk.io/errors"
+
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -54,7 +56,7 @@ $ %s tx multisig votes vote bridge1... 1 0
 			}
 
 			if vote_option != 0 && vote_option != 1 {
-				return fmt.Errorf("vote option must be 0 or 1")
+				return errorsmod.Wrap(types.ErrInvalidVoteOption, "vote option must be 0 or 1")
 			}
 
 			opt := types.VoteOption_NO

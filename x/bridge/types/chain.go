@@ -1,7 +1,7 @@
 package types
 
 import (
-	"fmt"
+	errorsmod "cosmossdk.io/errors"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/ethereum/go-ethereum/common"
 	"math/big"
@@ -9,29 +9,29 @@ import (
 
 func validateChain(chain *Chain) error {
 	if chain == nil {
-		return fmt.Errorf("chain is nil")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "nil chain")
 	}
 	if len(chain.BridgeAddress) == 0 {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "empty bridge address")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidAddress, "empty bridge address")
 	}
 
 	switch chain.Type {
 	case ChainType_EVM:
 		if _, set := big.NewInt(0).SetString(chain.Id, 10); !set {
-			return fmt.Errorf("invalid chain id: %s", chain.Id)
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid chain id: %s", chain.Id)
 		}
 		if !common.IsHexAddress(chain.BridgeAddress) {
-			return fmt.Errorf("invalid bridge address: %s", chain.BridgeAddress)
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid bridge address: %s", chain.BridgeAddress)
 		}
 		if !common.IsHexAddress(chain.Operator) {
-			return fmt.Errorf("invalid operator address: %s", chain.Operator)
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid operator address: %s", chain.Operator)
 		}
 	case ChainType_BITCOIN:
 	case ChainType_COSMOS:
 	case ChainType_OTHER:
 	case ChainType_ZANO:
 	default:
-		return fmt.Errorf("invalid chain type: %s", chain.Type)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid chain type: %s", chain.Type)
 	}
 
 	return nil

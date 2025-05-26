@@ -2,8 +2,8 @@ package keeper
 
 import (
 	"context"
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/hyle-team/bridgeless-core/v12/x/bridge/types"
 )
 
@@ -12,7 +12,7 @@ func (m msgServer) SetParties(goCtx context.Context, msg *types.MsgSetParties) (
 	params := m.Keeper.GetParams(ctx)
 
 	if msg.Creator != params.ModuleAdmin {
-		return nil, sdkerrors.Wrap(types.ErrPermissionDenied, "msg sender is not module admin")
+		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "msg sender is not module admin")
 	}
 
 	params.Parties = msg.Parties

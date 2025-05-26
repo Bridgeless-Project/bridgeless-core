@@ -18,6 +18,7 @@ package vesting
 
 import (
 	"context"
+	errorsmod "cosmossdk.io/errors"
 	"encoding/json"
 
 	"github.com/gorilla/mux"
@@ -81,7 +82,7 @@ func (AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router) {}
 // RegisterGRPCGatewayRoutes registers the module's gRPC Gateway routes.
 func (a AppModuleBasic) RegisterGRPCGatewayRoutes(c client.Context, serveMux *runtime.ServeMux) {
 	if err := types.RegisterQueryHandlerClient(context.Background(), serveMux, types.NewQueryClient(c)); err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to register GRPC gateway"))
 	}
 }
 

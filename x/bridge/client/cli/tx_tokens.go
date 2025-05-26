@@ -1,6 +1,7 @@
 package cli
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -32,7 +33,7 @@ func TxTokensCmd() *cobra.Command {
 
 func CmdInsertToken() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "insert [from_key_or_address] [token-json] ",
+		Use:   "insert [from_key_or_address] [path-to-token-json] ",
 		Short: "Insert a new token",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -42,14 +43,14 @@ func CmdInsertToken() *cobra.Command {
 				return err
 			}
 
-			token := types.Token{}
-			if err = types.ModuleCdc.UnmarshalJSON([]byte(args[1]), &token); err != nil {
-				return err
+			token, err := parseInsertToken(args[1])
+			if err != nil {
+				return errorsmod.Wrap(err, "failed to parse token")
 			}
 
 			msg := types.NewMsgInsertToken(
 				clientCtx.GetFromAddress().String(),
-				token,
+				*token,
 			)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)

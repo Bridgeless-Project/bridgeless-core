@@ -16,6 +16,9 @@
 package types
 
 import (
+	errorsmod "cosmossdk.io/errors"
+	"errors"
+
 	// embed compiled smart contract
 	_ "embed"
 	"encoding/hex"
@@ -62,7 +65,7 @@ type jsonCompiledContract struct {
 func (s CompiledContract) MarshalJSON() ([]byte, error) {
 	abi1, err := json.Marshal(s.ABI)
 	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "failed to marshal JSON")
 	}
 	return json.Marshal(jsonCompiledContract{ABI: string(abi1), Bin: s.Bin})
 }
@@ -71,12 +74,13 @@ func (s CompiledContract) MarshalJSON() ([]byte, error) {
 func (s *CompiledContract) UnmarshalJSON(data []byte) error {
 	var x jsonCompiledContract
 	if err := json.Unmarshal(data, &x); err != nil {
-		return err
+		return errorsmod.Wrap(err, "failed to unmarshal JSON")
 	}
 
 	s.Bin = x.Bin
 	if err := json.Unmarshal([]byte(x.ABI), &s.ABI); err != nil {
-		return fmt.Errorf("failed to unmarshal ABI: %w", err)
+		return errorsmod.Wrap(err, "failed to unmarshal ABI")
+
 	}
 
 	return nil
@@ -105,28 +109,28 @@ var (
 func init() {
 	err := json.Unmarshal(erc20JSON, &ERC20Contract)
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to unmarshal erc20 JSON"))
 	}
 
 	if len(ERC20Contract.Bin) == 0 {
-		panic("load contract failed")
+		panic(errorsmod.Wrap(errors.New("failed loading contract"), "load contract failed"))
 	}
 
 	err = json.Unmarshal(testMessageCallJSON, &TestMessageCall)
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to unmarshal TestMessageCall JSON"))
 	}
 
 	if len(TestMessageCall.Bin) == 0 {
-		panic("load contract failed")
+		panic(errorsmod.Wrap(ErrCallDisabled, "TestMessageCall bin must not be empty"))
 	}
 
 	err = json.Unmarshal(simpleStorageJSON, &SimpleStorageContract)
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed unmarshall JSON"))
 	}
 
 	if len(TestMessageCall.Bin) == 0 {
-		panic("load contract failed")
+		panic(errorsmod.Wrap(ErrCallDisabled, "TestMessageCall bin must not be empty"))
 	}
 }

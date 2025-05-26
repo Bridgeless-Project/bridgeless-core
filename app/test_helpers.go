@@ -17,6 +17,7 @@
 package app
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	"encoding/json"
 	"time"
 
@@ -111,14 +112,14 @@ func Setup(
 		// Verify feeMarket genesis
 		if feemarketGenesis != nil {
 			if err := feemarketGenesis.Validate(); err != nil {
-				panic(err)
+				panic(errorsmod.Wrap(err, "failed to validate genesis"))
 			}
 			genesisState[feemarkettypes.ModuleName] = app.AppCodec().MustMarshalJSON(feemarketGenesis)
 		}
 
 		stateBytes, err := json.MarshalIndent(genesisState, "", " ")
 		if err != nil {
-			panic(err)
+			panic(errorsmod.Wrap(err, "failed to marshal genesis state"))
 		}
 
 		// Initialize the chain

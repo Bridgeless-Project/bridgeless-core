@@ -2,6 +2,7 @@ package backend
 
 import (
 	"bufio"
+	errorsmod "cosmossdk.io/errors"
 	"math/big"
 	"os"
 	"path/filepath"
@@ -54,7 +55,7 @@ func (suite *BackendTestSuite) SetupTest() {
 	clientDir := filepath.Join(baseDir, nodeDirName, "evmoscli")
 	keyRing, err := suite.generateTestKeyring(clientDir)
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to generate test keyring"))
 	}
 
 	// Create Account with set sequence

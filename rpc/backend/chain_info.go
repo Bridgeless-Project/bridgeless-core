@@ -16,6 +16,7 @@
 package backend
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	"fmt"
 	"math/big"
 	"strconv"
@@ -36,7 +37,7 @@ import (
 func (b *Backend) ChainID() (*hexutil.Big, error) {
 	eip155ChainID, err := types.ParseChainID(b.clientCtx.ChainID)
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to parse chain id"))
 	}
 	// if current block is at or past the EIP-155 replay-protection fork block, return chainID from config
 	bn, err := b.BlockNumber()

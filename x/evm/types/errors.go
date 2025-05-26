@@ -100,7 +100,7 @@ func NewExecErrorWithReason(revertReason []byte) *RevertError {
 	reason, errUnpack := abi.UnpackRevert(result)
 	err := errors.New("execution reverted")
 	if errUnpack == nil {
-		err = fmt.Errorf("execution reverted: %v", reason)
+		err = errors.New(fmt.Sprintf("execution reverted: %v", reason))
 	}
 	return &RevertError{
 		error:  err,

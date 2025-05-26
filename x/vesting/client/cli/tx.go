@@ -17,6 +17,8 @@
 package cli
 
 import (
+	errorsmod "cosmossdk.io/errors"
+	"errors"
 	"fmt"
 	"time"
 
@@ -112,7 +114,7 @@ with a start time and an array of coins strings and durations relative to the st
 			lockupFile, _ := cmd.Flags().GetString(FlagLockup)
 			vestingFile, _ := cmd.Flags().GetString(FlagVesting)
 			if lockupFile == "" && vestingFile == "" {
-				return fmt.Errorf("must specify at least one of %s or %s", FlagLockup, FlagVesting)
+				return errors.New(fmt.Sprintf("must specify at least one of %s or %s", FlagLockup, FlagVesting))
 			}
 			if lockupFile != "" {
 				lockupStart, lockupPeriods, err = ReadScheduleFile(lockupFile)
@@ -174,7 +176,7 @@ func NewMsgClawbackCmd() *cobra.Command {
 			if destString != "" {
 				dest, err = sdk.AccAddressFromBech32(destString)
 				if err != nil {
-					return fmt.Errorf("bad dest address: %w", err)
+					return errorsmod.Wrap(err, "bad dest address")
 				}
 			}
 

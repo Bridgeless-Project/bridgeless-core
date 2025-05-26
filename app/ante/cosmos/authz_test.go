@@ -1,6 +1,7 @@
 package cosmos_test
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	"fmt"
 	"testing"
 	"time"
@@ -288,7 +289,7 @@ func (suite *AnteTestSuite) TestRejectMsgsInAuthz() {
 			&distantFuture,
 		)
 		if err != nil {
-			panic(err)
+			panic(errorsmod.Wrap(err, "failed to test reject msgs"))
 		}
 		return msg
 	}

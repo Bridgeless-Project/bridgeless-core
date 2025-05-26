@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/hyle-team/bridgeless-core/v12/x/bridge/types"
@@ -11,12 +12,12 @@ func (m msgServer) InsertChain(goCtx context.Context, msg *types.MsgInsertChain)
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if msg.Creator != m.GetParams(ctx).ModuleAdmin {
-		return nil, sdkerrors.Wrap(types.ErrPermissionDenied, "msg sender is not module admin")
+		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "msg sender is not module admin")
 	}
 
 	_, found := m.GetChain(ctx, msg.Chain.Id)
 	if found {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrConflict, "chain already exists")
+		return nil, errorsmod.Wrap(sdkerrors.ErrConflict, "chain already exists")
 	}
 
 	m.SetChain(ctx, msg.Chain)
@@ -28,12 +29,12 @@ func (m msgServer) DeleteChain(goCtx context.Context, msg *types.MsgDeleteChain)
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if msg.Creator != m.GetParams(ctx).ModuleAdmin {
-		return nil, sdkerrors.Wrap(types.ErrPermissionDenied, "msg sender is not module admin")
+		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "msg sender is not module admin")
 	}
 
 	_, found := m.GetChain(ctx, msg.ChainId)
 	if !found {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrNotFound, "chain not found")
+		return nil, errorsmod.Wrap(sdkerrors.ErrNotFound, "chain not found")
 	}
 
 	m.RemoveChain(ctx, msg.ChainId)

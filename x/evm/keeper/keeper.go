@@ -92,7 +92,7 @@ func NewKeeper(
 
 	// ensure the authority account is correct
 	if err := sdk.VerifyAddressFormat(authority); err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "invalid authority"))
 	}
 
 	// NOTE: we pass in the parameter space to the CommitStateDB in order to use custom denominations for the EVM operations
@@ -119,7 +119,7 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 func (k *Keeper) WithChainID(ctx sdk.Context) {
 	chainID, err := evmostypes.ParseChainID(ctx.ChainID())
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "invalid chain ID"))
 	}
 
 	if k.eip155ChainID != nil && k.eip155ChainID.Cmp(chainID) != 0 {

@@ -1,6 +1,7 @@
 package cli
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -62,7 +63,7 @@ Where proposal.json looks like:
 
 			msg, err := types.NewMsgSubmitProposal(creator, group, msgs)
 			if err != nil {
-				return fmt.Errorf("invalid message: %w", err)
+				return errorsmod.Wrap(err, "invalid message")
 			}
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)

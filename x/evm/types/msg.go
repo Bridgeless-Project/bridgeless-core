@@ -17,7 +17,6 @@ package types
 
 import (
 	"errors"
-	"fmt"
 	"math/big"
 
 	sdkmath "cosmossdk.io/math"
@@ -27,7 +26,7 @@ import (
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	errortypes "github.com/cosmos/cosmos-sdk/types/errors"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	"github.com/cosmos/cosmos-sdk/x/auth/signing"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
@@ -130,7 +129,7 @@ func newMsgEthereumTx(
 
 	dataAny, err := PackTxData(txData)
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed pack tx data"))
 	}
 
 	msg := MsgEthereumTx{Data: dataAny}
@@ -172,7 +171,7 @@ func (msg MsgEthereumTx) ValidateBasic() error {
 
 	// Validate Size_ field, should be kept empty
 	if msg.Size_ != 0 {
-		return errorsmod.Wrapf(errortypes.ErrInvalidRequest, "tx size is deprecated")
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "tx size is deprecated")
 	}
 
 	txData, err := UnpackTxData(msg.Data)
@@ -199,7 +198,7 @@ func (msg MsgEthereumTx) ValidateBasic() error {
 	// Validate Hash field after validated txData to avoid panic
 	txHash := msg.AsTransaction().Hash().Hex()
 	if msg.Hash != txHash {
-		return errorsmod.Wrapf(errortypes.ErrInvalidRequest, "invalid tx hash %s, expected: %s", msg.Hash, txHash)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid tx hash %s, expected: %s", msg.Hash, txHash)
 	}
 
 	return nil
@@ -217,12 +216,12 @@ func (msg *MsgEthereumTx) GetMsgs() []sdk.Msg {
 func (msg *MsgEthereumTx) GetSigners() []sdk.AccAddress {
 	data, err := UnpackTxData(msg.Data)
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrapf(err, "failed to unpack tx data: %s", msg.Data))
 	}
 
 	sender, err := msg.GetSender(data.GetChainID())
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to get sender"))
 	}
 
 	signer := sdk.AccAddress(sender.Bytes())
@@ -248,7 +247,7 @@ func (msg MsgEthereumTx) GetSignBytes() []byte {
 func (msg *MsgEthereumTx) Sign(ethSigner ethtypes.Signer, keyringSigner keyring.Signer) error {
 	from := msg.GetFrom()
 	if from.Empty() {
-		return fmt.Errorf("sender address not defined for message")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidAddress, "sender address not defined for message")
 	}
 
 	tx := msg.AsTransaction()
@@ -349,17 +348,17 @@ func (msg *MsgEthereumTx) UnmarshalBinary(b []byte) error {
 func (msg *MsgEthereumTx) BuildTx(b client.TxBuilder, evmDenom string) (signing.Tx, error) {
 	builder, ok := b.(authtx.ExtensionOptionsTxBuilder)
 	if !ok {
-		return nil, errors.New("unsupported builder")
+		return nil, errorsmod.Wrap(errors.New("unsupported builder"), "failed to build tx")
 	}
 
 	option, err := codectypes.NewAnyWithValue(&ExtensionOptionsEthereumTx{})
 	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "failed to build tx")
 	}
 
 	txData, err := UnpackTxData(msg.Data)
 	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "failed to unpack tx data")
 	}
 	fees := make(sdk.Coins, 0)
 	feeAmt := sdkmath.NewIntFromBigInt(txData.Fee())
@@ -374,7 +373,7 @@ func (msg *MsgEthereumTx) BuildTx(b client.TxBuilder, evmDenom string) (signing.
 
 	err = builder.SetMsgs(msg)
 	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "failed to build tx")
 	}
 	builder.SetFeeAmount(fees)
 	builder.SetGasLimit(msg.GetGas())

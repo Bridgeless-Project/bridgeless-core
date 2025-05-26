@@ -1,6 +1,7 @@
 package evm_test
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	"encoding/json"
 	"fmt"
 	"math/big"
@@ -428,7 +429,7 @@ func StdSignBytes(cdc *codec.LegacyAmino, chainID string, accnum uint64, sequenc
 		Tip:           stdTip,
 	})
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to make bytes to sign"))
 	}
 
 	return sdk.MustSortJSON(bz)

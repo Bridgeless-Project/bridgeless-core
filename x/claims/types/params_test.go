@@ -226,7 +226,7 @@ func TestIsEVMChannel(t *testing.T) {
 func validateBool(i interface{}) error {
 	_, ok := i.(bool)
 	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
 	}
 
 	return nil
@@ -235,7 +235,7 @@ func validateBool(i interface{}) error {
 func validateStartDate(i interface{}) error {
 	_, ok := i.(time.Time)
 	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
 	}
 	return nil
 }
@@ -243,7 +243,7 @@ func validateStartDate(i interface{}) error {
 func validateDuration(i interface{}) error {
 	v, ok := i.(time.Duration)
 	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
 	}
 
 	if v <= 0 {
@@ -256,7 +256,7 @@ func validateDuration(i interface{}) error {
 func validateDenom(i interface{}) error {
 	denom, ok := i.(string)
 	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
 	}
 
 	return sdk.ValidateDenom(denom)

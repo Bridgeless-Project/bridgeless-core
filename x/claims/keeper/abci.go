@@ -44,7 +44,7 @@ func (k Keeper) EndBlocker(ctx sdk.Context) {
 	}
 
 	if err := k.EndAirdrop(ctx, params); err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to end air drop"))
 	}
 }
 
@@ -67,7 +67,7 @@ func (k Keeper) EndAirdrop(ctx sdk.Context, params types.Params) error {
 	params.EnableClaims = false
 	err := k.SetParams(ctx, params)
 	if err != nil {
-		return errorsmod.Wrap(err, "error setting params")
+		return errorsmod.Wrap(err, "failed to set params")
 	}
 
 	logger.Info("end EndAirdrop logic")

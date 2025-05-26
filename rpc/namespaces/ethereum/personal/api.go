@@ -17,6 +17,7 @@ package personal
 
 import (
 	"context"
+	errorsmod "cosmossdk.io/errors"
 	"fmt"
 	"os"
 	"time"
@@ -56,7 +57,7 @@ func NewAPI(
 
 	iterator, err := types.NewHDPathIterator(basePath, true)
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to initialize iterator"))
 	}
 
 	return &PrivateAccountAPI{

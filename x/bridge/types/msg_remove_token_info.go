@@ -1,6 +1,7 @@
 package types
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -28,7 +29,7 @@ func (msg *MsgRemoveTokenInfo) Type() string {
 func (msg *MsgRemoveTokenInfo) GetSigners() []sdk.AccAddress {
 	accAddress, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrapf(err, "failed to acc address from bech32 string, given string: %s", msg.Creator))
 	}
 
 	return []sdk.AccAddress{accAddress}
@@ -42,15 +43,15 @@ func (msg *MsgRemoveTokenInfo) GetSignBytes() []byte {
 func (msg *MsgRemoveTokenInfo) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address: %s", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address: %s", err)
 	}
 
 	if msg.TokenId == 0 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "token id cannot be zero")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidType, "token id cannot be zero")
 	}
 
 	if len(msg.ChainId) == 0 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "chain id cannot be empty")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidChainID, "chain id cannot be empty")
 	}
 
 	return nil

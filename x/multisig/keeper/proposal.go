@@ -1,13 +1,12 @@
 package keeper
 
 import (
-	"fmt"
+	errorsmod "cosmossdk.io/errors"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/hyle-team/bridgeless-core/v12/x/multisig/types"
-	"github.com/pkg/errors"
 )
 
 // SetProposal set a specific proposal in the store from its id
@@ -114,15 +113,15 @@ func (k Keeper) doExecuteMsgs(ctx sdk.Context, proposal types.Proposal) error {
 	for i, msg := range msgs {
 		handler := k.router.Handler(msg)
 		if handler == nil {
-			return sdkerrors.Wrapf(sdkerrors.ErrLogic, "no message handler found for %q", sdk.MsgTypeURL(msg))
+			return errorsmod.Wrapf(sdkerrors.ErrLogic, "no message handler found for %q", sdk.MsgTypeURL(msg))
 		}
 		r, err := handler(ctx, msg)
 		if err != nil {
-			return errors.Wrapf(err, "message %s at position %d", sdk.MsgTypeURL(msg), i)
+			return errorsmod.Wrapf(err, "message %s at position %d", sdk.MsgTypeURL(msg), i)
 		}
 		// Handler should always return non-nil sdk.Result.
 		if r == nil {
-			return fmt.Errorf("got nil sdk.Result for message %q at position %d", msg, i)
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "got nil sdk.Result for message %q at position %d", msg, i)
 		}
 		events = append(events, r.GetEvents()...)
 	}

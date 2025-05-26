@@ -1,9 +1,10 @@
 package tx
 
 import (
-	"fmt"
+	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	bridgeTypes "github.com/hyle-team/bridgeless-core/v12/types"
 )
 
 // SetMsgs takes a slice of sdk.Msg's and turn them into Any's.
@@ -25,7 +26,7 @@ func GetMsgs(anys []*types.Any, name string) ([]sdk.Msg, error) {
 	for i, any := range anys {
 		cached := any.GetCachedValue()
 		if cached == nil {
-			return nil, fmt.Errorf("any cached value is nil, %s messages must be correctly packed any values", name)
+			return nil, errorsmod.Wrapf(bridgeTypes.ErrFailedToGetMsgs, "any cached value is nil, %s messages must be correctly packed any values", name)
 		}
 		msgs[i] = cached.(sdk.Msg)
 	}

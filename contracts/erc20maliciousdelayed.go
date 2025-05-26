@@ -1,6 +1,7 @@
 package contracts
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	_ "embed" // embed compiled smart contract
 	"encoding/json"
 
@@ -28,7 +29,7 @@ func init() {
 
 	err := json.Unmarshal(ERC20MaliciousDelayedJSON, &ERC20MaliciousDelayedContract)
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to init erc20 malicious delayed"))
 	}
 
 	if len(ERC20MaliciousDelayedContract.Bin) == 0 {

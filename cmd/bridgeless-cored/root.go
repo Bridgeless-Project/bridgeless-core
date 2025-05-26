@@ -17,6 +17,7 @@
 package main
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	"errors"
 	"fmt"
 	"io"
@@ -153,7 +154,7 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 	)
 	rootCmd, err := srvflags.AddTxFlags(rootCmd)
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed add tx flags"))
 	}
 
 	// add rosetta
@@ -253,18 +254,18 @@ func (a appCreator) newApp(logger log.Logger, db dbm.DB, traceStore io.Writer, a
 
 	pruningOpts, err := sdkserver.GetPruningOptionsFromFlags(appOpts)
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to get pruning opts from flags"))
 	}
 
 	snapshotDir := filepath.Join(cast.ToString(appOpts.Get(flags.FlagHome)), "data", "snapshots")
 	snapshotDB, err := dbm.NewDB("metadata", sdkserver.GetAppDBBackend(appOpts), snapshotDir)
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to create snapshot db"))
 	}
 
 	snapshotStore, err := snapshots.NewStore(snapshotDB, snapshotDir)
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to create snapshot store"))
 	}
 
 	snapshotOptions := snapshottypes.NewSnapshotOptions(

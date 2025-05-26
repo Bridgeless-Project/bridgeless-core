@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"cosmossdk.io/errors"
+	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -35,7 +35,7 @@ func CmdSubmitParties() *cobra.Command {
 			cmd.Flags().Set(flags.FlagFrom, args[0])
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
-				return errors.Wrap(err, "cannot get client tx context")
+				return errorsmod.Wrap(err, "cannot get client tx context")
 			}
 
 			arg2 := args[1]
@@ -43,7 +43,7 @@ func CmdSubmitParties() *cobra.Command {
 			for _, party := range parties {
 				_, err = sdk.AccAddressFromBech32(party)
 				if err != nil {
-					return errors.Wrap(err, "failed to set parties")
+					return errorsmod.Wrap(err, "failed to set parties")
 				}
 			}
 

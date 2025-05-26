@@ -16,7 +16,7 @@
 package types
 
 import (
-	"fmt"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"math/big"
 
 	"github.com/gogo/protobuf/proto"
@@ -73,13 +73,13 @@ func DecodeTransactionLogs(data []byte) (TransactionLogs, error) {
 // UnwrapEthereumMsg extract MsgEthereumTx from wrapping sdk.Tx
 func UnwrapEthereumMsg(tx *sdk.Tx, ethHash common.Hash) (*MsgEthereumTx, error) {
 	if tx == nil {
-		return nil, fmt.Errorf("invalid tx: nil")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidType, "tx is nil")
 	}
 
 	for _, msg := range (*tx).GetMsgs() {
 		ethMsg, ok := msg.(*MsgEthereumTx)
 		if !ok {
-			return nil, fmt.Errorf("invalid tx type: %T", tx)
+			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid tx type: %T", tx)
 		}
 		txHash := ethMsg.AsTransaction().Hash()
 		ethMsg.Hash = txHash.Hex()
@@ -88,7 +88,7 @@ func UnwrapEthereumMsg(tx *sdk.Tx, ethHash common.Hash) (*MsgEthereumTx, error) 
 		}
 	}
 
-	return nil, fmt.Errorf("eth tx not found: %s", ethHash)
+	return nil, errorsmod.Wrapf(sdkerrors.ErrNotFound, "eth tx not found: %s", ethHash)
 }
 
 // BinSearch execute the binary search and hone in on an executable gas limit

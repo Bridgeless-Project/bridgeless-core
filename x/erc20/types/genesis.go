@@ -16,7 +16,10 @@
 
 package types
 
-import "fmt"
+import (
+	errorsmod "cosmossdk.io/errors"
+	bridgeTypes "github.com/hyle-team/bridgeless-core/v12/types"
+)
 
 // NewGenesisState creates a new genesis state.
 func NewGenesisState(params Params, pairs []TokenPair) GenesisState {
@@ -42,10 +45,10 @@ func (gs GenesisState) Validate() error {
 
 	for _, b := range gs.TokenPairs {
 		if seenErc20[b.Erc20Address] {
-			return fmt.Errorf("token ERC20 contract duplicated on genesis '%s'", b.Erc20Address)
+			return errorsmod.Wrapf(bridgeTypes.ErrDuplicatedValue, "token ERC20 contract duplicated on genesis '%s'", b.Erc20Address)
 		}
 		if seenDenom[b.Denom] {
-			return fmt.Errorf("coin denomination duplicated on genesis: '%s'", b.Denom)
+			return errorsmod.Wrapf(bridgeTypes.ErrDuplicatedValue, "coin denomination duplicated on genesis: '%s'", b.Denom)
 		}
 
 		if err := b.Validate(); err != nil {

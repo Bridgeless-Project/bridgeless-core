@@ -17,6 +17,7 @@ package client
 
 import (
 	"bufio"
+	errorsmod "cosmossdk.io/errors"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -67,7 +68,7 @@ The pass backend requires GnuPG: https://gnupg.org/
 	algoFlag.DefValue = string(hd.EthSecp256k1Type)
 	err := algoFlag.Value.Set(string(hd.EthSecp256k1Type))
 	if err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed set flag"))
 	}
 
 	addCmd.RunE = runAddCmd

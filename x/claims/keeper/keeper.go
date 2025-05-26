@@ -17,6 +17,7 @@
 package keeper
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	"fmt"
 
 	"github.com/tendermint/tendermint/libs/log"
@@ -57,7 +58,7 @@ func NewKeeper(
 ) *Keeper {
 	// ensure gov module account is set and is not nil
 	if err := sdk.VerifyAddressFormat(authority); err != nil {
-		panic(err)
+		panic(errorsmod.Wrap(err, "failed to verify address"))
 	}
 
 	return &Keeper{

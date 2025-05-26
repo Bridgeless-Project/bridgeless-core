@@ -17,7 +17,9 @@
 package types
 
 import (
+	"errors"
 	"fmt"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"time"
 
 	"github.com/hyle-team/bridgeless-core/v12/utils"
@@ -124,7 +126,7 @@ func DefaultParams() V3Params {
 func validateBool(i interface{}) error {
 	_, ok := i.(bool)
 	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
 	}
 
 	return nil
@@ -133,7 +135,7 @@ func validateBool(i interface{}) error {
 func validateStartDate(i interface{}) error {
 	_, ok := i.(time.Time)
 	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
 	}
 	return nil
 }
@@ -141,11 +143,11 @@ func validateStartDate(i interface{}) error {
 func validateDuration(i interface{}) error {
 	v, ok := i.(time.Duration)
 	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
 	}
 
 	if v <= 0 {
-		return fmt.Errorf("duration must be positive: %s", v)
+		return errors.New(fmt.Sprintf("duration must be positive: %s", v))
 	}
 
 	return nil
@@ -154,7 +156,7 @@ func validateDuration(i interface{}) error {
 func validateDenom(i interface{}) error {
 	denom, ok := i.(string)
 	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
 	}
 
 	return sdk.ValidateDenom(denom)
@@ -164,7 +166,7 @@ func validateDenom(i interface{}) error {
 func ValidateChannels(i interface{}) error {
 	channels, ok := i.([]string)
 	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
 	}
 
 	for _, channel := range channels {
@@ -180,10 +182,10 @@ func ValidateChannels(i interface{}) error {
 
 func (p V3Params) Validate() error {
 	if p.DurationOfDecay <= 0 {
-		return fmt.Errorf("duration of decay must be positive: %d", p.DurationOfDecay)
+		return errors.New(fmt.Sprintf("duration of decay must be positive: %d", p.DurationOfDecay))
 	}
 	if p.DurationUntilDecay <= 0 {
-		return fmt.Errorf("duration until decay must be positive: %d", p.DurationOfDecay)
+		return errors.New(fmt.Sprintf("duration until decay must be positive: %d", p.DurationOfDecay))
 	}
 	if err := sdk.ValidateDenom(p.ClaimsDenom); err != nil {
 		return err

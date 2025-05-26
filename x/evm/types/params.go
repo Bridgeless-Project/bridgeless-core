@@ -16,7 +16,9 @@
 package types
 
 import (
-	"fmt"
+	errorsmod "cosmossdk.io/errors"
+	"errors"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/core/vm"
@@ -107,7 +109,7 @@ func (p Params) EIPs() []int {
 func validateEVMDenom(i interface{}) error {
 	denom, ok := i.(string)
 	if !ok {
-		return fmt.Errorf("invalid parameter EVM denom type: %T", i)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter EVM denom type: %T", i)
 	}
 
 	return sdk.ValidateDenom(denom)
@@ -116,7 +118,7 @@ func validateEVMDenom(i interface{}) error {
 func validateBool(i interface{}) error {
 	_, ok := i.(bool)
 	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
 	}
 	return nil
 }
@@ -124,12 +126,12 @@ func validateBool(i interface{}) error {
 func validateEIPs(i interface{}) error {
 	eips, ok := i.([]int64)
 	if !ok {
-		return fmt.Errorf("invalid EIP slice type: %T", i)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid EIP slice type: %T", i)
 	}
 
 	for _, eip := range eips {
 		if !vm.ValidEip(int(eip)) {
-			return fmt.Errorf("EIP %d is not activateable, valid EIPS are: %s", eip, vm.ActivateableEips())
+			return errorsmod.Wrapf(errors.New("invalid EIP"), "EIP %d is not activateable, valid EIPS are: %s", eip, vm.ActivateableEips())
 		}
 	}
 
@@ -139,7 +141,7 @@ func validateEIPs(i interface{}) error {
 func validateChainConfig(i interface{}) error {
 	cfg, ok := i.(ChainConfig)
 	if !ok {
-		return fmt.Errorf("invalid chain config type: %T", i)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid chain config type: %T", i)
 	}
 
 	return cfg.Validate()

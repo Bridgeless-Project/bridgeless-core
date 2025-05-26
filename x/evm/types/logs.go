@@ -16,13 +16,11 @@
 package types
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	"errors"
-	"fmt"
-
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
-
-	evmostypes "github.com/hyle-team/bridgeless-core/v12/types"
+	bridgeTypes "github.com/hyle-team/bridgeless-core/v12/types"
 )
 
 // NewTransactionLogs creates a new NewTransactionLogs instance.
@@ -43,19 +41,19 @@ func NewTransactionLogsFromEth(hash common.Hash, ethlogs []*ethtypes.Log) Transa
 
 // Validate performs a basic validation of a GenesisAccount fields.
 func (tx TransactionLogs) Validate() error {
-	if evmostypes.IsEmptyHash(tx.Hash) {
-		return fmt.Errorf("hash cannot be the empty %s", tx.Hash)
+	if bridgeTypes.IsEmptyHash(tx.Hash) {
+		return errorsmod.Wrapf(bridgeTypes.ErrInvalidTxHash, "hash cannot be the empty %s", tx.Hash)
 	}
 
 	for i, log := range tx.Logs {
 		if log == nil {
-			return fmt.Errorf("log %d cannot be nil", i)
+			return errorsmod.Wrapf(errors.New("invalid log"), "log %d cannot be nil", i)
 		}
 		if err := log.Validate(); err != nil {
-			return fmt.Errorf("invalid log %d: %w", i, err)
+			return errorsmod.Wrapf(err, "invalid log %d", i)
 		}
 		if log.TxHash != tx.Hash {
-			return fmt.Errorf("log tx hash mismatch (%s ≠ %s)", log.TxHash, tx.Hash)
+			return errorsmod.Wrapf(bridgeTypes.ErrInvalidTxHash, "log tx hash mismatch (%s ≠ %s)", log.TxHash, tx.Hash)
 		}
 	}
 	return nil
@@ -68,17 +66,17 @@ func (tx TransactionLogs) EthLogs() []*ethtypes.Log {
 
 // Validate performs a basic validation of an ethereum Log fields.
 func (log *Log) Validate() error {
-	if err := evmostypes.ValidateAddress(log.Address); err != nil {
-		return fmt.Errorf("invalid log address %w", err)
+	if err := bridgeTypes.ValidateAddress(log.Address); err != nil {
+		return errorsmod.Wrapf(err, "invalid log address: %s", log.Address)
 	}
-	if evmostypes.IsEmptyHash(log.BlockHash) {
-		return fmt.Errorf("block hash cannot be the empty %s", log.BlockHash)
+	if bridgeTypes.IsEmptyHash(log.BlockHash) {
+		return errorsmod.Wrapf(bridgeTypes.ErrInvalidBlock, "block hash cannot be the empty %s", log.BlockHash)
 	}
 	if log.BlockNumber == 0 {
-		return errors.New("block number cannot be zero")
+		return errorsmod.Wrap(bridgeTypes.ErrInvalidBlock, "block number cannot be zero")
 	}
-	if evmostypes.IsEmptyHash(log.TxHash) {
-		return fmt.Errorf("tx hash cannot be the empty %s", log.TxHash)
+	if bridgeTypes.IsEmptyHash(log.TxHash) {
+		return errorsmod.Wrapf(bridgeTypes.ErrInvalidTxHash, "tx hash cannot be the empty %s", log.TxHash)
 	}
 	return nil
 }
