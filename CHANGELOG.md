@@ -38,8 +38,7 @@ Ref: https://keepachangelog.com/en/1.0.0/
 ## [v12.1.19] - 2025-05-20
 
 ### Improvement 
-- (deps) [#87](https://github.com/hyle-team/bridgeless-core/pull/87) Added detailed docs for `x/bridge` module
-- (deps) [#87](https://github.com/hyle-team/bridgeless-core/pull/87) Updated ibc-go import in go.mod to v6.1.9
+- (deps) [#87](https://github.com/hyle-team/bridgeless-core/pull/87) Added detailed docs for `x/bridge` module. Updated ibc-go import in go.mod to v6.1.9
 
 ### Client Breaking
 - (deps) [#87](https://github.com/hyle-team/bridgeless-core/pull/87) Simplified bridge module CLI transaction queries
@@ -67,24 +66,16 @@ Ref: https://keepachangelog.com/en/1.0.0/
 ## [v12.1.17-rc1] - 2025-05-01
 
 ### Improvement
-- (deps) [#74](https://github.com/hyle-team/bridgeless-core/pull/74) Added new param `commission_rate` to `x/bridge` token
-- (deps) [#74](https://github.com/hyle-team/bridgeless-core/pull/74) Added new param `commission_amount` to `x/bridge` transaction
-- (deps) [#74](https://github.com/hyle-team/bridgeless-core/pull/74) Added new param `tss_threshold` to `x/bridge` module params
-- (deps) [#74](https://github.com/hyle-team/bridgeless-core/pull/74) Added storage of transaction submissions to `x/bridge` module
-- (deps) [#74](https://github.com/hyle-team/bridgeless-core/pull/74) Updated `SubmitTx` logic with added `tss_threshold` param
-
+- (deps) [#74](https://github.com/hyle-team/bridgeless-core/pull/74) Added new param `commission_rate` to `x/bridge` token. Added new param `commission_amount` to `x/bridge` transaction, new param `tss_threshold` to `x/bridge` module params.  Added storage of transaction submissions to `x/bridge` module. Updated `SubmitTx` logic with added `tss_threshold` param
 
 ### Bug Fixes
 - (deps) [#74](https://github.com/hyle-team/bridgeless-core/pull/74) Fixed query params in `GetTokenById` message
-
-
 
 ## [v12.1.16-rc1] - 2025-02-03
 
 ### Improvement
 
-- (deps) [#64](https://github.com/hyle-team/bridgeless-core/pull/64) Added new param `parties` to `x/bridge` module params
-- (deps) [#64](https://github.com/hyle-team/bridgeless-core/pull/64) Improved message handling in `x/bridge` module
+- (deps) [#64](https://github.com/hyle-team/bridgeless-core/pull/64) Added new param `parties` to `x/bridge` module params. Improved message handling in `x/bridge` module - added `SubmitEvent` event on transaction submission to core.
 - (deps) [#65](https://github.com/hyle-team/bridgeless-core/pull/65) Changed Transaction structure in `x/bridge` module
 
 
