@@ -35,6 +35,50 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 # Changelog
 
+## [v12.1.19] - 2025-05-20
+
+### Improvement 
+- (deps) [#87](https://github.com/hyle-team/bridgeless-core/pull/87) Added detailed docs for `x/bridge` module
+- (deps) [#87](https://github.com/hyle-team/bridgeless-core/pull/87) Updated ibc-go import in go.mod to v6.1.9
+
+### Client Breaking
+- (deps) [#87](https://github.com/hyle-team/bridgeless-core/pull/87) Simplified bridge module CLI transaction queries
+
+### Bug Fixes
+- (deps) [#92](https://github.com/hyle-team/bridgeless-core/pull/92) Remove the ability to send feeless transactions over the EVM module.
+
+
+## [v12.1.18] 
+
+### Improvement
+- (deps) [#86](https://github.com/hyle-team/bridgeless-core/pull/86) Updated cosmos-sdk version import to v0.46.33
+- Added app.toml and genesis.json configs
+
+## [v12.1.17-rc3] 
+
+### Bug Fixes
+  - (deps) [#83](https://github.com/hyle-team/bridgeless-core/pull/83) Removed unnecessary `commission_amount` field from `bridge.TransactionSubmissions`
+
+## [v12.1.17-rc2] - 2025-05-05
+
+### Bug Fixes
+- (deps) [#81](https://github.com/hyle-team/bridgeless-core/pull/81) Removed checking for tx existence on core while submission
+
+## [v12.1.17-rc1] - 2025-05-01
+
+### Improvement
+- (deps) [#74](https://github.com/hyle-team/bridgeless-core/pull/74) Added new param `commission_rate` to `x/bridge` token
+- (deps) [#74](https://github.com/hyle-team/bridgeless-core/pull/74) Added new param `commission_amount` to `x/bridge` transaction
+- (deps) [#74](https://github.com/hyle-team/bridgeless-core/pull/74) Added new param `tss_threshold` to `x/bridge` module params
+- (deps) [#74](https://github.com/hyle-team/bridgeless-core/pull/74) Added storage of transaction submissions to `x/bridge` module
+- (deps) [#74](https://github.com/hyle-team/bridgeless-core/pull/74) Updated `SubmitTx` logic with added `tss_threshold` param
+
+
+### Bug Fixes
+- (deps) [#74](https://github.com/hyle-team/bridgeless-core/pull/74) Fixed query params in `GetTokenById` message
+
+
+
 ## [v12.1.16-rc1] - 2025-02-03
 
 ### Improvement
