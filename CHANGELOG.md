@@ -78,6 +78,77 @@ Ref: https://keepachangelog.com/en/1.0.0/
 - (deps) [#64](https://github.com/hyle-team/bridgeless-core/pull/64) Added new param `parties` to `x/bridge` module params. Improved message handling in `x/bridge` module - added `SubmitEvent` event on transaction submission to core.
 - (deps) [#65](https://github.com/hyle-team/bridgeless-core/pull/65) Changed Transaction structure in `x/bridge` module
 
+## [v12.1.15-rc1]
+
+### Improvement
+- (deps) [#57](https://github.com/hyle-team/bridgeless-core/pull/57) Added ZANO chain type support to `x/bridge` module
+- (deps) [#60](https://github.com/hyle-team/bridgeless-core/pull/60) Removed tokens burning while slashing validator
+- (deps) [#61](https://github.com/hyle-team/bridgeless-core/pull/61) Added custom ZANO chain validation
+
+## [v12.1.14-rc1]
+
+### Bug Fixes
+- (deps) [#53](https://github.com/hyle-team/bridgeless-core/pull/53) Fix `wrong fee denomination; got: ; required: abridge: insufficient fee: insufficient fee` error
+
+### Improvement
+- (deps) [#52](https://github.com/hyle-team/bridgeless-core/pull/52) Added `x/multisig` module
+
+
+## [v12.1.13-rc1]
+
+### Improvement
+- (deps) [#49](https://github.com/hyle-team/bridgeless-core/pull/49) Bump cosmos-sdk version. Fixed module path, NFT module logic, adding hook to bank module
+
+## [v12.1.12-rc1]
+
+### Improvement
+- (deps) [#47](https://github.com/hyle-team/bridgeless-core/pull/47) Upgrading bridge module with new logic for TokenE bridging contracts (adding signature, adding is_wrapped fields)
+
+## [v12.1.11-rc1]
+
+### Improvement
+- (deps) [#45](https://github.com/hyle-team/bridgeless-core/pull/45) Upgraded ibc-go version to v6.1.6
+- (deps) [#46](https://github.com/hyle-team/bridgeless-core/pull/46) Upgraded comsos-sdk version
+
+## [v12.1.10-rc1]
+
+### Improvement
+- (deps) [#43](https://github.com/hyle-team/bridgeless-core/pull/43) Added `token_info` fields to `x/bridge` Token
+
+## [v12.1.9-rc4]
+
+### Bug Fixes
+- Disabled repeated call of InitGenesis for new bridge module
+
+## [v12.1.9-rc3]
+
+### Improvement
+- Removed unused field `evm_admin` from `x/bridge` module
+
+## [v12.1.9-rc2]
+ 
+### Improvement
+- Added migrations for v12.1.9-rc2
+
+## [v12.1.9-rc1]
+
+### Improvement
+- (deps) [#40](https://github.com/hyle-team/bridgeless-core/pull/40) Added store for `x/bridge` module
+- (deps) [#42](https://github.com/hyle-team/bridgeless-core/pull/42) Added `x/bridge` module
+
+## [v12.1.8-rc2]
+### Improvement
+- Updated tutorial docs at VALIDATOR.md. Updated cosmos-sdk version to v0.46.24
+
+## [v12.1.7-dev.2]
+### Improvement
+- (deps) [#29](https://github.com/hyle-team/bridgeless-core/pull/29) Added `x/nft` module
+- (deps) [#30](https://github.com/hyle-team/bridgeless-core/pull/30) Moved `x/nft` module to cosmos-sdk
+- (deps) [#31](https://github.com/hyle-team/bridgeless-core/pull/31) Added CI
+- (deps) [#32](https://github.com/hyle-team/bridgeless-core/pull/32) Updated cosmos-sdk version to v0.46.16
+- (deps) [#33](https://github.com/hyle-team/bridgeless-core/pull/33) Updated cosmos-sdk version to v0.46.17
+- (deps) [#34](https://github.com/hyle-team/bridgeless-core/pull/34) Removed unused modules and fix staking hooks initialization
+- (deps) [#35](https://github.com/hyle-team/bridgeless-core/pull/35) Added genesis to Dockerfile
 
 ## [v12.1.6] - 2023-07-04
 
