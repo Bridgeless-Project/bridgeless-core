@@ -15,12 +15,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hyle-team/bridgeless-core.git"
+    "url": "git+https://github.com/Bridgeless-Project/bridgeless-core.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/hyle-team/bridgeless-core/issues"
+    "url": "https://github.com/Bridgeless-Project/bridgeless-core/issues"
   },
-  "homepage": "https://github.com/hyle-team/bridgeless-core#readme"
+  "homepage": "https://github.com/Bridgeless-Project/bridgeless-core#readme"
 }

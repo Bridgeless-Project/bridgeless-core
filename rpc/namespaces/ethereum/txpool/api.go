@@ -20,7 +20,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/common/hexutil"
 
-	"github.com/hyle-team/bridgeless-core/v12/rpc/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/types"
 )
 
 // PublicAPI offers and API for the transaction pool. It only operates on data that is non-confidential.

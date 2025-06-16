@@ -20,7 +20,7 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/types"
 )
 
 const (

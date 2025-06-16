@@ -17,10 +17,10 @@
 package v3
 
 import (
+	v3types "github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/migrations/v3/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	v3types "github.com/hyle-team/bridgeless-core/v12/x/erc20/migrations/v3/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/erc20/types"
 )
 
 var isTrue = []byte{0x01}

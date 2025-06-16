@@ -3,12 +3,12 @@ package evm_test
 import (
 	"math/big"
 
+	ethante "github.com/Bridgeless-Project/bridgeless-core/v12/app/ante/evm"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/testutil"
+	testutiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	ethante "github.com/hyle-team/bridgeless-core/v12/app/ante/evm"
-	"github.com/hyle-team/bridgeless-core/v12/testutil"
-	testutiltx "github.com/hyle-team/bridgeless-core/v12/testutil/tx"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
 )
 
 func (suite *AnteTestSuite) TestEthSigVerificationDecorator() {

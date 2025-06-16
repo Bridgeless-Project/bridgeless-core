@@ -23,13 +23,13 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/ethereum/go-ethereum/common"
-	evmostypes "github.com/hyle-team/bridgeless-core/v12/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/revenue/v1/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1/types"
 )
 
 var _ types.QueryServer = Keeper{}

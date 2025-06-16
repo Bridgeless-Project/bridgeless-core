@@ -6,6 +6,10 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
+	ibctesting "github.com/Bridgeless-Project/bridgeless-core/v12/ibc/testing"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
+	evm "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
@@ -14,10 +18,6 @@ import (
 	ibcgotesting "github.com/cosmos/ibc-go/v6/testing"
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/hyle-team/bridgeless-core/v12/app"
-	ibctesting "github.com/hyle-team/bridgeless-core/v12/ibc/testing"
-	"github.com/hyle-team/bridgeless-core/v12/x/erc20/types"
-	evm "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
 	"github.com/stretchr/testify/suite"
 )
 

@@ -22,8 +22,8 @@ WORKDIR /
 RUN apt-get update
 
 # Copy over binaries from the build-env
-COPY --from=build-env /go/src/github.com/hyle-team/bridgeless-core/build/bridgeless-cored /
-COPY --from=build-env /go/src/github.com/hyle-team/bridgeless-core/scripts/start-docker.sh /
+COPY --from=build-env /go/src/github.com/Bridgeless-Project/bridgeless-core/build/bridgeless-cored /
+COPY --from=build-env /go/src/github.com/Bridgeless-Project/bridgeless-core/scripts/start-docker.sh /
 
 EXPOSE 26656 26657 1317 9090 8545 8546
 

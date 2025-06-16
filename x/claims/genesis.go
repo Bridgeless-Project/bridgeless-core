@@ -18,12 +18,12 @@ package claims
 
 import (
 	errorsmod "cosmossdk.io/errors"
-	bridgeTypes "github.com/hyle-team/bridgeless-core/v12/types"
+	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/claims/keeper"
-	"github.com/hyle-team/bridgeless-core/v12/x/claims/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/types"
 )
 
 // InitGenesis initializes the claim module's state from a provided genesis

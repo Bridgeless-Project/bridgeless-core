@@ -21,9 +21,9 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/erc20/types"
 )
 
 // ParseRegisterCoinProposal reads and parses a ParseRegisterCoinProposal from a file.

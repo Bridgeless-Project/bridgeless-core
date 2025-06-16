@@ -9,9 +9,9 @@ import (
 
 	"github.com/tendermint/tendermint/libs/log"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/multisig/types"
 )
 
 type (

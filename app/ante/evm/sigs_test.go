@@ -3,9 +3,9 @@ package evm_test
 import (
 	"math/big"
 
-	utiltx "github.com/hyle-team/bridgeless-core/v12/testutil/tx"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/statedb"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	utiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/statedb"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 )
 
 func (suite *AnteTestSuite) TestSignatures() {

@@ -29,7 +29,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/encoding"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/encoding"
 )
 
 // NewDefaultGenesisState generates the default state for the application.

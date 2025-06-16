@@ -35,9 +35,9 @@ import (
 	"github.com/spf13/cobra"
 	abci "github.com/tendermint/tendermint/abci/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/revenue/v1/client/cli"
-	"github.com/hyle-team/bridgeless-core/v12/x/revenue/v1/keeper"
-	"github.com/hyle-team/bridgeless-core/v12/x/revenue/v1/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1/client/cli"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1/types"
 )
 
 // type check to ensure the interface is properly implemented

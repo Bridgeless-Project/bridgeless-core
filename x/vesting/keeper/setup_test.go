@@ -14,11 +14,11 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/stretchr/testify/suite"
 
+	evm "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	evm "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/app"
-	"github.com/hyle-team/bridgeless-core/v12/x/vesting/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/vesting/types"
 )
 
 var (

@@ -35,10 +35,10 @@ import (
 	ibcgotesting "github.com/cosmos/ibc-go/v6/testing"
 	"github.com/cosmos/ibc-go/v6/testing/mock"
 
-	"github.com/hyle-team/bridgeless-core/v12/crypto/ethsecp256k1"
-	evmostypes "github.com/hyle-team/bridgeless-core/v12/types"
-	"github.com/hyle-team/bridgeless-core/v12/utils"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/ethsecp256k1"
+	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 )
 
 // ChainIDPrefix defines the default chain ID prefix for Evmos test chains

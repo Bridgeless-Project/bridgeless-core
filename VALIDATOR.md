@@ -1,14 +1,14 @@
 # Validators’ Devnet Guide
 
 * Chain id: `bridge_2607-1`
-* Bridgeless-core binary (linux/amd64): https://github.com/hyle-team/bridgeless-core/releases/tag/v12.1.8-rc1
-* Genesis file: https://github.com/hyle-team/bridgeless-core/blob/chains/devnet/config/genesis.json
-* App.toml file: https://github.com/hyle-team/bridgeless-core/blob/chains/devnet/config/app.toml
+* Bridgeless-core binary (linux/amd64): https://github.com/Bridgeless-Project/bridgeless-core/releases/tag/v12.1.8-rc1
+* Genesis file: https://github.com/Bridgeless-Project/bridgeless-core/blob/chains/devnet/config/genesis.json
+* App.toml file: https://github.com/Bridgeless-Project/bridgeless-core/blob/chains/devnet/config/app.toml
 
 ## Local installation
 
 You can get binary file from github release and also, you can build core from sources by yourself:
-use “https://github.com/hyle-team/bridgeless-core/releases/tag/v12.1.8-rc1” release information.
+use “https://github.com/Bridgeless-Project/bridgeless-core/releases/tag/v12.1.8-rc1” release information.
 
 The binary is built under Alpine linux. If you are using Ubuntu linux, please install musl-dev
 using `sudo apt install musl-dev` command to be able to use Alpine binary on your machine
@@ -149,7 +149,7 @@ BRIDGELESS_HOME
 
 To generate folder struct execute the command:
 
-    docker run --volume $BRIDGELESS_HOME/config/validator:/config/validator  ghcr.io/hyle-team/bridgeless-core:{last_tag} init $MONIKER_NAME main--chain-id bridge_2607-1  --home=$BRIDGELESS_HOME --keyring-backend test
+    docker run --volume $BRIDGELESS_HOME/config/validator:/config/validator  ghcr.io/Bridgeless-Project/bridgeless-core:{last_tag} init $MONIKER_NAME main--chain-id bridge_2607-1  --home=$BRIDGELESS_HOME --keyring-backend test
 
 Modify docker-compose.yml:
 
@@ -158,7 +158,7 @@ Modify docker-compose.yml:
     services:
     
     validator:
-    image: ghcr.io/hyle-team/bridgeless-core:{last_tag}
+    image: ghcr.io/Bridgeless-Project/bridgeless-core:{last_tag}
     entrypoint: sh -c "bridgeless-core start --home=$BRIDGELESS_HOME --rpc.laddr tcp://0.0.0.0:26657 --p2p.external-address tcp://validator:26656"
     volumes:
       - $BRIDGELESS_HOME/config:/config/validator/config
@@ -187,7 +187,7 @@ Please, backup the following files and folders:
 
 Get the node id:
 
-    docker run ghcr.io/hyle-team/bridgeless-core:{last_tag} tendermint show-node-id --home=$BRIDGELESS_HOME
+    docker run ghcr.io/Bridgeless-Project/bridgeless-core:{last_tag} tendermint show-node-id --home=$BRIDGELESS_HOME
 
 The next step is a setting peers into config.toml. Find a `persistent_peers` field and set here at least your node
 info(`node_id@node_ip:26656`) and one or two the others.

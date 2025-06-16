@@ -25,9 +25,9 @@ import (
 	"github.com/ethereum/go-ethereum/core/vm"
 	"github.com/ethereum/go-ethereum/params"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/statedb"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
-	feemarkettypes "github.com/hyle-team/bridgeless-core/v12/x/feemarket/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/statedb"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
+	feemarkettypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 )
 
 // EVMKeeper defines the expected keeper interface used on the AnteHandler

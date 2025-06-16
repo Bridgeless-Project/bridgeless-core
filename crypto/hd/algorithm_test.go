@@ -15,9 +15,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 
-	cryptocodec "github.com/hyle-team/bridgeless-core/v12/crypto/codec"
-	enccodec "github.com/hyle-team/bridgeless-core/v12/encoding/codec"
-	evmostypes "github.com/hyle-team/bridgeless-core/v12/types"
+	cryptocodec "github.com/Bridgeless-Project/bridgeless-core/v12/crypto/codec"
+	enccodec "github.com/Bridgeless-Project/bridgeless-core/v12/encoding/codec"
+	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 )
 
 var TestCodec amino.Codec

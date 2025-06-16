@@ -23,8 +23,8 @@ import (
 	govv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	"github.com/ethereum/go-ethereum/common"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/erc20/keeper"
-	"github.com/hyle-team/bridgeless-core/v12/x/erc20/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
 )
 
 // NewErc20ProposalHandler creates a governance handler to manage new proposal types.

@@ -35,9 +35,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/recovery/client/cli"
-	"github.com/hyle-team/bridgeless-core/v12/x/recovery/keeper"
-	"github.com/hyle-team/bridgeless-core/v12/x/recovery/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/recovery/client/cli"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/recovery/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/recovery/types"
 )
 
 // type check to ensure the interface is properly implemented

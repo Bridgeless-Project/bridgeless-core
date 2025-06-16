@@ -19,15 +19,15 @@ import (
 	"github.com/stretchr/testify/suite"
 	tmrpctypes "github.com/tendermint/tendermint/rpc/core/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/app"
-	"github.com/hyle-team/bridgeless-core/v12/crypto/hd"
-	"github.com/hyle-team/bridgeless-core/v12/encoding"
-	"github.com/hyle-team/bridgeless-core/v12/indexer"
-	"github.com/hyle-team/bridgeless-core/v12/rpc/backend/mocks"
-	rpctypes "github.com/hyle-team/bridgeless-core/v12/rpc/types"
-	utiltx "github.com/hyle-team/bridgeless-core/v12/testutil/tx"
-	"github.com/hyle-team/bridgeless-core/v12/utils"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/hd"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/encoding"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/indexer"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/backend/mocks"
+	rpctypes "github.com/Bridgeless-Project/bridgeless-core/v12/rpc/types"
+	utiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 )
 
 type BackendTestSuite struct {

@@ -21,7 +21,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/revenue/v1/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1/types"
 )
 
 // GetRevenues returns all registered Revenues.

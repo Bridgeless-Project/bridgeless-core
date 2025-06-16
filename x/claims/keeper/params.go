@@ -19,7 +19,7 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/claims/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/types"
 )
 
 // GetParams returns the total set of claim parameters.

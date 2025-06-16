@@ -26,11 +26,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	errortypes "github.com/cosmos/cosmos-sdk/types/errors"
 
-	anteutils "github.com/hyle-team/bridgeless-core/v12/app/ante/utils"
-	"github.com/hyle-team/bridgeless-core/v12/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/keeper"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/statedb"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	anteutils "github.com/Bridgeless-Project/bridgeless-core/v12/app/ante/utils"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/statedb"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"

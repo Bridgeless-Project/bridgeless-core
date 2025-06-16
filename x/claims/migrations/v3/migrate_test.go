@@ -6,13 +6,13 @@ import (
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/encoding"
+	v3 "github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/migrations/v3"
+	v3types "github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/migrations/v3/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/types"
 	"github.com/cosmos/cosmos-sdk/testutil"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/hyle-team/bridgeless-core/v12/app"
-	"github.com/hyle-team/bridgeless-core/v12/encoding"
-	v3 "github.com/hyle-team/bridgeless-core/v12/x/claims/migrations/v3"
-	v3types "github.com/hyle-team/bridgeless-core/v12/x/claims/migrations/v3/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/claims/types"
 	"github.com/stretchr/testify/require"
 )
 

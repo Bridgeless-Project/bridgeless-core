@@ -9,7 +9,7 @@ BINDIR ?= $(GOPATH)/bin
 BINARY = bridgeless-cored
 DIR = bridgeless-core
 BUILDDIR ?= $(CURDIR)/build
-HTTPS_GIT := https:///github.com/hyle-team/bridgeless-core.git
+HTTPS_GIT := https:///github.com/Bridgeless-Project/bridgeless-core.git
 DOCKER := $(shell which docker)
 NAMESPACE := tharsishq
 PROJECT := bridgeless-core
@@ -285,7 +285,7 @@ update-swagger-docs: statik
 .PHONY: update-swagger-docs
 
 godocs:
-	@echo "--> Wait a few seconds and visit http://localhost:6060/pkg/github.com/hyle-team/bridgeless-core"
+	@echo "--> Wait a few seconds and visit http://localhost:6060/pkg/github.com/Bridgeless-Project/bridgeless-core"
 	godoc -http=:6060
 
 ###############################################################################
@@ -532,7 +532,7 @@ localnet-show-logstream:
 ###                                Releasing                                ###
 ###############################################################################
 
-PACKAGE_NAME:=github.com/hyle-team/bridgeless-core
+PACKAGE_NAME:=github.com/Bridgeless-Project/bridgeless-core
 GOLANG_CROSS_VERSION  = v1.20
 GOPATH ?= '$(HOME)/go'
 release-dry-run:

@@ -19,10 +19,10 @@ import (
 	"math/big"
 
 	errorsmod "cosmossdk.io/errors"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
+	vestingtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/vesting/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	errortypes "github.com/cosmos/cosmos-sdk/types/errors"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
-	vestingtypes "github.com/hyle-team/bridgeless-core/v12/x/vesting/types"
 )
 
 // EthVestingTransactionDecorator validates if clawback vesting accounts are

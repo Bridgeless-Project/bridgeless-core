@@ -25,8 +25,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
-	feemarkettypes "github.com/hyle-team/bridgeless-core/v12/x/feemarket/types"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
+	feemarkettypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 )
 
 // QueryClient defines a gRPC Client used for:

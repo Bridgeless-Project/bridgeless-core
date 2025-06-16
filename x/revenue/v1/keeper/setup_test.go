@@ -12,11 +12,11 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/app"
-	utiltx "github.com/hyle-team/bridgeless-core/v12/testutil/tx"
-	evm "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
-	feemarkettypes "github.com/hyle-team/bridgeless-core/v12/x/feemarket/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/revenue/v1/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
+	utiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
+	evm "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
+	feemarkettypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1/types"
 
 	"github.com/stretchr/testify/suite"
 )

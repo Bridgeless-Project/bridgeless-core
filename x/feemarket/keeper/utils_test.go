@@ -5,7 +5,7 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/hyle-team/bridgeless-core/v12/utils"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"
 
 	sdkmath "cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -21,14 +21,14 @@ import (
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 
-	"github.com/hyle-team/bridgeless-core/v12/app"
-	"github.com/hyle-team/bridgeless-core/v12/crypto/ethsecp256k1"
-	"github.com/hyle-team/bridgeless-core/v12/encoding"
-	"github.com/hyle-team/bridgeless-core/v12/testutil"
-	utiltx "github.com/hyle-team/bridgeless-core/v12/testutil/tx"
-	evmostypes "github.com/hyle-team/bridgeless-core/v12/types"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/feemarket/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/ethsecp256k1"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/encoding"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/testutil"
+	utiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
+	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 
 	"github.com/stretchr/testify/require"
 

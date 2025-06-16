@@ -29,9 +29,9 @@ import (
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/core/vm"
 
-	claimstypes "github.com/hyle-team/bridgeless-core/v12/x/claims/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/statedb"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	claimstypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/statedb"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 )
 
 // AccountKeeper defines the expected interface needed to retrieve account info.

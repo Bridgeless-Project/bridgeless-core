@@ -32,9 +32,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/claims/client/cli"
-	"github.com/hyle-team/bridgeless-core/v12/x/claims/keeper"
-	"github.com/hyle-team/bridgeless-core/v12/x/claims/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/client/cli"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/types"
 )
 
 var (

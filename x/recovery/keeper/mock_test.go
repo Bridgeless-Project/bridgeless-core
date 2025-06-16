@@ -12,7 +12,7 @@ import (
 
 	transfertypes "github.com/cosmos/ibc-go/v6/modules/apps/transfer/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/recovery/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/recovery/types"
 )
 
 var _ types.TransferKeeper = &MockTransferKeeper{}

@@ -11,9 +11,9 @@ import (
 	authante "github.com/cosmos/cosmos-sdk/x/auth/ante"
 	"github.com/ethereum/go-ethereum/common"
 
+	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	evmostypes "github.com/hyle-team/bridgeless-core/v12/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/types"
 )
 
 func SetupContract(b *testing.B) (*KeeperTestSuite, common.Address) {

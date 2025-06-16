@@ -36,13 +36,13 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/types"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/types"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 
-	evmoskr "github.com/hyle-team/bridgeless-core/v12/crypto/keyring"
+	evmoskr "github.com/Bridgeless-Project/bridgeless-core/v12/crypto/keyring"
 
-	vestingcli "github.com/hyle-team/bridgeless-core/v12/x/vesting/client/cli"
-	vestingtypes "github.com/hyle-team/bridgeless-core/v12/x/vesting/types"
+	vestingcli "github.com/Bridgeless-Project/bridgeless-core/v12/x/vesting/client/cli"
+	vestingtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/vesting/types"
 )
 
 const (

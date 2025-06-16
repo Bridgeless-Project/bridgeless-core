@@ -18,9 +18,9 @@ package types
 
 import (
 	errorsmod "cosmossdk.io/errors"
+	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	bridgeTypes "github.com/hyle-team/bridgeless-core/v12/types"
 	"regexp"
 	"strings"
 )

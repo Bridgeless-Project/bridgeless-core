@@ -16,8 +16,8 @@
 package miner
 
 import (
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/backend"
 	"github.com/cosmos/cosmos-sdk/server"
-	"github.com/hyle-team/bridgeless-core/v12/rpc/backend"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"

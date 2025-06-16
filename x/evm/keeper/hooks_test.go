@@ -9,9 +9,9 @@ import (
 	"github.com/ethereum/go-ethereum/core"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/keeper"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/statedb"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/statedb"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 )
 
 // LogRecordHook records all the logs

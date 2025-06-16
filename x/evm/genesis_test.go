@@ -5,12 +5,12 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/ethsecp256k1"
+	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/statedb"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/hyle-team/bridgeless-core/v12/crypto/ethsecp256k1"
-	evmostypes "github.com/hyle-team/bridgeless-core/v12/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/statedb"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/types"
 )
 
 func (suite *EvmTestSuite) TestInitGenesis() {

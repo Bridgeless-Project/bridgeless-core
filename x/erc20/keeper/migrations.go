@@ -17,10 +17,10 @@
 package keeper
 
 import (
+	v3 "github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/migrations/v3"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	v3 "github.com/hyle-team/bridgeless-core/v12/x/erc20/migrations/v3"
-	"github.com/hyle-team/bridgeless-core/v12/x/erc20/types"
 )
 
 var _ module.MigrationHandler = Migrator{}.Migrate2to3
