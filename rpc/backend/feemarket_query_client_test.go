@@ -1,10 +1,10 @@
 package backend
 
 import (
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/backend/mocks"
+	rpc "github.com/Bridgeless-Project/bridgeless-core/v12/rpc/types"
+	feemarkettypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/hyle-team/bridgeless-core/v12/rpc/backend/mocks"
-	rpc "github.com/hyle-team/bridgeless-core/v12/rpc/types"
-	feemarkettypes "github.com/hyle-team/bridgeless-core/v12/x/feemarket/types"
 )
 
 var _ feemarkettypes.QueryClient = &mocks.FeeMarketQueryClient{}

@@ -3,9 +3,9 @@ package keeper
 import (
 	"context"
 	errorsmod "cosmossdk.io/errors"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/hyle-team/bridgeless-core/v12/x/multisig/types"
 )
 
 func (k msgServer) ChangeGroup(goCtx context.Context, msg *types.MsgChangeGroup) (*types.MsgChangeGroupResponse, error) {

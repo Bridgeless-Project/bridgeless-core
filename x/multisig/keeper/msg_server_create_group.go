@@ -3,10 +3,10 @@ package keeper
 import (
 	"context"
 	"encoding/binary"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/address"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/multisig/types"
 )
 
 func (k msgServer) CreateGroup(goCtx context.Context, msg *types.MsgCreateGroup) (*types.MsgCreateGroupResponse, error) {

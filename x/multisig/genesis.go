@@ -1,9 +1,9 @@
 package multisig
 
 import (
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/multisig/keeper"
-	"github.com/hyle-team/bridgeless-core/v12/x/multisig/types"
 )
 
 // InitGenesis initializes the capability module's state from a provided genesis

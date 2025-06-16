@@ -22,7 +22,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/x/auth/tx"
 
-	enccodec "github.com/hyle-team/bridgeless-core/v12/encoding/codec"
+	enccodec "github.com/Bridgeless-Project/bridgeless-core/v12/encoding/codec"
 )
 
 // MakeConfig creates an EncodingConfig for testing

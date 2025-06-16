@@ -18,7 +18,7 @@ package types
 
 import (
 	errorsmod "cosmossdk.io/errors"
-	bridgeTypes "github.com/hyle-team/bridgeless-core/v12/types"
+	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 )
 
 // NewGenesisState creates a new genesis state.

@@ -4,10 +4,10 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	"fmt"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/hyle-team/bridgeless-core/v12/x/multisig/keeper"
-	"github.com/hyle-team/bridgeless-core/v12/x/multisig/types"
 )
 
 // NewHandler ...

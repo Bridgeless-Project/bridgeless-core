@@ -27,9 +27,9 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	abci "github.com/tendermint/tendermint/abci/types"
 
-	evmostypes "github.com/hyle-team/bridgeless-core/v12/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/keeper"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 )
 
 // InitGenesis initializes genesis state based on exported genesis
@@ -57,7 +57,9 @@ func InitGenesis(
 		// check that the EVM balance the matches the account balance
 		acc := accountKeeper.GetAccount(ctx, accAddress)
 		if acc == nil {
-			panic(errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "account not found for address %s", account.Address))
+			// if address is not found in the account store, just skip
+			k.Logger(ctx).Info(errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "account not found for address %s", account.Address).Error())
+			continue
 		}
 
 		ethAcct, ok := acc.(evmostypes.EthAccountI)

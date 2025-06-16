@@ -1,7 +1,7 @@
 syntax = "proto3";
 package core.multisig;
 
-option go_package = "github.com/hyle-team/bridgeless-core/v12/x/multisig/types";
+option go_package = "github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types";
 
 message Group {
   string account = 1;

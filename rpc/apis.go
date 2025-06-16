@@ -23,16 +23,16 @@ import (
 
 	"github.com/ethereum/go-ethereum/rpc"
 
-	"github.com/hyle-team/bridgeless-core/v12/rpc/backend"
-	"github.com/hyle-team/bridgeless-core/v12/rpc/namespaces/ethereum/debug"
-	"github.com/hyle-team/bridgeless-core/v12/rpc/namespaces/ethereum/eth"
-	"github.com/hyle-team/bridgeless-core/v12/rpc/namespaces/ethereum/eth/filters"
-	"github.com/hyle-team/bridgeless-core/v12/rpc/namespaces/ethereum/miner"
-	"github.com/hyle-team/bridgeless-core/v12/rpc/namespaces/ethereum/net"
-	"github.com/hyle-team/bridgeless-core/v12/rpc/namespaces/ethereum/personal"
-	"github.com/hyle-team/bridgeless-core/v12/rpc/namespaces/ethereum/txpool"
-	"github.com/hyle-team/bridgeless-core/v12/rpc/namespaces/ethereum/web3"
-	"github.com/hyle-team/bridgeless-core/v12/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/backend"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/namespaces/ethereum/debug"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/namespaces/ethereum/eth"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/namespaces/ethereum/eth/filters"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/namespaces/ethereum/miner"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/namespaces/ethereum/net"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/namespaces/ethereum/personal"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/namespaces/ethereum/txpool"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/namespaces/ethereum/web3"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/types"
 
 	rpcclient "github.com/tendermint/tendermint/rpc/jsonrpc/client"
 )

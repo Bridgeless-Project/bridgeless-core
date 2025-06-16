@@ -25,9 +25,9 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/tendermint/tendermint/libs/cli"
 
+	clientkeys "github.com/Bridgeless-Project/bridgeless-core/v12/client/keys"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/hd"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
-	clientkeys "github.com/hyle-team/bridgeless-core/v12/client/keys"
-	"github.com/hyle-team/bridgeless-core/v12/crypto/hd"
 )
 
 // KeyCommands registers a sub-tree of commands to interact with

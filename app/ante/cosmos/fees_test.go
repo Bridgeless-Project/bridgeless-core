@@ -5,13 +5,13 @@ import (
 	"time"
 
 	"cosmossdk.io/math"
+	cosmosante "github.com/Bridgeless-Project/bridgeless-core/v12/app/ante/cosmos"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/testutil"
+	testutiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"
 	sdktestutil "github.com/cosmos/cosmos-sdk/testutil/testdata"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/feegrant"
-	cosmosante "github.com/hyle-team/bridgeless-core/v12/app/ante/cosmos"
-	"github.com/hyle-team/bridgeless-core/v12/testutil"
-	testutiltx "github.com/hyle-team/bridgeless-core/v12/testutil/tx"
-	"github.com/hyle-team/bridgeless-core/v12/utils"
 )
 
 func (suite *AnteTestSuite) TestDeductFeeDecorator() {

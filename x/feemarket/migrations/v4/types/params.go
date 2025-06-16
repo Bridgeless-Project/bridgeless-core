@@ -17,9 +17,9 @@ package types
 
 import (
 	errorsmod "cosmossdk.io/errors"
+	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	bridgeTypes "github.com/hyle-team/bridgeless-core/v12/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/feemarket/types"
 
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"

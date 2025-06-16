@@ -38,82 +38,82 @@ Ref: https://keepachangelog.com/en/1.0.0/
 ## [v12.1.19] - 2025-05-20
 
 ### Improvement 
-- (deps) [#87](https://github.com/hyle-team/bridgeless-core/pull/87) Added detailed docs for `x/bridge` module. Updated ibc-go import in go.mod to v6.1.9
+- (deps) [#87](https://github.com/Bridgeless-Project/bridgeless-core/pull/87) Added detailed docs for `x/bridge` module. Updated ibc-go import in go.mod to v6.1.9
 
 ### Client Breaking
-- (deps) [#87](https://github.com/hyle-team/bridgeless-core/pull/87) Simplified bridge module CLI transaction queries
+- (deps) [#87](https://github.com/Bridgeless-Project/bridgeless-core/pull/87) Simplified bridge module CLI transaction queries
 
 ### Bug Fixes
-- (deps) [#92](https://github.com/hyle-team/bridgeless-core/pull/92) Remove the ability to send feeless transactions over the EVM module.
+- (deps) [#92](https://github.com/Bridgeless-Project/bridgeless-core/pull/92) Remove the ability to send feeless transactions over the EVM module.
 
 
 ## [v12.1.18] 
 
 ### Improvement
-- (deps) [#86](https://github.com/hyle-team/bridgeless-core/pull/86) Updated cosmos-sdk version import to v0.46.33
+- (deps) [#86](https://github.com/Bridgeless-Project/bridgeless-core/pull/86) Updated cosmos-sdk version import to v0.46.33
 - Added app.toml and genesis.json configs
 
 ## [v12.1.17-rc3] 
 
 ### Bug Fixes
-  - (deps) [#83](https://github.com/hyle-team/bridgeless-core/pull/83) Removed unnecessary `commission_amount` field from `bridge.TransactionSubmissions`
+  - (deps) [#83](https://github.com/Bridgeless-Project/bridgeless-core/pull/83) Removed unnecessary `commission_amount` field from `bridge.TransactionSubmissions`
 
 ## [v12.1.17-rc2] - 2025-05-05
 
 ### Bug Fixes
-- (deps) [#81](https://github.com/hyle-team/bridgeless-core/pull/81) Removed checking for tx existence on core while submission
+- (deps) [#81](https://github.com/Bridgeless-Project/bridgeless-core/pull/81) Removed checking for tx existence on core while submission
 
 ## [v12.1.17-rc1] - 2025-05-01
 
 ### Improvement
-- (deps) [#74](https://github.com/hyle-team/bridgeless-core/pull/74) Added new param `commission_rate` to `x/bridge` token. Added new param `commission_amount` to `x/bridge` transaction, new param `tss_threshold` to `x/bridge` module params.  Added storage of transaction submissions to `x/bridge` module. Updated `SubmitTx` logic with added `tss_threshold` param
+- (deps) [#74](https://github.com/Bridgeless-Project/bridgeless-core/pull/74) Added new param `commission_rate` to `x/bridge` token. Added new param `commission_amount` to `x/bridge` transaction, new param `tss_threshold` to `x/bridge` module params.  Added storage of transaction submissions to `x/bridge` module. Updated `SubmitTx` logic with added `tss_threshold` param
 
 ### Bug Fixes
-- (deps) [#74](https://github.com/hyle-team/bridgeless-core/pull/74) Fixed query params in `GetTokenById` message
+- (deps) [#74](https://github.com/Bridgeless-Project/bridgeless-core/pull/74) Fixed query params in `GetTokenById` message
 
 ## [v12.1.16-rc1] - 2025-02-03
 
 ### Improvement
 
-- (deps) [#64](https://github.com/hyle-team/bridgeless-core/pull/64) Added new param `parties` to `x/bridge` module params. Improved message handling in `x/bridge` module - added `SubmitEvent` event on transaction submission to core.
-- (deps) [#65](https://github.com/hyle-team/bridgeless-core/pull/65) Changed Transaction structure in `x/bridge` module
+- (deps) [#64](https://github.com/Bridgeless-Project/bridgeless-core/pull/64) Added new param `parties` to `x/bridge` module params. Improved message handling in `x/bridge` module - added `SubmitEvent` event on transaction submission to core.
+- (deps) [#65](https://github.com/Bridgeless-Project/bridgeless-core/pull/65) Changed Transaction structure in `x/bridge` module
 
 ## [v12.1.15-rc1]
 
 ### Improvement
-- (deps) [#57](https://github.com/hyle-team/bridgeless-core/pull/57) Added ZANO chain type support to `x/bridge` module
-- (deps) [#60](https://github.com/hyle-team/bridgeless-core/pull/60) Removed tokens burning while slashing validator
-- (deps) [#61](https://github.com/hyle-team/bridgeless-core/pull/61) Added custom ZANO chain validation
+- (deps) [#57](https://github.com/Bridgeless-Project/bridgeless-core/pull/57) Added ZANO chain type support to `x/bridge` module
+- (deps) [#60](https://github.com/Bridgeless-Project/bridgeless-core/pull/60) Removed tokens burning while slashing validator
+- (deps) [#61](https://github.com/Bridgeless-Project/bridgeless-core/pull/61) Added custom ZANO chain validation
 
 ## [v12.1.14-rc1]
 
 ### Bug Fixes
-- (deps) [#53](https://github.com/hyle-team/bridgeless-core/pull/53) Fix `wrong fee denomination; got: ; required: abridge: insufficient fee: insufficient fee` error
+- (deps) [#53](https://github.com/Bridgeless-Project/bridgeless-core/pull/53) Fix `wrong fee denomination; got: ; required: abridge: insufficient fee: insufficient fee` error
 
 ### Improvement
-- (deps) [#52](https://github.com/hyle-team/bridgeless-core/pull/52) Added `x/multisig` module
+- (deps) [#52](https://github.com/Bridgeless-Project/bridgeless-core/pull/52) Added `x/multisig` module
 
 
 ## [v12.1.13-rc1]
 
 ### Improvement
-- (deps) [#49](https://github.com/hyle-team/bridgeless-core/pull/49) Bump cosmos-sdk version. Fixed module path, NFT module logic, adding hook to bank module
+- (deps) [#49](https://github.com/Bridgeless-Project/bridgeless-core/pull/49) Bump cosmos-sdk version. Fixed module path, NFT module logic, adding hook to bank module
 
 ## [v12.1.12-rc1]
 
 ### Improvement
-- (deps) [#47](https://github.com/hyle-team/bridgeless-core/pull/47) Upgrading bridge module with new logic for TokenE bridging contracts (adding signature, adding is_wrapped fields)
+- (deps) [#47](https://github.com/Bridgeless-Project/bridgeless-core/pull/47) Upgrading bridge module with new logic for TokenE bridging contracts (adding signature, adding is_wrapped fields)
 
 ## [v12.1.11-rc1]
 
 ### Improvement
-- (deps) [#45](https://github.com/hyle-team/bridgeless-core/pull/45) Upgraded ibc-go version to v6.1.6
-- (deps) [#46](https://github.com/hyle-team/bridgeless-core/pull/46) Upgraded comsos-sdk version
+- (deps) [#45](https://github.com/Bridgeless-Project/bridgeless-core/pull/45) Upgraded ibc-go version to v6.1.6
+- (deps) [#46](https://github.com/Bridgeless-Project/bridgeless-core/pull/46) Upgraded comsos-sdk version
 
 ## [v12.1.10-rc1]
 
 ### Improvement
-- (deps) [#43](https://github.com/hyle-team/bridgeless-core/pull/43) Added `token_info` fields to `x/bridge` Token
+- (deps) [#43](https://github.com/Bridgeless-Project/bridgeless-core/pull/43) Added `token_info` fields to `x/bridge` Token
 
 ## [v12.1.9-rc4]
 
@@ -133,8 +133,8 @@ Ref: https://keepachangelog.com/en/1.0.0/
 ## [v12.1.9-rc1]
 
 ### Improvement
-- (deps) [#40](https://github.com/hyle-team/bridgeless-core/pull/40) Added store for `x/bridge` module
-- (deps) [#42](https://github.com/hyle-team/bridgeless-core/pull/42) Added `x/bridge` module
+- (deps) [#40](https://github.com/Bridgeless-Project/bridgeless-core/pull/40) Added store for `x/bridge` module
+- (deps) [#42](https://github.com/Bridgeless-Project/bridgeless-core/pull/42) Added `x/bridge` module
 
 ## [v12.1.8-rc2]
 ### Improvement
@@ -142,13 +142,13 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 ## [v12.1.7-dev.2]
 ### Improvement
-- (deps) [#29](https://github.com/hyle-team/bridgeless-core/pull/29) Added `x/nft` module
-- (deps) [#30](https://github.com/hyle-team/bridgeless-core/pull/30) Moved `x/nft` module to cosmos-sdk
-- (deps) [#31](https://github.com/hyle-team/bridgeless-core/pull/31) Added CI
-- (deps) [#32](https://github.com/hyle-team/bridgeless-core/pull/32) Updated cosmos-sdk version to v0.46.16
-- (deps) [#33](https://github.com/hyle-team/bridgeless-core/pull/33) Updated cosmos-sdk version to v0.46.17
-- (deps) [#34](https://github.com/hyle-team/bridgeless-core/pull/34) Removed unused modules and fix staking hooks initialization
-- (deps) [#35](https://github.com/hyle-team/bridgeless-core/pull/35) Added genesis to Dockerfile
+- (deps) [#29](https://github.com/Bridgeless-Project/bridgeless-core/pull/29) Added `x/nft` module
+- (deps) [#30](https://github.com/Bridgeless-Project/bridgeless-core/pull/30) Moved `x/nft` module to cosmos-sdk
+- (deps) [#31](https://github.com/Bridgeless-Project/bridgeless-core/pull/31) Added CI
+- (deps) [#32](https://github.com/Bridgeless-Project/bridgeless-core/pull/32) Updated cosmos-sdk version to v0.46.16
+- (deps) [#33](https://github.com/Bridgeless-Project/bridgeless-core/pull/33) Updated cosmos-sdk version to v0.46.17
+- (deps) [#34](https://github.com/Bridgeless-Project/bridgeless-core/pull/34) Removed unused modules and fix staking hooks initialization
+- (deps) [#35](https://github.com/Bridgeless-Project/bridgeless-core/pull/35) Added genesis to Dockerfile
 
 ## [v12.1.6] - 2023-07-04
 

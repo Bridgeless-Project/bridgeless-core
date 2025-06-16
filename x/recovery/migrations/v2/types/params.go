@@ -18,11 +18,11 @@ package types
 
 import (
 	errorsmod "cosmossdk.io/errors"
+	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	bridgeTypes "github.com/hyle-team/bridgeless-core/v12/types"
 	"time"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/recovery/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/recovery/types"
 
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 )

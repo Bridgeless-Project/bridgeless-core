@@ -3,8 +3,8 @@ package keeper
 import (
 	"context"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/multisig/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

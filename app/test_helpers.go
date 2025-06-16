@@ -38,11 +38,11 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/encoding"
-	feemarkettypes "github.com/hyle-team/bridgeless-core/v12/x/feemarket/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/encoding"
+	feemarkettypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/cmd/config"
-	"github.com/hyle-team/bridgeless-core/v12/utils"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/cmd/config"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"
 )
 
 func init() {

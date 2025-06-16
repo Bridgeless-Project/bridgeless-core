@@ -22,15 +22,15 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/server/types"
 	ethlog "github.com/ethereum/go-ethereum/log"
 	ethrpc "github.com/ethereum/go-ethereum/rpc"
-	"github.com/hyle-team/bridgeless-core/v12/rpc"
 
-	"github.com/hyle-team/bridgeless-core/v12/server/config"
-	evmostypes "github.com/hyle-team/bridgeless-core/v12/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/server/config"
+	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 )
 
 // StartJSONRPC starts the JSON-RPC server

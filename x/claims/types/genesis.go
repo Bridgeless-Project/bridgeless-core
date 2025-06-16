@@ -19,7 +19,7 @@ package types
 import (
 	errorsmod "cosmossdk.io/errors"
 	"encoding/json"
-	bridgeTypes "github.com/hyle-team/bridgeless-core/v12/types"
+	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 )

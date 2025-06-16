@@ -18,7 +18,7 @@ package keeper
 import (
 	"math/big"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/feemarket/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )

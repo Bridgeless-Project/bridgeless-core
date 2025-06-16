@@ -6,7 +6,7 @@ import "multisig/proposal.proto";
 
 // this line is used by starport scaffolding # proto/tx/import
 
-option go_package = "github.com/hyle-team/bridgeless-core/v12/x/multisig/types";
+option go_package = "github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types";
 
 // Msg defines the Msg service.
 service Msg {

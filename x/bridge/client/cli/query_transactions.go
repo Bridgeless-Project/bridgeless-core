@@ -3,9 +3,9 @@ package cli
 import (
 	"errors"
 	"fmt"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/hyle-team/bridgeless-core/v12/x/bridge/types"
 	"github.com/spf13/cobra"
 	"math/big"
 )

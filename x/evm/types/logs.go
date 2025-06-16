@@ -18,9 +18,9 @@ package types
 import (
 	errorsmod "cosmossdk.io/errors"
 	"errors"
+	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	bridgeTypes "github.com/hyle-team/bridgeless-core/v12/types"
 )
 
 // NewTransactionLogs creates a new NewTransactionLogs instance.

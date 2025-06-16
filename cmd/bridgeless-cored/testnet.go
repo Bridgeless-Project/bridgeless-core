@@ -53,16 +53,16 @@ import (
 	govv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/crypto/hd"
-	"github.com/hyle-team/bridgeless-core/v12/server/config"
-	srvflags "github.com/hyle-team/bridgeless-core/v12/server/flags"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/hd"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/server/config"
+	srvflags "github.com/Bridgeless-Project/bridgeless-core/v12/server/flags"
 
-	evmostypes "github.com/hyle-team/bridgeless-core/v12/types"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 
-	cmdcfg "github.com/hyle-team/bridgeless-core/v12/cmd/config"
-	evmoskr "github.com/hyle-team/bridgeless-core/v12/crypto/keyring"
-	"github.com/hyle-team/bridgeless-core/v12/testutil/network"
+	cmdcfg "github.com/Bridgeless-Project/bridgeless-core/v12/cmd/config"
+	evmoskr "github.com/Bridgeless-Project/bridgeless-core/v12/crypto/keyring"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/testutil/network"
 )
 
 var (

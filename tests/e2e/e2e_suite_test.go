@@ -10,8 +10,8 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/hyle-team/bridgeless-core/v12/tests/e2e/upgrade"
-	"github.com/hyle-team/bridgeless-core/v12/utils"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/tests/e2e/upgrade"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"
 )
 
 const (

@@ -18,12 +18,12 @@ package v4_test
 import (
 	"testing"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/encoding"
+	v4 "github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/migrations/v4"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 	"github.com/cosmos/cosmos-sdk/testutil"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/hyle-team/bridgeless-core/v12/app"
-	"github.com/hyle-team/bridgeless-core/v12/encoding"
-	v4 "github.com/hyle-team/bridgeless-core/v12/x/feemarket/migrations/v4"
-	"github.com/hyle-team/bridgeless-core/v12/x/feemarket/types"
 	"github.com/stretchr/testify/require"
 )
 

@@ -19,7 +19,7 @@ package client
 import (
 	govclient "github.com/cosmos/cosmos-sdk/x/gov/client"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/erc20/client/cli"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/client/cli"
 )
 
 var (
