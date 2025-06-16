@@ -10,7 +10,7 @@ import (
 	// "github.com/cosmos/cosmos-sdk/client/flags"
 	// sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/multisig/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
 )
 
 // GetQueryCmd returns the cli query commands for this module

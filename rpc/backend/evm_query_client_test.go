@@ -9,14 +9,14 @@ import (
 
 	"cosmossdk.io/math"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/backend/mocks"
+	rpc "github.com/Bridgeless-Project/bridgeless-core/v12/rpc/types"
+	utiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	errortypes "github.com/cosmos/cosmos-sdk/types/errors"
 	grpctypes "github.com/cosmos/cosmos-sdk/types/grpc"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/hyle-team/bridgeless-core/v12/rpc/backend/mocks"
-	rpc "github.com/hyle-team/bridgeless-core/v12/rpc/types"
-	utiltx "github.com/hyle-team/bridgeless-core/v12/testutil/tx"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
 	mock "github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"

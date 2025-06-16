@@ -20,7 +20,7 @@ import (
 	errorsmod "cosmossdk.io/errors"
 
 	"fmt"
-	bridgetypes "github.com/hyle-team/bridgeless-core/v12/types"
+	bridgetypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 
 	"github.com/spf13/cobra"
 
@@ -34,9 +34,9 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 
-	evmostypes "github.com/hyle-team/bridgeless-core/v12/types"
+	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/erc20/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
 )
 
 // NewTxCmd returns a root CLI command handler for erc20 transaction commands

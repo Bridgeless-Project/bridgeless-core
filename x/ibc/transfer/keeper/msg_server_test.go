@@ -6,12 +6,12 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/testutil"
+	erc20types "github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/ibc/transfer/keeper"
 	"github.com/cosmos/ibc-go/v6/modules/apps/transfer/types"
 	channeltypes "github.com/cosmos/ibc-go/v6/modules/core/04-channel/types"
 	host "github.com/cosmos/ibc-go/v6/modules/core/24-host"
-	"github.com/hyle-team/bridgeless-core/v12/testutil"
-	erc20types "github.com/hyle-team/bridgeless-core/v12/x/erc20/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/ibc/transfer/keeper"
 	"github.com/stretchr/testify/mock"
 )
 

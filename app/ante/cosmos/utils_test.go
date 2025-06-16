@@ -5,6 +5,9 @@ import (
 	"time"
 
 	sdkmath "cosmossdk.io/math"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/ethsecp256k1"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/encoding"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
@@ -12,9 +15,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 	"github.com/cosmos/cosmos-sdk/x/authz"
-	"github.com/hyle-team/bridgeless-core/v12/app"
-	"github.com/hyle-team/bridgeless-core/v12/crypto/ethsecp256k1"
-	"github.com/hyle-team/bridgeless-core/v12/encoding"
 )
 
 func (suite *AnteTestSuite) CreateTestCosmosTxBuilder(gasPrice sdkmath.Int, denom string, msgs ...sdk.Msg) client.TxBuilder {

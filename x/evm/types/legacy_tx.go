@@ -21,9 +21,9 @@ import (
 	errortypes "github.com/cosmos/cosmos-sdk/types/errors"
 
 	errorsmod "cosmossdk.io/errors"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/hyle-team/bridgeless-core/v12/types"
 )
 
 func NewLegacyTx(tx *ethtypes.Transaction) (*LegacyTx, error) {

@@ -3,13 +3,13 @@ package evm_test
 import (
 	"math/big"
 
-	evmante "github.com/hyle-team/bridgeless-core/v12/app/ante/evm"
-	"github.com/hyle-team/bridgeless-core/v12/testutil"
+	evmante "github.com/Bridgeless-Project/bridgeless-core/v12/app/ante/evm"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/testutil"
 
+	testutiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	testutiltx "github.com/hyle-team/bridgeless-core/v12/testutil/tx"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
 )
 
 func (suite *AnteTestSuite) TestEthSetupContextDecorator() {

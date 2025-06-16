@@ -29,8 +29,8 @@ import (
 	"github.com/cosmos/ibc-go/v6/modules/core/exported"
 	"github.com/ethereum/go-ethereum/common"
 
-	"github.com/hyle-team/bridgeless-core/v12/ibc"
-	"github.com/hyle-team/bridgeless-core/v12/x/erc20/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/ibc"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
 )
 
 // OnRecvPacket performs the ICS20 middleware receive callback for automatically

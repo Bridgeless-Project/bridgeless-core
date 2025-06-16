@@ -20,11 +20,11 @@ import (
 	"strconv"
 
 	errorsmod "cosmossdk.io/errors"
+	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	vestexported "github.com/cosmos/cosmos-sdk/x/auth/vesting/exported"
-	evmostypes "github.com/hyle-team/bridgeless-core/v12/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/claims/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/types"
 )
 
 // EndBlocker checks if the airdrop claiming period has ended in order to

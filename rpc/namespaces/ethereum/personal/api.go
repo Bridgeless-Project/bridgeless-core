@@ -22,10 +22,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/hyle-team/bridgeless-core/v12/rpc/backend"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/backend"
 
-	"github.com/hyle-team/bridgeless-core/v12/crypto/hd"
-	"github.com/hyle-team/bridgeless-core/v12/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/hd"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/types"
 
 	"github.com/tendermint/tendermint/libs/log"
 
@@ -37,7 +37,7 @@ import (
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 )
 
 // PrivateAccountAPI is the personal_ prefixed set of APIs in the Web3 JSON-RPC spec.

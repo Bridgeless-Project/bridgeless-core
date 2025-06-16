@@ -21,8 +21,8 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/hyle-team/bridgeless-core/v12/rpc/backend"
-	"github.com/hyle-team/bridgeless-core/v12/rpc/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/backend"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/types"
 
 	"github.com/pkg/errors"
 	"github.com/tendermint/tendermint/libs/log"

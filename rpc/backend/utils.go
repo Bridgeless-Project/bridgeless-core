@@ -37,8 +37,8 @@ import (
 	"github.com/tendermint/tendermint/libs/log"
 	tmrpctypes "github.com/tendermint/tendermint/rpc/core/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/rpc/types"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/types"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	"github.com/tendermint/tendermint/proto/tendermint/crypto"
 )
 

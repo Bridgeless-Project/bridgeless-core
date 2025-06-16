@@ -16,9 +16,9 @@
 package keeper
 
 import (
+	v4 "github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/migrations/v4"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	v4 "github.com/hyle-team/bridgeless-core/v12/x/feemarket/migrations/v4"
-	"github.com/hyle-team/bridgeless-core/v12/x/feemarket/types"
 )
 
 // Migrator is a struct for handling in-place store migrations.

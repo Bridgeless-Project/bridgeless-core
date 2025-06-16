@@ -16,10 +16,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/migrations/legacytx"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/app"
-	"github.com/hyle-team/bridgeless-core/v12/app/ante"
-	"github.com/hyle-team/bridgeless-core/v12/crypto/ethsecp256k1"
-	"github.com/hyle-team/bridgeless-core/v12/encoding"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app/ante"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/ethsecp256k1"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/encoding"
 )
 
 func TestConsumeSignatureVerificationGas(t *testing.T) {

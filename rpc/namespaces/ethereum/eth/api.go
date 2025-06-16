@@ -28,11 +28,11 @@ import (
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/rpc/backend"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/backend"
 
-	rpctypes "github.com/hyle-team/bridgeless-core/v12/rpc/types"
-	"github.com/hyle-team/bridgeless-core/v12/types"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	rpctypes "github.com/Bridgeless-Project/bridgeless-core/v12/rpc/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/types"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 )
 
 // The Ethereum API allows applications to connect to an Evmos node that is

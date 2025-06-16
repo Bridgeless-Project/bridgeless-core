@@ -21,6 +21,9 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	"encoding/json"
 	"fmt"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/docs"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge"
+	multisigkeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/keeper"
 	"github.com/cosmos/cosmos-sdk/x/accumulator"
 	accumulatorkeeper "github.com/cosmos/cosmos-sdk/x/accumulator/keeper"
 	accumulatortypes "github.com/cosmos/cosmos-sdk/x/accumulator/types"
@@ -30,12 +33,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/nft"
 	nftkeeper "github.com/cosmos/cosmos-sdk/x/nft/keeper"
 	nfttypes "github.com/cosmos/cosmos-sdk/x/nft/types"
-	"github.com/hyle-team/bridgeless-core/v12/docs"
-	"github.com/hyle-team/bridgeless-core/v12/x/bridge"
-	multisigkeeper "github.com/hyle-team/bridgeless-core/v12/x/multisig/keeper"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/multisig"
-	multisigtypes "github.com/hyle-team/bridgeless-core/v12/x/multisig/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig"
+	multisigtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
 
 	"io"
 	"net/http"
@@ -140,46 +140,46 @@ import (
 	icahosttypes "github.com/cosmos/ibc-go/v6/modules/apps/27-interchain-accounts/host/types"
 	icatypes "github.com/cosmos/ibc-go/v6/modules/apps/27-interchain-accounts/types"
 
-	ethante "github.com/hyle-team/bridgeless-core/v12/app/ante/evm"
-	"github.com/hyle-team/bridgeless-core/v12/encoding"
-	"github.com/hyle-team/bridgeless-core/v12/ethereum/eip712"
-	srvflags "github.com/hyle-team/bridgeless-core/v12/server/flags"
-	evmostypes "github.com/hyle-team/bridgeless-core/v12/types"
-	bridgetypes "github.com/hyle-team/bridgeless-core/v12/x/bridge/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm"
-	evmkeeper "github.com/hyle-team/bridgeless-core/v12/x/evm/keeper"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/feemarket"
-	feemarketkeeper "github.com/hyle-team/bridgeless-core/v12/x/feemarket/keeper"
-	feemarkettypes "github.com/hyle-team/bridgeless-core/v12/x/feemarket/types"
+	ethante "github.com/Bridgeless-Project/bridgeless-core/v12/app/ante/evm"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/encoding"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/ethereum/eip712"
+	srvflags "github.com/Bridgeless-Project/bridgeless-core/v12/server/flags"
+	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
+	bridgetypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm"
+	evmkeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/keeper"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket"
+	feemarketkeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/keeper"
+	feemarkettypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 
 	// unnamed import of statik for swagger UI support
-	_ "github.com/hyle-team/bridgeless-core/v12/client/docs/statik"
+	_ "github.com/Bridgeless-Project/bridgeless-core/v12/client/docs/statik"
 
-	"github.com/hyle-team/bridgeless-core/v12/app/ante"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app/ante"
 
-	bridgekeeper "github.com/hyle-team/bridgeless-core/v12/x/bridge/keeper"
-	"github.com/hyle-team/bridgeless-core/v12/x/claims"
-	claimskeeper "github.com/hyle-team/bridgeless-core/v12/x/claims/keeper"
-	claimstypes "github.com/hyle-team/bridgeless-core/v12/x/claims/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/erc20"
-	erc20client "github.com/hyle-team/bridgeless-core/v12/x/erc20/client"
-	erc20keeper "github.com/hyle-team/bridgeless-core/v12/x/erc20/keeper"
-	erc20types "github.com/hyle-team/bridgeless-core/v12/x/erc20/types"
+	bridgekeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/claims"
+	claimskeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/keeper"
+	claimstypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20"
+	erc20client "github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/client"
+	erc20keeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/keeper"
+	erc20types "github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/recovery"
-	recoverykeeper "github.com/hyle-team/bridgeless-core/v12/x/recovery/keeper"
-	recoverytypes "github.com/hyle-team/bridgeless-core/v12/x/recovery/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/revenue/v1"
-	revenuekeeper "github.com/hyle-team/bridgeless-core/v12/x/revenue/v1/keeper"
-	revenuetypes "github.com/hyle-team/bridgeless-core/v12/x/revenue/v1/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/vesting"
-	vestingkeeper "github.com/hyle-team/bridgeless-core/v12/x/vesting/keeper"
-	vestingtypes "github.com/hyle-team/bridgeless-core/v12/x/vesting/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/recovery"
+	recoverykeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/recovery/keeper"
+	recoverytypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/recovery/types"
+	revenue "github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1"
+	revenuekeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1/keeper"
+	revenuetypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/vesting"
+	vestingkeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/vesting/keeper"
+	vestingtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/vesting/types"
 
 	// NOTE: override ICS20 keeper to support IBC transfers of ERC20 tokens
-	"github.com/hyle-team/bridgeless-core/v12/x/ibc/transfer"
-	transferkeeper "github.com/hyle-team/bridgeless-core/v12/x/ibc/transfer/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/ibc/transfer"
+	transferkeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/ibc/transfer/keeper"
 
 	// Force-load the tracer engines to trigger registration due to Go-Ethereum v1.10.15 changes
 	_ "github.com/ethereum/go-ethereum/eth/tracers/js"
@@ -871,164 +871,6 @@ func NewBridge(
 	app.setPostHandler()
 	app.SetEndBlocker(app.EndBlocker)
 
-	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
-	if err != nil {
-		panic(fmt.Errorf("failed to read upgrade info from disk: %w", err))
-	}
-
-	app.UpgradeKeeper.SetUpgradeHandler(
-		"v12.1.8-rc2",
-		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
-			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
-		},
-	)
-
-	if upgradeInfo.Name == "v12.1.9-rc3" && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
-		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storetypes.StoreUpgrades{
-			Added: []string{bridgetypes.ModuleName},
-		}))
-	}
-
-	app.UpgradeKeeper.SetUpgradeHandler(
-		"v12.1.9-rc3",
-		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
-			app.BridgeKeeper.SetParams(ctx, bridgetypes.Params{
-				ModuleAdmin: "bridge1ykcl8yncutg8z8hr8fct043rx56j5a9ennk7dy",
-			})
-
-			// Disabling repeated call of InitGenesis for new bridge module
-			fromVM[bridgetypes.ModuleName] = bridge.AppModule{}.ConsensusVersion()
-
-			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
-		},
-	)
-
-	app.UpgradeKeeper.SetUpgradeHandler(
-		"v12.1.10-rc1",
-		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
-			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
-		},
-	)
-
-	app.UpgradeKeeper.SetUpgradeHandler(
-		"v12.1.11-rc1",
-		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
-			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
-		},
-	)
-
-	app.UpgradeKeeper.SetUpgradeHandler(
-		"v12.1.12-rc1",
-		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
-			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
-		},
-	)
-
-	app.UpgradeKeeper.SetUpgradeHandler(
-		"v12.1.13-rc1",
-		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
-			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
-		},
-	)
-	if upgradeInfo.Name == "v12.1.14-rc1" && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
-		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storetypes.StoreUpgrades{
-			Added: []string{multisigtypes.ModuleName},
-		}))
-	}
-
-	app.UpgradeKeeper.SetUpgradeHandler("v12.1.14-rc1", func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
-		stakingParams := stakingtypes.Params{
-			UnbondingTime:           app.StakingKeeper.UnbondingTime(ctx),
-			MaxValidators:           app.StakingKeeper.MaxValidators(ctx),
-			MaxEntries:              app.StakingKeeper.MaxEntries(ctx),
-			HistoricalEntries:       app.StakingKeeper.HistoricalEntries(ctx),
-			BondDenom:               "abridge",
-			MinCommissionRate:       app.StakingKeeper.MinCommissionRate(ctx),
-			MinimalDelegationAmount: sdk.DefaultMinDelegationAmount,
-		}
-		app.StakingKeeper.SetParams(ctx, stakingParams)
-
-		multisigParams := multisigtypes.Params{
-			GroupSequence:    0,
-			ProposalSequence: 0,
-			PrunePeriod:      240,
-			VotingPeriod:     120,
-		}
-		app.MultisigKeeper.SetParams(ctx, multisigParams)
-
-		// Disabling repeated call of InitGenesis for new multisig module
-		fromVM[multisigtypes.ModuleName] = multisig.AppModule{}.ConsensusVersion()
-
-		return app.mm.RunMigrations(ctx, app.configurator, fromVM)
-	})
-
-	app.UpgradeKeeper.SetUpgradeHandler(
-		"v12.1.15-rc1",
-		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
-			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
-		},
-	)
-
-	app.UpgradeKeeper.SetUpgradeHandler(
-		"v12.1.16-rc1",
-		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
-			bridgeParams := bridgetypes.Params{
-				ModuleAdmin: app.BridgeKeeper.ModuleAdmin(ctx),
-				Parties:     []*bridgetypes.Party{},
-			}
-			app.BridgeKeeper.SetParams(ctx, bridgeParams)
-
-			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
-		},
-	)
-
-	app.UpgradeKeeper.SetUpgradeHandler(
-		"v12.1.17-rc1",
-		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
-			bridgeParams := bridgetypes.Params{
-				ModuleAdmin:  app.BridgeKeeper.ModuleAdmin(ctx),
-				Parties:      app.BridgeKeeper.PartiesList(ctx),
-				TssThreshold: 0,
-			}
-			app.BridgeKeeper.SetParams(ctx, bridgeParams)
-
-			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
-		},
-	)
-
-	app.UpgradeKeeper.SetUpgradeHandler(
-		"v12.1.17-rc2",
-		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
-			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
-		},
-	)
-
-	app.UpgradeKeeper.SetUpgradeHandler(
-		"v12.1.17-rc3",
-		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
-			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
-		},
-	)
-
-	app.UpgradeKeeper.SetUpgradeHandler(
-		"v12.1.19",
-		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
-			mintParams := minttypes.Params{
-				MintDenom:            "abridge",
-				HalvingBlocks:        6306900,
-				MaxHalvingPeriods:    7,
-				CurrentHalvingPeriod: 0,
-				BlockReward: sdk.Coin{
-					Denom:  "abridge",
-					Amount: sdk.NewInt(6400000000000000000),
-				},
-			}
-
-			app.MintKeeper.SetParams(ctx, mintParams)
-			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
-		},
-	)
-
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
 			tmos.Exit(err.Error())
@@ -1334,7 +1176,7 @@ func initParamsKeeper(
 	paramsKeeper.Subspace(ibchost.ModuleName)
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	// ethermint subspaces
-	paramsKeeper.Subspace(evmtypes.ModuleName).WithKeyTable(evmtypes.ParamKeyTable()) // nolint: staticcheck
+	paramsKeeper.Subspace(evmtypes.ModuleName).WithKeyTable(evmtypes.ParamKeyTable()) //nolint: staticcheck
 	paramsKeeper.Subspace(feemarkettypes.ModuleName).WithKeyTable(feemarkettypes.ParamKeyTable())
 	// evmos subspaces
 	paramsKeeper.Subspace(erc20types.ModuleName)

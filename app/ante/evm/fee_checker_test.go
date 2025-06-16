@@ -6,14 +6,14 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/encoding"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/types"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
 	"github.com/ethereum/go-ethereum/params"
-	"github.com/hyle-team/bridgeless-core/v12/encoding"
-	"github.com/hyle-team/bridgeless-core/v12/types"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
 	"github.com/tendermint/tendermint/libs/log"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 )

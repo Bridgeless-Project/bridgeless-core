@@ -20,8 +20,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	abci "github.com/tendermint/tendermint/abci/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/feemarket/keeper"
-	"github.com/hyle-team/bridgeless-core/v12/x/feemarket/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 )
 
 // InitGenesis initializes genesis state based on exported genesis

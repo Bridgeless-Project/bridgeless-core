@@ -1,7 +1,7 @@
 package keeper_test
 
 import (
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	"github.com/tendermint/tendermint/abci/types"
 )
 

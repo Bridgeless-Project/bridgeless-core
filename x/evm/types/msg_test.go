@@ -13,18 +13,18 @@ import (
 	sdkmath "cosmossdk.io/math"
 	"github.com/stretchr/testify/suite"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/ethsecp256k1"
+	utiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/hyle-team/bridgeless-core/v12/crypto/ethsecp256k1"
-	utiltx "github.com/hyle-team/bridgeless-core/v12/testutil/tx"
 
-	"github.com/hyle-team/bridgeless-core/v12/app"
-	"github.com/hyle-team/bridgeless-core/v12/encoding"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/encoding"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 )
 
 const invalidAddress = "0x0000"

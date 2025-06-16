@@ -3,11 +3,11 @@ package utils_test
 import (
 	"time"
 
+	anteutils "github.com/Bridgeless-Project/bridgeless-core/v12/app/ante/utils"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/testutil"
+	testutiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	anteutils "github.com/hyle-team/bridgeless-core/v12/app/ante/utils"
-	"github.com/hyle-team/bridgeless-core/v12/testutil"
-	testutiltx "github.com/hyle-team/bridgeless-core/v12/testutil/tx"
-	"github.com/hyle-team/bridgeless-core/v12/utils"
 )
 
 // TestClaimStakingRewardsIfNecessary tests the ClaimStakingRewardsIfNecessary function

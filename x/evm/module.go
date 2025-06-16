@@ -34,9 +34,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/client/cli"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/keeper"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/client/cli"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 )
 
 var (

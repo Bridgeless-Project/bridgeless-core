@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hyle-team/bridgeless-core/v12/utils"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/keeper"
 
 	sdkmath "cosmossdk.io/math"
 	"github.com/gogo/protobuf/proto"
@@ -19,7 +19,7 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
-	feemarkettypes "github.com/hyle-team/bridgeless-core/v12/x/feemarket/types"
+	feemarkettypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/ethereum/go-ethereum/common"
@@ -33,13 +33,13 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/app"
-	"github.com/hyle-team/bridgeless-core/v12/crypto/ethsecp256k1"
-	utiltx "github.com/hyle-team/bridgeless-core/v12/testutil/tx"
-	evmostypes "github.com/hyle-team/bridgeless-core/v12/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/statedb"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/ethsecp256k1"
+	utiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
+	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/statedb"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 
 	"github.com/tendermint/tendermint/crypto/tmhash"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"

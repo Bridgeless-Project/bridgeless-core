@@ -13,11 +13,11 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	sdkvesting "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/crypto/ethsecp256k1"
-	"github.com/hyle-team/bridgeless-core/v12/testutil"
-	utiltx "github.com/hyle-team/bridgeless-core/v12/testutil/tx"
-	"github.com/hyle-team/bridgeless-core/v12/utils"
-	"github.com/hyle-team/bridgeless-core/v12/x/vesting/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/ethsecp256k1"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/testutil"
+	utiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/vesting/types"
 )
 
 // TestClawbackAccount is a struct to store all relevant information that is corresponding

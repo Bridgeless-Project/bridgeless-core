@@ -1,9 +1,9 @@
 package keeper
 
 import (
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/multisig/types"
 )
 
 // SetVote set a specific vote in the store from its proposal id and voter

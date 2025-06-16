@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app/ante"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/ethsecp256k1"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/hyle-team/bridgeless-core/v12/app/ante"
-	"github.com/hyle-team/bridgeless-core/v12/crypto/ethsecp256k1"
 )
 
 func generatePubKeysAndSignatures(n int, msg []byte, _ bool) (pubkeys []cryptotypes.PubKey, signatures [][]byte) {

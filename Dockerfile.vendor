@@ -1,6 +1,6 @@
 FROM golang:1.20-alpine as buildbase
 
-WORKDIR /go/src/github.com/hyle-team/bridgeless-core/v12
+WORKDIR /go/src/github.com/Bridgeless-Project/bridgeless-core/v12
 COPY vendor .
 COPY . .
 
@@ -10,7 +10,7 @@ ENV GO111MODULE="on"
 ENV CGO_ENABLED=1
 ENV GOOS="linux"
 
-RUN go build -o /usr/local/bin/bridgeless-core github.com/hyle-team/bridgeless-core/v12/cmd/bridgeless-cored
+RUN go build -o /usr/local/bin/bridgeless-core github.com/Bridgeless-Project/bridgeless-core/v12/cmd/bridgeless-cored
 
 ###
 

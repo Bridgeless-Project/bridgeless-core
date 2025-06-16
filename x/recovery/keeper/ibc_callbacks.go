@@ -32,9 +32,9 @@ import (
 	host "github.com/cosmos/ibc-go/v6/modules/core/24-host"
 	"github.com/cosmos/ibc-go/v6/modules/core/exported"
 
-	"github.com/hyle-team/bridgeless-core/v12/ibc"
-	"github.com/hyle-team/bridgeless-core/v12/utils"
-	"github.com/hyle-team/bridgeless-core/v12/x/recovery/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/ibc"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/recovery/types"
 )
 
 // OnRecvPacket performs an IBC receive callback. It returns the tokens that

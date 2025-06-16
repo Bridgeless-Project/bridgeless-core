@@ -16,8 +16,8 @@
 package keeper
 
 import (
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/types"
 )
 
 // GetParams returns the total set of evm parameters.

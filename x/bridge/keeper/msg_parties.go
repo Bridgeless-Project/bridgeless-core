@@ -3,8 +3,8 @@ package keeper
 import (
 	"context"
 	errorsmod "cosmossdk.io/errors"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/bridge/types"
 )
 
 func (m msgServer) SetParties(goCtx context.Context, msg *types.MsgSetParties) (*types.MsgSetPartiesResponse, error) {

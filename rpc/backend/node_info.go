@@ -22,6 +22,11 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/ethsecp256k1"
+	rpctypes "github.com/Bridgeless-Project/bridgeless-core/v12/rpc/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/server/config"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/types"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdkcrypto "github.com/cosmos/cosmos-sdk/crypto"
@@ -33,11 +38,6 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/hyle-team/bridgeless-core/v12/crypto/ethsecp256k1"
-	rpctypes "github.com/hyle-team/bridgeless-core/v12/rpc/types"
-	"github.com/hyle-team/bridgeless-core/v12/server/config"
-	"github.com/hyle-team/bridgeless-core/v12/types"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
 	tmtypes "github.com/tendermint/tendermint/types"
 )
 

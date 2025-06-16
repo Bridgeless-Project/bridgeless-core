@@ -21,7 +21,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/feemarket/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 )
 
 // GetQueryCmd returns the parent command for all x/feemarket CLI query commands.

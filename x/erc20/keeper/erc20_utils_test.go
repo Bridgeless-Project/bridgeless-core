@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"math/big"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/contracts"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
+	evm "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/hyle-team/bridgeless-core/v12/contracts"
-	"github.com/hyle-team/bridgeless-core/v12/x/erc20/types"
-	evm "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
 )
 
 func (suite *KeeperTestSuite) MintERC20Token(contractAddr, from, to common.Address, amount *big.Int) *evm.MsgEthereumTx {

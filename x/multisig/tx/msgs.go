@@ -2,9 +2,9 @@ package tx
 
 import (
 	errorsmod "cosmossdk.io/errors"
+	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	"github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	bridgeTypes "github.com/hyle-team/bridgeless-core/v12/types"
 )
 
 // SetMsgs takes a slice of sdk.Msg's and turn them into Any's.

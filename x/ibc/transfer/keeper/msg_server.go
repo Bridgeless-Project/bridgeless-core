@@ -27,8 +27,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	erc20types "github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
 	"github.com/cosmos/ibc-go/v6/modules/apps/transfer/types"
-	erc20types "github.com/hyle-team/bridgeless-core/v12/x/erc20/types"
 )
 
 var _ types.MsgServer = Keeper{}

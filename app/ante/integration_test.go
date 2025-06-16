@@ -4,16 +4,16 @@ import (
 	"time"
 
 	sdkmath "cosmossdk.io/math"
+	testutiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	testutiltx "github.com/hyle-team/bridgeless-core/v12/testutil/tx"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/ethsecp256k1"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/testutil"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/hyle-team/bridgeless-core/v12/crypto/ethsecp256k1"
-	"github.com/hyle-team/bridgeless-core/v12/testutil"
-	"github.com/hyle-team/bridgeless-core/v12/utils"
 )
 
 var _ = Describe("when sending a Cosmos transaction", func() {

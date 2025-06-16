@@ -4,9 +4,9 @@ import (
 	"strings"
 	"testing"
 
+	utiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
 	"github.com/ethereum/go-ethereum/common"
-	utiltx "github.com/hyle-team/bridgeless-core/v12/testutil/tx"
-	"github.com/hyle-team/bridgeless-core/v12/x/erc20/types"
 	"github.com/stretchr/testify/suite"
 	"github.com/tendermint/tendermint/crypto/tmhash"
 )

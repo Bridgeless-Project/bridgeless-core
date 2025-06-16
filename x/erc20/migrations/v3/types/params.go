@@ -20,8 +20,8 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/erc20/types"
 )
 
 var _ types.LegacyParams = &V3Params{}

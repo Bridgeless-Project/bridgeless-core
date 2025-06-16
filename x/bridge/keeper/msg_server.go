@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"github.com/hyle-team/bridgeless-core/v12/x/bridge/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 )
 
 type msgServer struct {

@@ -34,9 +34,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/feemarket/client/cli"
-	"github.com/hyle-team/bridgeless-core/v12/x/feemarket/keeper"
-	"github.com/hyle-team/bridgeless-core/v12/x/feemarket/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/client/cli"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 )
 
 var (

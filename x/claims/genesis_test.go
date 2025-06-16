@@ -12,13 +12,13 @@ import (
 	tmversion "github.com/tendermint/tendermint/proto/tendermint/version"
 	"github.com/tendermint/tendermint/version"
 
-	"github.com/hyle-team/bridgeless-core/v12/app"
-	"github.com/hyle-team/bridgeless-core/v12/testutil"
-	utiltx "github.com/hyle-team/bridgeless-core/v12/testutil/tx"
-	"github.com/hyle-team/bridgeless-core/v12/utils"
-	"github.com/hyle-team/bridgeless-core/v12/x/claims"
-	"github.com/hyle-team/bridgeless-core/v12/x/claims/types"
-	feemarkettypes "github.com/hyle-team/bridgeless-core/v12/x/feemarket/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/testutil"
+	utiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/claims"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/types"
+	feemarkettypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 )
 
 type GenesisTestSuite struct {

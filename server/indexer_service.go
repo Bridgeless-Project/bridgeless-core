@@ -23,7 +23,7 @@ import (
 	rpcclient "github.com/tendermint/tendermint/rpc/client"
 	"github.com/tendermint/tendermint/types"
 
-	evmostypes "github.com/hyle-team/bridgeless-core/v12/types"
+	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 )
 
 const (

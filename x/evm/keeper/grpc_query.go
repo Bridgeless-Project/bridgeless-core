@@ -40,9 +40,9 @@ import (
 	"github.com/ethereum/go-ethereum/core/vm"
 	ethparams "github.com/ethereum/go-ethereum/params"
 
-	evmostypes "github.com/hyle-team/bridgeless-core/v12/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/statedb"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/statedb"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 )
 
 var _ types.QueryServer = Keeper{}

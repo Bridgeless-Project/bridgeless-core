@@ -20,8 +20,8 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/revenue/v1/keeper"
-	"github.com/hyle-team/bridgeless-core/v12/x/revenue/v1/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1/types"
 )
 
 // InitGenesis import module genesis

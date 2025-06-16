@@ -22,7 +22,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/feemarket/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 )
 
 var _ types.QueryServer = Keeper{}

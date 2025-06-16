@@ -16,7 +16,7 @@
 package web3
 
 import (
-	"github.com/hyle-team/bridgeless-core/v12/version"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/version"
 
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"

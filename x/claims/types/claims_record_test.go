@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"cosmossdk.io/math"
+	utiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	utiltx "github.com/hyle-team/bridgeless-core/v12/testutil/tx"
-	"github.com/hyle-team/bridgeless-core/v12/x/claims/types"
 	"github.com/stretchr/testify/require"
 )
 

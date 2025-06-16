@@ -22,7 +22,7 @@ import (
 	errortypes "github.com/cosmos/cosmos-sdk/types/errors"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/erc20/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
 )
 
 // MintingEnabled checks that:

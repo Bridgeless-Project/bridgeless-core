@@ -23,7 +23,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/vesting/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/vesting/types"
 )
 
 var _ types.QueryServer = Keeper{}

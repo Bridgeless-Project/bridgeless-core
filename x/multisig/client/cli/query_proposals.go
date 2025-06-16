@@ -2,8 +2,8 @@ package cli
 
 import (
 	"context"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/hyle-team/bridgeless-core/v12/x/multisig/types"
 	"github.com/spf13/cobra"
 	"strconv"
 )

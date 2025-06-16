@@ -18,7 +18,7 @@ package keeper
 import (
 	"fmt"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/feemarket/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 	abci "github.com/tendermint/tendermint/abci/types"
 
 	sdkmath "cosmossdk.io/math"
