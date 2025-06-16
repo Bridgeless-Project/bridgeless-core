@@ -1,12 +1,12 @@
 package keeper
 
 import (
+	v2 "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/migrations/v2"
+	v3 "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/migrations/v3"
+	v4 "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/migrations/v4"
+	v5 "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/migrations/v5"
+	v6 "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/migrations/v6"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	v2 "github.com/hyle-team/bridgeless-core/v12/x/bridge/migrations/v2"
-	v3 "github.com/hyle-team/bridgeless-core/v12/x/bridge/migrations/v3"
-	v4 "github.com/hyle-team/bridgeless-core/v12/x/bridge/migrations/v4"
-	v5 "github.com/hyle-team/bridgeless-core/v12/x/bridge/migrations/v5"
-	v6 "github.com/hyle-team/bridgeless-core/v12/x/bridge/migrations/v6"
 )
 
 type Migrator struct {
