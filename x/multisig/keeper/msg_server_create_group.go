@@ -24,9 +24,12 @@ func (k msgServer) CreateGroup(goCtx context.Context, msg *types.MsgCreateGroup)
 		parentAcc := address.Module(types.ModuleName, []byte{types.GroupAccountKey})
 		groupAccAddr = address.Derive(parentAcc, buf)
 
-		if k.accountKeeper.GetAccount(ctx, groupAccAddr) != nil {
+		account := k.accountKeeper.GetAccount(ctx, groupAccAddr)
+
+		if account != nil {
 			// handle a rare collision, in which case we just go on to the
 			// next sequence value and derive a new address.
+			i++
 			continue
 		}
 		acc := k.accountKeeper.NewAccount(ctx, &authtypes.ModuleAccount{
@@ -37,8 +40,6 @@ func (k msgServer) CreateGroup(goCtx context.Context, msg *types.MsgCreateGroup)
 		})
 
 		k.accountKeeper.SetAccount(ctx, acc)
-		i++
-
 		break
 	}
 
