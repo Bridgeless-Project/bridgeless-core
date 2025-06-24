@@ -29,12 +29,6 @@ func (k Keeper) GetProposal(ctx sdk.Context, id uint64) (val types.Proposal, fou
 	return val, true
 }
 
-// RemoveProposal removes a proposal from the store
-func (k Keeper) RemoveProposal(ctx sdk.Context, id uint64) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ProposalKeyPrefix))
-	store.Delete(types.ProposalKey(id))
-}
-
 // GetAllProposal returns all proposals
 func (k Keeper) GetAllProposal(ctx sdk.Context) (list []types.Proposal) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ProposalKeyPrefix))

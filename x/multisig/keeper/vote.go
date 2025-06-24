@@ -26,12 +26,6 @@ func (k Keeper) GetVote(ctx sdk.Context, proposalId uint64, voter string) (val t
 	return val, true
 }
 
-// RemoveVote removes a vote from the store
-func (k Keeper) RemoveVote(ctx sdk.Context, proposalId uint64, voter string) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.VoteKeyPrefix))
-	store.Delete(types.VoteKey(proposalId, voter))
-}
-
 // GetAllVote returns all votes
 func (k Keeper) GetAllVote(ctx sdk.Context) (list []types.Vote) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.VoteKeyPrefix))

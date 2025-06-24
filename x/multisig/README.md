@@ -425,7 +425,7 @@ vote:
 The create command creates a multisig group with provided members and threshold.
 
 ```
-simd tx tx multisig groups create bridge1... bridge1...,bridge1... 2 
+simd tx multisig groups create bridge1... bridge1...,bridge1... 2 
 ```
 
 ### Update

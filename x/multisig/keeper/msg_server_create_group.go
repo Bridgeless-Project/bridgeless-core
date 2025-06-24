@@ -16,19 +16,23 @@ func (k msgServer) CreateGroup(goCtx context.Context, msg *types.MsgCreateGroup)
 	var groupAccAddr sdk.AccAddress
 	// loop here in the rare case where an ADR-028-derived address creates a
 	// collision with an existing address.
-	i := uint64(1)
+	i := params.GroupSequence + 1
 	for {
 		buf := make([]byte, 8)
-		binary.BigEndian.PutUint64(buf, params.GroupSequence+i)
+		binary.BigEndian.PutUint64(buf, i)
 
 		parentAcc := address.Module(types.ModuleName, []byte{types.GroupAccountKey})
 		groupAccAddr = address.Derive(parentAcc, buf)
 
-		if k.accountKeeper.GetAccount(ctx, groupAccAddr) != nil {
+		account := k.accountKeeper.GetAccount(ctx, groupAccAddr)
+
+		if account != nil {
 			// handle a rare collision, in which case we just go on to the
 			// next sequence value and derive a new address.
+			i++
 			continue
 		}
+
 		acc := k.accountKeeper.NewAccount(ctx, &authtypes.ModuleAccount{
 			BaseAccount: &authtypes.BaseAccount{
 				Address: groupAccAddr.String(),
@@ -37,8 +41,6 @@ func (k msgServer) CreateGroup(goCtx context.Context, msg *types.MsgCreateGroup)
 		})
 
 		k.accountKeeper.SetAccount(ctx, acc)
-		i++
-
 		break
 	}
 
@@ -48,7 +50,7 @@ func (k msgServer) CreateGroup(goCtx context.Context, msg *types.MsgCreateGroup)
 		Threshold: msg.Threshold,
 	})
 
-	params.GroupSequence += i
+	params.GroupSequence = i
 	k.SetParams(ctx, params)
 
 	ctx.EventManager().EmitEvent(
