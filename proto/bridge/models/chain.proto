@@ -14,6 +14,7 @@ enum ChainType {
   COSMOS = 2;
   OTHER = 3;
   ZANO = 4;
+  TON = 5;
 }
 
 message Chain {
@@ -23,4 +24,5 @@ message Chain {
   string bridge_address = 3;
   // operator is the address of the operator of the bridge contract
   string operator = 4;
+  uint32 confirmations = 5;
 }
