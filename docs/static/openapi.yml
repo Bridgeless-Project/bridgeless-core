@@ -43,6 +43,8 @@ paths:
                     confirmations:
                       type: integer
                       format: int64
+                    name:
+                      type: string
               pagination:
                 type: object
                 properties:
@@ -352,6 +354,8 @@ paths:
                   confirmations:
                     type: integer
                     format: int64
+                  name:
+                    type: string
         default:
           description: An unexpected error response.
           schema:
@@ -49821,6 +49825,8 @@ definitions:
       confirmations:
         type: integer
         format: int64
+      name:
+        type: string
   core.bridge.ChainType:
     type: string
     enum:
@@ -49899,6 +49905,8 @@ definitions:
           confirmations:
             type: integer
             format: int64
+          name:
+            type: string
   core.bridge.QueryGetChainsResponse:
     type: object
     properties:
@@ -49930,6 +49938,8 @@ definitions:
             confirmations:
               type: integer
               format: int64
+            name:
+              type: string
       pagination:
         type: object
         properties:

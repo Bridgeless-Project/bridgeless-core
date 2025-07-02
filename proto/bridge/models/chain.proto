@@ -25,4 +25,5 @@ message Chain {
   // operator is the address of the operator of the bridge contract
   string operator = 4;
   uint32 confirmations = 5;
+  string name = 6;
 }
