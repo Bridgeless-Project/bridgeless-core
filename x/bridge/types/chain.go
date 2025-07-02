@@ -15,6 +15,10 @@ func validateChain(chain *Chain) error {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidAddress, "empty bridge address")
 	}
 
+	if chain.Confirmations == 0 {
+		return errorsmod.Wrap(ErrInvalidConfirmationsNumber, "confirmations number can not be zero")
+	}
+
 	switch chain.Type {
 	case ChainType_EVM:
 		if _, set := big.NewInt(0).SetString(chain.Id, 10); !set {
@@ -30,6 +34,7 @@ func validateChain(chain *Chain) error {
 	case ChainType_COSMOS:
 	case ChainType_OTHER:
 	case ChainType_ZANO:
+	case ChainType_TON:
 	default:
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid chain type: %s", chain.Type)
 	}
