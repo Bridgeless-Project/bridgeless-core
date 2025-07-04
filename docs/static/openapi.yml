@@ -28,6 +28,7 @@ paths:
                         - COSMOS
                         - OTHER
                         - ZANO
+                        - TON
                       default: EVM
                     bridge_address:
                       type: string
@@ -39,6 +40,11 @@ paths:
                       title: >-
                         operator is the address of the operator of the bridge
                         contract
+                    confirmations:
+                      type: integer
+                      format: int64
+                    name:
+                      type: string
               pagination:
                 type: object
                 properties:
@@ -333,6 +339,7 @@ paths:
                       - COSMOS
                       - OTHER
                       - ZANO
+                      - TON
                     default: EVM
                   bridge_address:
                     type: string
@@ -344,6 +351,11 @@ paths:
                     title: >-
                       operator is the address of the operator of the bridge
                       contract
+                  confirmations:
+                    type: integer
+                    format: int64
+                  name:
+                    type: string
         default:
           description: An unexpected error response.
           schema:
@@ -23480,15 +23492,17 @@ paths:
                   mint_denom:
                     type: string
                     title: type of coin to mint
-                  blocks_per_month:
+                  halving_blocks:
                     type: string
                     format: uint64
-                    title: expected blocks per month
-                  end_block:
-                    type: string
-                    format: uint64
-                    title: block when no additional tokens will be minted
-                  month_reward:
+                    title: each halving_blocks block_reward is davide on 2
+                  max_halving_periods:
+                    type: integer
+                    format: int64
+                  current_halving_period:
+                    type: integer
+                    format: int64
+                  block_reward:
                     type: object
                     properties:
                       denom:
@@ -49800,6 +49814,7 @@ definitions:
           - COSMOS
           - OTHER
           - ZANO
+          - TON
         default: EVM
       bridge_address:
         type: string
@@ -49807,6 +49822,11 @@ definitions:
       operator:
         type: string
         title: operator is the address of the operator of the bridge contract
+      confirmations:
+        type: integer
+        format: int64
+      name:
+        type: string
   core.bridge.ChainType:
     type: string
     enum:
@@ -49815,6 +49835,7 @@ definitions:
       - COSMOS
       - OTHER
       - ZANO
+      - TON
     default: EVM
   core.bridge.MsgAddTokenInfoResponse:
     type: object
@@ -49873,6 +49894,7 @@ definitions:
               - COSMOS
               - OTHER
               - ZANO
+              - TON
             default: EVM
           bridge_address:
             type: string
@@ -49880,6 +49902,11 @@ definitions:
           operator:
             type: string
             title: operator is the address of the operator of the bridge contract
+          confirmations:
+            type: integer
+            format: int64
+          name:
+            type: string
   core.bridge.QueryGetChainsResponse:
     type: object
     properties:
@@ -49898,6 +49925,7 @@ definitions:
                 - COSMOS
                 - OTHER
                 - ZANO
+                - TON
               default: EVM
             bridge_address:
               type: string
@@ -49907,6 +49935,11 @@ definitions:
             operator:
               type: string
               title: operator is the address of the operator of the bridge contract
+            confirmations:
+              type: integer
+              format: int64
+            name:
+              type: string
       pagination:
         type: object
         properties:
@@ -64166,15 +64199,17 @@ definitions:
       mint_denom:
         type: string
         title: type of coin to mint
-      blocks_per_month:
+      halving_blocks:
         type: string
         format: uint64
-        title: expected blocks per month
-      end_block:
-        type: string
-        format: uint64
-        title: block when no additional tokens will be minted
-      month_reward:
+        title: each halving_blocks block_reward is davide on 2
+      max_halving_periods:
+        type: integer
+        format: int64
+      current_halving_period:
+        type: integer
+        format: int64
+      block_reward:
         type: object
         properties:
           denom:
@@ -64197,15 +64232,17 @@ definitions:
           mint_denom:
             type: string
             title: type of coin to mint
-          blocks_per_month:
+          halving_blocks:
             type: string
             format: uint64
-            title: expected blocks per month
-          end_block:
-            type: string
-            format: uint64
-            title: block when no additional tokens will be minted
-          month_reward:
+            title: each halving_blocks block_reward is davide on 2
+          max_halving_periods:
+            type: integer
+            format: int64
+          current_halving_period:
+            type: integer
+            format: int64
+          block_reward:
             type: object
             properties:
               denom:
