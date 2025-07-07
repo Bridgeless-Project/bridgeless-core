@@ -23,4 +23,6 @@ var (
 	ErrInvalidCommissionRate        = errorsmod.Register(ModuleName, 1112, "invalid commission rate")
 	ErrInvalidTssThreshold          = errorsmod.Register(ModuleName, 1113, "invalid tss threshold")
 	ErrInvalidTxHash                = errorsmod.Register(ModuleName, 1114, "invalid tx hash")
+	ErrInvalidConfirmationsNumber   = errorsmod.Register(ModuleName, 1115, "invalid confirmations number")
+	ErrInvalidChainName             = errorsmod.Register(ModuleName, 1116, "invalid chain name")
 )
