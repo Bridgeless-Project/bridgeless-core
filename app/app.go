@@ -33,6 +33,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/nft"
 	nftkeeper "github.com/cosmos/cosmos-sdk/x/nft/keeper"
 	nfttypes "github.com/cosmos/cosmos-sdk/x/nft/types"
+	"github.com/gorilla/mux"
+	"github.com/spf13/cast"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig"
 	multisigtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
@@ -43,10 +45,7 @@ import (
 	"path/filepath"
 	"sort"
 
-	"github.com/gorilla/mux"
 	"github.com/rakyll/statik/fs"
-	"github.com/spf13/cast"
-
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
 	tmos "github.com/tendermint/tendermint/libs/os"
@@ -870,6 +869,13 @@ func NewBridge(
 	app.setAnteHandler(encodingConfig.TxConfig, maxGasWanted)
 	app.setPostHandler()
 	app.SetEndBlocker(app.EndBlocker)
+
+	app.UpgradeKeeper.SetUpgradeHandler(
+		"v12.1.20-rc1",
+		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
+			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
+		},
+	)
 
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
