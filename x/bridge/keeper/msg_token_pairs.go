@@ -33,6 +33,7 @@ func (m msgServer) AddTokenInfo(goCtx context.Context, msg *types.MsgAddTokenInf
 	m.SetTokenPairs(ctx, msg.Info, token.Info...)
 	for _, info := range token.Info {
 		// reverse mapping dest chain -> src chain
+		m.SetTokenInfo(ctx, info)
 		m.SetTokenPairs(ctx, info, msg.Info)
 	}
 
@@ -66,6 +67,7 @@ func (m msgServer) RemoveTokenInfo(goCtx context.Context, msg *types.MsgRemoveTo
 	m.RemoveTokenPairs(ctx, token.Info[idx], token.Info...)
 	for _, info := range token.Info {
 		// reverse mapping dest chain -> src chain
+		m.Keeper.RemoveTokenInfo(ctx, info.ChainId, info.Address)
 		m.RemoveTokenPairs(ctx, info, token.Info[idx])
 	}
 
