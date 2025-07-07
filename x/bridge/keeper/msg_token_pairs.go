@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+
 	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -28,13 +29,10 @@ func (m msgServer) AddTokenInfo(goCtx context.Context, msg *types.MsgAddTokenInf
 
 	token.Info = append(token.Info, msg.Info)
 	m.SetToken(ctx, token)
-
-	// mapping src chain -> dest chain
-	m.SetTokenPairs(ctx, msg.Info, token.Info...)
+	m.SetTokenInfo(ctx, msg.Info)
+	m.SetTokenPairs(ctx, msg.Info, token.Info...) // mapping src chain -> dest chain
 	for _, info := range token.Info {
-		// reverse mapping dest chain -> src chain
-		m.SetTokenInfo(ctx, info)
-		m.SetTokenPairs(ctx, info, msg.Info)
+		m.SetTokenPairs(ctx, info, msg.Info) // reverse mapping dest chain -> src chain
 	}
 
 	return &types.MsgAddTokenInfoResponse{}, nil
@@ -63,12 +61,11 @@ func (m msgServer) RemoveTokenInfo(goCtx context.Context, msg *types.MsgRemoveTo
 		return nil, errorsmod.Wrap(sdkerrors.ErrNotFound, "token info not found")
 	}
 
-	// mapping src chain -> dest chain
-	m.RemoveTokenPairs(ctx, token.Info[idx], token.Info...)
+	old := token.Info[idx]
+	m.Keeper.RemoveTokenInfo(ctx, old.ChainId, old.Address)
+	m.RemoveTokenPairs(ctx, old, token.Info...) // mapping src chain -> dest chain
 	for _, info := range token.Info {
-		// reverse mapping dest chain -> src chain
-		m.Keeper.RemoveTokenInfo(ctx, info.ChainId, info.Address)
-		m.RemoveTokenPairs(ctx, info, token.Info[idx])
+		m.RemoveTokenPairs(ctx, info, old) // reverse mapping dest chain -> src chain
 	}
 
 	token.Info = append(token.Info[:idx], token.Info[idx+1:]...)
