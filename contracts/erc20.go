@@ -21,10 +21,10 @@ import (
 	_ "embed" // embed compiled smart contract
 	"encoding/json"
 
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	"github.com/ethereum/go-ethereum/common"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/erc20/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
 )
 
 var (

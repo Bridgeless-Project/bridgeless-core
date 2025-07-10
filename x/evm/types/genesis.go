@@ -17,7 +17,7 @@ package types
 
 import (
 	errorsmod "cosmossdk.io/errors"
-	"github.com/hyle-team/bridgeless-core/v12/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/types"
 )
 
 // Validate performs a basic validation of a GenesisAccount fields.

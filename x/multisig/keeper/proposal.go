@@ -3,10 +3,10 @@ package keeper
 import (
 	errorsmod "cosmossdk.io/errors"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/hyle-team/bridgeless-core/v12/x/multisig/types"
 )
 
 // SetProposal set a specific proposal in the store from its id
@@ -27,12 +27,6 @@ func (k Keeper) GetProposal(ctx sdk.Context, id uint64) (val types.Proposal, fou
 
 	k.cdc.MustUnmarshal(b, &val)
 	return val, true
-}
-
-// RemoveProposal removes a proposal from the store
-func (k Keeper) RemoveProposal(ctx sdk.Context, id uint64) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ProposalKeyPrefix))
-	store.Delete(types.ProposalKey(id))
 }
 
 // GetAllProposal returns all proposals

@@ -12,14 +12,14 @@ import (
 
 	abci "github.com/tendermint/tendermint/abci/types"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/client/cli"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/hyle-team/bridgeless-core/v12/x/multisig/client/cli"
-	"github.com/hyle-team/bridgeless-core/v12/x/multisig/keeper"
-	"github.com/hyle-team/bridgeless-core/v12/x/multisig/types"
 )
 
 var (
@@ -162,7 +162,7 @@ func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.Raw
 }
 
 // ConsensusVersion implements ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 2 }
+func (AppModule) ConsensusVersion() uint64 { return 1 }
 
 // BeginBlock executes all ABCI BeginBlock logic respective to the capability module.
 func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {}

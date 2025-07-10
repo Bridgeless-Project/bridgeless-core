@@ -22,11 +22,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/hyle-team/bridgeless-core/v12/app"
-	"github.com/hyle-team/bridgeless-core/v12/encoding"
-	v5 "github.com/hyle-team/bridgeless-core/v12/x/evm/migrations/v5"
-	v5types "github.com/hyle-team/bridgeless-core/v12/x/evm/migrations/v5/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/encoding"
+	v5 "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/migrations/v5"
+	v5types "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/migrations/v5/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 )
 
 func TestMigrate(t *testing.T) {

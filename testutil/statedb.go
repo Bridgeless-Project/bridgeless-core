@@ -17,10 +17,10 @@
 package testutil
 
 import (
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app/ante/evm"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/statedb"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/hyle-team/bridgeless-core/v12/app/ante/evm"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/statedb"
 )
 
 // NewStateDB returns a new StateDB for testing purposes.

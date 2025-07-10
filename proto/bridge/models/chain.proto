@@ -6,7 +6,7 @@ import "cosmos/base/query/v1beta1/pagination.proto";
 import "google/api/annotations.proto";
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/hyle-team/bridgeless-core/v12/x/bridge/types";
+option go_package = "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types";
 
 enum ChainType {
   EVM = 0;
@@ -14,6 +14,7 @@ enum ChainType {
   COSMOS = 2;
   OTHER = 3;
   ZANO = 4;
+  TON = 5;
 }
 
 message Chain {
@@ -23,4 +24,6 @@ message Chain {
   string bridge_address = 3;
   // operator is the address of the operator of the bridge contract
   string operator = 4;
+  uint32 confirmations = 5;
+  string name = 6;
 }

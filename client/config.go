@@ -27,7 +27,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client/flags"
 
-	"github.com/hyle-team/bridgeless-core/v12/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/types"
 )
 
 // InitConfig adds the chain-id, encoding and output flags to the persistent flag set.

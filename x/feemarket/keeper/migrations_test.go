@@ -1,9 +1,9 @@
 package keeper_test
 
 import (
+	feemarketkeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	feemarketkeeper "github.com/hyle-team/bridgeless-core/v12/x/feemarket/keeper"
-	"github.com/hyle-team/bridgeless-core/v12/x/feemarket/types"
 )
 
 type mockSubspace struct {

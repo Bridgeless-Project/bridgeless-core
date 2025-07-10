@@ -1,9 +1,9 @@
 package keeper
 
 import (
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/multisig/types"
 )
 
 // SetVote set a specific vote in the store from its proposal id and voter
@@ -24,12 +24,6 @@ func (k Keeper) GetVote(ctx sdk.Context, proposalId uint64, voter string) (val t
 
 	k.cdc.MustUnmarshal(b, &val)
 	return val, true
-}
-
-// RemoveVote removes a vote from the store
-func (k Keeper) RemoveVote(ctx sdk.Context, proposalId uint64, voter string) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.VoteKeyPrefix))
-	store.Delete(types.VoteKey(proposalId, voter))
 }
 
 // GetAllVote returns all votes

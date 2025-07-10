@@ -19,10 +19,10 @@ package v3
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 
+	v3types "github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/migrations/v3/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/types"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	v3types "github.com/hyle-team/bridgeless-core/v12/x/claims/migrations/v3/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/claims/types"
 )
 
 // MigrateStore migrates the x/claims module state from the consensus version 2 to

@@ -1,9 +1,9 @@
 package testutil
 
 import (
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/encoding"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/hyle-team/bridgeless-core/v12/app"
-	"github.com/hyle-team/bridgeless-core/v12/encoding"
 )
 
 // NextFn is a no-op function that returns the context and no error in order to mock

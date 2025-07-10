@@ -4,8 +4,8 @@ import (
 	"math/big"
 	"testing"
 
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	"github.com/ethereum/go-ethereum/common"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
 	"github.com/stretchr/testify/require"
 	abci "github.com/tendermint/tendermint/abci/types"
 )

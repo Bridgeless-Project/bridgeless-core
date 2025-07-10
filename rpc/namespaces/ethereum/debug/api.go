@@ -29,18 +29,18 @@ import (
 
 	"github.com/davecgh/go-spew/spew"
 
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 
 	stderrors "github.com/pkg/errors"
 
 	"github.com/cosmos/cosmos-sdk/server"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/backend"
+	rpctypes "github.com/Bridgeless-Project/bridgeless-core/v12/rpc/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/consensus/ethash"
 	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/hyle-team/bridgeless-core/v12/rpc/backend"
-	rpctypes "github.com/hyle-team/bridgeless-core/v12/rpc/types"
 	"github.com/tendermint/tendermint/libs/log"
 )
 

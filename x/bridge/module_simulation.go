@@ -3,14 +3,14 @@ package bridge
 import (
 	"math/rand"
 
+	bridgesimulation "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/simulation"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
-	bridgesimulation "github.com/hyle-team/bridgeless-core/v12/x/bridge/simulation"
-	"github.com/hyle-team/bridgeless-core/v12/x/bridge/types"
 )
 
 // avoid unused import issue

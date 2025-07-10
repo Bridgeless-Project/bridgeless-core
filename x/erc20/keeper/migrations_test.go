@@ -1,17 +1,17 @@
 package keeper_test
 
 import (
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/encoding"
+	erc20keeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/keeper"
+	v3types "github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/migrations/v3/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	"github.com/cosmos/cosmos-sdk/testutil"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	"github.com/hyle-team/bridgeless-core/v12/app"
-	"github.com/hyle-team/bridgeless-core/v12/encoding"
-	erc20keeper "github.com/hyle-team/bridgeless-core/v12/x/erc20/keeper"
-	v3types "github.com/hyle-team/bridgeless-core/v12/x/erc20/migrations/v3/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/erc20/types"
 )
 
 type mockSubspace struct {

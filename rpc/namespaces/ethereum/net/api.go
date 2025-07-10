@@ -20,8 +20,8 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	"fmt"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/hyle-team/bridgeless-core/v12/types"
 	rpcclient "github.com/tendermint/tendermint/rpc/client"
 )
 

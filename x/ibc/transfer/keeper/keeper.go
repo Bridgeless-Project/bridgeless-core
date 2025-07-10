@@ -26,7 +26,7 @@ import (
 	transfertypes "github.com/cosmos/ibc-go/v6/modules/apps/transfer/types"
 	porttypes "github.com/cosmos/ibc-go/v6/modules/core/05-port/types"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/ibc/transfer/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/ibc/transfer/types"
 )
 
 // Keeper defines the modified IBC transfer keeper that embeds the original one.

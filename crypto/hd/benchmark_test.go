@@ -3,8 +3,8 @@ package hd
 import (
 	"testing"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
-	"github.com/hyle-team/bridgeless-core/v12/types"
 )
 
 func BenchmarkEthSecp256k1Algo_Derive(b *testing.B) {

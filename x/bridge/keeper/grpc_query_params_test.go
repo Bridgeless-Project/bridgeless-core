@@ -3,9 +3,9 @@ package keeper_test
 import (
 	"testing"
 
+	testkeeper "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	testkeeper "github.com/hyle-team/bridgeless-core/v12/testutil/keeper"
-	"github.com/hyle-team/bridgeless-core/v12/x/bridge/types"
 	"github.com/stretchr/testify/require"
 )
 

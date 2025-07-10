@@ -21,8 +21,8 @@ import (
 	"time"
 
 	// TODO update import to local pkg when rpc pkg is migrated
+	"github.com/Bridgeless-Project/bridgeless-core/v12/server/config"
 	"github.com/gorilla/mux"
-	"github.com/hyle-team/bridgeless-core/v12/server/config"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"github.com/spf13/cobra"
 	"golang.org/x/net/netutil"

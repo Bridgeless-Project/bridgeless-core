@@ -3,15 +3,15 @@ package ibc
 import (
 	"testing"
 
-	"github.com/hyle-team/bridgeless-core/v12/x/claims/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/types"
 	"github.com/stretchr/testify/require"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	teststypes "github.com/Bridgeless-Project/bridgeless-core/v12/types/tests"
 	transfertypes "github.com/cosmos/ibc-go/v6/modules/apps/transfer/types"
 	channeltypes "github.com/cosmos/ibc-go/v6/modules/core/04-channel/types"
 	ibctesting "github.com/cosmos/ibc-go/v6/testing"
-	teststypes "github.com/hyle-team/bridgeless-core/v12/types/tests"
 )
 
 func init() {

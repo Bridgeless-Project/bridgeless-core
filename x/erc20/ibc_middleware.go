@@ -25,9 +25,9 @@ import (
 	porttypes "github.com/cosmos/ibc-go/v6/modules/core/05-port/types"
 	"github.com/cosmos/ibc-go/v6/modules/core/exported"
 
+	"github.com/Bridgeless-Project/bridgeless-core/v12/ibc"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/keeper"
 	errortypes "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/hyle-team/bridgeless-core/v12/ibc"
-	"github.com/hyle-team/bridgeless-core/v12/x/erc20/keeper"
 )
 
 var _ porttypes.IBCModule = &IBCMiddleware{}

@@ -17,7 +17,7 @@ package types
 
 import (
 	"fmt"
-	bridgeTypes "github.com/hyle-team/bridgeless-core/v12/types"
+	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	"strings"
 
 	errorsmod "cosmossdk.io/errors"

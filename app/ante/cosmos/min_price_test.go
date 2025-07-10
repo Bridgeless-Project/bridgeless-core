@@ -2,12 +2,12 @@ package cosmos_test
 
 import (
 	sdkmath "cosmossdk.io/math"
+	cosmosante "github.com/Bridgeless-Project/bridgeless-core/v12/app/ante/cosmos"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/testutil"
+	testutiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	cosmosante "github.com/hyle-team/bridgeless-core/v12/app/ante/cosmos"
-	"github.com/hyle-team/bridgeless-core/v12/testutil"
-	testutiltx "github.com/hyle-team/bridgeless-core/v12/testutil/tx"
-	"github.com/hyle-team/bridgeless-core/v12/utils"
 )
 
 var execTypes = []struct {

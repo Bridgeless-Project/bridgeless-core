@@ -6,14 +6,14 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	ethante "github.com/hyle-team/bridgeless-core/v12/app/ante/evm"
-	"github.com/hyle-team/bridgeless-core/v12/server/config"
-	"github.com/hyle-team/bridgeless-core/v12/testutil"
-	testutiltx "github.com/hyle-team/bridgeless-core/v12/testutil/tx"
-	"github.com/hyle-team/bridgeless-core/v12/types"
-	"github.com/hyle-team/bridgeless-core/v12/utils"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/statedb"
-	evmtypes "github.com/hyle-team/bridgeless-core/v12/x/evm/types"
+	ethante "github.com/Bridgeless-Project/bridgeless-core/v12/app/ante/evm"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/server/config"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/testutil"
+	testutiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/statedb"
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 )

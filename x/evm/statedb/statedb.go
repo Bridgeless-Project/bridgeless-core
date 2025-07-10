@@ -17,7 +17,7 @@ package statedb
 
 import (
 	"errors"
-	bridgeTypes "github.com/hyle-team/bridgeless-core/v12/types"
+	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	"math/big"
 	"sort"
 

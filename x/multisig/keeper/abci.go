@@ -2,12 +2,11 @@ package keeper
 
 import (
 	"fmt"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/hyle-team/bridgeless-core/v12/x/multisig/types"
 )
 
 func (k Keeper) EndBlocker(ctx sdk.Context) {
-	param := k.GetParams(ctx)
 	currentBlock := uint64(ctx.BlockHeight())
 
 	k.IterateProposals(ctx, func(proposal types.Proposal) (stop bool) {
@@ -43,20 +42,6 @@ func (k Keeper) EndBlocker(ctx sdk.Context) {
 				sdk.NewAttribute(types.AttributeKeyProposal, fmt.Sprintf("%d", proposal.Id)),
 				sdk.NewAttribute(types.AttributeKeyProposalStatus, proposal.Status.String()),
 				sdk.NewAttribute(types.AttributeKeyProposalExecutionLogs, logs),
-			))
-		}
-
-		if proposal.VotingEndBlock+param.PrunePeriod == currentBlock {
-			votes := k.GetAllVoteByProposalId(ctx, proposal.Id)
-
-			for _, vote := range votes {
-				k.RemoveVote(ctx, vote.ProposalId, vote.Voter)
-			}
-
-			k.RemoveProposal(ctx, proposal.Id)
-
-			ctx.EventManager().EmitEvent(sdk.NewEvent(types.EventTypeProposalPruned,
-				sdk.NewAttribute(types.AttributeKeyProposal, fmt.Sprintf("%d", proposal.Id)),
 			))
 		}
 

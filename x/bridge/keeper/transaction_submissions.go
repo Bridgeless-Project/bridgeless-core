@@ -2,12 +2,12 @@ package keeper
 
 import (
 	errorsmod "cosmossdk.io/errors"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/hyle-team/bridgeless-core/v12/x/bridge/types"
 )
 
 func (k Keeper) SetTransactionSubmissions(sdkCtx sdk.Context, txSubmissions *types.TransactionSubmissions) {

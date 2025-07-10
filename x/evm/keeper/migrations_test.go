@@ -1,9 +1,9 @@
 package keeper_test
 
 import (
+	evmkeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	evmkeeper "github.com/hyle-team/bridgeless-core/v12/x/evm/keeper"
-	"github.com/hyle-team/bridgeless-core/v12/x/evm/types"
 )
 
 type mockSubspace struct {

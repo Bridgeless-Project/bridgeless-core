@@ -52,17 +52,17 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/crisis"
 	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
 
-	evmosclient "github.com/hyle-team/bridgeless-core/v12/client"
-	"github.com/hyle-team/bridgeless-core/v12/client/debug"
-	"github.com/hyle-team/bridgeless-core/v12/encoding"
-	"github.com/hyle-team/bridgeless-core/v12/ethereum/eip712"
-	evmosserver "github.com/hyle-team/bridgeless-core/v12/server"
-	servercfg "github.com/hyle-team/bridgeless-core/v12/server/config"
-	srvflags "github.com/hyle-team/bridgeless-core/v12/server/flags"
+	evmosclient "github.com/Bridgeless-Project/bridgeless-core/v12/client"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/client/debug"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/encoding"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/ethereum/eip712"
+	evmosserver "github.com/Bridgeless-Project/bridgeless-core/v12/server"
+	servercfg "github.com/Bridgeless-Project/bridgeless-core/v12/server/config"
+	srvflags "github.com/Bridgeless-Project/bridgeless-core/v12/server/flags"
 
-	"github.com/hyle-team/bridgeless-core/v12/app"
-	cmdcfg "github.com/hyle-team/bridgeless-core/v12/cmd/config"
-	evmoskr "github.com/hyle-team/bridgeless-core/v12/crypto/keyring"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
+	cmdcfg "github.com/Bridgeless-Project/bridgeless-core/v12/cmd/config"
+	evmoskr "github.com/Bridgeless-Project/bridgeless-core/v12/crypto/keyring"
 )
 
 const (
