@@ -76,6 +76,7 @@ func validateTokenInfo(info *TokenInfo, chainType *ChainType) error {
 	case ChainType_COSMOS:
 	case ChainType_ZANO:
 	case ChainType_TON:
+	case ChainType_SOLANA:
 	case ChainType_OTHER:
 	default:
 		return errors.New(fmt.Sprintf("invalid chain type: %v", *chainType))
