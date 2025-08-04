@@ -1,8 +1,6 @@
 module github.com/Bridgeless-Project/bridgeless-core/v12
 
-go 1.22
-
-toolchain go1.24.1
+go 1.20
 
 require (
 	cosmossdk.io/errors v1.0.0-beta.7
