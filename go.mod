@@ -1,6 +1,8 @@
 module github.com/Bridgeless-Project/bridgeless-core/v12
 
-go 1.20
+go 1.22
+
+toolchain go1.24.1
 
 require (
 	cosmossdk.io/errors v1.0.0-beta.7
@@ -174,7 +176,6 @@ require (
 	github.com/prometheus/tsdb v0.10.0 // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475 // indirect
 	github.com/rjeczalik/notify v0.9.3 // indirect
-	github.com/rogpeppe/go-internal v1.13.1 // indirect
 	github.com/rs/zerolog v1.29.1 // indirect
 	github.com/sasha-s/go-deadlock v0.3.1 // indirect
 	github.com/shirou/gopsutil v3.21.4-0.20210419000835-c7a38de76ee5+incompatible // indirect
