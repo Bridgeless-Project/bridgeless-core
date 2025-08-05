@@ -15,6 +15,7 @@ enum ChainType {
   OTHER = 3;
   ZANO = 4;
   TON = 5;
+  SOLANA = 6;
 }
 
 message Chain {
