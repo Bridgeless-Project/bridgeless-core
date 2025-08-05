@@ -18,9 +18,15 @@ package app
 
 import (
 	"context"
-	errorsmod "cosmossdk.io/errors"
 	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"path/filepath"
+	"sort"
+
+	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/docs"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge"
 	multisigkeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/keeper"
@@ -38,12 +44,6 @@ import (
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig"
 	multisigtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
-
-	"io"
-	"net/http"
-	"os"
-	"path/filepath"
-	"sort"
 
 	"github.com/rakyll/statik/fs"
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -872,6 +872,13 @@ func NewBridge(
 
 	app.UpgradeKeeper.SetUpgradeHandler(
 		"v12.1.20-rc1",
+		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
+			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
+		},
+	)
+
+	app.UpgradeKeeper.SetUpgradeHandler(
+		"v12.1.21-rc1",
 		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
 		},
