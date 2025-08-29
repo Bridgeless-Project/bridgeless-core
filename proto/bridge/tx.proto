@@ -29,7 +29,7 @@ service Msg {
     rpc AddTokenInfo(MsgAddTokenInfo) returns (MsgAddTokenInfoResponse);
     rpc RemoveTokenInfo(MsgRemoveTokenInfo) returns (MsgRemoveTokenInfoResponse);
 
-  rpc SetParties(MsgSetParties) returns (MsgSetPartiesResponse);
+    rpc SetParties(MsgSetParties) returns (MsgSetPartiesResponse);
     rpc SetTssThreshold(MsgSetTssThreshold) returns (MsgSetTssThresholdResponse);
 }
 
