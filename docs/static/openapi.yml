@@ -29,6 +29,7 @@ paths:
                         - OTHER
                         - ZANO
                         - TON
+                        - SOLANA
                       default: EVM
                     bridge_address:
                       type: string
@@ -340,6 +341,7 @@ paths:
                       - OTHER
                       - ZANO
                       - TON
+                      - SOLANA
                     default: EVM
                   bridge_address:
                     type: string
@@ -18567,6 +18569,7 @@ paths:
                         - PROPOSAL_STATUS_PASSED
                         - PROPOSAL_STATUS_REJECTED
                         - PROPOSAL_STATUS_FAILED
+                        - PROPOSAL_STATUS_CANCELED
                       default: PROPOSAL_STATUS_UNSPECIFIED
                       description: >-
                         ProposalStatus enumerates the valid statuses of a
@@ -18583,6 +18586,8 @@ paths:
                         been rejected.
                          - PROPOSAL_STATUS_FAILED: PROPOSAL_STATUS_FAILED defines a proposal status of a proposal that has
                         failed.
+                         - PROPOSAL_STATUS_CANCELED: PROPOSAL_STATUS_CANCELED defines a proposal status of a proposal that has
+                        been canceled.(these poposals used to be deleted)
                     final_tally_result:
                       description: >-
                         final_tally_result is the final tally result of the
@@ -18602,6 +18607,9 @@ paths:
                           type: string
                         no_with_veto_count:
                           type: string
+                      title: >-
+                        TallyResult defines a standard tally for a governance
+                        proposal.s
                     submit_time:
                       type: string
                       format: date-time
@@ -18865,6 +18873,8 @@ paths:
             been rejected.
              - PROPOSAL_STATUS_FAILED: PROPOSAL_STATUS_FAILED defines a proposal status of a proposal that has
             failed.
+             - PROPOSAL_STATUS_CANCELED: PROPOSAL_STATUS_CANCELED defines a proposal status of a proposal that has
+            been canceled.(these poposals used to be deleted)
           in: query
           required: false
           type: string
@@ -18875,6 +18885,7 @@ paths:
             - PROPOSAL_STATUS_PASSED
             - PROPOSAL_STATUS_REJECTED
             - PROPOSAL_STATUS_FAILED
+            - PROPOSAL_STATUS_CANCELED
           default: PROPOSAL_STATUS_UNSPECIFIED
         - name: voter
           description: voter defines the voter address for the proposals.
@@ -19146,6 +19157,7 @@ paths:
                       - PROPOSAL_STATUS_PASSED
                       - PROPOSAL_STATUS_REJECTED
                       - PROPOSAL_STATUS_FAILED
+                      - PROPOSAL_STATUS_CANCELED
                     default: PROPOSAL_STATUS_UNSPECIFIED
                     description: >-
                       ProposalStatus enumerates the valid statuses of a
@@ -19162,6 +19174,8 @@ paths:
                       been rejected.
                        - PROPOSAL_STATUS_FAILED: PROPOSAL_STATUS_FAILED defines a proposal status of a proposal that has
                       failed.
+                       - PROPOSAL_STATUS_CANCELED: PROPOSAL_STATUS_CANCELED defines a proposal status of a proposal that has
+                      been canceled.(these poposals used to be deleted)
                   final_tally_result:
                     description: >-
                       final_tally_result is the final tally result of the
@@ -19181,6 +19195,9 @@ paths:
                         type: string
                       no_with_veto_count:
                         type: string
+                    title: >-
+                      TallyResult defines a standard tally for a governance
+                      proposal.s
                   submit_time:
                     type: string
                     format: date-time
@@ -19992,6 +20009,9 @@ paths:
                     type: string
                   no_with_veto_count:
                     type: string
+                title: >-
+                  TallyResult defines a standard tally for a governance
+                  proposal.s
             description: >-
               QueryTallyResultResponse is the response type for the Query/Tally
               RPC method.
@@ -21248,6 +21268,7 @@ paths:
                         - PROPOSAL_STATUS_PASSED
                         - PROPOSAL_STATUS_REJECTED
                         - PROPOSAL_STATUS_FAILED
+                        - PROPOSAL_STATUS_CANCELED
                       default: PROPOSAL_STATUS_UNSPECIFIED
                       description: >-
                         ProposalStatus enumerates the valid statuses of a
@@ -21264,6 +21285,8 @@ paths:
                         been rejected.
                          - PROPOSAL_STATUS_FAILED: PROPOSAL_STATUS_FAILED defines a proposal status of a proposal that has
                         failed.
+                         - PROPOSAL_STATUS_CANCELED: PROPOSAL_STATUS_CANCELED defines a proposal status of a proposal that has
+                        been canceled.(these poposals used to be deleted)
                     final_tally_result:
                       description: >-
                         final_tally_result is the final tally result of the
@@ -21541,6 +21564,8 @@ paths:
             been rejected.
              - PROPOSAL_STATUS_FAILED: PROPOSAL_STATUS_FAILED defines a proposal status of a proposal that has
             failed.
+             - PROPOSAL_STATUS_CANCELED: PROPOSAL_STATUS_CANCELED defines a proposal status of a proposal that has
+            been canceled.(these poposals used to be deleted)
           in: query
           required: false
           type: string
@@ -21551,6 +21576,7 @@ paths:
             - PROPOSAL_STATUS_PASSED
             - PROPOSAL_STATUS_REJECTED
             - PROPOSAL_STATUS_FAILED
+            - PROPOSAL_STATUS_CANCELED
           default: PROPOSAL_STATUS_UNSPECIFIED
         - name: voter
           description: voter defines the voter address for the proposals.
@@ -21818,6 +21844,7 @@ paths:
                       - PROPOSAL_STATUS_PASSED
                       - PROPOSAL_STATUS_REJECTED
                       - PROPOSAL_STATUS_FAILED
+                      - PROPOSAL_STATUS_CANCELED
                     default: PROPOSAL_STATUS_UNSPECIFIED
                     description: >-
                       ProposalStatus enumerates the valid statuses of a
@@ -21834,6 +21861,8 @@ paths:
                       been rejected.
                        - PROPOSAL_STATUS_FAILED: PROPOSAL_STATUS_FAILED defines a proposal status of a proposal that has
                       failed.
+                       - PROPOSAL_STATUS_CANCELED: PROPOSAL_STATUS_CANCELED defines a proposal status of a proposal that has
+                      been canceled.(these poposals used to be deleted)
                   final_tally_result:
                     description: >-
                       final_tally_result is the final tally result of the
@@ -49815,6 +49844,7 @@ definitions:
           - OTHER
           - ZANO
           - TON
+          - SOLANA
         default: EVM
       bridge_address:
         type: string
@@ -49836,6 +49866,7 @@ definitions:
       - OTHER
       - ZANO
       - TON
+      - SOLANA
     default: EVM
   core.bridge.MsgAddTokenInfoResponse:
     type: object
@@ -49895,6 +49926,7 @@ definitions:
               - OTHER
               - ZANO
               - TON
+              - SOLANA
             default: EVM
           bridge_address:
             type: string
@@ -49926,6 +49958,7 @@ definitions:
                 - OTHER
                 - ZANO
                 - TON
+                - SOLANA
               default: EVM
             bridge_address:
               type: string
@@ -61866,6 +61899,7 @@ definitions:
           - PROPOSAL_STATUS_PASSED
           - PROPOSAL_STATUS_REJECTED
           - PROPOSAL_STATUS_FAILED
+          - PROPOSAL_STATUS_CANCELED
         default: PROPOSAL_STATUS_UNSPECIFIED
         description: |-
           ProposalStatus enumerates the valid statuses of a proposal.
@@ -61881,6 +61915,8 @@ definitions:
           been rejected.
            - PROPOSAL_STATUS_FAILED: PROPOSAL_STATUS_FAILED defines a proposal status of a proposal that has
           failed.
+           - PROPOSAL_STATUS_CANCELED: PROPOSAL_STATUS_CANCELED defines a proposal status of a proposal that has
+          been canceled.(these poposals used to be deleted)
       final_tally_result:
         description: |-
           final_tally_result is the final tally result of the proposal. When
@@ -61896,6 +61932,7 @@ definitions:
             type: string
           no_with_veto_count:
             type: string
+        title: TallyResult defines a standard tally for a governance proposal.s
       submit_time:
         type: string
         format: date-time
@@ -61935,6 +61972,7 @@ definitions:
       - PROPOSAL_STATUS_PASSED
       - PROPOSAL_STATUS_REJECTED
       - PROPOSAL_STATUS_FAILED
+      - PROPOSAL_STATUS_CANCELED
     default: PROPOSAL_STATUS_UNSPECIFIED
     description: |-
       ProposalStatus enumerates the valid statuses of a proposal.
@@ -61950,6 +61988,8 @@ definitions:
       been rejected.
        - PROPOSAL_STATUS_FAILED: PROPOSAL_STATUS_FAILED defines a proposal status of a proposal that has
       failed.
+       - PROPOSAL_STATUS_CANCELED: PROPOSAL_STATUS_CANCELED defines a proposal status of a proposal that has
+      been canceled.(these poposals used to be deleted)
   cosmos.gov.v1.QueryDepositResponse:
     type: object
     properties:
@@ -62289,6 +62329,7 @@ definitions:
               - PROPOSAL_STATUS_PASSED
               - PROPOSAL_STATUS_REJECTED
               - PROPOSAL_STATUS_FAILED
+              - PROPOSAL_STATUS_CANCELED
             default: PROPOSAL_STATUS_UNSPECIFIED
             description: |-
               ProposalStatus enumerates the valid statuses of a proposal.
@@ -62304,6 +62345,8 @@ definitions:
               been rejected.
                - PROPOSAL_STATUS_FAILED: PROPOSAL_STATUS_FAILED defines a proposal status of a proposal that has
               failed.
+               - PROPOSAL_STATUS_CANCELED: PROPOSAL_STATUS_CANCELED defines a proposal status of a proposal that has
+              been canceled.(these poposals used to be deleted)
           final_tally_result:
             description: >-
               final_tally_result is the final tally result of the proposal. When
@@ -62322,6 +62365,7 @@ definitions:
                 type: string
               no_with_veto_count:
                 type: string
+            title: TallyResult defines a standard tally for a governance proposal.s
           submit_time:
             type: string
             format: date-time
@@ -62549,6 +62593,7 @@ definitions:
                 - PROPOSAL_STATUS_PASSED
                 - PROPOSAL_STATUS_REJECTED
                 - PROPOSAL_STATUS_FAILED
+                - PROPOSAL_STATUS_CANCELED
               default: PROPOSAL_STATUS_UNSPECIFIED
               description: |-
                 ProposalStatus enumerates the valid statuses of a proposal.
@@ -62564,6 +62609,8 @@ definitions:
                 been rejected.
                  - PROPOSAL_STATUS_FAILED: PROPOSAL_STATUS_FAILED defines a proposal status of a proposal that has
                 failed.
+                 - PROPOSAL_STATUS_CANCELED: PROPOSAL_STATUS_CANCELED defines a proposal status of a proposal that has
+                been canceled.(these poposals used to be deleted)
             final_tally_result:
               description: >-
                 final_tally_result is the final tally result of the proposal.
@@ -62583,6 +62630,7 @@ definitions:
                   type: string
                 no_with_veto_count:
                   type: string
+              title: TallyResult defines a standard tally for a governance proposal.s
             submit_time:
               type: string
               format: date-time
@@ -62653,6 +62701,7 @@ definitions:
             type: string
           no_with_veto_count:
             type: string
+        title: TallyResult defines a standard tally for a governance proposal.s
     description: >-
       QueryTallyResultResponse is the response type for the Query/Tally RPC
       method.
@@ -62797,7 +62846,7 @@ definitions:
         type: string
       no_with_veto_count:
         type: string
-    description: TallyResult defines a standard tally for a governance proposal.
+    title: TallyResult defines a standard tally for a governance proposal.s
   cosmos.gov.v1.Vote:
     type: object
     properties:
@@ -63128,6 +63177,7 @@ definitions:
           - PROPOSAL_STATUS_PASSED
           - PROPOSAL_STATUS_REJECTED
           - PROPOSAL_STATUS_FAILED
+          - PROPOSAL_STATUS_CANCELED
         default: PROPOSAL_STATUS_UNSPECIFIED
         description: |-
           ProposalStatus enumerates the valid statuses of a proposal.
@@ -63143,6 +63193,8 @@ definitions:
           been rejected.
            - PROPOSAL_STATUS_FAILED: PROPOSAL_STATUS_FAILED defines a proposal status of a proposal that has
           failed.
+           - PROPOSAL_STATUS_CANCELED: PROPOSAL_STATUS_CANCELED defines a proposal status of a proposal that has
+          been canceled.(these poposals used to be deleted)
       final_tally_result:
         description: |-
           final_tally_result is the final tally result of the proposal. When
@@ -63194,6 +63246,7 @@ definitions:
       - PROPOSAL_STATUS_PASSED
       - PROPOSAL_STATUS_REJECTED
       - PROPOSAL_STATUS_FAILED
+      - PROPOSAL_STATUS_CANCELED
     default: PROPOSAL_STATUS_UNSPECIFIED
     description: |-
       ProposalStatus enumerates the valid statuses of a proposal.
@@ -63209,6 +63262,8 @@ definitions:
       been rejected.
        - PROPOSAL_STATUS_FAILED: PROPOSAL_STATUS_FAILED defines a proposal status of a proposal that has
       failed.
+       - PROPOSAL_STATUS_CANCELED: PROPOSAL_STATUS_CANCELED defines a proposal status of a proposal that has
+      been canceled.(these poposals used to be deleted)
   cosmos.gov.v1beta1.QueryDepositResponse:
     type: object
     properties:
@@ -63545,6 +63600,7 @@ definitions:
               - PROPOSAL_STATUS_PASSED
               - PROPOSAL_STATUS_REJECTED
               - PROPOSAL_STATUS_FAILED
+              - PROPOSAL_STATUS_CANCELED
             default: PROPOSAL_STATUS_UNSPECIFIED
             description: |-
               ProposalStatus enumerates the valid statuses of a proposal.
@@ -63560,6 +63616,8 @@ definitions:
               been rejected.
                - PROPOSAL_STATUS_FAILED: PROPOSAL_STATUS_FAILED defines a proposal status of a proposal that has
               failed.
+               - PROPOSAL_STATUS_CANCELED: PROPOSAL_STATUS_CANCELED defines a proposal status of a proposal that has
+              been canceled.(these poposals used to be deleted)
           final_tally_result:
             description: >-
               final_tally_result is the final tally result of the proposal. When
@@ -63798,6 +63856,7 @@ definitions:
                 - PROPOSAL_STATUS_PASSED
                 - PROPOSAL_STATUS_REJECTED
                 - PROPOSAL_STATUS_FAILED
+                - PROPOSAL_STATUS_CANCELED
               default: PROPOSAL_STATUS_UNSPECIFIED
               description: |-
                 ProposalStatus enumerates the valid statuses of a proposal.
@@ -63813,6 +63872,8 @@ definitions:
                 been rejected.
                  - PROPOSAL_STATUS_FAILED: PROPOSAL_STATUS_FAILED defines a proposal status of a proposal that has
                 failed.
+                 - PROPOSAL_STATUS_CANCELED: PROPOSAL_STATUS_CANCELED defines a proposal status of a proposal that has
+                been canceled.(these poposals used to be deleted)
             final_tally_result:
               description: >-
                 final_tally_result is the final tally result of the proposal.

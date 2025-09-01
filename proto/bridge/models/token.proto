@@ -21,6 +21,7 @@ message TokenMetadata {
   string name = 1;
   string symbol = 2;
   string uri = 3;
+  string dex_name = 4;
 }
 
 message Token {
