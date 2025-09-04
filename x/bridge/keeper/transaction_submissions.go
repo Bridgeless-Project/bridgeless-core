@@ -12,8 +12,7 @@ import (
 
 func (k Keeper) SetTransactionSubmissions(sdkCtx sdk.Context, txSubmissions *types.TransactionSubmissions) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreTransactionSubmissionsPrefix))
-
-	tStore.Set([]byte(txSubmissions.TxHash), k.cdc.MustMarshal(txSubmissions))
+	tStore.Set(types.KeyTransactionSubmissions(txSubmissions.TxHash), k.cdc.MustMarshal(txSubmissions))
 }
 
 func (k Keeper) GetPaginatedTransactionsSubmissions(sdkCtx sdk.Context, pagination *query.PageRequest) (
@@ -41,7 +40,7 @@ func (k Keeper) GetPaginatedTransactionsSubmissions(sdkCtx sdk.Context, paginati
 func (k Keeper) GetTransactionSubmissions(sdkCtx sdk.Context, txHash string) (txSubmissions types.TransactionSubmissions, found bool) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreTransactionSubmissionsPrefix))
 
-	bz := tStore.Get([]byte(txHash))
+	bz := tStore.Get(types.KeyTransactionSubmissions(txHash))
 	if bz == nil {
 		return txSubmissions, false
 	}
@@ -53,7 +52,7 @@ func (k Keeper) GetTransactionSubmissions(sdkCtx sdk.Context, txHash string) (tx
 
 func (k Keeper) RemoveTransactionSubmissions(sdkCtx sdk.Context, txHash string) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreTransactionSubmissionsPrefix))
-	tStore.Delete([]byte(txHash))
+	tStore.Delete(types.KeyTransactionSubmissions(txHash))
 }
 
 func (k Keeper) TxHash(tx *types.Transaction) common.Hash {
