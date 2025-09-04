@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/binary"
 	"fmt"
 	"strconv"
 	"strings"
@@ -31,6 +32,8 @@ const (
 	StoreChainPrefix                  = "chain"
 	StoreTransactionPrefix            = "transaction"
 	StoreTransactionSubmissionsPrefix = "transaction-submissions"
+	StoreReferralPrefix               = "referral"
+	StoreReferralRewardsPrefix        = "referral_rewards"
 
 	// Attributes keys for bridge events
 	AttributeKeyDepositTxHash     = "deposit_tx_hash"
@@ -72,6 +75,16 @@ func KeyTokenInfo(chain, addr string) []byte {
 
 func KeyChain(chain string) []byte {
 	return []byte(chain)
+}
+
+func KeyReferralRewards(referraId uint32, tokenId uint64) []byte {
+	return []byte(fmt.Sprintf("%d/%d", referraId, tokenId))
+}
+
+func KeyReferral(referralId uint32) []byte {
+	bytes := make([]byte, 4)
+	binary.LittleEndian.PutUint32(bytes, referralId)
+	return bytes
 }
 
 func KeyTransaction(id string) []byte {

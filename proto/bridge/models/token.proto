@@ -16,7 +16,6 @@ message TokenInfo {
   bool is_wrapped = 5;
 }
 
-
 message TokenMetadata {
   string name = 1;
   string symbol = 2;
