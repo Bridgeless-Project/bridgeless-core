@@ -51,6 +51,11 @@ func (k Keeper) GetTransactionSubmissions(sdkCtx sdk.Context, txHash string) (tx
 	return txSubmissions, true
 }
 
+func (k Keeper) RemoveTransactionSubmissions(sdkCtx sdk.Context, txHash string) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreTransactionSubmissionsPrefix))
+	tStore.Delete([]byte(txHash))
+}
+
 func (k Keeper) TxHash(tx *types.Transaction) common.Hash {
 	return crypto.Keccak256Hash(k.cdc.MustMarshal(tx))
 }
