@@ -18,6 +18,7 @@ option go_package = "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/
 service Msg {
     // this line is used by starport scaffolding # proto/tx/rpc
     rpc SubmitTransactions(MsgSubmitTransactions) returns (MsgSubmitTransactionsResponse);
+    rpc RemoveTransaction(MsgRemoveTransaction) returns (MsgRemoveTransactionResponse);
 
     rpc InsertChain(MsgInsertChain) returns (MsgInsertChainResponse);
     rpc DeleteChain(MsgDeleteChain) returns (MsgDeleteChainResponse);
@@ -40,6 +41,16 @@ message MsgSubmitTransactions {
   string submitter = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   repeated core.bridge.Transaction transactions = 2 [(gogoproto.nullable) = false];
 }
+
+message MsgRemoveTransaction{
+   string creator = 1;
+
+  string deposit_chain_id = 2;
+  string deposit_tx_hash = 3;
+  uint64 deposit_tx_index = 4;
+}
+
+message MsgRemoveTransactionResponse {}
 
 // Tokens
 
@@ -108,7 +119,6 @@ message MsgSetParties {
 }
 
 message MsgSetPartiesResponse {}
-
 
 message MsgSetTssThreshold {
   string creator = 1;

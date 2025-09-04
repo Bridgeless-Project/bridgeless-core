@@ -1,6 +1,8 @@
 package cli
 
 import (
+	"strconv"
+
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -19,6 +21,7 @@ func TxTransactionsCmd() *cobra.Command {
 
 	cmd.AddCommand(
 		CmdSubmitTx(),
+		CmdRemoveTx(),
 	)
 
 	return cmd
@@ -43,6 +46,36 @@ func CmdSubmitTx() *cobra.Command {
 			}
 
 			msg := types.NewMsgSubmitTransactions(clientCtx.GetFromAddress().String(), tr...)
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdRemoveTx() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "remove [from_key_or_address] [deposit-tx-hash] [deposit-tx-index] [deposit-chain-id]",
+		Short: "Remove the transaction from the bridge module",
+		Args:  cobra.ExactArgs(4),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			cmd.Flags().Set(flags.FlagFrom, args[0])
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			depositHash := args[1]
+			depositIndex, err := strconv.ParseUint(args[2], 10, 64)
+			if err != nil {
+				return err
+			}
+			depostChainId := args[3]
+
+			msg := types.NewMsgRemoveTransaction(clientCtx.GetFromAddress().String(), depostChainId, depositHash, depositIndex)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
