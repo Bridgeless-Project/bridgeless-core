@@ -11,7 +11,6 @@ import (
 func (k Keeper) SetTransaction(sdkCtx sdk.Context, transaction types.Transaction) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreTransactionPrefix))
 	tStore.Set(types.KeyTransaction(types.TransactionId(&transaction)), k.cdc.MustMarshal(&transaction))
-
 }
 
 func (k Keeper) GetTransaction(sdkCtx sdk.Context, id string) (types.Transaction, bool) {
@@ -25,6 +24,11 @@ func (k Keeper) GetTransaction(sdkCtx sdk.Context, id string) (types.Transaction
 
 	k.cdc.MustUnmarshal(bz, &transaction)
 	return transaction, true
+}
+
+func (k Keeper) RemoveTransaction(sdkCtx sdk.Context, id string) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreTransactionPrefix))
+	tStore.Delete(types.KeyTransaction(id))
 }
 
 func (k Keeper) GetPaginatedTransactions(
@@ -53,9 +57,8 @@ func (k Keeper) GetPaginatedTransactions(
 
 func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submitter string) error {
 	// Check whether tx has enough submissions to be added to core
-	txSubmissions, found := k.GetTransactionSubmissions(ctx, k.TxHash(transaction).String())
-
 	threshold := k.GetParams(ctx).TssThreshold
+	txSubmissions, found := k.GetTransactionSubmissions(ctx, k.TxHash(transaction).String())
 	if !found {
 		txSubmissions.TxHash = k.TxHash(transaction).String()
 	}
@@ -75,6 +78,26 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 		k.SetTransaction(ctx, *transaction)
 		emitSubmitEvent(ctx, *transaction)
 	}
+
+	return nil
+}
+
+func (k Keeper) DeleteTx(ctx sdk.Context, depositTxHash string, depositTxIndex uint64, depositChainId string) error {
+	txId := types.TransactionId(&types.Transaction{DepositTxHash: depositTxHash, DepositTxIndex: depositTxIndex, DepositChainId: depositChainId})
+	transaction, ok := k.GetTransaction(ctx, txId)
+	if !ok {
+		return errorsmod.Wrap(types.ErrTransactionNotFound, "failed to get transaction")
+	}
+
+	// Delete tx from core
+	k.RemoveTransaction(ctx, txId)
+
+	// Delete tx submissions
+	txSubmissions, found := k.GetTransactionSubmissions(ctx, k.TxHash(&transaction).String())
+	if found {
+		k.RemoveTransactionSubmissions(ctx, txSubmissions.TxHash)
+	}
+	emitRemoveTransactionEvent(ctx, transaction)
 
 	return nil
 }
