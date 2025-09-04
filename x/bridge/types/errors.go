@@ -25,4 +25,5 @@ var (
 	ErrInvalidTxHash                = errorsmod.Register(ModuleName, 1114, "invalid tx hash")
 	ErrInvalidConfirmationsNumber   = errorsmod.Register(ModuleName, 1115, "invalid confirmations number")
 	ErrInvalidChainName             = errorsmod.Register(ModuleName, 1116, "invalid chain name")
+	ErrTransactionNotFound          = errorsmod.Register(ModuleName, 1117, "transaction not found")
 )
