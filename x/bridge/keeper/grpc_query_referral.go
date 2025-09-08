@@ -25,7 +25,7 @@ func (k queryServer) GetReferralById(goctx context.Context, req *types.QueryGetR
 
 }
 
-func (k queryServer) GetQueryGetReferrals(goctx context.Context, req *types.QueryGetReferrals) (*types.QueryGetReferralsResponse, error) {
+func (k queryServer) GetGetReferrals(goctx context.Context, req *types.QueryGetReferrals) (*types.QueryGetReferralsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}

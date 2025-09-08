@@ -70,7 +70,7 @@ service Query {
     option (google.api.http).get = "/cosmos/bridge/referrals/{referral_id}";
   }
 
-  rpc GetQueryGetReferrals(QueryGetReferrals) returns (QueryGetReferralsResponse) {
+  rpc GetGetReferrals(QueryGetReferrals) returns (QueryGetReferralsResponse) {
     option (google.api.http).get = "/cosmos/bridge/referrals";
   }
 
@@ -78,7 +78,7 @@ service Query {
     option (google.api.http).get = "/cosmos/bridge/referrals/rewards/{referral_id}/{token_id}";
   }
 
-  rpc GetQueryGetReferralsRewardsById(QueryGetReferralRewardsById) returns (QueryGetReferralRewardsByIdResponse) {
+  rpc GetGetReferralsRewardsById(QueryGetReferralRewardsById) returns (QueryGetReferralRewardsByIdResponse) {
     option (google.api.http).get = "/cosmos/bridge/referrals/rewards/{referral_id}";
   }
   // this line is used by starport scaffolding # 2

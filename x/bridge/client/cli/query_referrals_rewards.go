@@ -67,7 +67,7 @@ func CmdQueryGetReferralsRewardsById() *cobra.Command {
 				Pagination: pageReq,
 			}
 
-			res, err := queryClient.GetQueryGetReferralsRewardsById(context.Background(), req)
+			res, err := queryClient.GetGetReferralsRewardsById(context.Background(), req)
 			if err != nil {
 				return err
 			}
