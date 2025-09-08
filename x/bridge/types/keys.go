@@ -90,3 +90,7 @@ func KeyReferral(referralId uint32) []byte {
 func KeyTransaction(id string) []byte {
 	return []byte(id)
 }
+
+func KeyTransactionSubmissions(txHash string) []byte {
+	return []byte(txHash)
+}
