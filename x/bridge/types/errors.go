@@ -29,4 +29,6 @@ var (
 	ErrReferralNotFound             = errorsmod.Register(ModuleName, 1118, "referral not found")
 	ErrReferralRewardsNotFound      = errorsmod.Register(ModuleName, 1119, "referral rewards not found")
 	ErrAlreadyExists                = errorsmod.Register(ModuleName, 1120, "entity already exists")
+	ErrReferralIdMustBePositive     = errorsmod.Register(ModuleName, 1121, "referral id must be positive")
+	ErrTokenIdMustBePositive        = errorsmod.Register(ModuleName, 1122, "token id must be positive")
 )

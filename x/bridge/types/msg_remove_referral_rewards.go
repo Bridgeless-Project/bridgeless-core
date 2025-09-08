@@ -47,11 +47,11 @@ func (msg *MsgRemoveReferralRewards) ValidateBasic() error {
 	}
 
 	if msg.ReferrerId == 0 {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "referrer id cannot be 0")
+		return errorsmod.Wrapf(ErrReferralIdMustBePositive, "referrer id cannot be 0")
 	}
 
 	if msg.TokenId == 0 {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "token id cannot be 0")
+		return errorsmod.Wrapf(ErrTokenIdMustBePositive, "token id cannot be 0")
 	}
 
 	return nil

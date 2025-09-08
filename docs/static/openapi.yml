@@ -2906,7 +2906,7 @@ paths:
                       type: string
                     tx_data:
                       type: string
-                    referrals_id:
+                    referral_id:
                       type: integer
                       format: int32
                 description: Transactions is a list of transactions.
@@ -3232,7 +3232,7 @@ paths:
                     type: string
                   tx_data:
                     type: string
-                  referrals_id:
+                  referral_id:
                     type: integer
                     format: int32
             description: >-
@@ -51527,7 +51527,7 @@ definitions:
             type: string
           tx_data:
             type: string
-          referrals_id:
+          referral_id:
             type: integer
             format: int32
     description: >-
@@ -51575,7 +51575,7 @@ definitions:
               type: string
             tx_data:
               type: string
-            referrals_id:
+            referral_id:
               type: integer
               format: int32
         description: Transactions is a list of transactions.
@@ -51753,7 +51753,7 @@ definitions:
         type: string
       tx_data:
         type: string
-      referrals_id:
+      referral_id:
         type: integer
         format: int32
   core.bridge.TransactionSubmissions:

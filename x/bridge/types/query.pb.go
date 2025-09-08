@@ -1616,9 +1616,9 @@ type QueryClient interface {
 	GetTxsSubmissions(ctx context.Context, in *QueryGetTxsSubmissions, opts ...grpc.CallOption) (*QueryGetTxsSubmissionsResponse, error)
 	GetTxSubmissionsByHash(ctx context.Context, in *QueryGetTxSubmissionsByHash, opts ...grpc.CallOption) (*QueryGetTxSubmissionsByHashResponse, error)
 	GetReferralById(ctx context.Context, in *QueryGetReferralById, opts ...grpc.CallOption) (*QueryGetReferralByIdResponse, error)
-	GetGetReferrals(ctx context.Context, in *QueryGetReferrals, opts ...grpc.CallOption) (*QueryGetReferralsResponse, error)
+	GetReferrals(ctx context.Context, in *QueryGetReferrals, opts ...grpc.CallOption) (*QueryGetReferralsResponse, error)
 	GetReferralRewardsByToken(ctx context.Context, in *QueryGetReferralRewardByToken, opts ...grpc.CallOption) (*QueryGetReferralRewardByIdResponse, error)
-	GetGetReferralsRewardsById(ctx context.Context, in *QueryGetReferralRewardsById, opts ...grpc.CallOption) (*QueryGetReferralRewardsByIdResponse, error)
+	GetReferralsRewardsById(ctx context.Context, in *QueryGetReferralRewardsById, opts ...grpc.CallOption) (*QueryGetReferralRewardsByIdResponse, error)
 }
 
 type queryClient struct {
@@ -1737,9 +1737,9 @@ func (c *queryClient) GetReferralById(ctx context.Context, in *QueryGetReferralB
 	return out, nil
 }
 
-func (c *queryClient) GetGetReferrals(ctx context.Context, in *QueryGetReferrals, opts ...grpc.CallOption) (*QueryGetReferralsResponse, error) {
+func (c *queryClient) GetReferrals(ctx context.Context, in *QueryGetReferrals, opts ...grpc.CallOption) (*QueryGetReferralsResponse, error) {
 	out := new(QueryGetReferralsResponse)
-	err := c.cc.Invoke(ctx, "/core.bridge.Query/GetGetReferrals", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/core.bridge.Query/GetReferrals", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1755,9 +1755,9 @@ func (c *queryClient) GetReferralRewardsByToken(ctx context.Context, in *QueryGe
 	return out, nil
 }
 
-func (c *queryClient) GetGetReferralsRewardsById(ctx context.Context, in *QueryGetReferralRewardsById, opts ...grpc.CallOption) (*QueryGetReferralRewardsByIdResponse, error) {
+func (c *queryClient) GetReferralsRewardsById(ctx context.Context, in *QueryGetReferralRewardsById, opts ...grpc.CallOption) (*QueryGetReferralRewardsByIdResponse, error) {
 	out := new(QueryGetReferralRewardsByIdResponse)
-	err := c.cc.Invoke(ctx, "/core.bridge.Query/GetGetReferralsRewardsById", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/core.bridge.Query/GetReferralsRewardsById", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1785,9 +1785,9 @@ type QueryServer interface {
 	GetTxsSubmissions(context.Context, *QueryGetTxsSubmissions) (*QueryGetTxsSubmissionsResponse, error)
 	GetTxSubmissionsByHash(context.Context, *QueryGetTxSubmissionsByHash) (*QueryGetTxSubmissionsByHashResponse, error)
 	GetReferralById(context.Context, *QueryGetReferralById) (*QueryGetReferralByIdResponse, error)
-	GetGetReferrals(context.Context, *QueryGetReferrals) (*QueryGetReferralsResponse, error)
+	GetReferrals(context.Context, *QueryGetReferrals) (*QueryGetReferralsResponse, error)
 	GetReferralRewardsByToken(context.Context, *QueryGetReferralRewardByToken) (*QueryGetReferralRewardByIdResponse, error)
-	GetGetReferralsRewardsById(context.Context, *QueryGetReferralRewardsById) (*QueryGetReferralRewardsByIdResponse, error)
+	GetReferralsRewardsById(context.Context, *QueryGetReferralRewardsById) (*QueryGetReferralRewardsByIdResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -1830,14 +1830,14 @@ func (*UnimplementedQueryServer) GetTxSubmissionsByHash(ctx context.Context, req
 func (*UnimplementedQueryServer) GetReferralById(ctx context.Context, req *QueryGetReferralById) (*QueryGetReferralByIdResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetReferralById not implemented")
 }
-func (*UnimplementedQueryServer) GetGetReferrals(ctx context.Context, req *QueryGetReferrals) (*QueryGetReferralsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetGetReferrals not implemented")
+func (*UnimplementedQueryServer) GetReferrals(ctx context.Context, req *QueryGetReferrals) (*QueryGetReferralsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetReferrals not implemented")
 }
 func (*UnimplementedQueryServer) GetReferralRewardsByToken(ctx context.Context, req *QueryGetReferralRewardByToken) (*QueryGetReferralRewardByIdResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetReferralRewardsByToken not implemented")
 }
-func (*UnimplementedQueryServer) GetGetReferralsRewardsById(ctx context.Context, req *QueryGetReferralRewardsById) (*QueryGetReferralRewardsByIdResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetGetReferralsRewardsById not implemented")
+func (*UnimplementedQueryServer) GetReferralsRewardsById(ctx context.Context, req *QueryGetReferralRewardsById) (*QueryGetReferralRewardsByIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetReferralsRewardsById not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -2060,20 +2060,20 @@ func _Query_GetReferralById_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_GetGetReferrals_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Query_GetReferrals_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryGetReferrals)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).GetGetReferrals(ctx, in)
+		return srv.(QueryServer).GetReferrals(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/core.bridge.Query/GetGetReferrals",
+		FullMethod: "/core.bridge.Query/GetReferrals",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).GetGetReferrals(ctx, req.(*QueryGetReferrals))
+		return srv.(QueryServer).GetReferrals(ctx, req.(*QueryGetReferrals))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2096,20 +2096,20 @@ func _Query_GetReferralRewardsByToken_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_GetGetReferralsRewardsById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Query_GetReferralsRewardsById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryGetReferralRewardsById)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).GetGetReferralsRewardsById(ctx, in)
+		return srv.(QueryServer).GetReferralsRewardsById(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/core.bridge.Query/GetGetReferralsRewardsById",
+		FullMethod: "/core.bridge.Query/GetReferralsRewardsById",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).GetGetReferralsRewardsById(ctx, req.(*QueryGetReferralRewardsById))
+		return srv.(QueryServer).GetReferralsRewardsById(ctx, req.(*QueryGetReferralRewardsById))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2167,16 +2167,16 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Query_GetReferralById_Handler,
 		},
 		{
-			MethodName: "GetGetReferrals",
-			Handler:    _Query_GetGetReferrals_Handler,
+			MethodName: "GetReferrals",
+			Handler:    _Query_GetReferrals_Handler,
 		},
 		{
 			MethodName: "GetReferralRewardsByToken",
 			Handler:    _Query_GetReferralRewardsByToken_Handler,
 		},
 		{
-			MethodName: "GetGetReferralsRewardsById",
-			Handler:    _Query_GetGetReferralsRewardsById_Handler,
+			MethodName: "GetReferralsRewardsById",
+			Handler:    _Query_GetReferralsRewardsById_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

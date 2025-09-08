@@ -190,7 +190,7 @@ message Transaction {
   string withdrawal_amount = 14;
   string commission_amount = 15;
   string tx_data = 16;
-  int32 referrals_id = 17;
+  int32 referral_id = 17;
 }
 ```
 
@@ -213,7 +213,7 @@ Example:
   "withdrawal_amount": "0",
   "commission_amount": "0",
   "tx_data": "",
-  "referrals_id": 0
+  "referral_id": 0
 }
 ```
 

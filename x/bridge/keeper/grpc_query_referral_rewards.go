@@ -22,7 +22,7 @@ func (k queryServer) GetReferralRewardsByToken(goctx context.Context, req *types
 	return &types.QueryGetReferralRewardByIdResponse{Rewards: rewards}, nil
 }
 
-func (k queryServer) GetGetReferralsRewardsById(goctx context.Context, req *types.QueryGetReferralRewardsById) (*types.QueryGetReferralRewardsByIdResponse, error) {
+func (k queryServer) GetReferralsRewardsById(goctx context.Context, req *types.QueryGetReferralRewardsById) (*types.QueryGetReferralRewardsByIdResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}

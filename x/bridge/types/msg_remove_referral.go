@@ -45,5 +45,8 @@ func (msg *MsgRemoveReferral) ValidateBasic() error {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address: %s", err)
 	}
 
+	if msg.Id == 0 {
+		return errorsmod.Wrapf(ErrReferralIdMustBePositive, "referral id cannot be 0")
+	}
 	return nil
 }

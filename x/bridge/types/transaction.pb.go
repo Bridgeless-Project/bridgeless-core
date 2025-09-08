@@ -43,7 +43,7 @@ type Transaction struct {
 	WithdrawalAmount  string `protobuf:"bytes,14,opt,name=withdrawal_amount,json=withdrawalAmount,proto3" json:"withdrawal_amount,omitempty"`
 	CommissionAmount  string `protobuf:"bytes,15,opt,name=commission_amount,json=commissionAmount,proto3" json:"commission_amount,omitempty"`
 	TxData            string `protobuf:"bytes,16,opt,name=tx_data,json=txData,proto3" json:"tx_data,omitempty"`
-	ReferralsId       int32  `protobuf:"varint,17,opt,name=referrals_id,json=referralsId,proto3" json:"referrals_id,omitempty"`
+	ReferralsId       int32  `protobuf:"varint,17,opt,name=referral_id,json=referralsId,proto3" json:"referral_id,omitempty"`
 }
 
 func (m *Transaction) Reset()         { *m = Transaction{} }
