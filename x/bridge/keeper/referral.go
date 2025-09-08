@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (k Keeper) SetReferral(sdkCtx sdk.Context, Referral types.Referral) {
+func (k Keeper) AddReferral(sdkCtx sdk.Context, Referral types.Referral) {
 	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreReferralPrefix))
 	cStore.Set(types.KeyReferral(Referral.Id), k.cdc.MustMarshal(&Referral))
 }
@@ -61,7 +61,7 @@ func (k Keeper) GetAllReferrals(sdkCtx sdk.Context) (Referrals []types.Referral)
 	return
 }
 
-func (k Keeper) RemoveReferral(sdkCtx sdk.Context, id uint32) {
+func (k Keeper) DeleteReferral(sdkCtx sdk.Context, id uint32) {
 	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreReferralPrefix))
 	cStore.Delete(types.KeyReferral(id))
 }

@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (k Keeper) SetReferralRewards(sdkCtx sdk.Context, referralId uint32, tokenId uint64, ReferralRewards types.ReferralRewards) {
+func (k Keeper) AddReferralRewards(sdkCtx sdk.Context, referralId uint32, tokenId uint64, ReferralRewards types.ReferralRewards) {
 	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreReferralRewardsPrefix))
 	cStore.Set(types.KeyReferralRewards(referralId, tokenId), k.cdc.MustMarshal(&ReferralRewards))
 }
@@ -27,7 +27,7 @@ func (k Keeper) GetReferralRewards(sdkCtx sdk.Context, referralId uint32, tokenI
 	return
 }
 
-func (k Keeper) GetReferralRewardssWithPagination(ctx sdk.Context, pagination *query.PageRequest) ([]types.ReferralRewards, *query.PageResponse, error) {
+func (k Keeper) GetReferralRewardsWithPagination(ctx sdk.Context, pagination *query.PageRequest) ([]types.ReferralRewards, *query.PageResponse, error) {
 	cStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreReferralRewardsPrefix))
 	var ReferralRewardss []types.ReferralRewards
 
@@ -47,7 +47,7 @@ func (k Keeper) GetReferralRewardssWithPagination(ctx sdk.Context, pagination *q
 	return ReferralRewardss, pageRes, nil
 }
 
-func (k Keeper) GetAllReferralRewardss(sdkCtx sdk.Context) (ReferralRewardss []types.ReferralRewards) {
+func (k Keeper) GetAllReferralRewards(sdkCtx sdk.Context) (ReferralRewardss []types.ReferralRewards) {
 	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreReferralRewardsPrefix))
 	iterator := cStore.Iterator(nil, nil)
 	defer iterator.Close()
@@ -61,7 +61,7 @@ func (k Keeper) GetAllReferralRewardss(sdkCtx sdk.Context) (ReferralRewardss []t
 	return
 }
 
-func (k Keeper) RemoveReferralRewards(sdkCtx sdk.Context, referralId uint32, tokenId uint64) {
+func (k Keeper) DeleteReferralRewards(sdkCtx sdk.Context, referralId uint32, tokenId uint64) {
 	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreReferralRewardsPrefix))
 	cStore.Delete(types.KeyReferralRewards(referralId, tokenId))
 }

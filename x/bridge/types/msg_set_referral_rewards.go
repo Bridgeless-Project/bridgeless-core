@@ -47,9 +47,9 @@ func (msg *MsgSetReferralRewards) ValidateBasic() error {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address: %s", err)
 	}
 
-	if err = validateReferralRewards(&msg); err != nil {
+	if err = validateReferralRewards(&msg.Rewards); err != nil {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest,
-			fmt.Sprintf("invalid referral %d: %s", &msg.Referral.Id, err),
+			fmt.Sprintf("invalid referral rewards %d: %s", &msg.Rewards.ReferralId, err),
 		)
 	}
 

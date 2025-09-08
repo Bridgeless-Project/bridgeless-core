@@ -25,4 +25,7 @@ var (
 	ErrInvalidTxHash                = errorsmod.Register(ModuleName, 1114, "invalid tx hash")
 	ErrInvalidConfirmationsNumber   = errorsmod.Register(ModuleName, 1115, "invalid confirmations number")
 	ErrInvalidChainName             = errorsmod.Register(ModuleName, 1116, "invalid chain name")
+	ErrReferralNotFound             = errorsmod.Register(ModuleName, 1117, "referral not found")
+	ErrReferralRewardsNotFound      = errorsmod.Register(ModuleName, 1118, "referral rewards not found")
+	ErrAlreadyExists                = errorsmod.Register(ModuleName, 1119, "entity already exists")
 )

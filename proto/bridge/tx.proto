@@ -33,8 +33,8 @@ service Msg {
     rpc SetParties(MsgSetParties) returns (MsgSetPartiesResponse);
     rpc SetTssThreshold(MsgSetTssThreshold) returns (MsgSetTssThresholdResponse);
 
-    rpc SetReferrer(MsgSetReferral) returns (MsgSetReferralResponse);
-    rpc RemoveReferrer(MsgRemoveReferral) returns (MsgRemoveReferralResponse);
+    rpc SetReferral(MsgSetReferral) returns (MsgSetReferralResponse);
+    rpc RemoveReferral(MsgRemoveReferral) returns (MsgRemoveReferralResponse);
 
     rpc SetReferralRewards(MsgSetReferralRewards) returns (MsgSetReferralRewardsResponse);
     rpc RemoveReferralRewards(MsgRemoveReferralRewards) returns (MsgRemoveReferralRewardsResponse);
