@@ -63,6 +63,52 @@ Example:
 }
 ```
 
+### Referral
+**Referral** defines referral properties that include the referral address to process withdrawal and the commission rate.
+
+Definition:
+```protobuf
+message Referral {
+      // stores a 16-bit unsigned integer
+      uint32 id = 1; 
+      string withdrawal_address = 2;
+      int32 commission_rate = 3;
+}
+```
+
+Example:
+```json
+{
+  "id": "0",
+  "withdrawal_address": "bridge1qqqqqnqaea03090u62sd7e42jfv2lhllsckms0",
+  "commission_rate": 5 // represents 5%
+}
+```
+
+
+### Referral Rewards
+**ReferralRewards** defines referral rewards properties that include the referral id, token id, amount to claim and total collected amount.
+
+Definition 
+```protobuf
+message ReferralRewards {
+  uint32 referral_id = 1;
+  uint64 token_id = 2;
+  cosmos.base.v1beta1.Coin to_claim = 3 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin total_collected_amount = 4 [(gogoproto.nullable) = false];
+}
+```
+
+Example
+```json
+{
+  "referral_id": 1,
+  "token_id": 1,
+  "to_claim": "10abridge",
+  "total_collected_amount": "100abridge"
+}
+```
+
 ### Token
 **Token** defines necessary token properties like id or decimals used during bridging process.
 
@@ -144,6 +190,7 @@ message Transaction {
   string withdrawal_amount = 14;
   string commission_amount = 15;
   string tx_data = 16;
+  int32 referrals_id = 17;
 }
 ```
 
@@ -165,7 +212,8 @@ Example:
   "is_wrapped": true,
   "withdrawal_amount": "0",
   "commission_amount": "0",
-  "tx_data": ""
+  "tx_data": "",
+  "referrals_id": 0
 }
 ```
 
@@ -270,7 +318,7 @@ ___
 
 **SubmitTransactions** - stores bridge transactions data to core.
 
-Message example:
+Message definition:
 
 ```protobuf
 message MsgSubmitTransactions {
@@ -280,6 +328,22 @@ message MsgSubmitTransactions {
   repeated core.bridge.Transaction transactions = 2 [(gogoproto.nullable) = false];
 }
 ```
+
+### RemoveTransaction
+**RemoveTransaction** - removes bridge transaction data from core.
+
+Message definition:
+
+```protobuf
+message MsgRemoveTransaction{
+  string creator = 1;
+
+  string deposit_chain_id = 2;
+  string deposit_tx_hash = 3;
+  uint64 deposit_tx_index = 4;
+}
+```
+
 ___
 ### TokenInfo
 ___
@@ -295,6 +359,47 @@ message MsgAddTokenInfo {
   TokenInfo info = 3 [(gogoproto.nullable) = false];
 }
 ```
+
+___
+
+### SetReferral
+
+Message definition:
+```protobuf
+message MsgSetReferral {
+  string creator = 1;
+  Referral referral = 2 [(gogoproto.nullable) = false];
+}
+```
+
+### RemoveReferral
+Message definition:
+```protobuf
+message MsgRemoveReferral {
+  string creator = 1;
+  uint32 id = 2;
+}
+```
+
+### SetReferralRewards
+Message definition:
+```protobuf
+message MsgSetReferralRewards {
+  string creator = 1;
+  ReferralRewards rewards = 4 [(gogoproto.nullable) = false];
+}
+```
+
+### RemoveReferralRewards
+Message definition 
+```protobuf
+message MsgRemoveReferralRewards {
+  string creator = 1;
+  uint32 referrer_id = 2;
+  uint64 token_id = 3;
+}
+```
+
 ___
 
 ### RemoveTokenInfo
@@ -367,6 +472,39 @@ ___
 
 ```
  bridgeless-cored tx bridge chains remove bridge1... 1
+```
+___
+
+### Referrals
+___
+
+### SetReferral
+**SetReferral** - adds new referral data to core.
+
+```
+bridgeless-cored tx bridge referral set bridge1... referral-id=0 referral-withdrawal-address=bridge1... referral-commission-rate=5
+```
+
+### RemoveReferral
+**RemoveReferral** - removes referral data by referral id from core.
+
+```
+ bridgeless-cored tx bridge referral remove bridge1... 0
+```
+
+___
+### ReferralRewards
+**SetReferralRewards** - adds new referral rewards data to core.
+
+```
+ bridgeless-cored tx bridge referral-rewards set bridge1... referral-id=1 token-id=1 to-claim=10abridge total-collected-amount=100abridge
+```
+
+### RemoveReferralRewards
+**RemoveReferralRewards** - removes referral rewards data by referral id and token id from core.
+
+```
+ bridgeless-cored tx bridge referral-rewards remove bridge1... 1 1
 ```
 ___
 
@@ -539,6 +677,62 @@ chain:
   operator: m4...
   type: BITCOIN
 ```
+
+___
+### Referrals
+___
+### GetReferralById
+```
+ bridgeless-cored query bridge referrals 1
+```
+
+Response example:
+```
+referral:
+  commission_rate: 5
+  id: "1"
+  withdrawal_address: bridge1qqqqqnqaea03090u62sd7e42jfv2lhllsckms0
+```
+
+### GetQueryGetReferrals
+```
+bridgeless-cored query bridge referrals
+```
+Response example:
+```
+referrals: 
+  - commission_rate: 5
+    id: "1"
+    withdrawal_address: bridge1qqqqqnqaea03090u62sd7e42jfv2lhllsckms0
+```
+
+### GetReferralRewardsByToken
+```
+ bridgeless-cored query bridge referral-rewards 1 1
+```
+Response example:
+```
+referral_rewards:
+  referral_id: "1"
+  to_claim: "10abridge"
+  token_id: "1"
+  total_collected_amount: "100abridge"
+```
+
+### GetQueryGetReferralsRewardsById
+```
+bridgeless-cored query bridge referrals-rewards
+```
+
+Response example:
+```
+referrals_rewards:
+- referral_id: "1"
+  to_claim: "10abridge"
+  token_id: "1"
+  total_collected_amount: "100abridge"
+```
+
 ___
 ### Tokens
 ___

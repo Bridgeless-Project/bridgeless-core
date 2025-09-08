@@ -20,7 +20,6 @@ func TxReferralCmd() *cobra.Command {
 	}
 
 	cmd.AddCommand(
-
 		CmdSetReferral(),
 		CmdRemoveReferral(),
 	)
@@ -31,7 +30,7 @@ func TxReferralCmd() *cobra.Command {
 
 func CmdSetReferral() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "set [from_key_or_address] [id] [referral-withdrawal-address] [commission-rate]",
+		Use:   "set [from_key_or_address] [referral-id] [referral-withdrawal-address] [commission-rate]",
 		Short: "set a new referral",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {

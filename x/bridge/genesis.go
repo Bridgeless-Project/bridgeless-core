@@ -31,6 +31,14 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		k.SetTransactionSubmissions(ctx, &txSubmissions)
 	}
 
+	for _, referral := range genState.Referrals {
+		k.AddReferral(ctx, referral)
+	}
+
+	for _, referralRewards := range genState.ReferralsRewards {
+		k.AddReferralRewards(ctx, referralRewards.ReferralId, referralRewards.TokenId, referralRewards)
+	}
+
 	if err := genState.Validate(); err != nil {
 		panic(errors.Wrap(err, "invalid genesis state"))
 	}
@@ -54,6 +62,12 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	}
 
 	txsWithSubmissions, _, err := k.GetPaginatedTransactionsSubmissions(ctx, &query.PageRequest{Limit: query.MaxLimit})
+	if err != nil {
+		panic(errorsmod.Wrap(err, "failed to export genesis transaction submissions"))
+	}
+
+	referrals := k.GetAllReferrals(ctx)
+	referralsRewards := k.GetAllReferralRewards(ctx)
 
 	return &types.GenesisState{
 		Params:                  k.GetParams(ctx),
@@ -61,5 +75,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 		Tokens:                  tokens,
 		Transactions:            txs,
 		TransactionsSubmissions: txsWithSubmissions,
+		Referrals:               referrals,
+		ReferralsRewards:        referralsRewards,
 	}
 }
