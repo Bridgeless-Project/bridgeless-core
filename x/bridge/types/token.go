@@ -61,11 +61,12 @@ func validateTokenInfo(info *TokenInfo, chainType *ChainType) error {
 	if info.Address == "" {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "token address is empty")
 	}
+
 	minDeposit, ok := big.NewInt(0).SetString(info.MinDeposit, 10)
 	if !ok {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("invalid min deposit: %s", info.MinDeposit))
 	}
-	if !minDeposit.IsUint64() {
+	if minDeposit.Cmp(big.NewInt(0)) == -1 {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("min deposit cannot be negative: %s", info.MinDeposit))
 	}
 
