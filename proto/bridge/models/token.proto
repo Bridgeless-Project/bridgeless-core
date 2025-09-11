@@ -14,7 +14,7 @@ message TokenInfo {
   string chain_id = 3;
   uint64 token_id = 4;
   bool is_wrapped = 5;
-  uint64 min_deposit = 6;
+  string min_deposit = 6;
 }
 
 message TokenMetadata {
