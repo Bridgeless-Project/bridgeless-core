@@ -45,14 +45,14 @@ func CmdSetReferral() *cobra.Command {
 				return err
 			}
 
-			commissionRate, err := strconv.ParseInt(args[4], 10, 32)
+			commissionRate, err := strconv.ParseInt(args[3], 10, 32)
 			if err != nil {
 				return err
 			}
 
 			referral := types.Referral{
 				Id:                uint32(referralId),
-				WithdrawalAddress: args[3],
+				WithdrawalAddress: args[2],
 				CommissionRate:    int32(commissionRate),
 			}
 

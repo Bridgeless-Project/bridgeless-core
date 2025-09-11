@@ -11,7 +11,7 @@ import (
 
 func CmdQueryGetReferralRewardsByToken() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "referral-rewards [referral_id] [token-id]",
+		Use:   "referral-rewards [referral-id] [token-id]",
 		Short: "Query bridge referral rewards by referral id and token id",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -20,7 +20,7 @@ func CmdQueryGetReferralRewardsByToken() *cobra.Command {
 				return err
 			}
 
-			referraid, err := cmd.Flags().GetUint32("id")
+			referraid, err := cmd.Flags().GetUint32("referral-id")
 			if err != nil {
 				return err
 			}

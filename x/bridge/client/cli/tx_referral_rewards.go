@@ -97,7 +97,7 @@ func CmdRemoveReferralRewards() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			tokenId, err := strconv.ParseUint(args[1], 10, 64)
+			tokenId, err := strconv.ParseUint(args[2], 10, 64)
 			if err != nil {
 				return err
 			}
