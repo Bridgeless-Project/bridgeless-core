@@ -1,13 +1,14 @@
 package cli
 
 import (
+	"math/big"
 	"strconv"
 
+	"cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cobra"
 )
 
@@ -51,21 +52,21 @@ func CmdSetReferralRewards() *cobra.Command {
 				return err
 			}
 
-			allowedCoins, err := sdk.ParseCoinNormalized(args[3])
-			if err != nil {
-				return err
+			_, ok := big.NewInt(0).SetString(args[3], 10)
+			if !ok {
+				return errors.Wrap(types.ErrInvalidDataType, "to-claim must be a valid integer")
 			}
 
-			totalCollectedAmount, err := sdk.ParseCoinNormalized(args[4])
-			if err != nil {
-				return err
+			_, ok = big.NewInt(0).SetString(args[4], 10)
+			if !ok {
+				return errors.Wrap(types.ErrInvalidDataType, "total-collected-amount must be a valid integer")
 			}
 
 			referral := types.ReferralRewards{
 				ReferralId:           uint32(referralId),
 				TokenId:              tokenId,
-				ToClaim:              allowedCoins,
-				TotalCollectedAmount: totalCollectedAmount,
+				ToClaim:              args[3],
+				TotalCollectedAmount: args[4],
 			}
 
 			msg := types.NewMsgSetReferralRewards(

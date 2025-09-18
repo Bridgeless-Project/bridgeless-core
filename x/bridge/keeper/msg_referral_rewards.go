@@ -20,8 +20,7 @@ func (m msgServer) SetReferralRewards(goCtx context.Context, msg *types.MsgSetRe
 		return nil, errorsmod.Wrap(types.ErrAlreadyExists, "Referral rewards with this Referral ID and Token ID already exists")
 	}
 
-	m.AddReferralRewards(ctx, msg.Rewards.ReferralId, msg.Rewards.TokenId, msg.Rewards)
-
+	m.InsertReferralRewards(ctx, msg.Rewards.ReferralId, msg.Rewards.TokenId, msg.Rewards)
 	return &types.MsgSetReferralRewardsResponse{}, nil
 }
 
@@ -38,6 +37,5 @@ func (m msgServer) RemoveReferralRewards(goCtx context.Context, msg *types.MsgRe
 	}
 
 	m.DeleteReferralRewards(ctx, msg.ReferrerId, msg.TokenId)
-
 	return &types.MsgRemoveReferralRewardsResponse{}, nil
 }

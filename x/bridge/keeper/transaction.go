@@ -1,6 +1,9 @@
 package keeper
 
 import (
+	"math/big"
+	"strconv"
+
 	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
@@ -78,7 +81,38 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 		k.SetTransaction(ctx, *transaction)
 		emitSubmitEvent(ctx, *transaction)
 	}
+	if transaction.ReferralId != 0 {
+		referral, ok := k.GetReferral(ctx, transaction.ReferralId)
+		if !ok {
+			return errorsmod.Wrap(types.ErrReferralNotFound, "referral ID not found")
+		}
+		tokenId, err := strconv.ParseUint(transaction.DepositToken, 10, 64)
+		if err != nil {
+			return errorsmod.Wrap(types.ErrInvalidDataType, "invalid deposit token")
+		}
 
+		// Rewards for referral are taken from CommissionAmount
+		commissionAmount, ok := big.NewInt(0).SetString(transaction.CommissionAmount, 10)
+		if !ok {
+			return errorsmod.Wrap(types.ErrInvalidDataType, "invalid withdrawal amount")
+		}
+		rewards := big.NewInt(0).Div(big.NewInt(0).
+			Mul(
+				commissionAmount,
+				big.NewInt(int64(referral.CommissionRate)),
+			),
+			big.NewInt(100), // percentage conversion
+		)
+
+		referralRewards := types.ReferralRewards{
+			ReferralId:           transaction.ReferralId,
+			TokenId:              tokenId,
+			ToClaim:              sdk.NewIntFromBigInt(rewards).String(),
+			TotalCollectedAmount: sdk.NewIntFromBigInt(rewards).String(),
+		}
+
+		k.AddReferralRewards(ctx, transaction.ReferralId, tokenId, referralRewards)
+	}
 	return nil
 }
 

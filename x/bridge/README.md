@@ -142,7 +142,7 @@ Example:
 ```json
 {
   "id": "0",
-  "commission_rate": "0.5",
+  "commission_rate": "5",
   "metadata": {
     "name": "TESTNET",
     "symbol": "TEST",
@@ -525,7 +525,7 @@ Example of `token.json`:
 ```json
 {
   "id": 1,
-  "commission_rate": "0.5",
+  "commission_rate": "5",
   "metadata": {
     "name": "TESTNET",
     "symbol": "TEST",
@@ -746,7 +746,7 @@ Response example:
 
 ```
 tokens:
-- commission_rate: "0.5"
+- commission_rate: "5"
   id: "1"
   info:
   - address: 0x0000000000000000000000000000000000000000
@@ -775,7 +775,7 @@ ___
 Response example:
 ```
 tokens:
-- commission_rate: "0.5"
+- commission_rate: "5"
   id: "1"
   info:
   - address: 0x0000000000000000000000000000000000000000

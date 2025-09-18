@@ -36,7 +36,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	}
 
 	for _, referralRewards := range genState.ReferralsRewards {
-		k.AddReferralRewards(ctx, referralRewards.ReferralId, referralRewards.TokenId, referralRewards)
+		k.InsertReferralRewards(ctx, referralRewards.ReferralId, referralRewards.TokenId, referralRewards)
 	}
 
 	if err := genState.Validate(); err != nil {

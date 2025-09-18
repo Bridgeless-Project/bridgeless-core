@@ -3,6 +3,7 @@ package types
 import (
 	"errors"
 	"fmt"
+	"math/big"
 )
 
 func validateReferral(referral *Referral) error {
@@ -28,7 +29,17 @@ func validateReferralRewards(rewards *ReferralRewards) error {
 		return errors.New("rewards is nil")
 	}
 
-	if rewards.TotalCollectedAmount.IsLT(rewards.ToClaim) {
+	totalCollectedAmount, ok := big.NewInt(0).SetString(rewards.TotalCollectedAmount, 10)
+	if !ok {
+		return errors.New("invalid total collected amount")
+	}
+
+	toClaim, ok := big.NewInt(0).SetString(rewards.ToClaim, 10)
+	if !ok {
+		return errors.New("invalid to claim amount")
+	}
+
+	if totalCollectedAmount.Cmp(toClaim) == -1 {
 		return errors.New("total collected amount must be greater or equal to claim")
 	}
 

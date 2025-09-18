@@ -31,4 +31,5 @@ var (
 	ErrAlreadyExists                = errorsmod.Register(ModuleName, 1120, "entity already exists")
 	ErrReferralIdMustBePositive     = errorsmod.Register(ModuleName, 1121, "referral id must be positive")
 	ErrTokenIdMustBePositive        = errorsmod.Register(ModuleName, 1122, "token id must be positive")
+	ErrInvalidDataType              = errorsmod.Register(ModuleName, 1123, "invalid data type")
 )

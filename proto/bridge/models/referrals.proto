@@ -19,6 +19,6 @@ message Referral {
 message ReferralRewards {
   uint32 referral_id = 1;
   uint64 token_id = 2;
-  cosmos.base.v1beta1.Coin to_claim = 3 [(gogoproto.nullable) = false];
-  cosmos.base.v1beta1.Coin total_collected_amount = 4 [(gogoproto.nullable) = false];
+  string to_claim = 3;
+  string total_collected_amount = 4;
 }
