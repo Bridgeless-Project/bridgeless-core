@@ -76,44 +76,48 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 
 	// If tx has not been submitted yet or has not enough submissions (less than tss threshold param)
 	// it is not set to core
-	if len(txSubmissions.Submitters) == int(threshold+1) {
-		k.SetTransaction(ctx, *transaction)
-		emitSubmitEvent(ctx, *transaction)
+	if len(txSubmissions.Submitters) != int(threshold+1) {
+		return nil
+	}
 
-		if transaction.ReferralId != 0 {
-			referral, ok := k.GetReferral(ctx, transaction.ReferralId)
-			if !ok {
-				return errorsmod.Wrap(types.ErrReferralNotFound, "referral ID not found")
-			}
+	k.SetTransaction(ctx, *transaction)
+	emitSubmitEvent(ctx, *transaction)
 
-			token, ok := k.GetTokenInfo(ctx, transaction.DepositChainId, transaction.DepositToken)
-			if !ok {
-				return errorsmod.Wrap(types.ErrTokenInfoNotFound, "token info not found for deposit token")
-			}
+	if transaction.ReferralId == 0 {
+		return nil
+	}
 
-			// Rewards for referral are taken from CommissionAmount
-			commissionAmount, ok := big.NewInt(0).SetString(transaction.CommissionAmount, 10)
-			if !ok {
-				return errorsmod.Wrap(types.ErrInvalidDataType, "invalid withdrawal amount")
-			}
+	referral, ok := k.GetReferral(ctx, transaction.ReferralId)
+	if !ok {
+		return errorsmod.Wrap(types.ErrReferralNotFound, "referral ID not found")
+	}
 
-			rewards, err := types.GetCommissionAmount(commissionAmount, referral.CommissionRate)
-			if err != nil {
-				return errorsmod.Wrap(err, "failed to calculate referral rewards")
-			}
+	token, ok := k.GetTokenInfo(ctx, transaction.DepositChainId, transaction.DepositToken)
+	if !ok {
+		return errorsmod.Wrap(types.ErrTokenInfoNotFound, "token info not found for deposit token")
+	}
 
-			referralRewards := types.ReferralRewards{
-				ReferralId:         transaction.ReferralId,
-				TokenId:            token.TokenId,
-				ToClaim:            sdk.NewIntFromBigInt(rewards).String(),
-				TotalClaimedAmount: sdk.NewInt(0).String(),
-			}
+	// Rewards for referral are taken from CommissionAmount
+	commissionAmount, ok := big.NewInt(0).SetString(transaction.CommissionAmount, 10)
+	if !ok {
+		return errorsmod.Wrap(types.ErrInvalidDataType, "invalid withdrawal amount")
+	}
 
-			err = k.AddReferralRewards(ctx, transaction.ReferralId, token.TokenId, referralRewards)
-			if err != nil {
-				return errorsmod.Wrap(err, "failed to add referral rewards")
-			}
-		}
+	rewards, err := types.GetCommissionAmount(commissionAmount, referral.CommissionRate)
+	if err != nil {
+		return errorsmod.Wrap(err, "failed to calculate referral rewards")
+	}
+
+	referralRewards := types.ReferralRewards{
+		ReferralId:         transaction.ReferralId,
+		TokenId:            token.TokenId,
+		ToClaim:            sdk.NewIntFromBigInt(rewards).String(),
+		TotalClaimedAmount: sdk.NewInt(0).String(),
+	}
+
+	err = k.AddReferralRewards(ctx, transaction.ReferralId, token.TokenId, referralRewards)
+	if err != nil {
+		return errorsmod.Wrap(err, "failed to add referral rewards")
 	}
 
 	return nil
@@ -129,48 +133,52 @@ func (k Keeper) DeleteTx(ctx sdk.Context, depositTxHash string, depositTxIndex u
 	// Delete tx from core
 	k.RemoveTransaction(ctx, txId)
 
-	// Minus referral rewards
-	if transaction.ReferralId != 0 {
-		referral, ok := k.GetReferral(ctx, transaction.ReferralId)
-		if !ok {
-			return errorsmod.Wrap(types.ErrReferralNotFound, "referral ID not found")
-		}
-
-		token, ok := k.GetTokenInfo(ctx, transaction.DepositChainId, transaction.DepositToken)
-		if !ok {
-			return errorsmod.Wrap(types.ErrTokenInfoNotFound, "token info not found for deposit token")
-		}
-
-		// Rewards for referral are taken from CommissionAmount
-		commissionAmount, ok := big.NewInt(0).SetString(transaction.CommissionAmount, 10)
-		if !ok {
-			return errorsmod.Wrap(types.ErrInvalidDataType, "invalid withdrawal amount")
-		}
-
-		rewards, err := types.GetCommissionAmount(commissionAmount, referral.CommissionRate)
-		if err != nil {
-			return errorsmod.Wrap(err, "failed to calculate referral rewards")
-		}
-
-		// convert rewards to negative value to minus it
-		referralRewards := types.ReferralRewards{
-			ReferralId:         transaction.ReferralId,
-			TokenId:            token.TokenId,
-			ToClaim:            sdk.NewIntFromBigInt(rewards).Neg().String(),
-			TotalClaimedAmount: sdk.NewInt(0).String(),
-		}
-
-		err = k.AddReferralRewards(ctx, transaction.ReferralId, token.TokenId, referralRewards)
-		if err != nil {
-			return errorsmod.Wrap(err, "failed to minus referral rewards")
-		}
-	}
-
 	// Delete tx submissions
 	txSubmissions, found := k.GetTransactionSubmissions(ctx, k.TxHash(&transaction).String())
 	if found {
 		k.RemoveTransactionSubmissions(ctx, txSubmissions.TxHash)
 	}
+
+	// Minus referral rewards
+	if transaction.ReferralId == 0 {
+		emitRemoveTransactionEvent(ctx, transaction)
+		return nil
+	}
+
+	referral, ok := k.GetReferral(ctx, transaction.ReferralId)
+	if !ok {
+		return errorsmod.Wrap(types.ErrReferralNotFound, "referral ID not found")
+	}
+
+	token, ok := k.GetTokenInfo(ctx, transaction.DepositChainId, transaction.DepositToken)
+	if !ok {
+		return errorsmod.Wrap(types.ErrTokenInfoNotFound, "token info not found for deposit token")
+	}
+
+	// Rewards for referral are taken from CommissionAmount
+	commissionAmount, ok := big.NewInt(0).SetString(transaction.CommissionAmount, 10)
+	if !ok {
+		return errorsmod.Wrap(types.ErrInvalidDataType, "invalid withdrawal amount")
+	}
+
+	rewards, err := types.GetCommissionAmount(commissionAmount, referral.CommissionRate)
+	if err != nil {
+		return errorsmod.Wrap(err, "failed to calculate referral rewards")
+	}
+
+	// convert rewards to negative value to minus it
+	referralRewards := types.ReferralRewards{
+		ReferralId:         transaction.ReferralId,
+		TokenId:            token.TokenId,
+		ToClaim:            sdk.NewIntFromBigInt(rewards).Neg().String(),
+		TotalClaimedAmount: sdk.NewInt(0).String(),
+	}
+
+	err = k.AddReferralRewards(ctx, transaction.ReferralId, token.TokenId, referralRewards)
+	if err != nil {
+		return errorsmod.Wrap(err, "failed to minus referral rewards")
+	}
+
 	emitRemoveTransactionEvent(ctx, transaction)
 	return nil
 }
