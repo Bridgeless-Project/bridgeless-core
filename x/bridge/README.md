@@ -748,7 +748,7 @@ Response example:
 
 ```
 tokens:
-- commission_rate: "5"
+- commission_rate: "0.5"
   id: "1"
   info:
   - address: 0x0000000000000000000000000000000000000000
@@ -777,7 +777,7 @@ ___
 Response example:
 ```
 tokens:
-- commission_rate: "5"
+- commission_rate: "0.5"
   id: "1"
   info:
   - address: 0x0000000000000000000000000000000000000000
