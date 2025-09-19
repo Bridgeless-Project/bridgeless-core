@@ -13,7 +13,7 @@ message Referral {
   // stores a 16-bit unsigned integer
   uint32 id = 1;
   string withdrawal_address = 2;
-  int32 commission_rate = 3;
+  string commission_rate = 3;
 }
 
 message ReferralRewards {

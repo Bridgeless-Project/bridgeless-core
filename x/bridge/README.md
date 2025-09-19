@@ -72,7 +72,7 @@ message Referral {
       // stores a 16-bit unsigned integer
       uint32 id = 1; 
       string withdrawal_address = 2;
-      int32 commission_rate = 3;
+      string commission_rate = 3;
 }
 ```
 
@@ -81,7 +81,7 @@ Example:
 {
   "id": "0",
   "withdrawal_address": "bridge1qqqqqnqaea03090u62sd7e42jfv2lhllsckms0",
-  "commission_rate": 5 // represents 5%
+  "commission_rate": "0.1"
 }
 ```
 
@@ -94,8 +94,8 @@ Definition
 message ReferralRewards {
   uint32 referral_id = 1;
   uint64 token_id = 2;
-  cosmos.base.v1beta1.Coin to_claim = 3 [(gogoproto.nullable) = false];
-  cosmos.base.v1beta1.Coin total_collected_amount = 4 [(gogoproto.nullable) = false];
+  string to_claim = 3;
+  string total_collected_amount = 4;
 }
 ```
 
@@ -104,8 +104,8 @@ Example
 {
   "referral_id": 1,
   "token_id": 1,
-  "to_claim": "10abridge",
-  "total_collected_amount": "100abridge"
+  "to_claim": "10",
+  "total_collected_amount": "100"
 }
 ```
 
@@ -120,8 +120,8 @@ message TokenInfo {
   string chain_id = 3;;
   uint64 token_id = 4;
   bool is_wrapped = 5;
+  string min_withdrawal_amount = 6;
 }
-
 
 message TokenMetadata {
   string name = 1;
@@ -142,7 +142,7 @@ Example:
 ```json
 {
   "id": "0",
-  "commission_rate": "5",
+  "commission_rate": "0.1",
   "metadata": {
     "name": "TESTNET",
     "symbol": "TEST",
@@ -154,14 +154,16 @@ Example:
       "decimals": "18",
       "chain_id": "00000",
       "token_id": "1",
-      "is_wrapped": true
+      "is_wrapped": true,
+      "min_withdrawal_amount": "0"
     },
     {
       "address": "0x0000000000000000000000000000000000000000",
       "decimals": "18",
       "chain_id": "00000",
       "token_id": "1",
-      "is_wrapped": false
+      "is_wrapped": false,
+      "min_withdrawal_amount": "0"
     }
   ]
 }
@@ -525,7 +527,7 @@ Example of `token.json`:
 ```json
 {
   "id": 1,
-  "commission_rate": "5",
+  "commission_rate": "0.1",
   "metadata": {
     "name": "TESTNET",
     "symbol": "TEST",
@@ -689,7 +691,7 @@ ___
 Response example:
 ```
 referral:
-  commission_rate: 5
+  commission_rate: "0.1"
   id: "1"
   withdrawal_address: bridge1qqqqqnqaea03090u62sd7e42jfv2lhllsckms0
 ```
@@ -701,7 +703,7 @@ bridgeless-cored query bridge referrals
 Response example:
 ```
 referrals: 
-  - commission_rate: 5
+  - commission_rate: "0.1"
     id: "1"
     withdrawal_address: bridge1qqqqqnqaea03090u62sd7e42jfv2lhllsckms0
 ```
@@ -714,9 +716,9 @@ Response example:
 ```
 referral_rewards:
   referral_id: "1"
-  to_claim: "10abridge"
+  to_claim: "10"
   token_id: "1"
-  total_collected_amount: "100abridge"
+  total_collected_amount: "100"
 ```
 
 ### GetQueryGetReferralsRewardsById
@@ -728,9 +730,9 @@ Response example:
 ```
 referrals_rewards:
 - referral_id: "1"
-  to_claim: "10abridge"
+  to_claim: "10"
   token_id: "1"
-  total_collected_amount: "100abridge"
+  total_collected_amount: "100"
 ```
 
 ___

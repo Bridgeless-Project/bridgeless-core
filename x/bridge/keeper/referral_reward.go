@@ -22,8 +22,14 @@ func (k Keeper) AddReferralRewards(sdkCtx sdk.Context, referralId uint32, tokenI
 	var referralRewards types.ReferralRewards
 	if bz == nil {
 		cStore.Set(types.KeyReferralRewards(referralId, tokenId), k.cdc.MustMarshal(&newReferralRewards))
+		return nil
 	}
 	k.cdc.MustUnmarshal(bz, &referralRewards)
+
+	if referralRewards.ToClaim == "" || referralRewards.TotalCollectedAmount == "" {
+		cStore.Set(types.KeyReferralRewards(referralId, tokenId), k.cdc.MustMarshal(&newReferralRewards))
+		return nil
+	}
 
 	// Sum the rewards
 	toClaim, ok := big.NewInt(0).SetString(referralRewards.ToClaim, 10)

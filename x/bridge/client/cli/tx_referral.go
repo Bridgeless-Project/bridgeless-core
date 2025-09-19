@@ -45,7 +45,8 @@ func CmdSetReferral() *cobra.Command {
 				return err
 			}
 
-			commissionRate, err := strconv.ParseInt(args[3], 10, 32)
+			// validate that commission rate is a valid float
+			_, err = strconv.ParseFloat(args[3], 32)
 			if err != nil {
 				return err
 			}
@@ -53,7 +54,7 @@ func CmdSetReferral() *cobra.Command {
 			referral := types.Referral{
 				Id:                uint32(referralId),
 				WithdrawalAddress: args[2],
-				CommissionRate:    int32(commissionRate),
+				CommissionRate:    args[3],
 			}
 
 			msg := types.NewMsgSetReferral(

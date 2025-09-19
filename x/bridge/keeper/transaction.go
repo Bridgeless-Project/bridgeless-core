@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"math/big"
-	"strconv"
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
@@ -80,39 +79,43 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 	if len(txSubmissions.Submitters) == int(threshold+1) {
 		k.SetTransaction(ctx, *transaction)
 		emitSubmitEvent(ctx, *transaction)
+
+		if transaction.ReferralId != 0 {
+			referral, ok := k.GetReferral(ctx, transaction.ReferralId)
+			if !ok {
+				return errorsmod.Wrap(types.ErrReferralNotFound, "referral ID not found")
+			}
+
+			token, ok := k.GetTokenInfo(ctx, transaction.DepositChainId, transaction.DepositToken)
+			if !ok {
+				return errorsmod.Wrap(types.ErrTokenInfoNotFound, "token info not found for deposit token")
+			}
+
+			// Rewards for referral are taken from CommissionAmount
+			commissionAmount, ok := big.NewInt(0).SetString(transaction.CommissionAmount, 10)
+			if !ok {
+				return errorsmod.Wrap(types.ErrInvalidDataType, "invalid withdrawal amount")
+			}
+
+			rewards, err := types.GetCommissionAmount(commissionAmount, referral.CommissionRate)
+			if err != nil {
+				return errorsmod.Wrap(err, "failed to calculate referral rewards")
+			}
+
+			referralRewards := types.ReferralRewards{
+				ReferralId:           transaction.ReferralId,
+				TokenId:              token.TokenId,
+				ToClaim:              sdk.NewIntFromBigInt(rewards).String(),
+				TotalCollectedAmount: sdk.NewIntFromBigInt(rewards).String(),
+			}
+
+			err = k.AddReferralRewards(ctx, transaction.ReferralId, token.TokenId, referralRewards)
+			if err != nil {
+				return errorsmod.Wrap(err, "failed to add referral rewards")
+			}
+		}
 	}
-	if transaction.ReferralId != 0 {
-		referral, ok := k.GetReferral(ctx, transaction.ReferralId)
-		if !ok {
-			return errorsmod.Wrap(types.ErrReferralNotFound, "referral ID not found")
-		}
-		tokenId, err := strconv.ParseUint(transaction.DepositToken, 10, 64)
-		if err != nil {
-			return errorsmod.Wrap(types.ErrInvalidDataType, "invalid deposit token")
-		}
 
-		// Rewards for referral are taken from CommissionAmount
-		commissionAmount, ok := big.NewInt(0).SetString(transaction.CommissionAmount, 10)
-		if !ok {
-			return errorsmod.Wrap(types.ErrInvalidDataType, "invalid withdrawal amount")
-		}
-		rewards := big.NewInt(0).Div(big.NewInt(0).
-			Mul(
-				commissionAmount,
-				big.NewInt(int64(referral.CommissionRate)),
-			),
-			big.NewInt(100), // percentage conversion
-		)
-
-		referralRewards := types.ReferralRewards{
-			ReferralId:           transaction.ReferralId,
-			TokenId:              tokenId,
-			ToClaim:              sdk.NewIntFromBigInt(rewards).String(),
-			TotalCollectedAmount: sdk.NewIntFromBigInt(rewards).String(),
-		}
-
-		k.AddReferralRewards(ctx, transaction.ReferralId, tokenId, referralRewards)
-	}
 	return nil
 }
 
@@ -126,13 +129,49 @@ func (k Keeper) DeleteTx(ctx sdk.Context, depositTxHash string, depositTxIndex u
 	// Delete tx from core
 	k.RemoveTransaction(ctx, txId)
 
+	// Minus referral rewards
+	if transaction.ReferralId != 0 {
+		referral, ok := k.GetReferral(ctx, transaction.ReferralId)
+		if !ok {
+			return errorsmod.Wrap(types.ErrReferralNotFound, "referral ID not found")
+		}
+
+		token, ok := k.GetTokenInfo(ctx, transaction.DepositChainId, transaction.DepositToken)
+		if !ok {
+			return errorsmod.Wrap(types.ErrTokenInfoNotFound, "token info not found for deposit token")
+		}
+
+		// Rewards for referral are taken from CommissionAmount
+		commissionAmount, ok := big.NewInt(0).SetString(transaction.CommissionAmount, 10)
+		if !ok {
+			return errorsmod.Wrap(types.ErrInvalidDataType, "invalid withdrawal amount")
+		}
+
+		rewards, err := types.GetCommissionAmount(commissionAmount, referral.CommissionRate)
+		if err != nil {
+			return errorsmod.Wrap(err, "failed to calculate referral rewards")
+		}
+
+		// convert rewards to negative value to minus it
+		referralRewards := types.ReferralRewards{
+			ReferralId:           transaction.ReferralId,
+			TokenId:              token.TokenId,
+			ToClaim:              sdk.NewIntFromBigInt(rewards).Neg().String(),
+			TotalCollectedAmount: sdk.NewIntFromBigInt(rewards).Neg().String(),
+		}
+
+		err = k.AddReferralRewards(ctx, transaction.ReferralId, token.TokenId, referralRewards)
+		if err != nil {
+			return errorsmod.Wrap(err, "failed to minus referral rewards")
+		}
+	}
+
 	// Delete tx submissions
 	txSubmissions, found := k.GetTransactionSubmissions(ctx, k.TxHash(&transaction).String())
 	if found {
 		k.RemoveTransactionSubmissions(ctx, txSubmissions.TxHash)
 	}
 	emitRemoveTransactionEvent(ctx, transaction)
-
 	return nil
 }
 

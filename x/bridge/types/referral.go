@@ -18,8 +18,13 @@ func validateReferral(referral *Referral) error {
 		return errors.New("referral id must be greater than zero")
 	}
 
-	if referral.CommissionRate < 0 || referral.CommissionRate >= 100 {
-		return errors.New("commission rate must be greater than zero")
+	commissionRete, ok := big.NewFloat(0).SetString(referral.CommissionRate)
+	if !ok {
+		return errors.New("invalid commission rate")
+	}
+
+	if commissionRete.Cmp(big.NewFloat(0)) == -1 || commissionRete.Cmp(big.NewFloat(1)) == 1 {
+		return errors.New("commission rate must be in [0, 1] range")
 	}
 	return nil
 }
