@@ -26,7 +26,7 @@ func (k Keeper) AddReferralRewards(sdkCtx sdk.Context, referralId uint32, tokenI
 	}
 	k.cdc.MustUnmarshal(bz, &referralRewards)
 
-	if referralRewards.ToClaim == "" || referralRewards.TotalCollectedAmount == "" {
+	if referralRewards.ToClaim == "" {
 		cStore.Set(types.KeyReferralRewards(referralId, tokenId), k.cdc.MustMarshal(&newReferralRewards))
 		return nil
 	}
@@ -40,17 +40,8 @@ func (k Keeper) AddReferralRewards(sdkCtx sdk.Context, referralId uint32, tokenI
 	if !ok {
 		return status.Error(codes.InvalidArgument, "invalid to-claim amount in new referral rewards")
 	}
-	totalCollectedAmount, ok := big.NewInt(0).SetString(referralRewards.TotalCollectedAmount, 10)
-	if !ok {
-		return status.Error(codes.InvalidArgument, "invalid total collected amount in existing referral rewards")
-	}
-	newTotalCollectedAmount, ok := big.NewInt(0).SetString(newReferralRewards.TotalCollectedAmount, 10)
-	if !ok {
-		return status.Error(codes.InvalidArgument, "invalid total collected amount in new referral rewards")
-	}
 
 	referralRewards.ToClaim = toClaim.Add(toClaim, newToClaim).String()
-	referralRewards.TotalCollectedAmount = totalCollectedAmount.Add(totalCollectedAmount, newTotalCollectedAmount).String()
 
 	// Update the store
 	cStore.Set(types.KeyReferralRewards(referralId, tokenId), k.cdc.MustMarshal(&referralRewards))

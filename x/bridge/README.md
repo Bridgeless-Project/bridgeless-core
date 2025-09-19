@@ -95,7 +95,7 @@ message ReferralRewards {
   uint32 referral_id = 1;
   uint64 token_id = 2;
   string to_claim = 3;
-  string total_collected_amount = 4;
+  string total_claimed_amount = 4;
 }
 ```
 
@@ -105,7 +105,7 @@ Example
   "referral_id": 1,
   "token_id": 1,
   "to_claim": "10",
-  "total_collected_amount": "100"
+  "total_claimed_amount": "100"
 }
 ```
 
@@ -718,7 +718,7 @@ referral_rewards:
   referral_id: "1"
   to_claim: "10"
   token_id: "1"
-  total_collected_amount: "100"
+  total_claimed_amount: "100"
 ```
 
 ### GetQueryGetReferralsRewardsById
@@ -732,7 +732,7 @@ referrals_rewards:
 - referral_id: "1"
   to_claim: "10"
   token_id: "1"
-  total_collected_amount: "100"
+  total_claimed_amount: "100"
 ```
 
 ___

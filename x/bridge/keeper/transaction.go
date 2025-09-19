@@ -103,10 +103,10 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 			}
 
 			referralRewards := types.ReferralRewards{
-				ReferralId:           transaction.ReferralId,
-				TokenId:              token.TokenId,
-				ToClaim:              sdk.NewIntFromBigInt(rewards).String(),
-				TotalCollectedAmount: sdk.NewIntFromBigInt(rewards).String(),
+				ReferralId:         transaction.ReferralId,
+				TokenId:            token.TokenId,
+				ToClaim:            sdk.NewIntFromBigInt(rewards).String(),
+				TotalClaimedAmount: sdk.NewInt(0).String(),
 			}
 
 			err = k.AddReferralRewards(ctx, transaction.ReferralId, token.TokenId, referralRewards)
@@ -154,10 +154,10 @@ func (k Keeper) DeleteTx(ctx sdk.Context, depositTxHash string, depositTxIndex u
 
 		// convert rewards to negative value to minus it
 		referralRewards := types.ReferralRewards{
-			ReferralId:           transaction.ReferralId,
-			TokenId:              token.TokenId,
-			ToClaim:              sdk.NewIntFromBigInt(rewards).Neg().String(),
-			TotalCollectedAmount: sdk.NewIntFromBigInt(rewards).Neg().String(),
+			ReferralId:         transaction.ReferralId,
+			TokenId:            token.TokenId,
+			ToClaim:            sdk.NewIntFromBigInt(rewards).Neg().String(),
+			TotalClaimedAmount: sdk.NewInt(0).String(),
 		}
 
 		err = k.AddReferralRewards(ctx, transaction.ReferralId, token.TokenId, referralRewards)

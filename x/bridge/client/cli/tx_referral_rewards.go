@@ -63,10 +63,10 @@ func CmdSetReferralRewards() *cobra.Command {
 			}
 
 			referral := types.ReferralRewards{
-				ReferralId:           uint32(referralId),
-				TokenId:              tokenId,
-				ToClaim:              args[3],
-				TotalCollectedAmount: args[4],
+				ReferralId:         uint32(referralId),
+				TokenId:            tokenId,
+				ToClaim:            args[3],
+				TotalClaimedAmount: args[4],
 			}
 
 			msg := types.NewMsgSetReferralRewards(

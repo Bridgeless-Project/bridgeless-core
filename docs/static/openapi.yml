@@ -768,7 +768,7 @@ paths:
         - Query
   /cosmos/bridge/referrals:
     get:
-      operationId: CoreBridgeGetQueryGetReferrals
+      operationId: CoreBridgeGetReferrals
       responses:
         '200':
           description: A successful response.
@@ -787,8 +787,7 @@ paths:
                     withdrawal_address:
                       type: string
                     commission_rate:
-                      type: integer
-                      format: int32
+                      type: string
               pagination:
                 type: object
                 properties:
@@ -1063,7 +1062,7 @@ paths:
         - Query
   '/cosmos/bridge/referrals/rewards/{referral_id}':
     get:
-      operationId: CoreBridgeGetQueryGetReferralsRewardsById
+      operationId: CoreBridgeGetReferralsRewardsById
       responses:
         '200':
           description: A successful response.
@@ -1082,35 +1081,9 @@ paths:
                       type: string
                       format: uint64
                     to_claim:
-                      type: object
-                      properties:
-                        denom:
-                          type: string
-                        amount:
-                          type: string
-                      description: >-
-                        Coin defines a token with a denomination and an amount.
-
-
-                        NOTE: The amount field is an Int which implements the
-                        custom method
-
-                        signatures required by gogoproto.
-                    total_collected_amount:
-                      type: object
-                      properties:
-                        denom:
-                          type: string
-                        amount:
-                          type: string
-                      description: >-
-                        Coin defines a token with a denomination and an amount.
-
-
-                        NOTE: The amount field is an Int which implements the
-                        custom method
-
-                        signatures required by gogoproto.
+                      type: string
+                    total_claimed_amount:
+                      type: string
               pagination:
                 type: object
                 properties:
@@ -1407,35 +1380,9 @@ paths:
                     type: string
                     format: uint64
                   to_claim:
-                    type: object
-                    properties:
-                      denom:
-                        type: string
-                      amount:
-                        type: string
-                    description: >-
-                      Coin defines a token with a denomination and an amount.
-
-
-                      NOTE: The amount field is an Int which implements the
-                      custom method
-
-                      signatures required by gogoproto.
-                  total_collected_amount:
-                    type: object
-                    properties:
-                      denom:
-                        type: string
-                      amount:
-                        type: string
-                    description: >-
-                      Coin defines a token with a denomination and an amount.
-
-
-                      NOTE: The amount field is an Int which implements the
-                      custom method
-
-                      signatures required by gogoproto.
+                    type: string
+                  total_claimed_amount:
+                    type: string
         default:
           description: An unexpected error response.
           schema:
@@ -1653,8 +1600,7 @@ paths:
                   withdrawal_address:
                     type: string
                   commission_rate:
-                    type: integer
-                    format: int32
+                    type: string
         default:
           description: An unexpected error response.
           schema:
@@ -1873,6 +1819,8 @@ paths:
                     format: uint64
                   is_wrapped:
                     type: boolean
+                  min_withdrawal_amount:
+                    type: string
         default:
           description: An unexpected error response.
           schema:
@@ -2096,6 +2044,8 @@ paths:
                     format: uint64
                   is_wrapped:
                     type: boolean
+                  min_withdrawal_amount:
+                    type: string
         default:
           description: An unexpected error response.
           schema:
@@ -2342,6 +2292,8 @@ paths:
                             format: uint64
                           is_wrapped:
                             type: boolean
+                          min_withdrawal_amount:
+                            type: string
                       title: info is the token information on different chains
                     commission_rate:
                       type: string
@@ -2661,6 +2613,8 @@ paths:
                           format: uint64
                         is_wrapped:
                           type: boolean
+                        min_withdrawal_amount:
+                          type: string
                     title: info is the token information on different chains
                   commission_rate:
                     type: string
@@ -2908,7 +2862,7 @@ paths:
                       type: string
                     referral_id:
                       type: integer
-                      format: int32
+                      format: int64
                 description: Transactions is a list of transactions.
               pagination:
                 type: object
@@ -3234,7 +3188,7 @@ paths:
                     type: string
                   referral_id:
                     type: integer
-                    format: int32
+                    format: int64
             description: >-
               QueryTransactionByIdResponse is response type for the
               Query/TransactionById RPC method.
@@ -51114,8 +51068,7 @@ definitions:
           withdrawal_address:
             type: string
           commission_rate:
-            type: integer
-            format: int32
+            type: string
   core.bridge.QueryGetReferralRewardByIdResponse:
     type: object
     properties:
@@ -51129,35 +51082,9 @@ definitions:
             type: string
             format: uint64
           to_claim:
-            type: object
-            properties:
-              denom:
-                type: string
-              amount:
-                type: string
-            description: >-
-              Coin defines a token with a denomination and an amount.
-
-
-              NOTE: The amount field is an Int which implements the custom
-              method
-
-              signatures required by gogoproto.
-          total_collected_amount:
-            type: object
-            properties:
-              denom:
-                type: string
-              amount:
-                type: string
-            description: >-
-              Coin defines a token with a denomination and an amount.
-
-
-              NOTE: The amount field is an Int which implements the custom
-              method
-
-              signatures required by gogoproto.
+            type: string
+          total_claimed_amount:
+            type: string
   core.bridge.QueryGetReferralRewardsByIdResponse:
     type: object
     properties:
@@ -51173,35 +51100,9 @@ definitions:
               type: string
               format: uint64
             to_claim:
-              type: object
-              properties:
-                denom:
-                  type: string
-                amount:
-                  type: string
-              description: >-
-                Coin defines a token with a denomination and an amount.
-
-
-                NOTE: The amount field is an Int which implements the custom
-                method
-
-                signatures required by gogoproto.
-            total_collected_amount:
-              type: object
-              properties:
-                denom:
-                  type: string
-                amount:
-                  type: string
-              description: >-
-                Coin defines a token with a denomination and an amount.
-
-
-                NOTE: The amount field is an Int which implements the custom
-                method
-
-                signatures required by gogoproto.
+              type: string
+            total_claimed_amount:
+              type: string
       pagination:
         type: object
         properties:
@@ -51243,8 +51144,7 @@ definitions:
             withdrawal_address:
               type: string
             commission_rate:
-              type: integer
-              format: int32
+              type: string
       pagination:
         type: object
         properties:
@@ -51308,6 +51208,8 @@ definitions:
                   format: uint64
                 is_wrapped:
                   type: boolean
+                min_withdrawal_amount:
+                  type: string
             title: info is the token information on different chains
           commission_rate:
             type: string
@@ -51329,6 +51231,8 @@ definitions:
             format: uint64
           is_wrapped:
             type: boolean
+          min_withdrawal_amount:
+            type: string
   core.bridge.QueryGetTokenPairResponse:
     type: object
     properties:
@@ -51347,6 +51251,8 @@ definitions:
             format: uint64
           is_wrapped:
             type: boolean
+          min_withdrawal_amount:
+            type: string
   core.bridge.QueryGetTokensResponse:
     type: object
     properties:
@@ -51386,6 +51292,8 @@ definitions:
                     format: uint64
                   is_wrapped:
                     type: boolean
+                  min_withdrawal_amount:
+                    type: string
               title: info is the token information on different chains
             commission_rate:
               type: string
@@ -51529,7 +51437,7 @@ definitions:
             type: string
           referral_id:
             type: integer
-            format: int32
+            format: int64
     description: >-
       QueryTransactionByIdResponse is response type for the
       Query/TransactionById RPC method.
@@ -51577,7 +51485,7 @@ definitions:
               type: string
             referral_id:
               type: integer
-              format: int32
+              format: int64
         description: Transactions is a list of transactions.
       pagination:
         type: object
@@ -51618,8 +51526,7 @@ definitions:
       withdrawal_address:
         type: string
       commission_rate:
-        type: integer
-        format: int32
+        type: string
   core.bridge.ReferralRewards:
     type: object
     properties:
@@ -51630,29 +51537,9 @@ definitions:
         type: string
         format: uint64
       to_claim:
-        type: object
-        properties:
-          denom:
-            type: string
-          amount:
-            type: string
-        description: |-
-          Coin defines a token with a denomination and an amount.
-
-          NOTE: The amount field is an Int which implements the custom method
-          signatures required by gogoproto.
-      total_collected_amount:
-        type: object
-        properties:
-          denom:
-            type: string
-          amount:
-            type: string
-        description: |-
-          Coin defines a token with a denomination and an amount.
-
-          NOTE: The amount field is an Int which implements the custom method
-          signatures required by gogoproto.
+        type: string
+      total_claimed_amount:
+        type: string
   core.bridge.Token:
     type: object
     properties:
@@ -51687,6 +51574,8 @@ definitions:
               format: uint64
             is_wrapped:
               type: boolean
+            min_withdrawal_amount:
+              type: string
         title: info is the token information on different chains
       commission_rate:
         type: string
@@ -51705,6 +51594,8 @@ definitions:
         format: uint64
       is_wrapped:
         type: boolean
+      min_withdrawal_amount:
+        type: string
   core.bridge.TokenMetadata:
     type: object
     properties:
@@ -51755,7 +51646,7 @@ definitions:
         type: string
       referral_id:
         type: integer
-        format: int32
+        format: int64
   core.bridge.TransactionSubmissions:
     type: object
     properties:
@@ -51842,18 +51733,6 @@ definitions:
                repeated Bar results = 1;
                PageResponse page = 2;
        }
-  cosmos.base.v1beta1.Coin:
-    type: object
-    properties:
-      denom:
-        type: string
-      amount:
-        type: string
-    description: |-
-      Coin defines a token with a denomination and an amount.
-
-      NOTE: The amount field is an Int which implements the custom method
-      signatures required by gogoproto.
   google.protobuf.Any:
     type: object
     properties:
@@ -53355,6 +53234,18 @@ definitions:
           super_admin:
             type: string
     description: QueryParamsResponse is response type for the Query/Params RPC method.
+  cosmos.base.v1beta1.Coin:
+    type: object
+    properties:
+      denom:
+        type: string
+      amount:
+        type: string
+    description: |-
+      Coin defines a token with a denomination and an amount.
+
+      NOTE: The amount field is an Int which implements the custom method
+      signatures required by gogoproto.
   cosmos.auth.v1beta1.AddressBytesToStringResponse:
     type: object
     properties:
