@@ -1,0 +1,24 @@
+syntax = "proto3";
+package core.bridge;
+
+import "google/protobuf/any.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "google/api/annotations.proto";
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types";
+
+message Referral {
+  // stores a 16-bit unsigned integer
+  uint32 id = 1;
+  string withdrawal_address = 2;
+  string commission_rate = 3;
+}
+
+message ReferralRewards {
+  uint32 referral_id = 1;
+  uint64 token_id = 2;
+  string to_claim = 3;
+  string total_claimed_amount = 4;
+}

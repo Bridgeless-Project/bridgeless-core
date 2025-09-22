@@ -8,6 +8,7 @@ import "bridge/models/transaction.proto";
 import "bridge/models/token.proto";
 import "bridge/models/chain.proto";
 import "bridge/models/party.proto";
+import "bridge/models/referrals.proto";
 
 import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
@@ -32,6 +33,12 @@ service Msg {
 
     rpc SetParties(MsgSetParties) returns (MsgSetPartiesResponse);
     rpc SetTssThreshold(MsgSetTssThreshold) returns (MsgSetTssThresholdResponse);
+
+    rpc SetReferral(MsgSetReferral) returns (MsgSetReferralResponse);
+    rpc RemoveReferral(MsgRemoveReferral) returns (MsgRemoveReferralResponse);
+
+    rpc SetReferralRewards(MsgSetReferralRewards) returns (MsgSetReferralRewardsResponse);
+    rpc RemoveReferralRewards(MsgRemoveReferralRewards) returns (MsgRemoveReferralRewardsResponse);
 }
 
 // this line is used by starport scaffolding # proto/tx/message
@@ -126,3 +133,35 @@ message MsgSetTssThreshold {
 }
 
 message MsgSetTssThresholdResponse {}
+
+
+message MsgSetReferral {
+  string creator = 1;
+  Referral referral = 2 [(gogoproto.nullable) = false];
+}
+
+message MsgSetReferralResponse {}
+
+message MsgRemoveReferral {
+  string creator = 1;
+  uint32 id = 2;
+}
+
+message MsgRemoveReferralResponse {}
+
+message MsgSetReferralRewards {
+  string creator = 1;
+  ReferralRewards rewards = 4 [(gogoproto.nullable) = false];
+}
+
+message MsgSetReferralRewardsResponse {}
+
+message MsgRemoveReferralRewards {
+  string creator = 1;
+  uint32 referrer_id = 2;
+  uint64 token_id = 3;
+}
+
+message MsgRemoveReferralRewardsResponse {}
+
+
