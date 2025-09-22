@@ -1031,6 +1031,366 @@ func (m *MsgSetTssThresholdResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgSetTssThresholdResponse proto.InternalMessageInfo
 
+type MsgSetReferral struct {
+	Creator  string   `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Referral Referral `protobuf:"bytes,2,opt,name=referral,proto3" json:"referral"`
+}
+
+func (m *MsgSetReferral) Reset()         { *m = MsgSetReferral{} }
+func (m *MsgSetReferral) String() string { return proto.CompactTextString(m) }
+func (*MsgSetReferral) ProtoMessage()    {}
+func (*MsgSetReferral) Descriptor() ([]byte, []int) {
+	return fileDescriptor_41dc2e30e6049cae, []int{22}
+}
+func (m *MsgSetReferral) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSetReferral) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSetReferral.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSetReferral) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSetReferral.Merge(m, src)
+}
+func (m *MsgSetReferral) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSetReferral) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSetReferral.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSetReferral proto.InternalMessageInfo
+
+func (m *MsgSetReferral) GetCreator() string {
+	if m != nil {
+		return m.Creator
+	}
+	return ""
+}
+
+func (m *MsgSetReferral) GetReferral() Referral {
+	if m != nil {
+		return m.Referral
+	}
+	return Referral{}
+}
+
+type MsgSetReferralResponse struct {
+}
+
+func (m *MsgSetReferralResponse) Reset()         { *m = MsgSetReferralResponse{} }
+func (m *MsgSetReferralResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgSetReferralResponse) ProtoMessage()    {}
+func (*MsgSetReferralResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_41dc2e30e6049cae, []int{23}
+}
+func (m *MsgSetReferralResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSetReferralResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSetReferralResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSetReferralResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSetReferralResponse.Merge(m, src)
+}
+func (m *MsgSetReferralResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSetReferralResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSetReferralResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSetReferralResponse proto.InternalMessageInfo
+
+type MsgRemoveReferral struct {
+	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Id      uint32 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (m *MsgRemoveReferral) Reset()         { *m = MsgRemoveReferral{} }
+func (m *MsgRemoveReferral) String() string { return proto.CompactTextString(m) }
+func (*MsgRemoveReferral) ProtoMessage()    {}
+func (*MsgRemoveReferral) Descriptor() ([]byte, []int) {
+	return fileDescriptor_41dc2e30e6049cae, []int{24}
+}
+func (m *MsgRemoveReferral) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgRemoveReferral) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgRemoveReferral.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgRemoveReferral) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRemoveReferral.Merge(m, src)
+}
+func (m *MsgRemoveReferral) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgRemoveReferral) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRemoveReferral.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgRemoveReferral proto.InternalMessageInfo
+
+func (m *MsgRemoveReferral) GetCreator() string {
+	if m != nil {
+		return m.Creator
+	}
+	return ""
+}
+
+func (m *MsgRemoveReferral) GetId() uint32 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+type MsgRemoveReferralResponse struct {
+}
+
+func (m *MsgRemoveReferralResponse) Reset()         { *m = MsgRemoveReferralResponse{} }
+func (m *MsgRemoveReferralResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgRemoveReferralResponse) ProtoMessage()    {}
+func (*MsgRemoveReferralResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_41dc2e30e6049cae, []int{25}
+}
+func (m *MsgRemoveReferralResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgRemoveReferralResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgRemoveReferralResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgRemoveReferralResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRemoveReferralResponse.Merge(m, src)
+}
+func (m *MsgRemoveReferralResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgRemoveReferralResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRemoveReferralResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgRemoveReferralResponse proto.InternalMessageInfo
+
+type MsgSetReferralRewards struct {
+	Creator string          `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Rewards ReferralRewards `protobuf:"bytes,4,opt,name=rewards,proto3" json:"rewards"`
+}
+
+func (m *MsgSetReferralRewards) Reset()         { *m = MsgSetReferralRewards{} }
+func (m *MsgSetReferralRewards) String() string { return proto.CompactTextString(m) }
+func (*MsgSetReferralRewards) ProtoMessage()    {}
+func (*MsgSetReferralRewards) Descriptor() ([]byte, []int) {
+	return fileDescriptor_41dc2e30e6049cae, []int{26}
+}
+func (m *MsgSetReferralRewards) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSetReferralRewards) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSetReferralRewards.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSetReferralRewards) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSetReferralRewards.Merge(m, src)
+}
+func (m *MsgSetReferralRewards) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSetReferralRewards) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSetReferralRewards.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSetReferralRewards proto.InternalMessageInfo
+
+func (m *MsgSetReferralRewards) GetCreator() string {
+	if m != nil {
+		return m.Creator
+	}
+	return ""
+}
+
+func (m *MsgSetReferralRewards) GetRewards() ReferralRewards {
+	if m != nil {
+		return m.Rewards
+	}
+	return ReferralRewards{}
+}
+
+type MsgSetReferralRewardsResponse struct {
+}
+
+func (m *MsgSetReferralRewardsResponse) Reset()         { *m = MsgSetReferralRewardsResponse{} }
+func (m *MsgSetReferralRewardsResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgSetReferralRewardsResponse) ProtoMessage()    {}
+func (*MsgSetReferralRewardsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_41dc2e30e6049cae, []int{27}
+}
+func (m *MsgSetReferralRewardsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSetReferralRewardsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSetReferralRewardsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSetReferralRewardsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSetReferralRewardsResponse.Merge(m, src)
+}
+func (m *MsgSetReferralRewardsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSetReferralRewardsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSetReferralRewardsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSetReferralRewardsResponse proto.InternalMessageInfo
+
+type MsgRemoveReferralRewards struct {
+	Creator    string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	ReferrerId uint32 `protobuf:"varint,2,opt,name=referrer_id,json=referrerId,proto3" json:"referrer_id,omitempty"`
+	TokenId    uint64 `protobuf:"varint,3,opt,name=token_id,json=tokenId,proto3" json:"token_id,omitempty"`
+}
+
+func (m *MsgRemoveReferralRewards) Reset()         { *m = MsgRemoveReferralRewards{} }
+func (m *MsgRemoveReferralRewards) String() string { return proto.CompactTextString(m) }
+func (*MsgRemoveReferralRewards) ProtoMessage()    {}
+func (*MsgRemoveReferralRewards) Descriptor() ([]byte, []int) {
+	return fileDescriptor_41dc2e30e6049cae, []int{28}
+}
+func (m *MsgRemoveReferralRewards) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgRemoveReferralRewards) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgRemoveReferralRewards.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgRemoveReferralRewards) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRemoveReferralRewards.Merge(m, src)
+}
+func (m *MsgRemoveReferralRewards) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgRemoveReferralRewards) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRemoveReferralRewards.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgRemoveReferralRewards proto.InternalMessageInfo
+
+func (m *MsgRemoveReferralRewards) GetCreator() string {
+	if m != nil {
+		return m.Creator
+	}
+	return ""
+}
+
+func (m *MsgRemoveReferralRewards) GetReferrerId() uint32 {
+	if m != nil {
+		return m.ReferrerId
+	}
+	return 0
+}
+
+func (m *MsgRemoveReferralRewards) GetTokenId() uint64 {
+	if m != nil {
+		return m.TokenId
+	}
+	return 0
+}
+
+type MsgRemoveReferralRewardsResponse struct {
+}
+
+func (m *MsgRemoveReferralRewardsResponse) Reset()         { *m = MsgRemoveReferralRewardsResponse{} }
+func (m *MsgRemoveReferralRewardsResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgRemoveReferralRewardsResponse) ProtoMessage()    {}
+func (*MsgRemoveReferralRewardsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_41dc2e30e6049cae, []int{29}
+}
+func (m *MsgRemoveReferralRewardsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgRemoveReferralRewardsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgRemoveReferralRewardsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgRemoveReferralRewardsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRemoveReferralRewardsResponse.Merge(m, src)
+}
+func (m *MsgRemoveReferralRewardsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgRemoveReferralRewardsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRemoveReferralRewardsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgRemoveReferralRewardsResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgSubmitTransactions)(nil), "core.bridge.MsgSubmitTransactions")
 	proto.RegisterType((*MsgRemoveTransaction)(nil), "core.bridge.MsgRemoveTransaction")
@@ -1054,68 +1414,88 @@ func init() {
 	proto.RegisterType((*MsgSetPartiesResponse)(nil), "core.bridge.MsgSetPartiesResponse")
 	proto.RegisterType((*MsgSetTssThreshold)(nil), "core.bridge.MsgSetTssThreshold")
 	proto.RegisterType((*MsgSetTssThresholdResponse)(nil), "core.bridge.MsgSetTssThresholdResponse")
+	proto.RegisterType((*MsgSetReferral)(nil), "core.bridge.MsgSetReferral")
+	proto.RegisterType((*MsgSetReferralResponse)(nil), "core.bridge.MsgSetReferralResponse")
+	proto.RegisterType((*MsgRemoveReferral)(nil), "core.bridge.MsgRemoveReferral")
+	proto.RegisterType((*MsgRemoveReferralResponse)(nil), "core.bridge.MsgRemoveReferralResponse")
+	proto.RegisterType((*MsgSetReferralRewards)(nil), "core.bridge.MsgSetReferralRewards")
+	proto.RegisterType((*MsgSetReferralRewardsResponse)(nil), "core.bridge.MsgSetReferralRewardsResponse")
+	proto.RegisterType((*MsgRemoveReferralRewards)(nil), "core.bridge.MsgRemoveReferralRewards")
+	proto.RegisterType((*MsgRemoveReferralRewardsResponse)(nil), "core.bridge.MsgRemoveReferralRewardsResponse")
 }
 
 func init() { proto.RegisterFile("bridge/tx.proto", fileDescriptor_41dc2e30e6049cae) }
 
 var fileDescriptor_41dc2e30e6049cae = []byte{
-	// 882 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x56, 0xcf, 0x6f, 0xe3, 0x44,
-	0x14, 0xae, 0xb7, 0x81, 0xb4, 0x2f, 0xdb, 0x06, 0xac, 0xb2, 0x75, 0x4c, 0x48, 0x8a, 0x41, 0x10,
-	0x56, 0x6c, 0xcc, 0x06, 0x89, 0x03, 0xe2, 0xc0, 0x06, 0x90, 0x88, 0xb4, 0x11, 0x2b, 0x37, 0x08,
-	0xa9, 0x08, 0x45, 0x8e, 0x67, 0xd6, 0x31, 0x24, 0x9e, 0xc8, 0x33, 0x5b, 0xa5, 0x57, 0xf8, 0x07,
-	0xf8, 0x1f, 0xb8, 0x72, 0xe0, 0xc0, 0x9d, 0xeb, 0x1e, 0x2b, 0x4e, 0x9c, 0x10, 0x6a, 0x0f, 0xfc,
-	0x1b, 0xc8, 0xe3, 0xb1, 0x3d, 0xfe, 0x19, 0xa4, 0x3d, 0x25, 0x9e, 0xf7, 0xbd, 0xef, 0xfb, 0xde,
-	0xf3, 0x9b, 0x27, 0x43, 0x7b, 0x11, 0x78, 0xc8, 0xc5, 0x26, 0xdb, 0x0e, 0x37, 0x01, 0x61, 0x44,
-	0x6d, 0x39, 0x24, 0xc0, 0xc3, 0xe8, 0x54, 0x3f, 0x75, 0x08, 0x5d, 0x13, 0x6a, 0xae, 0xa9, 0x6b,
-	0x5e, 0x3e, 0x0c, 0x7f, 0x22, 0x94, 0xde, 0x17, 0x69, 0x6b, 0x82, 0xf0, 0x8a, 0x9a, 0x2c, 0xb0,
-	0x7d, 0x6a, 0x3b, 0xcc, 0x23, 0xbe, 0x00, 0x74, 0x72, 0x00, 0xf2, 0x03, 0xae, 0x08, 0x39, 0x4b,
-	0xdb, 0xab, 0x08, 0x6d, 0xec, 0x80, 0x5d, 0x89, 0xd0, 0x89, 0x4b, 0x5c, 0xc2, 0xff, 0x9a, 0xe1,
-	0xbf, 0x38, 0x21, 0x32, 0x38, 0x8f, 0x02, 0xd1, 0x43, 0x14, 0x32, 0x7e, 0x51, 0xe0, 0xb5, 0x29,
-	0x75, 0xcf, 0x9f, 0x2d, 0xd6, 0x1e, 0x9b, 0xa5, 0x06, 0xa9, 0xfa, 0x11, 0x1c, 0x52, 0x7e, 0xca,
-	0x70, 0xa0, 0x29, 0x67, 0xca, 0xe0, 0x70, 0xac, 0xfd, 0xf9, 0xfb, 0x83, 0x13, 0x91, 0xfe, 0x08,
-	0xa1, 0x00, 0x53, 0x7a, 0xce, 0x02, 0xcf, 0x77, 0xad, 0x14, 0xaa, 0x8e, 0xe1, 0xae, 0x54, 0x28,
-	0xd5, 0xee, 0x9c, 0xed, 0x0f, 0x5a, 0x23, 0x6d, 0x28, 0x75, 0x6c, 0x28, 0x09, 0x8d, 0x1b, 0xcf,
-	0xff, 0xee, 0xef, 0x59, 0x99, 0x9c, 0x8f, 0x8f, 0x7f, 0xfc, 0xf7, 0xb7, 0xfb, 0x29, 0xa7, 0xf1,
-	0xab, 0x02, 0x27, 0x53, 0xea, 0x5a, 0x78, 0x4d, 0x2e, 0xb1, 0x94, 0xac, 0x6a, 0xd0, 0x74, 0x02,
-	0x6c, 0x33, 0x22, 0x2c, 0x5a, 0xf1, 0xa3, 0x3a, 0x80, 0x57, 0x10, 0xde, 0x10, 0xea, 0xb1, 0x39,
-	0xef, 0xdd, 0xdc, 0x43, 0xda, 0x1d, 0x0e, 0x39, 0x16, 0xe7, 0x9f, 0x85, 0xc7, 0x13, 0xa4, 0xbe,
-	0x03, 0xed, 0x18, 0xc9, 0xb6, 0xf3, 0xa5, 0x4d, 0x97, 0xda, 0x3e, 0x07, 0x1e, 0x89, 0xe3, 0xd9,
-	0xf6, 0x4b, 0x9b, 0x2e, 0x65, 0x46, 0xb6, 0x9d, 0x7b, 0x3e, 0xc2, 0x5b, 0xad, 0x71, 0xa6, 0x0c,
-	0x1a, 0x09, 0xe3, 0x6c, 0x3b, 0x09, 0x4f, 0x8d, 0x1e, 0x74, 0xcb, 0xdc, 0x5a, 0x98, 0x6e, 0x88,
-	0x4f, 0xb1, 0xd1, 0x87, 0x37, 0x4a, 0x7b, 0x9e, 0x00, 0x2e, 0xe0, 0x78, 0x4a, 0xdd, 0x89, 0x4f,
-	0x71, 0xc0, 0x66, 0xe1, 0x50, 0xd4, 0x14, 0x3a, 0x84, 0x97, 0xf8, 0xdc, 0xf0, 0xea, 0x5a, 0x23,
-	0x35, 0xdb, 0xe8, 0x30, 0x22, 0x5a, 0x1c, 0xc1, 0x0c, 0x0d, 0xee, 0x65, 0xb9, 0x13, 0xd5, 0x9f,
-	0x14, 0x2e, 0xfb, 0xf5, 0x06, 0xd9, 0x0c, 0xef, 0x92, 0xed, 0xc0, 0x01, 0xe7, 0x8b, 0xfb, 0xda,
-	0xb0, 0x9a, 0xfc, 0x79, 0x82, 0xd4, 0x4f, 0xe0, 0x60, 0x8d, 0x99, 0x8d, 0x6c, 0x66, 0xf3, 0x4e,
-	0xb6, 0x46, 0x7a, 0xd1, 0xd4, 0x54, 0x20, 0x84, 0xb9, 0x24, 0x43, 0xf8, 0x93, 0x4c, 0x24, 0xfe,
-	0xbe, 0xe0, 0xf6, 0x3e, 0xc7, 0x2b, 0xfc, 0x22, 0xf6, 0x84, 0x80, 0x44, 0x53, 0xda, 0x76, 0x3e,
-	0x1d, 0xf5, 0x6d, 0xe7, 0x73, 0x55, 0xda, 0x76, 0x9e, 0x1c, 0xb7, 0x9d, 0xc3, 0x32, 0x6d, 0xe7,
-	0xe1, 0xd2, 0xb2, 0x76, 0xa9, 0x76, 0xe0, 0x20, 0x37, 0xcd, 0x4d, 0x27, 0x1a, 0xe3, 0x4c, 0x59,
-	0x59, 0x81, 0xef, 0xa0, 0x3d, 0xa5, 0xee, 0x23, 0x84, 0x78, 0xb5, 0x13, 0xff, 0x29, 0xa9, 0x51,
-	0xf8, 0x00, 0x1a, 0x9e, 0xff, 0x94, 0x88, 0x17, 0x77, 0xaf, 0xf8, 0xe2, 0xc2, 0x7c, 0x51, 0x1a,
-	0x47, 0x1a, 0x1d, 0x38, 0xcd, 0xd1, 0x27, 0xca, 0x08, 0xd4, 0xf4, 0x22, 0xfc, 0x0f, 0xf1, 0x9a,
-	0xa1, 0x92, 0x2b, 0xdf, 0xcf, 0x56, 0xde, 0x05, 0xbd, 0xa8, 0x92, 0x78, 0xf8, 0x06, 0x8e, 0xc2,
-	0xcb, 0x86, 0xd9, 0x13, 0x3b, 0x60, 0x1e, 0xa6, 0x35, 0xf2, 0xef, 0x43, 0x73, 0x13, 0x81, 0xc4,
-	0xd6, 0xca, 0xbe, 0xd5, 0x90, 0xe0, 0xca, 0x8a, 0x21, 0xc6, 0x69, 0xb4, 0x39, 0x13, 0xe2, 0x44,
-	0xf1, 0x31, 0xaf, 0xfa, 0x1c, 0xb3, 0x19, 0xa5, 0xb3, 0x65, 0x80, 0xe9, 0x92, 0xac, 0x50, 0x8d,
-	0x6c, 0x17, 0x0e, 0x59, 0x0c, 0xe3, 0x65, 0x1f, 0x59, 0xe9, 0x81, 0xa8, 0x2e, 0xc7, 0x16, 0x6b,
-	0x8d, 0xfe, 0x68, 0xc2, 0xfe, 0x94, 0xba, 0x2a, 0x02, 0xb5, 0x64, 0x87, 0x1b, 0x19, 0xff, 0xa5,
-	0x3b, 0x47, 0xbf, 0xbf, 0x1b, 0x13, 0xab, 0xa9, 0x36, 0xbc, 0x5a, 0xdc, 0xc1, 0x6f, 0xe6, 0x09,
-	0x0a, 0x10, 0xfd, 0xbd, 0x9d, 0x90, 0x44, 0xe2, 0x2b, 0x68, 0xc9, 0x17, 0xf0, 0xf5, 0x7c, 0xa6,
-	0x14, 0xd4, 0xdf, 0xaa, 0x09, 0xca, 0x84, 0xf2, 0xdd, 0x2a, 0x10, 0x4a, 0xc1, 0x22, 0x61, 0xc9,
-	0x75, 0x4a, 0x1d, 0x46, 0x3b, 0xa8, 0xc2, 0x21, 0x0f, 0x56, 0x39, 0xcc, 0xac, 0x9d, 0x90, 0x50,
-	0xde, 0xb9, 0x05, 0x42, 0x29, 0x58, 0x24, 0x2c, 0x59, 0x94, 0x69, 0xc9, 0x15, 0x84, 0x52, 0xb0,
-	0xaa, 0xe4, 0x2c, 0xa1, 0x05, 0x77, 0x33, 0xeb, 0xa3, 0x9b, 0x4f, 0x92, 0xa3, 0xfa, 0xdb, 0x75,
-	0xd1, 0x84, 0xf3, 0x5b, 0x68, 0xe7, 0x17, 0x43, 0xbf, 0x62, 0x4c, 0x12, 0xe6, 0x77, 0x77, 0x00,
-	0x12, 0xf2, 0xc7, 0x00, 0xd2, 0x8d, 0xd7, 0x0b, 0x23, 0x9e, 0xc4, 0x74, 0xa3, 0x3a, 0x26, 0x5b,
-	0xcd, 0xdf, 0xe6, 0x7e, 0x49, 0x9a, 0x0c, 0x28, 0x5a, 0xad, 0xb8, 0xc1, 0xe3, 0x8b, 0xe7, 0x37,
-	0x3d, 0xe5, 0xfa, 0xa6, 0xa7, 0xfc, 0x73, 0xd3, 0x53, 0x7e, 0xbe, 0xed, 0xed, 0x5d, 0xdf, 0xf6,
-	0xf6, 0xfe, 0xba, 0xed, 0xed, 0x5d, 0x7c, 0xea, 0x7a, 0x6c, 0xf9, 0x6c, 0x31, 0x74, 0xc8, 0xda,
-	0x1c, 0x73, 0x9e, 0x15, 0xa6, 0xf4, 0xc1, 0x93, 0x80, 0x7c, 0x8f, 0x1d, 0x66, 0x2e, 0xd2, 0xa3,
-	0x50, 0xca, 0xbc, 0x7c, 0x38, 0x32, 0xb7, 0x66, 0xfc, 0xa5, 0x7a, 0xb5, 0xc1, 0x74, 0xf1, 0x32,
-	0xff, 0xc8, 0xfb, 0xf0, 0xbf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x6d, 0xa0, 0x2b, 0x2e, 0xc0, 0x0a,
-	0x00, 0x00,
+	// 1078 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x57, 0x4f, 0x6f, 0x23, 0xc5,
+	0x13, 0x8d, 0x13, 0xff, 0x7e, 0x4e, 0xca, 0x1b, 0x87, 0x1d, 0x25, 0x9b, 0xf1, 0xc4, 0x6b, 0x87,
+	0x01, 0x96, 0xb0, 0x22, 0x1e, 0xd6, 0x48, 0x20, 0xa1, 0x45, 0x62, 0x0d, 0x48, 0x58, 0x5a, 0x8b,
+	0xd5, 0xc4, 0x08, 0x14, 0x84, 0xac, 0xb1, 0xa7, 0x33, 0x1e, 0xb0, 0xdd, 0xd6, 0x74, 0x6f, 0x70,
+	0xae, 0xf0, 0x05, 0xf8, 0x0e, 0x5c, 0x39, 0x70, 0xe0, 0xce, 0x75, 0x8f, 0x2b, 0x4e, 0x9c, 0x10,
+	0x4a, 0x0e, 0x7c, 0x0d, 0x34, 0x3d, 0xdd, 0xed, 0x9e, 0xbf, 0x8e, 0xc4, 0x29, 0x71, 0xd7, 0xab,
+	0xf7, 0x5e, 0x55, 0x97, 0xab, 0x65, 0xd8, 0x1b, 0x05, 0xbe, 0xeb, 0x21, 0x8b, 0x2e, 0xdb, 0x8b,
+	0x00, 0x53, 0xac, 0x55, 0xc7, 0x38, 0x40, 0xed, 0xe8, 0xd4, 0x38, 0x1c, 0x63, 0x32, 0xc3, 0xc4,
+	0x9a, 0x11, 0xcf, 0xba, 0x7c, 0x14, 0xfe, 0x89, 0x50, 0x46, 0x8b, 0xa7, 0xcd, 0xb0, 0x8b, 0xa6,
+	0xc4, 0xa2, 0x81, 0x33, 0x27, 0xce, 0x98, 0xfa, 0x78, 0xce, 0x01, 0xf5, 0x04, 0x00, 0x7f, 0x87,
+	0x72, 0x42, 0xe3, 0x89, 0xe3, 0xe7, 0x84, 0x16, 0x4e, 0x40, 0xaf, 0x78, 0xe8, 0x7e, 0x3c, 0x14,
+	0xa0, 0x0b, 0x14, 0x04, 0xce, 0x94, 0xf0, 0xf0, 0xbe, 0x87, 0x3d, 0xcc, 0xfe, 0xb5, 0xc2, 0xff,
+	0x04, 0x5f, 0xe4, 0x7f, 0x18, 0x05, 0xa2, 0x0f, 0x51, 0xc8, 0xfc, 0xb9, 0x04, 0x07, 0x7d, 0xe2,
+	0x9d, 0x3d, 0x1f, 0xcd, 0x7c, 0x3a, 0x58, 0xf9, 0x27, 0xda, 0x7b, 0xb0, 0x43, 0xd8, 0x29, 0x45,
+	0x81, 0x5e, 0x3a, 0x2e, 0x9d, 0xec, 0x74, 0xf5, 0x3f, 0x7e, 0x3b, 0xdd, 0xe7, 0xe9, 0x4f, 0x5c,
+	0x37, 0x40, 0x84, 0x9c, 0xd1, 0xc0, 0x9f, 0x7b, 0xf6, 0x0a, 0xaa, 0x75, 0xe1, 0x8e, 0xd2, 0x07,
+	0xa2, 0x6f, 0x1e, 0x6f, 0x9d, 0x54, 0x3b, 0x7a, 0x5b, 0x69, 0x68, 0x5b, 0x11, 0xea, 0x96, 0x5f,
+	0xfc, 0xd5, 0xda, 0xb0, 0x63, 0x39, 0x1f, 0xd4, 0x7e, 0xf8, 0xe7, 0xd7, 0x87, 0x2b, 0x4e, 0xf3,
+	0x97, 0x12, 0xec, 0xf7, 0x89, 0x67, 0xa3, 0x19, 0xbe, 0x44, 0x4a, 0xb2, 0xa6, 0x43, 0x65, 0x1c,
+	0x20, 0x87, 0x62, 0x6e, 0xd1, 0x16, 0x1f, 0xb5, 0x13, 0x78, 0xc5, 0x45, 0x0b, 0x4c, 0x7c, 0x3a,
+	0x64, 0xad, 0x1d, 0xfa, 0xae, 0xbe, 0xc9, 0x20, 0x35, 0x7e, 0xfe, 0x71, 0x78, 0xdc, 0x73, 0xb5,
+	0x07, 0xb0, 0x27, 0x90, 0x74, 0x39, 0x9c, 0x38, 0x64, 0xa2, 0x6f, 0x31, 0xe0, 0x2e, 0x3f, 0x1e,
+	0x2c, 0x3f, 0x73, 0xc8, 0x44, 0x65, 0xa4, 0xcb, 0xa1, 0x3f, 0x77, 0xd1, 0x52, 0x2f, 0x1f, 0x97,
+	0x4e, 0xca, 0x92, 0x71, 0xb0, 0xec, 0x85, 0xa7, 0x66, 0x13, 0x1a, 0x59, 0x6e, 0x6d, 0x44, 0x16,
+	0x78, 0x4e, 0x90, 0xd9, 0x82, 0xfb, 0x99, 0x3d, 0x97, 0x80, 0x73, 0xa8, 0xf5, 0x89, 0xd7, 0x9b,
+	0x13, 0x14, 0xd0, 0x41, 0x38, 0x33, 0x05, 0x85, 0xb6, 0xe1, 0x7f, 0x6c, 0xac, 0x58, 0x75, 0xd5,
+	0x8e, 0x16, 0x6f, 0x74, 0x18, 0xe1, 0x2d, 0x8e, 0x60, 0xa6, 0x0e, 0xf7, 0xe2, 0xdc, 0x52, 0xf5,
+	0xc7, 0x12, 0x93, 0xfd, 0x62, 0xe1, 0x3a, 0x14, 0xad, 0x93, 0xad, 0xc3, 0x36, 0xe3, 0x13, 0x7d,
+	0x2d, 0xdb, 0x15, 0xf6, 0xb9, 0xe7, 0x6a, 0x8f, 0x61, 0x7b, 0x86, 0xa8, 0xe3, 0x3a, 0xd4, 0x61,
+	0x9d, 0xac, 0x76, 0x8c, 0xb4, 0xa9, 0x3e, 0x47, 0x70, 0x73, 0x32, 0x83, 0xfb, 0x53, 0x4c, 0x48,
+	0x7f, 0x9f, 0x32, 0x7b, 0x9f, 0xa0, 0x29, 0xfa, 0x2f, 0xf6, 0xb8, 0x80, 0x42, 0x93, 0xd9, 0x76,
+	0x36, 0x1d, 0xc5, 0x6d, 0x67, 0x73, 0x95, 0xd9, 0x76, 0x96, 0x2c, 0xda, 0xce, 0x60, 0xb1, 0xb6,
+	0xb3, 0x70, 0x66, 0x59, 0xeb, 0x54, 0xeb, 0xb0, 0x9d, 0x98, 0xe6, 0xca, 0x38, 0x1a, 0xe3, 0x58,
+	0x59, 0x71, 0x81, 0x6f, 0x60, 0xaf, 0x4f, 0xbc, 0x27, 0xae, 0xcb, 0xaa, 0xed, 0xcd, 0x2f, 0x70,
+	0x81, 0xc2, 0x3b, 0x50, 0xf6, 0xe7, 0x17, 0x98, 0x5f, 0xdc, 0xbd, 0xf4, 0xc5, 0x85, 0xf9, 0xbc,
+	0x34, 0x86, 0x34, 0xeb, 0x70, 0x98, 0xa0, 0x97, 0xca, 0x2e, 0x68, 0xab, 0x2f, 0xc2, 0x2d, 0xc4,
+	0x0b, 0x86, 0x4a, 0xad, 0x7c, 0x2b, 0x5e, 0x79, 0x03, 0x8c, 0xb4, 0x8a, 0xf4, 0xf0, 0x25, 0xec,
+	0x86, 0x5f, 0x36, 0x44, 0x9f, 0x39, 0x01, 0xf5, 0x11, 0x29, 0x90, 0x7f, 0x1b, 0x2a, 0x8b, 0x08,
+	0xc4, 0xb7, 0x56, 0xfc, 0x56, 0x43, 0x82, 0x2b, 0x5b, 0x40, 0xcc, 0xc3, 0x68, 0x73, 0x4a, 0x62,
+	0xa9, 0xf8, 0x94, 0x55, 0x7d, 0x86, 0xe8, 0x80, 0x90, 0xc1, 0x24, 0x40, 0x64, 0x82, 0xa7, 0x6e,
+	0x81, 0x6c, 0x03, 0x76, 0xa8, 0x80, 0xb1, 0xb2, 0x77, 0xed, 0xd5, 0x01, 0xaf, 0x2e, 0xc1, 0x26,
+	0xb5, 0xc6, 0x6c, 0x78, 0xce, 0x10, 0xb5, 0xf9, 0x4b, 0x50, 0xa0, 0xf3, 0x3e, 0x6c, 0x8b, 0xf7,
+	0x82, 0x4f, 0xed, 0x41, 0xac, 0x3e, 0x41, 0x21, 0xbe, 0x92, 0x02, 0xcc, 0x47, 0x4b, 0x11, 0x91,
+	0xf2, 0x1f, 0xc2, 0x5d, 0xd9, 0xfa, 0x5b, 0x38, 0xa8, 0xc1, 0xa6, 0x2f, 0x4a, 0xdc, 0xf4, 0x5d,
+	0xf3, 0x08, 0xea, 0xa9, 0x74, 0xc9, 0x8d, 0x45, 0x7f, 0x57, 0x91, 0xef, 0x9d, 0xc0, 0x2d, 0xba,
+	0xc0, 0xc7, 0x50, 0x09, 0x22, 0x10, 0xdb, 0xcc, 0xd5, 0x4e, 0x23, 0xb3, 0x40, 0x4e, 0xc4, 0xeb,
+	0x14, 0x29, 0x62, 0x2d, 0xa7, 0x04, 0xa5, 0xa3, 0x05, 0xe8, 0x19, 0x76, 0xd7, 0x99, 0x6a, 0x41,
+	0x35, 0xea, 0x24, 0x0a, 0x86, 0xb2, 0x7a, 0x10, 0x47, 0xd1, 0x68, 0xcb, 0xa9, 0xdf, 0x8a, 0xef,
+	0x2a, 0x13, 0x8e, 0xf3, 0x14, 0x85, 0xab, 0xce, 0xef, 0x00, 0x5b, 0x7d, 0xe2, 0x69, 0x2e, 0x68,
+	0x19, 0xcf, 0xb8, 0x19, 0xeb, 0x40, 0xe6, 0xb3, 0x63, 0x3c, 0x5c, 0x8f, 0x11, 0x6a, 0x9a, 0x03,
+	0x77, 0xd3, 0xcf, 0xf0, 0xab, 0x49, 0x82, 0x14, 0xc4, 0x78, 0x6b, 0x2d, 0x44, 0x4a, 0x7c, 0x0e,
+	0x55, 0x75, 0x07, 0x1f, 0x25, 0x33, 0x95, 0xa0, 0xf1, 0x5a, 0x41, 0x50, 0x25, 0x54, 0xd7, 0x6b,
+	0x8a, 0x50, 0x09, 0xa6, 0x09, 0x33, 0x36, 0xea, 0xca, 0x61, 0xf4, 0x0c, 0xe5, 0x38, 0x64, 0xc1,
+	0x3c, 0x87, 0xb1, 0x97, 0x27, 0x24, 0x54, 0x9f, 0xdd, 0x14, 0xa1, 0x12, 0x4c, 0x13, 0x66, 0xbc,
+	0x95, 0xab, 0x92, 0x73, 0x08, 0x95, 0x60, 0x5e, 0xc9, 0x71, 0x42, 0x1b, 0xee, 0xc4, 0x5e, 0x90,
+	0x46, 0x32, 0x49, 0x8d, 0x1a, 0xaf, 0x17, 0x45, 0x25, 0xe7, 0xd7, 0xb0, 0x97, 0x7c, 0x1b, 0x5a,
+	0x39, 0x63, 0x22, 0x99, 0xdf, 0x5c, 0x03, 0x90, 0xe4, 0x4f, 0x01, 0x94, 0xa5, 0x6f, 0xa4, 0x46,
+	0x5c, 0xc6, 0x0c, 0x33, 0x3f, 0xa6, 0x5a, 0x4d, 0x2e, 0xf4, 0x56, 0x46, 0x9a, 0x0a, 0x48, 0x5b,
+	0xcd, 0x59, 0xe2, 0xe1, 0x65, 0xa9, 0x1b, 0xfc, 0x28, 0x23, 0x4f, 0x04, 0xd3, 0x97, 0x95, 0xb1,
+	0x96, 0xb5, 0xaf, 0xa0, 0x96, 0xd8, 0xc9, 0xcd, 0xec, 0xb6, 0x49, 0xda, 0x07, 0xc5, 0x71, 0xc9,
+	0x1c, 0x2e, 0x99, 0xf4, 0x46, 0x36, 0x0b, 0x4d, 0x31, 0x4c, 0xc6, 0x92, 0xc9, 0x5d, 0xb4, 0xda,
+	0x0c, 0x0e, 0xb2, 0xb7, 0xec, 0x1b, 0xeb, 0x6c, 0x46, 0x5a, 0xa7, 0xb7, 0x82, 0x09, 0xb9, 0xee,
+	0xf9, 0x8b, 0xeb, 0x66, 0xe9, 0xe5, 0x75, 0xb3, 0xf4, 0xf7, 0x75, 0xb3, 0xf4, 0xd3, 0x4d, 0x73,
+	0xe3, 0xe5, 0x4d, 0x73, 0xe3, 0xcf, 0x9b, 0xe6, 0xc6, 0xf9, 0x47, 0x9e, 0x4f, 0x27, 0xcf, 0x47,
+	0xed, 0x31, 0x9e, 0x59, 0x5d, 0xc6, 0x36, 0x45, 0x84, 0x9c, 0x3e, 0x0b, 0xf0, 0xb7, 0x68, 0x4c,
+	0xad, 0xd1, 0xea, 0x28, 0x14, 0xb4, 0x2e, 0x1f, 0x75, 0xac, 0xa5, 0x25, 0x7e, 0x4b, 0x5e, 0x2d,
+	0x10, 0x19, 0xfd, 0x9f, 0xfd, 0xce, 0x7a, 0xf7, 0xdf, 0x00, 0x00, 0x00, 0xff, 0xff, 0xfd, 0xdb,
+	0xed, 0xa2, 0x62, 0x0e, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1142,6 +1522,10 @@ type MsgClient interface {
 	RemoveTokenInfo(ctx context.Context, in *MsgRemoveTokenInfo, opts ...grpc.CallOption) (*MsgRemoveTokenInfoResponse, error)
 	SetParties(ctx context.Context, in *MsgSetParties, opts ...grpc.CallOption) (*MsgSetPartiesResponse, error)
 	SetTssThreshold(ctx context.Context, in *MsgSetTssThreshold, opts ...grpc.CallOption) (*MsgSetTssThresholdResponse, error)
+	SetReferral(ctx context.Context, in *MsgSetReferral, opts ...grpc.CallOption) (*MsgSetReferralResponse, error)
+	RemoveReferral(ctx context.Context, in *MsgRemoveReferral, opts ...grpc.CallOption) (*MsgRemoveReferralResponse, error)
+	SetReferralRewards(ctx context.Context, in *MsgSetReferralRewards, opts ...grpc.CallOption) (*MsgSetReferralRewardsResponse, error)
+	RemoveReferralRewards(ctx context.Context, in *MsgRemoveReferralRewards, opts ...grpc.CallOption) (*MsgRemoveReferralRewardsResponse, error)
 }
 
 type msgClient struct {
@@ -1251,6 +1635,42 @@ func (c *msgClient) SetTssThreshold(ctx context.Context, in *MsgSetTssThreshold,
 	return out, nil
 }
 
+func (c *msgClient) SetReferral(ctx context.Context, in *MsgSetReferral, opts ...grpc.CallOption) (*MsgSetReferralResponse, error) {
+	out := new(MsgSetReferralResponse)
+	err := c.cc.Invoke(ctx, "/core.bridge.Msg/SetReferral", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) RemoveReferral(ctx context.Context, in *MsgRemoveReferral, opts ...grpc.CallOption) (*MsgRemoveReferralResponse, error) {
+	out := new(MsgRemoveReferralResponse)
+	err := c.cc.Invoke(ctx, "/core.bridge.Msg/RemoveReferral", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) SetReferralRewards(ctx context.Context, in *MsgSetReferralRewards, opts ...grpc.CallOption) (*MsgSetReferralRewardsResponse, error) {
+	out := new(MsgSetReferralRewardsResponse)
+	err := c.cc.Invoke(ctx, "/core.bridge.Msg/SetReferralRewards", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) RemoveReferralRewards(ctx context.Context, in *MsgRemoveReferralRewards, opts ...grpc.CallOption) (*MsgRemoveReferralRewardsResponse, error) {
+	out := new(MsgRemoveReferralRewardsResponse)
+	err := c.cc.Invoke(ctx, "/core.bridge.Msg/RemoveReferralRewards", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// this line is used by starport scaffolding # proto/tx/rpc
@@ -1265,6 +1685,10 @@ type MsgServer interface {
 	RemoveTokenInfo(context.Context, *MsgRemoveTokenInfo) (*MsgRemoveTokenInfoResponse, error)
 	SetParties(context.Context, *MsgSetParties) (*MsgSetPartiesResponse, error)
 	SetTssThreshold(context.Context, *MsgSetTssThreshold) (*MsgSetTssThresholdResponse, error)
+	SetReferral(context.Context, *MsgSetReferral) (*MsgSetReferralResponse, error)
+	RemoveReferral(context.Context, *MsgRemoveReferral) (*MsgRemoveReferralResponse, error)
+	SetReferralRewards(context.Context, *MsgSetReferralRewards) (*MsgSetReferralRewardsResponse, error)
+	RemoveReferralRewards(context.Context, *MsgRemoveReferralRewards) (*MsgRemoveReferralRewardsResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -1303,6 +1727,18 @@ func (*UnimplementedMsgServer) SetParties(ctx context.Context, req *MsgSetPartie
 }
 func (*UnimplementedMsgServer) SetTssThreshold(ctx context.Context, req *MsgSetTssThreshold) (*MsgSetTssThresholdResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetTssThreshold not implemented")
+}
+func (*UnimplementedMsgServer) SetReferral(ctx context.Context, req *MsgSetReferral) (*MsgSetReferralResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetReferral not implemented")
+}
+func (*UnimplementedMsgServer) RemoveReferral(ctx context.Context, req *MsgRemoveReferral) (*MsgRemoveReferralResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveReferral not implemented")
+}
+func (*UnimplementedMsgServer) SetReferralRewards(ctx context.Context, req *MsgSetReferralRewards) (*MsgSetReferralRewardsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetReferralRewards not implemented")
+}
+func (*UnimplementedMsgServer) RemoveReferralRewards(ctx context.Context, req *MsgRemoveReferralRewards) (*MsgRemoveReferralRewardsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveReferralRewards not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -1507,6 +1943,78 @@ func _Msg_SetTssThreshold_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SetReferral_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSetReferral)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SetReferral(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/core.bridge.Msg/SetReferral",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SetReferral(ctx, req.(*MsgSetReferral))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_RemoveReferral_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRemoveReferral)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).RemoveReferral(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/core.bridge.Msg/RemoveReferral",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).RemoveReferral(ctx, req.(*MsgRemoveReferral))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_SetReferralRewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSetReferralRewards)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SetReferralRewards(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/core.bridge.Msg/SetReferralRewards",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SetReferralRewards(ctx, req.(*MsgSetReferralRewards))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_RemoveReferralRewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRemoveReferralRewards)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).RemoveReferralRewards(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/core.bridge.Msg/RemoveReferralRewards",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).RemoveReferralRewards(ctx, req.(*MsgRemoveReferralRewards))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "core.bridge.Msg",
 	HandlerType: (*MsgServer)(nil),
@@ -1554,6 +2062,22 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetTssThreshold",
 			Handler:    _Msg_SetTssThreshold_Handler,
+		},
+		{
+			MethodName: "SetReferral",
+			Handler:    _Msg_SetReferral_Handler,
+		},
+		{
+			MethodName: "RemoveReferral",
+			Handler:    _Msg_RemoveReferral_Handler,
+		},
+		{
+			MethodName: "SetReferralRewards",
+			Handler:    _Msg_SetReferralRewards_Handler,
+		},
+		{
+			MethodName: "RemoveReferralRewards",
+			Handler:    _Msg_RemoveReferralRewards_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -2264,6 +2788,253 @@ func (m *MsgSetTssThresholdResponse) MarshalToSizedBuffer(dAtA []byte) (int, err
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgSetReferral) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSetReferral) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSetReferral) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Referral.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTx(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x12
+	if len(m.Creator) > 0 {
+		i -= len(m.Creator)
+		copy(dAtA[i:], m.Creator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSetReferralResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSetReferralResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSetReferralResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgRemoveReferral) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgRemoveReferral) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgRemoveReferral) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Id != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Creator) > 0 {
+		i -= len(m.Creator)
+		copy(dAtA[i:], m.Creator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgRemoveReferralResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgRemoveReferralResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgRemoveReferralResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSetReferralRewards) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSetReferralRewards) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSetReferralRewards) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Rewards.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTx(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x22
+	if len(m.Creator) > 0 {
+		i -= len(m.Creator)
+		copy(dAtA[i:], m.Creator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSetReferralRewardsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSetReferralRewardsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSetReferralRewardsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgRemoveReferralRewards) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgRemoveReferralRewards) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgRemoveReferralRewards) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.TokenId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.TokenId))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.ReferrerId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ReferrerId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Creator) > 0 {
+		i -= len(m.Creator)
+		copy(dAtA[i:], m.Creator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgRemoveReferralRewardsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgRemoveReferralRewardsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgRemoveReferralRewardsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -2560,6 +3331,107 @@ func (m *MsgSetTssThreshold) Size() (n int) {
 }
 
 func (m *MsgSetTssThresholdResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgSetReferral) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = m.Referral.Size()
+	n += 1 + l + sovTx(uint64(l))
+	return n
+}
+
+func (m *MsgSetReferralResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgRemoveReferral) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.Id != 0 {
+		n += 1 + sovTx(uint64(m.Id))
+	}
+	return n
+}
+
+func (m *MsgRemoveReferralResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgSetReferralRewards) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = m.Rewards.Size()
+	n += 1 + l + sovTx(uint64(l))
+	return n
+}
+
+func (m *MsgSetReferralRewardsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgRemoveReferralRewards) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.ReferrerId != 0 {
+		n += 1 + sovTx(uint64(m.ReferrerId))
+	}
+	if m.TokenId != 0 {
+		n += 1 + sovTx(uint64(m.TokenId))
+	}
+	return n
+}
+
+func (m *MsgRemoveReferralRewardsResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -4426,6 +5298,657 @@ func (m *MsgSetTssThresholdResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgSetTssThresholdResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSetReferral) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSetReferral: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSetReferral: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Referral", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Referral.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSetReferralResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSetReferralResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSetReferralResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgRemoveReferral) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgRemoveReferral: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgRemoveReferral: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgRemoveReferralResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgRemoveReferralResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgRemoveReferralResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSetReferralRewards) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSetReferralRewards: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSetReferralRewards: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Rewards.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSetReferralRewardsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSetReferralRewardsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSetReferralRewardsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgRemoveReferralRewards) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgRemoveReferralRewards: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgRemoveReferralRewards: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReferrerId", wireType)
+			}
+			m.ReferrerId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ReferrerId |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TokenId", wireType)
+			}
+			m.TokenId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TokenId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgRemoveReferralRewardsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgRemoveReferralRewardsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgRemoveReferralRewardsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
