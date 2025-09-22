@@ -6,6 +6,8 @@ import (
 	"math/big"
 )
 
+const DefaultReferralId = 0
+
 func validateReferral(referral *Referral) error {
 	if referral == nil {
 		return fmt.Errorf("transaction is nil")
@@ -45,4 +47,8 @@ func validateReferralRewards(rewards *ReferralRewards) error {
 	}
 
 	return nil
+}
+
+func IsDefaultReferralId(referralId uint32) bool {
+	return referralId == DefaultReferralId
 }

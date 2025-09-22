@@ -10,7 +10,7 @@ import (
 )
 
 func (k queryServer) GetReferralById(goctx context.Context, req *types.QueryGetReferralById) (*types.QueryGetReferralByIdResponse, error) {
-	if req == nil || req.ReferralId == 0 {
+	if req == nil || types.IsDefaultReferralId(req.ReferralId) {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 

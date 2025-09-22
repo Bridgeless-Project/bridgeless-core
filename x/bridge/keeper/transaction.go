@@ -83,7 +83,7 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 	k.SetTransaction(ctx, *transaction)
 	emitSubmitEvent(ctx, *transaction)
 
-	if transaction.ReferralId == 0 {
+	if types.IsDefaultReferralId(transaction.ReferralId) {
 		return nil
 	}
 
@@ -140,11 +140,13 @@ func (k Keeper) DeleteTx(ctx sdk.Context, depositTxHash string, depositTxIndex u
 	}
 
 	// Minus referral rewards
-	if transaction.ReferralId == 0 {
+	// if referral ID is default no need to minus rewards, just emit event and return
+	if types.IsDefaultReferralId(transaction.ReferralId) {
 		emitRemoveTransactionEvent(ctx, transaction)
 		return nil
 	}
 
+	// If referral ID is not default minus rewards
 	referral, ok := k.GetReferral(ctx, transaction.ReferralId)
 	if !ok {
 		return errorsmod.Wrap(types.ErrReferralNotFound, "referral ID not found")
