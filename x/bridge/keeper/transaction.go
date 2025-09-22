@@ -112,7 +112,7 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 		ReferralId:         transaction.ReferralId,
 		TokenId:            token.TokenId,
 		ToClaim:            sdk.NewIntFromBigInt(rewards).String(),
-		TotalClaimedAmount: sdk.NewInt(0).String(),
+		TotalClaimedAmount: sdk.NewInt(0).String(), // not used when adding referral rewards and should be 0
 	}
 
 	err = k.AddReferralRewards(ctx, transaction.ReferralId, token.TokenId, referralRewards)
@@ -171,7 +171,7 @@ func (k Keeper) DeleteTx(ctx sdk.Context, depositTxHash string, depositTxIndex u
 		ReferralId:         transaction.ReferralId,
 		TokenId:            token.TokenId,
 		ToClaim:            sdk.NewIntFromBigInt(rewards).Neg().String(),
-		TotalClaimedAmount: sdk.NewInt(0).String(),
+		TotalClaimedAmount: sdk.NewInt(0).String(), // not used when adding referral rewards and should be 0
 	}
 
 	err = k.AddReferralRewards(ctx, transaction.ReferralId, token.TokenId, referralRewards)
