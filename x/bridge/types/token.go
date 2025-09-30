@@ -16,20 +16,6 @@ func validateToken(token *Token) error {
 		return errors.New("token is nil")
 	}
 
-	rate, err := sdkmath.LegacyNewDecFromStr(token.CommissionRate)
-
-	if err != nil {
-		return errorsmod.Wrap(ErrInvalidCommissionRate, err.Error())
-	}
-
-	if rate.IsNegative() {
-		return errorsmod.Wrap(ErrInvalidCommissionRate, "commission rate must be positive")
-	}
-
-	if rate.GT(sdkmath.LegacyNewDec(1)) {
-		return errorsmod.Wrap(ErrInvalidCommissionRate, "commission rate must be <= 100%")
-	}
-
 	return validateTokenMetadata(&token.Metadata)
 }
 
@@ -62,6 +48,19 @@ func validateTokenInfo(info *TokenInfo, chainType *ChainType) error {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "token address is empty")
 	}
 
+	// validate commission rate
+	rate, err := sdkmath.LegacyNewDecFromStr(info.CommissionRate)
+	if err != nil {
+		return errorsmod.Wrap(ErrInvalidCommissionRate, err.Error())
+	}
+	if rate.IsNegative() {
+		return errorsmod.Wrap(ErrInvalidCommissionRate, "commission rate must be positive")
+	}
+	if rate.GT(sdkmath.LegacyNewDec(1)) {
+		return errorsmod.Wrap(ErrInvalidCommissionRate, "commission rate must be <= 100%")
+	}
+
+	// validate min withdrawal amount
 	minWithdrawal, ok := big.NewInt(0).SetString(info.MinWithdrawalAmount, 10)
 	if !ok {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("invalid min withdrawal: %s", info.MinWithdrawalAmount))

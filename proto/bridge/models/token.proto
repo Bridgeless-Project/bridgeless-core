@@ -15,6 +15,7 @@ message TokenInfo {
   uint64 token_id = 4;
   bool is_wrapped = 5;
   string min_withdrawal_amount = 6;
+  string commission_rate = 7;
 }
 
 message TokenMetadata {
@@ -29,5 +30,4 @@ message Token {
   TokenMetadata metadata = 2 [(gogoproto.nullable) = false];
   // info is the token information on different chains
   repeated TokenInfo info = 3 [(gogoproto.nullable) = false];
-  string commission_rate = 4;
 }
