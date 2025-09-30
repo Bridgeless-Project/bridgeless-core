@@ -7,6 +7,7 @@ import (
 	v5 "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/migrations/v5"
 	v6 "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/migrations/v6"
 	v7 "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/migrations/v7"
+	v8 "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/migrations/v8"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -50,4 +51,8 @@ func (m Migrator) Migrate5to6(ctx sdk.Context) error {
 
 func (m Migrator) Migrate6to7(ctx sdk.Context) error {
 	return v7.MigrateStore(ctx, m.keeper.storeKey, m.keeper.cdc)
+}
+
+func (m Migrator) Migrate7to8(ctx sdk.Context) error {
+	return v8.MigrateStore(ctx, m.keeper.storeKey, m.keeper.cdc)
 }

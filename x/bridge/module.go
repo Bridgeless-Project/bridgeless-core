@@ -2,8 +2,10 @@ package bridge
 
 import (
 	"context"
-	errorsmod "cosmossdk.io/errors"
 	"encoding/json"
+
+	errorsmod "cosmossdk.io/errors"
+
 	// this line is used by starport scaffolding # 1
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -21,7 +23,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 )
 
-const consensusVersion = 6
+const consensusVersion = 8
 
 var (
 	_ module.AppModule      = AppModule{}
@@ -144,6 +146,10 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 	if err := cfg.RegisterMigration(types.ModuleName, 6, am.migrator.Migrate6to7); err != nil {
 		panic(err)
 	}
+	if err := cfg.RegisterMigration(types.ModuleName, 7, am.migrator.Migrate7to8); err != nil {
+		panic(err)
+	}
+
 }
 
 // RegisterInvariants registers the invariants of the module. If an invariant deviates from its predicted value, the InvariantRegistry triggers appropriate logic (most often the chain will be halted)

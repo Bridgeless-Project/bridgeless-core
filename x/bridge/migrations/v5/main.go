@@ -1,8 +1,9 @@
 package v5
 
 import (
-	errorsmod "cosmossdk.io/errors"
 	"fmt"
+
+	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
@@ -86,8 +87,8 @@ func migrateTokens(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Bina
 				Symbol: oldToken.Metadata.Symbol,
 				Uri:    oldToken.Metadata.Uri,
 			},
-			Info:           transformTokenInfo(oldToken.Info),
-			CommissionRate: "0.01",
+			Info: transformTokenInfo(oldToken.Info),
+			//CommissionRate: "0.01",
 		}
 
 		// set new token instead of old one
