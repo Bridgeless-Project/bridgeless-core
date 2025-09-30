@@ -1821,6 +1821,8 @@ paths:
                     type: boolean
                   min_withdrawal_amount:
                     type: string
+                  commission_rate:
+                    type: string
         default:
           description: An unexpected error response.
           schema:
@@ -2045,6 +2047,8 @@ paths:
                   is_wrapped:
                     type: boolean
                   min_withdrawal_amount:
+                    type: string
+                  commission_rate:
                     type: string
         default:
           description: An unexpected error response.
@@ -2294,9 +2298,9 @@ paths:
                             type: boolean
                           min_withdrawal_amount:
                             type: string
+                          commission_rate:
+                            type: string
                       title: info is the token information on different chains
-                    commission_rate:
-                      type: string
               pagination:
                 type: object
                 properties:
@@ -2615,9 +2619,9 @@ paths:
                           type: boolean
                         min_withdrawal_amount:
                           type: string
+                        commission_rate:
+                          type: string
                     title: info is the token information on different chains
-                  commission_rate:
-                    type: string
         default:
           description: An unexpected error response.
           schema:
@@ -51210,9 +51214,9 @@ definitions:
                   type: boolean
                 min_withdrawal_amount:
                   type: string
+                commission_rate:
+                  type: string
             title: info is the token information on different chains
-          commission_rate:
-            type: string
   core.bridge.QueryGetTokenInfoResponse:
     type: object
     properties:
@@ -51233,6 +51237,8 @@ definitions:
             type: boolean
           min_withdrawal_amount:
             type: string
+          commission_rate:
+            type: string
   core.bridge.QueryGetTokenPairResponse:
     type: object
     properties:
@@ -51252,6 +51258,8 @@ definitions:
           is_wrapped:
             type: boolean
           min_withdrawal_amount:
+            type: string
+          commission_rate:
             type: string
   core.bridge.QueryGetTokensResponse:
     type: object
@@ -51294,9 +51302,9 @@ definitions:
                     type: boolean
                   min_withdrawal_amount:
                     type: string
+                  commission_rate:
+                    type: string
               title: info is the token information on different chains
-            commission_rate:
-              type: string
       pagination:
         type: object
         properties:
@@ -51576,9 +51584,9 @@ definitions:
               type: boolean
             min_withdrawal_amount:
               type: string
+            commission_rate:
+              type: string
         title: info is the token information on different chains
-      commission_rate:
-        type: string
   core.bridge.TokenInfo:
     type: object
     properties:
@@ -51595,6 +51603,8 @@ definitions:
       is_wrapped:
         type: boolean
       min_withdrawal_amount:
+        type: string
+      commission_rate:
         type: string
   core.bridge.TokenMetadata:
     type: object
