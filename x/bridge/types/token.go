@@ -1,10 +1,12 @@
 package types
 
 import (
-	errorsmod "cosmossdk.io/errors"
-	sdkmath "cosmossdk.io/math"
 	"errors"
 	"fmt"
+	"math/big"
+
+	errorsmod "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/ethereum/go-ethereum/common"
 )
@@ -12,20 +14,6 @@ import (
 func validateToken(token *Token) error {
 	if token == nil {
 		return errors.New("token is nil")
-	}
-
-	rate, err := sdkmath.LegacyNewDecFromStr(token.CommissionRate)
-
-	if err != nil {
-		return errorsmod.Wrap(ErrInvalidCommissionRate, err.Error())
-	}
-
-	if rate.IsNegative() {
-		return errorsmod.Wrap(ErrInvalidCommissionRate, "commission rate must be positive")
-	}
-
-	if rate.GT(sdkmath.LegacyNewDec(1)) {
-		return errorsmod.Wrap(ErrInvalidCommissionRate, "commission rate must be <= 100%")
 	}
 
 	return validateTokenMetadata(&token.Metadata)
@@ -55,15 +43,35 @@ func validateTokenInfo(info *TokenInfo, chainType *ChainType) error {
 	}
 	if info.ChainId == "" {
 		return errors.New("chain id cannot be empty")
-
 	}
 	if info.Address == "" {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "token address is empty")
 	}
+
+	// validate commission rate
+	rate, err := sdkmath.LegacyNewDecFromStr(info.CommissionRate)
+	if err != nil {
+		return errorsmod.Wrap(ErrInvalidCommissionRate, err.Error())
+	}
+	if rate.IsNegative() {
+		return errorsmod.Wrap(ErrInvalidCommissionRate, "commission rate must be positive")
+	}
+	if rate.GT(sdkmath.LegacyNewDec(1)) {
+		return errorsmod.Wrap(ErrInvalidCommissionRate, "commission rate must be <= 100%")
+	}
+
+	// validate min withdrawal amount
+	minWithdrawal, ok := big.NewInt(0).SetString(info.MinWithdrawalAmount, 10)
+	if !ok {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("invalid min withdrawal: %s", info.MinWithdrawalAmount))
+	}
+	if minWithdrawal.Cmp(big.NewInt(0)) == -1 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("min withdrawal cannot be negative: %s", info.MinWithdrawalAmount))
+	}
+
 	if chainType == nil {
 		return nil
 	}
-
 	switch *chainType {
 	case ChainType_EVM:
 		if !common.IsHexAddress(info.Address) {

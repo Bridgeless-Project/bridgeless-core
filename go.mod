@@ -247,6 +247,6 @@ replace (
 	// use cometbft
 
 	github.com/tendermint/tendermint => github.com/cometbft/cometbft v0.34.29
-	github.com/tyler-smith/go-bip39 => github.com/EduardMikhrin/go-bip39 v0.0.0-20250520110429-260285377285
+	github.com/tyler-smith/go-bip39 => github.com/distributed-lab/go-bip39 v0.0.0-20250520110429-260285377285
 	nhooyr.io/websocket => github.com/coder/websocket v1.8.7
 )

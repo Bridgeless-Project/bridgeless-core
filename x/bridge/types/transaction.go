@@ -6,6 +6,7 @@ import (
 	"math/big"
 
 	errorsmod "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
@@ -89,4 +90,15 @@ func ValidateChainTransaction(tx *Transaction, chainType ChainType) error {
 	}
 
 	return nil
+}
+
+// GetCommissionAmount returns a commission amount basing on provided amount and commission rate.
+func GetCommissionAmount(amount *big.Int, commissionRate string) (*big.Int, error) {
+	rate, err := sdkmath.LegacyNewDecFromStr(commissionRate)
+
+	if err != nil {
+		return big.NewInt(0), err
+	}
+
+	return rate.Mul(sdkmath.LegacyNewDecFromBigInt(amount)).TruncateInt().BigInt(), nil
 }
