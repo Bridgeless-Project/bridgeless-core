@@ -1,17 +1,18 @@
 package cli
 
 import (
+	"fmt"
+	"strconv"
+	"strings"
+
 	errorsmod "cosmossdk.io/errors"
 
-	"fmt"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/spf13/cobra"
-	"strconv"
-	"strings"
 )
 
 func TxVoteCmd() *cobra.Command {

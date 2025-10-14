@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	rand "github.com/tendermint/tendermint/libs/rand"
+	"github.com/tendermint/tendermint/libs/rand"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/ethereum/eip712"
 	"github.com/tidwall/gjson"

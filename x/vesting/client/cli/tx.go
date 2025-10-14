@@ -17,10 +17,11 @@
 package cli
 
 import (
-	errorsmod "cosmossdk.io/errors"
 	"errors"
 	"fmt"
 	"time"
+
+	errorsmod "cosmossdk.io/errors"
 
 	"github.com/spf13/cobra"
 

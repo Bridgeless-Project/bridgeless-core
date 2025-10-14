@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 	"encoding/binary"
+
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/address"

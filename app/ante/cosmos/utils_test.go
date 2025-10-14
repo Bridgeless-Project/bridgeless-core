@@ -1,8 +1,9 @@
 package cosmos_test
 
 import (
-	errorsmod "cosmossdk.io/errors"
 	"time"
+
+	errorsmod "cosmossdk.io/errors"
 
 	sdkmath "cosmossdk.io/math"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/app"

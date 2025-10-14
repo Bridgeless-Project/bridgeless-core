@@ -2,11 +2,12 @@ package cli
 
 import (
 	"context"
+	"strconv"
+
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cobra"
-	"strconv"
 )
 
 func CmdQueryVotes() *cobra.Command {

@@ -16,14 +16,14 @@
 package types
 
 import (
-	errorsmod "cosmossdk.io/errors"
-	"errors"
-
 	// embed compiled smart contract
 	_ "embed"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
+
+	errorsmod "cosmossdk.io/errors"
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
 )

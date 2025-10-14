@@ -20,6 +20,7 @@ service Msg {
     // this line is used by starport scaffolding # proto/tx/rpc
     rpc SubmitTransactions(MsgSubmitTransactions) returns (MsgSubmitTransactionsResponse);
     rpc RemoveTransaction(MsgRemoveTransaction) returns (MsgRemoveTransactionResponse);
+    rpc UpdateTransaction(MsgUpdateTransaction) returns (MsgUpdateTransactionResponse);
 
     rpc InsertChain(MsgInsertChain) returns (MsgInsertChainResponse);
     rpc DeleteChain(MsgDeleteChain) returns (MsgDeleteChainResponse);
@@ -50,7 +51,7 @@ message MsgSubmitTransactions {
 }
 
 message MsgRemoveTransaction{
-   string creator = 1;
+  string creator = 1;
 
   string deposit_chain_id = 2;
   string deposit_tx_hash = 3;
@@ -58,6 +59,16 @@ message MsgRemoveTransaction{
 }
 
 message MsgRemoveTransactionResponse {}
+
+message MsgUpdateTransaction {
+  option (cosmos.msg.v1.signer) = "submitter";
+
+  string submitter = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  core.bridge.Transaction transaction = 2 [(gogoproto.nullable) = false];
+}
+
+
+message MsgUpdateTransactionResponse {}
 
 // Tokens
 

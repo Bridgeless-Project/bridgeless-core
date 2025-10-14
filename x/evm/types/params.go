@@ -16,10 +16,11 @@
 package types
 
 import (
-	errorsmod "cosmossdk.io/errors"
 	"errors"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"math/big"
+
+	errorsmod "cosmossdk.io/errors"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/ethereum/go-ethereum/core/vm"
 	"github.com/ethereum/go-ethereum/params"

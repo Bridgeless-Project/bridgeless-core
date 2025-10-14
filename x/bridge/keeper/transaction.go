@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"math/big"
+	"reflect"
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
@@ -182,6 +183,47 @@ func (k Keeper) DeleteTx(ctx sdk.Context, depositTxHash string, depositTxIndex u
 	}
 
 	emitRemoveTransactionEvent(ctx, transaction)
+	return nil
+}
+
+func (k Keeper) UpdateTx(ctx sdk.Context, transaction *types.Transaction, submitter string) error {
+	// validate that tx already exists in the store
+	oldtx, ok := k.GetTransaction(ctx, types.TransactionId(transaction))
+	if !ok {
+		return errorsmod.Wrap(types.ErrTransactionNotFound, "failed to get transaction")
+	}
+
+	// validate that txs are the same except WithdrawalTxHash
+	if err := compareTxs(oldtx, *transaction); err != nil {
+		return errorsmod.Wrap(err, "failed to compare transactions")
+	}
+
+	k.SetTransaction(ctx, *transaction)
+	emitUpdateTransactionEvent(ctx, *transaction)
+
+	return nil
+}
+
+func compareTxs(tx, tx2 types.Transaction) error {
+	txValue := reflect.ValueOf(tx)
+	tx2Value := reflect.ValueOf(tx2)
+
+	txTypes := reflect.TypeOf(tx)
+
+	if txValue.NumField() != tx2Value.NumField() {
+		return errorsmod.Wrap(types.ErrInvalidDataType, "transactions have different number of fields")
+	}
+
+	for i := 0; i < txValue.NumField(); i++ {
+		if txTypes.Field(i).Name == "WithdrawalTxHash" {
+			continue
+		}
+
+		if txValue.Field(i).Interface() != tx2Value.Field(i).Interface() {
+			return errorsmod.Wrapf(types.ErrInvalidDataType, "field %s is different: %v != %v", txTypes.Field(i).Name, txValue.Field(i).Interface(), tx2Value.Field(i).Interface())
+		}
+	}
+
 	return nil
 }
 

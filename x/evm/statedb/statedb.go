@@ -17,9 +17,10 @@ package statedb
 
 import (
 	"errors"
-	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	"math/big"
 	"sort"
+
+	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"

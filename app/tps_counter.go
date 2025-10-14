@@ -18,10 +18,11 @@ package app
 
 import (
 	"context"
-	errorsmod "cosmossdk.io/errors"
 	"sync"
 	"sync/atomic"
 	"time"
+
+	errorsmod "cosmossdk.io/errors"
 
 	"github.com/tendermint/tendermint/libs/log"
 	"go.opencensus.io/stats"

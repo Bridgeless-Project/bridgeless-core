@@ -2,11 +2,12 @@ package backend
 
 import (
 	"bufio"
-	errorsmod "cosmossdk.io/errors"
 	"math/big"
 	"os"
 	"path/filepath"
 	"testing"
+
+	errorsmod "cosmossdk.io/errors"
 
 	dbm "github.com/tendermint/tm-db"
 

@@ -1,7 +1,6 @@
 package types_test
 
 import (
-	errorsmod "cosmossdk.io/errors"
 	"errors"
 	"fmt"
 	"math"
@@ -9,6 +8,8 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+
+	errorsmod "cosmossdk.io/errors"
 
 	sdkmath "cosmossdk.io/math"
 	"github.com/stretchr/testify/suite"

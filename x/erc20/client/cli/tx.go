@@ -17,9 +17,10 @@
 package cli
 
 import (
+	"fmt"
+
 	errorsmod "cosmossdk.io/errors"
 
-	"fmt"
 	bridgetypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 
 	"github.com/spf13/cobra"

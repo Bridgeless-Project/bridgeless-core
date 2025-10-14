@@ -19,8 +19,9 @@ package types
 import (
 	"errors"
 	"fmt"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"time"
+
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/types"

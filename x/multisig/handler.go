@@ -1,8 +1,9 @@
 package multisig
 
 import (
-	errorsmod "cosmossdk.io/errors"
 	"fmt"
+
+	errorsmod "cosmossdk.io/errors"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/keeper"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
