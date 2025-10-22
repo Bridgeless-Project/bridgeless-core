@@ -49,8 +49,8 @@ func (msg *MsgUpdateTransaction) ValidateBasic() error {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "missing signature")
 	}
 
-	if msg.Transaction.WithdrawalTxHash != "" {
-		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "withdrawal tx hash must be empty")
+	if msg.Transaction.WithdrawalTxHash == "" {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "withdrawal tx hash must not be empty")
 	}
 
 	return nil
