@@ -25,13 +25,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	errortypes "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
-	authante "github.com/cosmos/cosmos-sdk/x/auth/ante"
+	//authante "github.com/cosmos/cosmos-sdk/x/auth/ante"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/ethsecp256k1"
 )
 
-var _ authante.SignatureVerificationGasConsumer = SigVerificationGasConsumer
+var _ = SigVerificationGasConsumer
 
 const (
 	Secp256k1VerifyCost uint64 = 21000

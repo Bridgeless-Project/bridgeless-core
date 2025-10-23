@@ -17,13 +17,14 @@
 package main
 
 import (
-	errorsmod "cosmossdk.io/errors"
 	"errors"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"time"
+
+	errorsmod "cosmossdk.io/errors"
 
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"

@@ -12,7 +12,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 
-	proto "github.com/gogo/protobuf/proto"
+	"github.com/gogo/protobuf/proto"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/encoding"

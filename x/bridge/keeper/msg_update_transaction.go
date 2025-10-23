@@ -10,38 +10,21 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func (m msgServer) SubmitTransactions(goCtx context.Context, msg *types.MsgSubmitTransactions) (*types.MsgSubmitTransactionsResponse, error) {
+func (m msgServer) UpdateTransaction(goCtx context.Context, msg *types.MsgUpdateTransaction) (*types.MsgUpdateTransactionResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if !m.IsParty(ctx, msg.Submitter) {
+	if msg.Submitter != m.GetParams(ctx).RelayerAccount {
 		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "submitter isn`t an authorized party")
 	}
 
-	for _, tx := range msg.Transactions {
-		chain, found := m.GetChain(ctx, tx.DepositChainId)
-		if !found {
-			return nil, types.ErrSourceChainNotSupported
-		}
-		if _, found = m.GetChain(ctx, tx.WithdrawalChainId); !found {
-			return nil, types.ErrDestinationChainNotSupported
-		}
-
-		// Custom validation of transaction for certain chain type
-		err := types.ValidateChainTransaction(&tx, chain.Type)
-		if err != nil {
-			return nil, errorsmod.Wrap(types.InvalidTransaction, err.Error())
-		}
-
-		if err = m.SubmitTx(ctx, &tx, msg.Submitter); err != nil {
-			return nil, errorsmod.Wrap(types.InvalidTransaction, err.Error())
-		}
+	if err := m.UpdateTx(ctx, &msg.Transaction); err != nil {
+		return nil, errorsmod.Wrap(types.InvalidTransaction, err.Error())
 	}
 
-	return &types.MsgSubmitTransactionsResponse{}, nil
+	return &types.MsgUpdateTransactionResponse{}, nil
 }
 
-func emitSubmitEvent(sdkCtx sdk.Context, transaction types.Transaction) {
-	sdkCtx.EventManager().EmitEvent(sdk.NewEvent(types.EventType_DEPOSIT_SUBMITTED.String(),
+func emitUpdateTransactionEvent(sdkCtx sdk.Context, transaction types.Transaction) {
+	sdkCtx.EventManager().EmitEvent(sdk.NewEvent(types.EventType_TRANSACTION_UPDATED.String(),
 		sdk.NewAttribute(types.AttributeKeyDepositTxHash, transaction.DepositTxHash),
 		sdk.NewAttribute(types.AttributeKeyDepositNonce, big.NewInt(int64(transaction.DepositTxIndex)).String()),
 		sdk.NewAttribute(types.AttributeKeyDepositChainId, transaction.DepositChainId),
@@ -57,5 +40,4 @@ func emitSubmitEvent(sdkCtx sdk.Context, transaction types.Transaction) {
 		sdk.NewAttribute(types.AttributeKeySignature, transaction.Signature),
 		sdk.NewAttribute(types.AttributeKeyIsWrapped, strconv.FormatBool(transaction.IsWrapped)),
 		sdk.NewAttribute(types.AttributeKeyCommissionAmount, transaction.CommissionAmount)))
-
 }

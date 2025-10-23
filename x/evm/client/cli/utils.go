@@ -16,8 +16,9 @@
 package cli
 
 import (
-	errorsmod "cosmossdk.io/errors"
 	"strings"
+
+	errorsmod "cosmossdk.io/errors"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 

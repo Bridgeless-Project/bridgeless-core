@@ -26,7 +26,7 @@ import (
 	txTypes "github.com/cosmos/cosmos-sdk/types/tx"
 
 	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
-	apitypes "github.com/ethereum/go-ethereum/signer/core/apitypes"
+	"github.com/ethereum/go-ethereum/signer/core/apitypes"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 )

@@ -1,11 +1,12 @@
 package evm_test
 
 import (
-	errorsmod "cosmossdk.io/errors"
 	"encoding/json"
 	"fmt"
 	"math/big"
 	"time"
+
+	errorsmod "cosmossdk.io/errors"
 
 	sdkmath "cosmossdk.io/math"
 
@@ -31,7 +32,7 @@ import (
 	sdkante "github.com/cosmos/cosmos-sdk/x/auth/ante"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
-	authz "github.com/cosmos/cosmos-sdk/x/authz"
+	"github.com/cosmos/cosmos-sdk/x/authz"
 	ibctypes "github.com/cosmos/ibc-go/v6/modules/apps/transfer/types"
 	ibcclienttypes "github.com/cosmos/ibc-go/v6/modules/core/02-client/types"
 

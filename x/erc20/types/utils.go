@@ -17,12 +17,13 @@
 package types
 
 import (
+	"regexp"
+	"strings"
+
 	errorsmod "cosmossdk.io/errors"
 	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	"regexp"
-	"strings"
 )
 
 const (

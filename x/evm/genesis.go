@@ -17,6 +17,7 @@ package evm
 
 import (
 	"bytes"
+
 	errorsmod "cosmossdk.io/errors"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"

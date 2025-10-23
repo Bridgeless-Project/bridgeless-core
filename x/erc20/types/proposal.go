@@ -18,14 +18,15 @@ package types
 
 import (
 	"fmt"
-	bridgetypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	"strings"
+
+	bridgetypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 
 	errorsmod "cosmossdk.io/errors"
 	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	v1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
+	"github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	ibctransfertypes "github.com/cosmos/ibc-go/v6/modules/apps/transfer/types"
 )
 

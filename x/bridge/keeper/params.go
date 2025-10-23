@@ -17,7 +17,7 @@ func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
 	k.paramstore.SetParamSet(ctx, &params)
 }
 
-func (k Keeper) IsParty(sender string, ctx sdk.Context) bool {
+func (k Keeper) IsParty(ctx sdk.Context, sender string) bool {
 	parties := k.GetParams(ctx).Parties
 	for _, party := range parties {
 		if party.Address == sender {

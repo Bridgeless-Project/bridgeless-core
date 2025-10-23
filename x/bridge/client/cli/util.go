@@ -2,12 +2,13 @@ package cli
 
 import (
 	"encoding/json"
+	"os"
+
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/pkg/errors"
-	"os"
 )
 
-func parseSubmitTx(path string) ([]types.Transaction, error) {
+func parseTxs(path string) ([]types.Transaction, error) {
 	var txs []types.Transaction
 	contents, err := os.ReadFile(path)
 	if err != nil {

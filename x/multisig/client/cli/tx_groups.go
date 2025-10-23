@@ -2,6 +2,9 @@ package cli
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
+
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -9,8 +12,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/spf13/cobra"
-	"strconv"
-	"strings"
 )
 
 func TxGroupsCmd() *cobra.Command {
