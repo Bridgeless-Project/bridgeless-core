@@ -36,3 +36,8 @@ func (k Keeper) PartiesList(ctx sdk.Context) (parties []*types.Party) {
 	k.paramstore.Get(ctx, []byte(types.ParamModulePartiesKey), &parties)
 	return
 }
+
+func (k Keeper) TssThreshold(ctx sdk.Context) (threshold uint32) {
+	k.paramstore.Get(ctx, []byte(types.ParamTssThresholdKey), &threshold)
+	return
+}

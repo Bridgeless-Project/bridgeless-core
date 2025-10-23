@@ -913,6 +913,21 @@ func NewBridge(
 		},
 	)
 
+	app.UpgradeKeeper.SetUpgradeHandler(
+		"v12.1.26-rc1",
+		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
+			bridgeParams := bridgetypes.Params{
+				ModuleAdmin:    app.BridgeKeeper.ModuleAdmin(ctx),
+				Parties:        app.BridgeKeeper.PartiesList(ctx),
+				TssThreshold:   app.BridgeKeeper.TssThreshold(ctx),
+				RelayerAccount: "bridge1m2qc938kek3s8mrng6gvs2g4l324af539jhjqh",
+			}
+			app.BridgeKeeper.SetParams(ctx, bridgeParams)
+
+			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
+		},
+	)
+
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
 			tmos.Exit(err.Error())
