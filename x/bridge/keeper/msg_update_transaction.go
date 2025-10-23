@@ -12,12 +12,11 @@ import (
 
 func (m msgServer) UpdateTransaction(goCtx context.Context, msg *types.MsgUpdateTransaction) (*types.MsgUpdateTransactionResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if !m.IsParty(ctx, msg.Submitter) {
+	if msg.Submitter != m.GetParams(ctx).RelayerAccount {
 		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "submitter isn`t an authorized party")
 	}
 
-	if err := m.UpdateTx(ctx, &msg.Transaction, msg.Submitter); err != nil {
+	if err := m.UpdateTx(ctx, &msg.Transaction); err != nil {
 		return nil, errorsmod.Wrap(types.InvalidTransaction, err.Error())
 	}
 

@@ -186,7 +186,7 @@ func (k Keeper) DeleteTx(ctx sdk.Context, depositTxHash string, depositTxIndex u
 	return nil
 }
 
-func (k Keeper) UpdateTx(ctx sdk.Context, transaction *types.Transaction, submitter string) error {
+func (k Keeper) UpdateTx(ctx sdk.Context, transaction *types.Transaction) error {
 	// validate that tx already exists in the store
 	oldtx, ok := k.GetTransaction(ctx, types.TransactionId(transaction))
 	if !ok {
