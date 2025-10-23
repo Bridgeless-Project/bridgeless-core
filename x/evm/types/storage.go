@@ -17,8 +17,9 @@ package types
 
 import (
 	"fmt"
-	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	"strings"
+
+	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/ethereum/go-ethereum/common"

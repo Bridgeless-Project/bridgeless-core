@@ -17,9 +17,10 @@ package backend
 
 import (
 	"context"
-	errorsmod "cosmossdk.io/errors"
 	"math/big"
 	"time"
+
+	errorsmod "cosmossdk.io/errors"
 
 	rpctypes "github.com/Bridgeless-Project/bridgeless-core/v12/rpc/types"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/server/config"

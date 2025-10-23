@@ -16,8 +16,8 @@
 package types
 
 import (
-	fmt "fmt"
-	math "math"
+	"fmt"
+	"math"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )

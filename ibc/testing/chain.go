@@ -17,8 +17,9 @@
 package ibctesting
 
 import (
-	errorsmod "cosmossdk.io/errors"
 	"testing"
+
+	errorsmod "cosmossdk.io/errors"
 
 	"github.com/stretchr/testify/require"
 

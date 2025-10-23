@@ -2,9 +2,10 @@ package cli
 
 import (
 	"encoding/json"
+	"os"
+
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"os"
 )
 
 type proposal struct {

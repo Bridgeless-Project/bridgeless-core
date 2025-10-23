@@ -10,7 +10,7 @@ import (
 
 	sdkmath "cosmossdk.io/math"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
-	ante "github.com/Bridgeless-Project/bridgeless-core/v12/app/ante"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/app/ante"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/encoding"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/ethereum/eip712"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"

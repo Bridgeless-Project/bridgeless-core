@@ -18,9 +18,10 @@ package utils
 
 import (
 	"fmt"
+	"strings"
+
 	ibctransfertypes "github.com/cosmos/ibc-go/v6/modules/apps/transfer/types"
 	"github.com/ethereum/go-ethereum/common"
-	"strings"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/ethsecp256k1"
 

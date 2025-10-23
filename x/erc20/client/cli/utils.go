@@ -17,9 +17,10 @@
 package cli
 
 import (
-	errorsmod "cosmossdk.io/errors"
 	"os"
 	"path/filepath"
+
+	errorsmod "cosmossdk.io/errors"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
 	"github.com/cosmos/cosmos-sdk/codec"

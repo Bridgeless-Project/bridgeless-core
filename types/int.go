@@ -16,8 +16,8 @@
 package types
 
 import (
-	fmt "fmt"
-	math "math"
+	"fmt"
+	"math"
 	"math/big"
 
 	errorsmod "cosmossdk.io/errors"

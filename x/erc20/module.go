@@ -18,9 +18,10 @@ package erc20
 
 import (
 	"context"
-	errorsmod "cosmossdk.io/errors"
 	"encoding/json"
 	"math/rand"
+
+	errorsmod "cosmossdk.io/errors"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"

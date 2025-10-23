@@ -1,10 +1,11 @@
 package cosmos_test
 
 import (
-	errorsmod "cosmossdk.io/errors"
 	"fmt"
 	"testing"
 	"time"
+
+	errorsmod "cosmossdk.io/errors"
 
 	"github.com/stretchr/testify/require"
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -17,7 +18,7 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	cosmosante "github.com/Bridgeless-Project/bridgeless-core/v12/app/ante/cosmos"
-	testutil "github.com/Bridgeless-Project/bridgeless-core/v12/testutil"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/testutil"
 	utiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
 	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 )

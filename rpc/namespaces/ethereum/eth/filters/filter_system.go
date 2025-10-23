@@ -180,9 +180,9 @@ func (es *EventSystem) SubscribeLogs(crit filters.FilterCriteria) (*Subscription
 	switch {
 	// only interested in new mined logs, mined logs within a specific block range, or
 	// logs from a specific block number to new mined blocks
-	case (from == rpc.LatestBlockNumber && to == rpc.LatestBlockNumber),
-		(from >= 0 && to >= 0 && to >= from),
-		(from >= 0 && to == rpc.LatestBlockNumber):
+	case from == rpc.LatestBlockNumber && to == rpc.LatestBlockNumber,
+		from >= 0 && to >= 0 && to >= from,
+		from >= 0 && to == rpc.LatestBlockNumber:
 		return es.subscribeLogs(crit)
 
 	default:

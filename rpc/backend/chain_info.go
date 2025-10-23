@@ -16,10 +16,11 @@
 package backend
 
 import (
-	errorsmod "cosmossdk.io/errors"
 	"fmt"
 	"math/big"
 	"strconv"
+
+	errorsmod "cosmossdk.io/errors"
 
 	rpctypes "github.com/Bridgeless-Project/bridgeless-core/v12/rpc/types"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/types"
