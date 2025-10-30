@@ -613,6 +613,49 @@ ___
  bridgeless-cored tx bridge threshold set-tss-threshold bridge1... 5
 ```
 ___
+
+### Transactions Stop List
+
+___
+
+### AddTxToStopList
+
+```
+bridgeless-cored tx bridge stop-list add-tx bridge1... tx.json
+```
+
+Example of tx.json: 
+
+```json
+{
+  "deposit_chain_id": "0",
+  "deposit_tx_hash": "0x0000000000000000000000000000000000000000",
+  "deposit_tx_index": 0,
+  "deposit_block": 0,
+  "deposit_token": "0x0000000000000000000000000000000000000000",
+  "deposit_amount": "0",
+  "depositor": "0x0000000000000000000000000000000000000000",
+  "receiver": "0x0000000000000000000000000000000000000000",
+  "withdrawal_chain_id": "0",
+  "withdrawal_tx_hash": "",
+  "withdrawal_token": "0x0000000000000000000000000000000000000000",
+  "signature": "0x0000000000000000000000000000000000000000",
+  "is_wrapped": true,
+  "withdrawal_amount": "0",
+  "commission_amount": "0",
+  "tx_data": "",
+  "referral_id": 0
+}
+```
+___
+
+### RemoveTxFromStopList
+
+```
+ bridgeless-cored tx bridge stop-list remove bridge1... 0 0x0000000000000000000000000000000000000000 0
+```
+___
+___
 ## Query
 ___
 
@@ -921,4 +964,71 @@ txs_submissions:
 
 ```
 ___
+### Transactions Stop List
+___
+
+### QueryAllStopListTxs
+
+```
+ bridgeless-cored query bridge stop-list
+```
+
+Response example:
+
+```
+pagination:
+  next_key: null
+  total: "1"
+transactions:
+- commission_amount: "0"
+  deposit_amount: "0"
+  deposit_block: "0"
+  deposit_chain_id: "0"
+  deposit_token: "0x0000000000000000000000000000000000000000"
+  deposit_tx_hash: 0x0000000000000000000000000000000000000000
+  deposit_tx_index: "0"
+  depositor: 0x0000000000000000000000000000000000000000
+  is_wrapped: true
+  receiver: 0x0000000000000000000000000000000000000000
+  referral_id: 0
+  signature: 0x0000000000000000000000000000000000000000
+  tx_data: ""
+  withdrawal_amount: "0"
+  withdrawal_chain_id: "0"
+  withdrawal_token: 0x0000000000000000000000000000000000000000
+  withdrawal_tx_hash: ""
+```
+
+___
+
+### QueryStopListTxById
+
+```
+bridgeless-cored query bridge sl-tx 0 0x0000000000000000000000000000000000000000 0
+```
+
+Response example:
+
+```
+transaction:
+  commission_amount: "0"
+  deposit_amount: "0"
+  deposit_block: "0"
+  deposit_chain_id: "0"
+  deposit_token: "0x0000000000000000000000000000000000000000"
+  deposit_tx_hash: 0x0000000000000000000000000000000000000000
+  deposit_tx_index: "0"
+  depositor: 0x0000000000000000000000000000000000000000
+  is_wrapped: true
+  receiver: 0x0000000000000000000000000000000000000000
+  referral_id: 0
+  signature: 0x0000000000000000000000000000000000000000
+  tx_data: ""
+  withdrawal_amount: "0"
+  withdrawal_chain_id: "0"
+  withdrawal_token: 0x0000000000000000000000000000000000000000
+  withdrawal_tx_hash: ""
+```
+___
+
 
