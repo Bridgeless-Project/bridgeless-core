@@ -58,7 +58,7 @@ func CmdAddTxToSL() *cobra.Command {
 
 func CmdRemoveTxFromSL() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "remove [from_key_or_address] [deposit-tx-hash] [deposit-tx-index] [deposit-chain-id]",
+		Use:   "remove [from_key_or_address] [deposit-chain-id] [deposit-tx-hash] [deposit-tx-index]",
 		Short: "Remove the transaction from the bridge module",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -68,12 +68,12 @@ func CmdRemoveTxFromSL() *cobra.Command {
 				return err
 			}
 
-			depositHash := args[1]
-			depositIndex, err := strconv.ParseUint(args[2], 10, 64)
+			depositHash := args[2]
+			depositIndex, err := strconv.ParseUint(args[3], 10, 64)
 			if err != nil {
 				return err
 			}
-			depostChainId := args[3]
+			depostChainId := args[1]
 
 			msg := types.NewMsgRemoveTxFromStopList(clientCtx.GetFromAddress().String(), depositIndex, depositHash, depostChainId)
 
