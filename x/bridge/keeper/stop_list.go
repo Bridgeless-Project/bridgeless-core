@@ -10,17 +10,17 @@ import (
 )
 
 func (k Keeper) SetTxToStopList(sdkCtx sdk.Context, tx types.Transaction) {
-	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreBlacklistTransactionsPrefix))
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreStopListTransactionsPrefix))
 	tStore.Set(types.KeyTransaction(types.TransactionId(&tx)), k.cdc.MustMarshal(&tx))
 }
 
 func (k Keeper) DeleteTxFromStopList(sdkCtx sdk.Context, txKey string) {
-	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreBlacklistTransactionsPrefix))
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreStopListTransactionsPrefix))
 	tStore.Delete(types.KeyTransaction(txKey))
 }
 
 func (k Keeper) GetTxFromStopList(sdkCtx sdk.Context, txKey string) (types.Transaction, bool) {
-	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreBlacklistTransactionsPrefix))
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreStopListTransactionsPrefix))
 
 	var transaction types.Transaction
 	txBytes := tStore.Get(types.KeyTransaction(txKey))
@@ -33,7 +33,7 @@ func (k Keeper) GetTxFromStopList(sdkCtx sdk.Context, txKey string) (types.Trans
 }
 
 func (k Keeper) GetTxsFromStopListWithPagination(sdkCtx sdk.Context, pagination *query.PageRequest) ([]types.Transaction, *query.PageResponse, error) {
-	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreTokenPrefix))
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreStopListTransactionsPrefix))
 	var txs []types.Transaction
 
 	pageRes, err := query.Paginate(tStore, pagination, func(key []byte, value []byte) error {
