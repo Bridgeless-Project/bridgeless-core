@@ -576,6 +576,8 @@ paths:
                   tss_threshold:
                     type: integer
                     format: int64
+                  relayer_account:
+                    type: string
             description: >-
               QueryParamsResponse is response type for the Query/Params RPC
               method.
@@ -1792,6 +1794,579 @@ paths:
           required: true
           type: integer
           format: int64
+      tags:
+        - Query
+  /cosmos/bridge/stoplist:
+    get:
+      operationId: CoreBridgeGetStopListTxs
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              transactions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    deposit_chain_id:
+                      type: string
+                    deposit_tx_hash:
+                      type: string
+                    deposit_tx_index:
+                      type: string
+                      format: uint64
+                    deposit_block:
+                      type: string
+                      format: uint64
+                    deposit_token:
+                      type: string
+                    deposit_amount:
+                      type: string
+                    depositor:
+                      type: string
+                    receiver:
+                      type: string
+                    withdrawal_chain_id:
+                      type: string
+                    withdrawal_tx_hash:
+                      type: string
+                    withdrawal_token:
+                      type: string
+                    signature:
+                      type: string
+                    is_wrapped:
+                      type: boolean
+                    withdrawal_amount:
+                      type: string
+                    commission_amount:
+                      type: string
+                    tx_data:
+                      type: string
+                    referral_id:
+                      type: integer
+                      format: int64
+              pagination:
+                type: object
+                properties:
+                  next_key:
+                    type: string
+                    format: byte
+                    description: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently. It will be empty if
+                      there are no more results.
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                      description: >-
+                        A URL/resource name that uniquely identifies the type of
+                        the serialized
+
+                        protocol buffer message. This string must contain at
+                        least
+
+                        one "/" character. The last segment of the URL's path
+                        must represent
+
+                        the fully qualified name of the type (as in
+
+                        `path/google.protobuf.Duration`). The name should be in
+                        a canonical form
+
+                        (e.g., leading "." is not accepted).
+
+
+                        In practice, teams usually precompile into the binary
+                        all types that they
+
+                        expect it to use in the context of Any. However, for
+                        URLs which use the
+
+                        scheme `http`, `https`, or no scheme, one can optionally
+                        set up a type
+
+                        server that maps type URLs to message definitions as
+                        follows:
+
+
+                        * If no scheme is provided, `https` is assumed.
+
+                        * An HTTP GET on the URL must yield a
+                        [google.protobuf.Type][]
+                          value in binary format, or produce an error.
+                        * Applications are allowed to cache lookup results based
+                        on the
+                          URL, or have them precompiled into a binary to avoid any
+                          lookup. Therefore, binary compatibility needs to be preserved
+                          on changes to types. (Use versioned type names to manage
+                          breaking changes.)
+
+                        Note: this functionality is not currently available in
+                        the official
+
+                        protobuf release, and it is not used for type URLs
+                        beginning with
+
+                        type.googleapis.com.
+
+
+                        Schemes other than `http`, `https` (or the empty scheme)
+                        might be
+
+                        used with implementation specific semantics.
+                  additionalProperties: {}
+                  description: >-
+                    `Any` contains an arbitrary serialized protocol buffer
+                    message along with a
+
+                    URL that describes the type of the serialized message.
+
+
+                    Protobuf library provides support to pack/unpack Any values
+                    in the form
+
+                    of utility functions or additional generated methods of the
+                    Any type.
+
+
+                    Example 1: Pack and unpack a message in C++.
+
+                        Foo foo = ...;
+                        Any any;
+                        any.PackFrom(foo);
+                        ...
+                        if (any.UnpackTo(&foo)) {
+                          ...
+                        }
+
+                    Example 2: Pack and unpack a message in Java.
+
+                        Foo foo = ...;
+                        Any any = Any.pack(foo);
+                        ...
+                        if (any.is(Foo.class)) {
+                          foo = any.unpack(Foo.class);
+                        }
+
+                     Example 3: Pack and unpack a message in Python.
+
+                        foo = Foo(...)
+                        any = Any()
+                        any.Pack(foo)
+                        ...
+                        if any.Is(Foo.DESCRIPTOR):
+                          any.Unpack(foo)
+                          ...
+
+                     Example 4: Pack and unpack a message in Go
+
+                         foo := &pb.Foo{...}
+                         any, err := anypb.New(foo)
+                         if err != nil {
+                           ...
+                         }
+                         ...
+                         foo := &pb.Foo{}
+                         if err := any.UnmarshalTo(foo); err != nil {
+                           ...
+                         }
+
+                    The pack methods provided by protobuf library will by
+                    default use
+
+                    'type.googleapis.com/full.type.name' as the type URL and the
+                    unpack
+
+                    methods only use the fully qualified type name after the
+                    last '/'
+
+                    in the type URL, for example "foo.bar.com/x/y.z" will yield
+                    type
+
+                    name "y.z".
+
+
+
+                    JSON
+
+                    ====
+
+                    The JSON representation of an `Any` value uses the regular
+
+                    representation of the deserialized, embedded message, with
+                    an
+
+                    additional field `@type` which contains the type URL.
+                    Example:
+
+                        package google.profile;
+                        message Person {
+                          string first_name = 1;
+                          string last_name = 2;
+                        }
+
+                        {
+                          "@type": "type.googleapis.com/google.profile.Person",
+                          "firstName": <string>,
+                          "lastName": <string>
+                        }
+
+                    If the embedded message type is well-known and has a custom
+                    JSON
+
+                    representation, that representation will be embedded adding
+                    a field
+
+                    `value` which holds the custom JSON in addition to the
+                    `@type`
+
+                    field. Example (for message [google.protobuf.Duration][]):
+
+                        {
+                          "@type": "type.googleapis.com/google.protobuf.Duration",
+                          "value": "1.212s"
+                        }
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.count_total
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  '/cosmos/bridge/stoplist/{chain_id}/{tx_hash}/{tx_nonce}':
+    get:
+      operationId: CoreBridgeGetStopListTxsById
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              transaction:
+                type: object
+                properties:
+                  deposit_chain_id:
+                    type: string
+                  deposit_tx_hash:
+                    type: string
+                  deposit_tx_index:
+                    type: string
+                    format: uint64
+                  deposit_block:
+                    type: string
+                    format: uint64
+                  deposit_token:
+                    type: string
+                  deposit_amount:
+                    type: string
+                  depositor:
+                    type: string
+                  receiver:
+                    type: string
+                  withdrawal_chain_id:
+                    type: string
+                  withdrawal_tx_hash:
+                    type: string
+                  withdrawal_token:
+                    type: string
+                  signature:
+                    type: string
+                  is_wrapped:
+                    type: boolean
+                  withdrawal_amount:
+                    type: string
+                  commission_amount:
+                    type: string
+                  tx_data:
+                    type: string
+                  referral_id:
+                    type: integer
+                    format: int64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                      description: >-
+                        A URL/resource name that uniquely identifies the type of
+                        the serialized
+
+                        protocol buffer message. This string must contain at
+                        least
+
+                        one "/" character. The last segment of the URL's path
+                        must represent
+
+                        the fully qualified name of the type (as in
+
+                        `path/google.protobuf.Duration`). The name should be in
+                        a canonical form
+
+                        (e.g., leading "." is not accepted).
+
+
+                        In practice, teams usually precompile into the binary
+                        all types that they
+
+                        expect it to use in the context of Any. However, for
+                        URLs which use the
+
+                        scheme `http`, `https`, or no scheme, one can optionally
+                        set up a type
+
+                        server that maps type URLs to message definitions as
+                        follows:
+
+
+                        * If no scheme is provided, `https` is assumed.
+
+                        * An HTTP GET on the URL must yield a
+                        [google.protobuf.Type][]
+                          value in binary format, or produce an error.
+                        * Applications are allowed to cache lookup results based
+                        on the
+                          URL, or have them precompiled into a binary to avoid any
+                          lookup. Therefore, binary compatibility needs to be preserved
+                          on changes to types. (Use versioned type names to manage
+                          breaking changes.)
+
+                        Note: this functionality is not currently available in
+                        the official
+
+                        protobuf release, and it is not used for type URLs
+                        beginning with
+
+                        type.googleapis.com.
+
+
+                        Schemes other than `http`, `https` (or the empty scheme)
+                        might be
+
+                        used with implementation specific semantics.
+                  additionalProperties: {}
+                  description: >-
+                    `Any` contains an arbitrary serialized protocol buffer
+                    message along with a
+
+                    URL that describes the type of the serialized message.
+
+
+                    Protobuf library provides support to pack/unpack Any values
+                    in the form
+
+                    of utility functions or additional generated methods of the
+                    Any type.
+
+
+                    Example 1: Pack and unpack a message in C++.
+
+                        Foo foo = ...;
+                        Any any;
+                        any.PackFrom(foo);
+                        ...
+                        if (any.UnpackTo(&foo)) {
+                          ...
+                        }
+
+                    Example 2: Pack and unpack a message in Java.
+
+                        Foo foo = ...;
+                        Any any = Any.pack(foo);
+                        ...
+                        if (any.is(Foo.class)) {
+                          foo = any.unpack(Foo.class);
+                        }
+
+                     Example 3: Pack and unpack a message in Python.
+
+                        foo = Foo(...)
+                        any = Any()
+                        any.Pack(foo)
+                        ...
+                        if any.Is(Foo.DESCRIPTOR):
+                          any.Unpack(foo)
+                          ...
+
+                     Example 4: Pack and unpack a message in Go
+
+                         foo := &pb.Foo{...}
+                         any, err := anypb.New(foo)
+                         if err != nil {
+                           ...
+                         }
+                         ...
+                         foo := &pb.Foo{}
+                         if err := any.UnmarshalTo(foo); err != nil {
+                           ...
+                         }
+
+                    The pack methods provided by protobuf library will by
+                    default use
+
+                    'type.googleapis.com/full.type.name' as the type URL and the
+                    unpack
+
+                    methods only use the fully qualified type name after the
+                    last '/'
+
+                    in the type URL, for example "foo.bar.com/x/y.z" will yield
+                    type
+
+                    name "y.z".
+
+
+
+                    JSON
+
+                    ====
+
+                    The JSON representation of an `Any` value uses the regular
+
+                    representation of the deserialized, embedded message, with
+                    an
+
+                    additional field `@type` which contains the type URL.
+                    Example:
+
+                        package google.profile;
+                        message Person {
+                          string first_name = 1;
+                          string last_name = 2;
+                        }
+
+                        {
+                          "@type": "type.googleapis.com/google.profile.Person",
+                          "firstName": <string>,
+                          "lastName": <string>
+                        }
+
+                    If the embedded message type is well-known and has a custom
+                    JSON
+
+                    representation, that representation will be embedded adding
+                    a field
+
+                    `value` which holds the custom JSON in addition to the
+                    `@type`
+
+                    field. Example (for message [google.protobuf.Duration][]):
+
+                        {
+                          "@type": "type.googleapis.com/google.protobuf.Duration",
+                          "value": "1.212s"
+                        }
+      parameters:
+        - name: chain_id
+          in: path
+          required: true
+          type: string
+        - name: tx_hash
+          in: path
+          required: true
+          type: string
+        - name: tx_nonce
+          in: path
+          required: true
+          type: string
+          format: uint64
       tags:
         - Query
   '/cosmos/bridge/token-info/{chain}/{address}':
@@ -38936,682 +39511,6 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
-  /evmos/revenue/v1/params:
-    get:
-      summary: Params retrieves the revenue module params
-      operationId: EvmosRevenueV1Params
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              params:
-                title: params is the returned revenue parameter
-                type: object
-                properties:
-                  enable_revenue:
-                    type: boolean
-                    title: >-
-                      enable_revenue defines a parameter to enable the revenue
-                      module
-                  developer_shares:
-                    type: string
-                    title: >-
-                      developer_shares defines the proportion of the transaction
-                      fees to be
-
-                      distributed to the registered contract owner
-                  addr_derivation_cost_create:
-                    type: string
-                    format: uint64
-                    title: >-
-                      addr_derivation_cost_create defines the cost of address
-                      derivation for
-
-                      verifying the contract deployer at fee registration
-            description: >-
-              QueryParamsResponse is the response type for the Query/Params RPC
-              method.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      tags:
-        - Query
-  /evmos/revenue/v1/revenues:
-    get:
-      summary: Revenues retrieves all registered revenues
-      operationId: EvmosRevenueV1Revenues
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              revenues:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    contract_address:
-                      type: string
-                      title: >-
-                        contract_address is the hex address of a registered
-                        contract
-                    deployer_address:
-                      type: string
-                      title: >-
-                        deployer_address is the bech32 address of message
-                        sender. It must be the same as the origin EOA
-
-                        sending the transaction which deploys the contract
-                    withdrawer_address:
-                      type: string
-                      title: >-
-                        withdrawer_address is the bech32 address of account
-                        receiving the transaction fees it defaults to
-
-                        deployer_address
-                  title: >-
-                    Revenue defines an instance that organizes fee distribution
-                    conditions for
-
-                    the owner of a given smart contract
-                title: revenues is a slice of all stored Reveneue
-              pagination:
-                description: pagination defines the pagination in the response.
-                type: object
-                properties:
-                  next_key:
-                    type: string
-                    format: byte
-                    description: |-
-                      next_key is the key to be passed to PageRequest.key to
-                      query the next page most efficiently. It will be empty if
-                      there are no more results.
-                  total:
-                    type: string
-                    format: uint64
-                    title: >-
-                      total is total number of results available if
-                      PageRequest.count_total
-
-                      was set, its value is undefined otherwise
-            description: >-
-              QueryRevenuesResponse is the response type for the Query/Revenues
-              RPC method.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: pagination.key
-          description: |-
-            key is a value returned in PageResponse.next_key to begin
-            querying the next page most efficiently. Only one of offset or key
-            should be set.
-          in: query
-          required: false
-          type: string
-          format: byte
-        - name: pagination.offset
-          description: >-
-            offset is a numeric offset that can be used when key is unavailable.
-
-            It is less efficient than using key. Only one of offset or key
-            should
-
-            be set.
-          in: query
-          required: false
-          type: string
-          format: uint64
-        - name: pagination.limit
-          description: >-
-            limit is the total number of results to be returned in the result
-            page.
-
-            If left empty it will default to a value to be set by each app.
-          in: query
-          required: false
-          type: string
-          format: uint64
-        - name: pagination.count_total
-          description: >-
-            count_total is set to true  to indicate that the result set should
-            include
-
-            a count of the total number of items available for pagination in
-            UIs.
-
-            count_total is only respected when offset is used. It is ignored
-            when key
-
-            is set.
-          in: query
-          required: false
-          type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
-
-
-            Since: cosmos-sdk 0.43
-          in: query
-          required: false
-          type: boolean
-      tags:
-        - Query
-  '/evmos/revenue/v1/revenues/{contract_address}':
-    get:
-      summary: Revenue retrieves a registered revenue for a given contract address
-      operationId: EvmosRevenueV1Revenue
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              revenue:
-                title: revenue is a stored Reveneue for the queried contract
-                type: object
-                properties:
-                  contract_address:
-                    type: string
-                    title: >-
-                      contract_address is the hex address of a registered
-                      contract
-                  deployer_address:
-                    type: string
-                    title: >-
-                      deployer_address is the bech32 address of message sender.
-                      It must be the same as the origin EOA
-
-                      sending the transaction which deploys the contract
-                  withdrawer_address:
-                    type: string
-                    title: >-
-                      withdrawer_address is the bech32 address of account
-                      receiving the transaction fees it defaults to
-
-                      deployer_address
-            description: >-
-              QueryRevenueResponse is the response type for the Query/Revenue
-              RPC method.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: contract_address
-          description: contract_address of a registered contract in hex format
-          in: path
-          required: true
-          type: string
-      tags:
-        - Query
-  '/evmos/revenue/v1/revenues/{deployer_address}':
-    get:
-      summary: |-
-        DeployerRevenues retrieves all revenues that a given deployer has
-        registered
-      operationId: EvmosRevenueV1DeployerRevenues
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              contract_addresses:
-                type: array
-                items:
-                  type: string
-                title: >-
-                  contract_addresses is the slice of registered contract
-                  addresses for a deployer
-              pagination:
-                description: pagination defines the pagination in the response.
-                type: object
-                properties:
-                  next_key:
-                    type: string
-                    format: byte
-                    description: |-
-                      next_key is the key to be passed to PageRequest.key to
-                      query the next page most efficiently. It will be empty if
-                      there are no more results.
-                  total:
-                    type: string
-                    format: uint64
-                    title: >-
-                      total is total number of results available if
-                      PageRequest.count_total
-
-                      was set, its value is undefined otherwise
-            description: |-
-              QueryDeployerRevenuesResponse is the response type for the
-              Query/DeployerRevenues RPC method.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: deployer_address
-          description: deployer_address in bech32 format
-          in: path
-          required: true
-          type: string
-        - name: pagination.key
-          description: |-
-            key is a value returned in PageResponse.next_key to begin
-            querying the next page most efficiently. Only one of offset or key
-            should be set.
-          in: query
-          required: false
-          type: string
-          format: byte
-        - name: pagination.offset
-          description: >-
-            offset is a numeric offset that can be used when key is unavailable.
-
-            It is less efficient than using key. Only one of offset or key
-            should
-
-            be set.
-          in: query
-          required: false
-          type: string
-          format: uint64
-        - name: pagination.limit
-          description: >-
-            limit is the total number of results to be returned in the result
-            page.
-
-            If left empty it will default to a value to be set by each app.
-          in: query
-          required: false
-          type: string
-          format: uint64
-        - name: pagination.count_total
-          description: >-
-            count_total is set to true  to indicate that the result set should
-            include
-
-            a count of the total number of items available for pagination in
-            UIs.
-
-            count_total is only respected when offset is used. It is ignored
-            when key
-
-            is set.
-          in: query
-          required: false
-          type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
-
-
-            Since: cosmos-sdk 0.43
-          in: query
-          required: false
-          type: boolean
-      tags:
-        - Query
-  '/evmos/revenue/v1/revenues/{withdrawer_address}':
-    get:
-      summary: |-
-        WithdrawerRevenues retrieves all revenues with a given withdrawer
-        address
-      operationId: EvmosRevenueV1WithdrawerRevenues
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              contract_addresses:
-                type: array
-                items:
-                  type: string
-                title: >-
-                  contract_addresses is the slice of registered contract
-                  addresses for a withdrawer
-              pagination:
-                description: pagination defines the pagination in the response.
-                type: object
-                properties:
-                  next_key:
-                    type: string
-                    format: byte
-                    description: |-
-                      next_key is the key to be passed to PageRequest.key to
-                      query the next page most efficiently. It will be empty if
-                      there are no more results.
-                  total:
-                    type: string
-                    format: uint64
-                    title: >-
-                      total is total number of results available if
-                      PageRequest.count_total
-
-                      was set, its value is undefined otherwise
-            description: |-
-              QueryWithdrawerRevenuesResponse is the response type for the
-              Query/WithdrawerRevenues RPC method.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: withdrawer_address
-          description: withdrawer_address in bech32 format
-          in: path
-          required: true
-          type: string
-        - name: pagination.key
-          description: |-
-            key is a value returned in PageResponse.next_key to begin
-            querying the next page most efficiently. Only one of offset or key
-            should be set.
-          in: query
-          required: false
-          type: string
-          format: byte
-        - name: pagination.offset
-          description: >-
-            offset is a numeric offset that can be used when key is unavailable.
-
-            It is less efficient than using key. Only one of offset or key
-            should
-
-            be set.
-          in: query
-          required: false
-          type: string
-          format: uint64
-        - name: pagination.limit
-          description: >-
-            limit is the total number of results to be returned in the result
-            page.
-
-            If left empty it will default to a value to be set by each app.
-          in: query
-          required: false
-          type: string
-          format: uint64
-        - name: pagination.count_total
-          description: >-
-            count_total is set to true  to indicate that the result set should
-            include
-
-            a count of the total number of items available for pagination in
-            UIs.
-
-            count_total is only respected when offset is used. It is ignored
-            when key
-
-            is set.
-          in: query
-          required: false
-          type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
-
-
-            Since: cosmos-sdk 0.43
-          in: query
-          required: false
-          type: boolean
-      tags:
-        - Query
-  /evmos/revenue/v1/tx/cancel_revenue:
-    post:
-      summary: |-
-        CancelRevenue cancels a contract's fee registration and further receival
-        of transaction fees
-      operationId: EvmosRevenueV1CancelRevenue
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            title: >-
-              MsgCancelRevenueResponse defines the MsgCancelRevenue response
-              type
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: contract_address
-          description: contract_address in hex format
-          in: query
-          required: false
-          type: string
-        - name: deployer_address
-          description: >-
-            deployer_address is the bech32 address of message sender. It must be
-            the same as the origin EOA
-
-            sending the transaction which deploys the contract
-          in: query
-          required: false
-          type: string
-      tags:
-        - Msg
-  /evmos/revenue/v1/tx/register_revenue:
-    post:
-      summary: RegisterRevenue registers a new contract for receiving transaction fees
-      operationId: EvmosRevenueV1RegisterRevenue
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            title: >-
-              MsgRegisterRevenueResponse defines the MsgRegisterRevenue response
-              type
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: contract_address
-          description: contract_address in hex format
-          in: query
-          required: false
-          type: string
-        - name: deployer_address
-          description: >-
-            deployer_address is the bech32 address of message sender. It must be
-            the same as the origin EOA
-
-            sending the transaction which deploys the contract
-          in: query
-          required: false
-          type: string
-        - name: withdrawer_address
-          description: >-
-            withdrawer_address is the bech32 address of account receiving the
-            transaction fees
-          in: query
-          required: false
-          type: string
-        - name: nonces
-          description: >-
-            nonces is an array of nonces from the address path, where the last
-            nonce is the nonce
-
-            that determines the contract's address - it can be an EOA nonce or a
-
-            factory contract nonce
-          in: query
-          required: false
-          type: array
-          items:
-            type: string
-            format: uint64
-          collectionFormat: multi
-      tags:
-        - Msg
-  /evmos/revenue/v1/tx/update_revenue:
-    post:
-      summary: UpdateRevenue updates the withdrawer address of a revenue
-      operationId: EvmosRevenueV1UpdateRevenue
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            title: >-
-              MsgUpdateRevenueResponse defines the MsgUpdateRevenue response
-              type
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: contract_address
-          description: contract_address in hex format
-          in: query
-          required: false
-          type: string
-        - name: deployer_address
-          description: >-
-            deployer_address is the bech32 address of message sender. It must be
-            the same as the origin EOA
-
-            sending the transaction which deploys the contract
-          in: query
-          required: false
-          type: string
-        - name: withdrawer_address
-          description: >-
-            withdrawer_address is the bech32 address of account receiving the
-            transaction fees
-          in: query
-          required: false
-          type: string
-      tags:
-        - Msg
   '/evmos/vesting/v1/balances/{address}':
     get:
       summary: >-
@@ -50920,6 +50819,8 @@ definitions:
     default: EVM
   core.bridge.MsgAddTokenInfoResponse:
     type: object
+  core.bridge.MsgAddTxToStopListResponse:
+    type: object
   core.bridge.MsgDeleteChainResponse:
     type: object
   core.bridge.MsgDeleteTokenResponse:
@@ -50936,6 +50837,8 @@ definitions:
     type: object
   core.bridge.MsgRemoveTransactionResponse:
     type: object
+  core.bridge.MsgRemoveTxFromStopListResponse:
+    type: object
   core.bridge.MsgSetPartiesResponse:
     type: object
   core.bridge.MsgSetReferralResponse:
@@ -50947,6 +50850,8 @@ definitions:
   core.bridge.MsgSubmitTransactionsResponse:
     type: object
   core.bridge.MsgUpdateTokenResponse:
+    type: object
+  core.bridge.MsgUpdateTransactionResponse:
     type: object
   core.bridge.Params:
     type: object
@@ -50963,6 +50868,8 @@ definitions:
       tss_threshold:
         type: integer
         format: int64
+      relayer_account:
+        type: string
     description: Params defines the parameters for the module.
   core.bridge.Party:
     type: object
@@ -51149,6 +51056,120 @@ definitions:
               type: string
             commission_rate:
               type: string
+      pagination:
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+            description: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently. It will be empty if
+              there are no more results.
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
+  core.bridge.QueryGetStopListTxByIdResponse:
+    type: object
+    properties:
+      transaction:
+        type: object
+        properties:
+          deposit_chain_id:
+            type: string
+          deposit_tx_hash:
+            type: string
+          deposit_tx_index:
+            type: string
+            format: uint64
+          deposit_block:
+            type: string
+            format: uint64
+          deposit_token:
+            type: string
+          deposit_amount:
+            type: string
+          depositor:
+            type: string
+          receiver:
+            type: string
+          withdrawal_chain_id:
+            type: string
+          withdrawal_tx_hash:
+            type: string
+          withdrawal_token:
+            type: string
+          signature:
+            type: string
+          is_wrapped:
+            type: boolean
+          withdrawal_amount:
+            type: string
+          commission_amount:
+            type: string
+          tx_data:
+            type: string
+          referral_id:
+            type: integer
+            format: int64
+  core.bridge.QueryGetStopListTxsResponse:
+    type: object
+    properties:
+      transactions:
+        type: array
+        items:
+          type: object
+          properties:
+            deposit_chain_id:
+              type: string
+            deposit_tx_hash:
+              type: string
+            deposit_tx_index:
+              type: string
+              format: uint64
+            deposit_block:
+              type: string
+              format: uint64
+            deposit_token:
+              type: string
+            deposit_amount:
+              type: string
+            depositor:
+              type: string
+            receiver:
+              type: string
+            withdrawal_chain_id:
+              type: string
+            withdrawal_tx_hash:
+              type: string
+            withdrawal_token:
+              type: string
+            signature:
+              type: string
+            is_wrapped:
+              type: boolean
+            withdrawal_amount:
+              type: string
+            commission_amount:
+              type: string
+            tx_data:
+              type: string
+            referral_id:
+              type: integer
+              format: int64
       pagination:
         type: object
         properties:
@@ -51402,6 +51423,8 @@ definitions:
           tss_threshold:
             type: integer
             format: int64
+          relayer_account:
+            type: string
     description: QueryParamsResponse is response type for the Query/Params RPC method.
   core.bridge.QueryTransactionByIdResponse:
     type: object
@@ -74523,231 +74546,6 @@ definitions:
               for balances recovered via IBC packets
         title: Params holds parameters for the recovery module
     description: QueryParamsResponse is the response type for the Query/Params RPC method.
-  evmos.revenue.v1.MsgCancelRevenueResponse:
-    type: object
-    title: MsgCancelRevenueResponse defines the MsgCancelRevenue response type
-  evmos.revenue.v1.MsgRegisterRevenueResponse:
-    type: object
-    title: MsgRegisterRevenueResponse defines the MsgRegisterRevenue response type
-  evmos.revenue.v1.MsgUpdateParamsResponse:
-    type: object
-    description: |-
-      MsgUpdateParamsResponse defines the response structure for executing a
-      MsgUpdateParams message.
-  evmos.revenue.v1.MsgUpdateRevenueResponse:
-    type: object
-    title: MsgUpdateRevenueResponse defines the MsgUpdateRevenue response type
-  evmos.revenue.v1.Params:
-    type: object
-    properties:
-      enable_revenue:
-        type: boolean
-        title: enable_revenue defines a parameter to enable the revenue module
-      developer_shares:
-        type: string
-        title: |-
-          developer_shares defines the proportion of the transaction fees to be
-          distributed to the registered contract owner
-      addr_derivation_cost_create:
-        type: string
-        format: uint64
-        title: |-
-          addr_derivation_cost_create defines the cost of address derivation for
-          verifying the contract deployer at fee registration
-    title: Params defines the revenue module params
-  evmos.revenue.v1.QueryDeployerRevenuesResponse:
-    type: object
-    properties:
-      contract_addresses:
-        type: array
-        items:
-          type: string
-        title: >-
-          contract_addresses is the slice of registered contract addresses for a
-          deployer
-      pagination:
-        description: pagination defines the pagination in the response.
-        type: object
-        properties:
-          next_key:
-            type: string
-            format: byte
-            description: |-
-              next_key is the key to be passed to PageRequest.key to
-              query the next page most efficiently. It will be empty if
-              there are no more results.
-          total:
-            type: string
-            format: uint64
-            title: >-
-              total is total number of results available if
-              PageRequest.count_total
-
-              was set, its value is undefined otherwise
-    description: |-
-      QueryDeployerRevenuesResponse is the response type for the
-      Query/DeployerRevenues RPC method.
-  evmos.revenue.v1.QueryParamsResponse:
-    type: object
-    properties:
-      params:
-        title: params is the returned revenue parameter
-        type: object
-        properties:
-          enable_revenue:
-            type: boolean
-            title: enable_revenue defines a parameter to enable the revenue module
-          developer_shares:
-            type: string
-            title: >-
-              developer_shares defines the proportion of the transaction fees to
-              be
-
-              distributed to the registered contract owner
-          addr_derivation_cost_create:
-            type: string
-            format: uint64
-            title: >-
-              addr_derivation_cost_create defines the cost of address derivation
-              for
-
-              verifying the contract deployer at fee registration
-    description: QueryParamsResponse is the response type for the Query/Params RPC method.
-  evmos.revenue.v1.QueryRevenueResponse:
-    type: object
-    properties:
-      revenue:
-        title: revenue is a stored Reveneue for the queried contract
-        type: object
-        properties:
-          contract_address:
-            type: string
-            title: contract_address is the hex address of a registered contract
-          deployer_address:
-            type: string
-            title: >-
-              deployer_address is the bech32 address of message sender. It must
-              be the same as the origin EOA
-
-              sending the transaction which deploys the contract
-          withdrawer_address:
-            type: string
-            title: >-
-              withdrawer_address is the bech32 address of account receiving the
-              transaction fees it defaults to
-
-              deployer_address
-    description: >-
-      QueryRevenueResponse is the response type for the Query/Revenue RPC
-      method.
-  evmos.revenue.v1.QueryRevenuesResponse:
-    type: object
-    properties:
-      revenues:
-        type: array
-        items:
-          type: object
-          properties:
-            contract_address:
-              type: string
-              title: contract_address is the hex address of a registered contract
-            deployer_address:
-              type: string
-              title: >-
-                deployer_address is the bech32 address of message sender. It
-                must be the same as the origin EOA
-
-                sending the transaction which deploys the contract
-            withdrawer_address:
-              type: string
-              title: >-
-                withdrawer_address is the bech32 address of account receiving
-                the transaction fees it defaults to
-
-                deployer_address
-          title: >-
-            Revenue defines an instance that organizes fee distribution
-            conditions for
-
-            the owner of a given smart contract
-        title: revenues is a slice of all stored Reveneue
-      pagination:
-        description: pagination defines the pagination in the response.
-        type: object
-        properties:
-          next_key:
-            type: string
-            format: byte
-            description: |-
-              next_key is the key to be passed to PageRequest.key to
-              query the next page most efficiently. It will be empty if
-              there are no more results.
-          total:
-            type: string
-            format: uint64
-            title: >-
-              total is total number of results available if
-              PageRequest.count_total
-
-              was set, its value is undefined otherwise
-    description: >-
-      QueryRevenuesResponse is the response type for the Query/Revenues RPC
-      method.
-  evmos.revenue.v1.QueryWithdrawerRevenuesResponse:
-    type: object
-    properties:
-      contract_addresses:
-        type: array
-        items:
-          type: string
-        title: >-
-          contract_addresses is the slice of registered contract addresses for a
-          withdrawer
-      pagination:
-        description: pagination defines the pagination in the response.
-        type: object
-        properties:
-          next_key:
-            type: string
-            format: byte
-            description: |-
-              next_key is the key to be passed to PageRequest.key to
-              query the next page most efficiently. It will be empty if
-              there are no more results.
-          total:
-            type: string
-            format: uint64
-            title: >-
-              total is total number of results available if
-              PageRequest.count_total
-
-              was set, its value is undefined otherwise
-    description: |-
-      QueryWithdrawerRevenuesResponse is the response type for the
-      Query/WithdrawerRevenues RPC method.
-  evmos.revenue.v1.Revenue:
-    type: object
-    properties:
-      contract_address:
-        type: string
-        title: contract_address is the hex address of a registered contract
-      deployer_address:
-        type: string
-        title: >-
-          deployer_address is the bech32 address of message sender. It must be
-          the same as the origin EOA
-
-          sending the transaction which deploys the contract
-      withdrawer_address:
-        type: string
-        title: >-
-          withdrawer_address is the bech32 address of account receiving the
-          transaction fees it defaults to
-
-          deployer_address
-    title: |-
-      Revenue defines an instance that organizes fee distribution conditions for
-      the owner of a given smart contract
   evmos.vesting.v1.MsgClawbackResponse:
     type: object
     description: MsgClawbackResponse defines the MsgClawback response type.

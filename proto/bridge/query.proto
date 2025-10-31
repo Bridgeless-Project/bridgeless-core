@@ -82,6 +82,14 @@ service Query {
     option (google.api.http).get = "/cosmos/bridge/referrals/rewards/{referral_id}";
   }
   // this line is used by starport scaffolding # 2
+
+  rpc GetStopListTxsById(QueryGetStopListTxById) returns (QueryGetStopListTxByIdResponse) {
+    option (google.api.http).get = "/cosmos/bridge/stoplist/{chain_id}/{tx_hash}/{tx_nonce}";
+  }
+
+  rpc GetStopListTxs(QueryGetStopListTxs) returns (QueryGetStopListTxsResponse) {
+    option (google.api.http).get = "/cosmos/bridge/stoplist";
+  }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -224,3 +232,22 @@ message QueryGetReferralRewardsByIdResponse {
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 // this line is used by starport scaffolding # 3
+
+message QueryGetStopListTxById {
+  string chain_id = 1;
+  string tx_hash = 2;
+  uint64 tx_nonce = 3;
+}
+
+message QueryGetStopListTxByIdResponse {
+  Transaction transaction = 1 [(gogoproto.nullable) = false];;
+}
+
+message QueryGetStopListTxs {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryGetStopListTxsResponse{
+  repeated Transaction transactions = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}

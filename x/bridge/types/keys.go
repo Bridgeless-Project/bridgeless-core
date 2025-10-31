@@ -35,6 +35,7 @@ const (
 	StoreTransactionSubmissionsPrefix = "transaction-submissions"
 	StoreReferralPrefix               = "referral"
 	StoreReferralRewardsPrefix        = "referral_rewards"
+	StoreStopListTransactionsPrefix   = "stop_list__transactions"
 
 	// Attributes keys for bridge events
 	AttributeKeyDepositTxHash     = "deposit_tx_hash"

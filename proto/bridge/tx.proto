@@ -40,6 +40,9 @@ service Msg {
 
     rpc SetReferralRewards(MsgSetReferralRewards) returns (MsgSetReferralRewardsResponse);
     rpc RemoveReferralRewards(MsgRemoveReferralRewards) returns (MsgRemoveReferralRewardsResponse);
+
+    rpc AddTxToStopList(MsgAddTxToStopList) returns (MsgAddTxToStopListResponse);
+    rpc RemoveTxFromStopList(MsgRemoveTxFromStopList) returns (MsgRemoveTxFromStopListResponse);
 }
 
 // this line is used by starport scaffolding # proto/tx/message
@@ -175,4 +178,19 @@ message MsgRemoveReferralRewards {
 
 message MsgRemoveReferralRewardsResponse {}
 
+message MsgAddTxToStopList {
+  Transaction transaction = 1;
+  string  creator = 2;
+}
+
+message MsgAddTxToStopListResponse {}
+
+message MsgRemoveTxFromStopList {
+  string chain_id = 1;
+  string tx_hash = 2;
+  uint64 tx_nonce = 3;
+  string  creator = 4;
+}
+
+message MsgRemoveTxFromStopListResponse {}
 
