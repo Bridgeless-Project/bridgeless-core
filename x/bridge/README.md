@@ -652,7 +652,7 @@ ___
 ### RemoveTxFromStopList
 
 ```
- bridgeless-cored tx bridge stop-list remove bridge1... 0 0x0000000000000000000000000000000000000000 0
+ bridgeless-cored tx bridge stop-list remove-tx bridge1... 0 0x0000000000000000000000000000000000000000 0
 ```
 ___
 ___
@@ -1004,7 +1004,7 @@ ___
 ### QueryStopListTxById
 
 ```
-bridgeless-cored query bridge sl-tx 0 0x0000000000000000000000000000000000000000 0
+bridgeless-cored query bridge stop-list-tx 0 0x0000000000000000000000000000000000000000 0
 ```
 
 Response example:

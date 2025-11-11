@@ -30,11 +30,8 @@ func (m msgServer) AddTxToStopList(goCtx context.Context, msg *types.MsgAddTxToS
 }
 
 func (m msgServer) RemoveTxFromStopList(goCtx context.Context, msg *types.MsgRemoveTxFromStopList) (*types.MsgRemoveTxFromStopListResponse, error) {
-	if msg == nil {
-		return nil, errorsmod.Wrap(types.ErrInvalidDataType, "message cannot be nil")
-	}
-
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
 	params := m.Keeper.GetParams(ctx)
 	tx := &types.Transaction{
 		DepositTxHash:  msg.TxHash,

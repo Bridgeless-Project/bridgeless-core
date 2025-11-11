@@ -45,7 +45,7 @@ func CmdQueryStopList() *cobra.Command {
 
 func CmdQueryStopListTransactionById() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "sl-tx [chain-id] [tx_hash] [tx_nonce]",
+		Use:   "stop-list-tx [chain-id] [tx_hash] [tx_nonce]",
 		Short: "Query bridge transaction by its id",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
