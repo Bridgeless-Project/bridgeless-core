@@ -20,6 +20,18 @@ func parseTxs(path string) ([]types.Transaction, error) {
 	return txs, nil
 }
 
+func parseTx(path string) (*types.Transaction, error) {
+	var tx *types.Transaction
+	contents, err := os.ReadFile(path)
+	if err != nil {
+		return nil, errors.Wrap(err, "error reading file")
+	}
+	if err = json.Unmarshal(contents, &tx); err != nil {
+		return nil, errors.Wrap(err, "failed to unmarshal transaction")
+	}
+	return tx, nil
+}
+
 func parseInsertToken(path string) (*types.Token, error) {
 	return readFromJSON[types.Token](path)
 }
