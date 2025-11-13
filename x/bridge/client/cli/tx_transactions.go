@@ -22,6 +22,7 @@ func TxTransactionsCmd() *cobra.Command {
 	cmd.AddCommand(
 		CmdSubmitTx(),
 		CmdRemoveTx(),
+		CmdUpdateTx(),
 	)
 
 	return cmd
@@ -68,13 +69,12 @@ func CmdUpdateTx() *cobra.Command {
 				return err
 			}
 
-			var tr []types.Transaction
-			tr, err = parseTxs(args[1])
+			tr, err := parseTx(args[1])
 			if err != nil {
 				return err
 			}
 
-			msg := types.NewMsgSubmitTransactions(clientCtx.GetFromAddress().String(), tr...)
+			msg := types.NewMsgUpdateTransaction(clientCtx.GetFromAddress().String(), *tr)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},

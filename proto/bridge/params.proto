@@ -11,5 +11,5 @@ message Params {
   string module_admin = 1;
   repeated Party parties = 2;
   uint32 tss_threshold = 3;
-  string relayer_account = 4;
+  repeated string relayer_accounts = 4;
 }
