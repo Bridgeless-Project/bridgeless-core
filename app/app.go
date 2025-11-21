@@ -456,7 +456,13 @@ func NewBridge(
 	)
 
 	app.AccumulatorKeeper = accumulatorkeeper.NewKeeper(
-		appCodec, keys[accumulatortypes.StoreKey], keys[accumulatortypes.MemStoreKey], app.AccountKeeper, app.BankKeeper)
+		appCodec,
+		keys[accumulatortypes.StoreKey],
+		keys[accumulatortypes.MemStoreKey],
+		app.GetSubspace(accumulatortypes.ModuleName),
+		app.AccountKeeper,
+		app.BankKeeper,
+	)
 
 	app.NFTKeeper = nftkeeper.NewKeeper(
 		appCodec,
@@ -465,6 +471,7 @@ func NewBridge(
 		app.GetSubspace(nfttypes.ModuleName),
 		app.BankKeeper,
 		app.StakingKeeper,
+		app.AccumulatorKeeper,
 	)
 
 	app.BankKeeper = app.BankKeeper.SetHooks(
