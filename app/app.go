@@ -913,6 +913,70 @@ func NewBridge(
 		},
 	)
 
+	app.UpgradeKeeper.SetUpgradeHandler(
+		"v12.1.27",
+		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
+			nftParams := nfttypes.Params{
+				ModuleAdmin:         "bridge15tzhpy6nz6vq5c3rhrzac2zc2sq67r4lj4077n",
+				BondDenom:           "abridge",
+				Prefix:              "bridge",
+				NftSequence:         0,
+				TotalVestingTime:    6307200,
+				VestingPeriod:       120,
+				VestingPeriodsLimit: 52560,
+				NftTokenAmount:      "64000000000000000000000",
+				BatchSize:           100,
+				BatchIndex:          0,
+			}
+			app.NFTKeeper.SetParams(ctx, nftParams)
+
+			accumulatorParams := accumulatortypes.Params{
+				SuperAdmin: "bridge15tzhpy6nz6vq5c3rhrzac2zc2sq67r4lj4077n",
+			}
+			app.AccumulatorKeeper.SetParams(ctx, accumulatorParams)
+			newRewardsPeerBlock, ok := sdk.NewIntFromString("33290000000000000000")
+			if !ok {
+				panic("invalid new rewards per block")
+			}
+			mintParams := minttypes.Params{
+				MintDenom:            "abridge",
+				HalvingBlocks:        6306900,
+				MaxHalvingPeriods:    7,
+				CurrentHalvingPeriod: 0,
+				BlockReward: sdk.Coin{
+					Denom:  "abridge",
+					Amount: newRewardsPeerBlock,
+				},
+				StartHeight: uint64(plan.Height) - 1,
+			}
+			app.MintKeeper.SetParams(ctx, mintParams)
+
+			bridgeparams := bridgetypes.Params{
+				ModuleAdmin: "bridge15tzhpy6nz6vq5c3rhrzac2zc2sq67r4lj4077n",
+				Parties: []*bridgetypes.Party{
+					{
+						Address: "bridge1t8xw56axgs4cpu53st4de2u7umy7mqqkaauylx",
+					},
+					{
+						Address: "bridge1cwqe2f7a5kr4epjre4v7jj53e2l4mjqme50pxg",
+					},
+					{
+						Address: "bridge1539gmf5xtmrs8wnxccvl02jfcu39s0l50ktu2e",
+					},
+				},
+				TssThreshold:    2,
+				RelayerAccounts: []string{"bridge15tzhpy6nz6vq5c3rhrzac2zc2sq67r4lj4077n"},
+			}
+			app.BridgeKeeper.SetParams(ctx, bridgeparams)
+
+			distributionparams := app.DistrKeeper.GetParams(ctx)
+			distributionparams.NftProposerReward = sdk.NewDecWithPrec(20, 2) // 20%
+			app.DistrKeeper.SetParams(ctx, distributionparams)
+
+			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
+		},
+	)
+
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
 			tmos.Exit(err.Error())
