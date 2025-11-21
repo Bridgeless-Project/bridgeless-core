@@ -576,8 +576,10 @@ paths:
                   tss_threshold:
                     type: integer
                     format: int64
-                  relayer_account:
-                    type: string
+                  relayer_accounts:
+                    type: array
+                    items:
+                      type: string
             description: >-
               QueryParamsResponse is response type for the Query/Params RPC
               method.
@@ -25171,6 +25173,9 @@ paths:
                       custom method
 
                       signatures required by gogoproto.
+                  start_height:
+                    type: string
+                    format: uint64
             description: >-
               QueryParamsResponse is the response type for the Query/Params RPC
               method.
@@ -25212,9 +25217,6 @@ paths:
                     type: string
                   uri:
                     type: string
-                  vesting_period:
-                    type: string
-                    format: int64
                   reward_per_period:
                     type: object
                     properties:
@@ -25248,14 +25250,14 @@ paths:
                       custom method
 
                       signatures required by gogoproto.
-                  last_vesting_time:
-                    type: string
-                    format: int64
-                  vesting_counter:
+                  last_vesting_block:
                     type: string
                     format: int64
                   denom:
                     type: string
+                  start_vesting_block:
+                    type: string
+                    format: int64
                 description: NFT defines the NFT.
         default:
           description: An unexpected error response.
@@ -25470,9 +25472,6 @@ paths:
                       type: string
                     uri:
                       type: string
-                    vesting_period:
-                      type: string
-                      format: int64
                     reward_per_period:
                       type: object
                       properties:
@@ -25506,14 +25505,14 @@ paths:
                         custom method
 
                         signatures required by gogoproto.
-                    last_vesting_time:
-                      type: string
-                      format: int64
-                    vesting_counter:
+                    last_vesting_block:
                       type: string
                       format: int64
                     denom:
                       type: string
+                    start_vesting_block:
+                      type: string
+                      format: int64
                   description: NFT defines the NFT.
               pagination:
                 type: object
@@ -26092,9 +26091,6 @@ paths:
                       type: string
                     uri:
                       type: string
-                    vesting_period:
-                      type: string
-                      format: int64
                     reward_per_period:
                       type: object
                       properties:
@@ -26128,14 +26124,14 @@ paths:
                         custom method
 
                         signatures required by gogoproto.
-                    last_vesting_time:
-                      type: string
-                      format: int64
-                    vesting_counter:
+                    last_vesting_block:
                       type: string
                       format: int64
                     denom:
                       type: string
+                    start_vesting_block:
+                      type: string
+                      format: int64
                   description: NFT defines the NFT.
               pagination:
                 type: object
@@ -26426,6 +26422,33 @@ paths:
               params:
                 description: params holds all the parameters of this module.
                 type: object
+                properties:
+                  module_admin:
+                    type: string
+                  bond_denom:
+                    type: string
+                  prefix:
+                    type: string
+                  nft_sequence:
+                    type: string
+                    format: uint64
+                  total_vesting_time:
+                    type: string
+                    format: int64
+                  vesting_period:
+                    type: string
+                    format: int64
+                  vesting_periods_limit:
+                    type: string
+                    format: uint64
+                  nft_token_amount:
+                    type: string
+                  batch_size:
+                    type: string
+                    format: uint64
+                  batch_index:
+                    type: string
+                    format: uint64
             description: >-
               QueryParamsResponse is response type for the Query/Params RPC
               method.
@@ -50868,8 +50891,10 @@ definitions:
       tss_threshold:
         type: integer
         format: int64
-      relayer_account:
-        type: string
+      relayer_accounts:
+        type: array
+        items:
+          type: string
     description: Params defines the parameters for the module.
   core.bridge.Party:
     type: object
@@ -51423,8 +51448,10 @@ definitions:
           tss_threshold:
             type: integer
             format: int64
-          relayer_account:
-            type: string
+          relayer_accounts:
+            type: array
+            items:
+              type: string
     description: QueryParamsResponse is response type for the Query/Params RPC method.
   core.bridge.QueryTransactionByIdResponse:
     type: object
@@ -53148,6 +53175,8 @@ definitions:
       denom:
         type: string
   cosmos.accumulator.MsgAddAdminResponse:
+    type: object
+  cosmos.accumulator.MsgBurnTokensResponse:
     type: object
   cosmos.accumulator.Params:
     type: object
@@ -65540,6 +65569,9 @@ definitions:
 
           NOTE: The amount field is an Int which implements the custom method
           signatures required by gogoproto.
+      start_height:
+        type: string
+        format: uint64
     description: Params holds parameters for the mint module.
   cosmos.mint.v1beta1.QueryParamsResponse:
     type: object
@@ -65576,8 +65608,13 @@ definitions:
               method
 
               signatures required by gogoproto.
+          start_height:
+            type: string
+            format: uint64
     description: QueryParamsResponse is the response type for the Query/Params RPC method.
   cosmos.nft.MsgDelegateResponse:
+    type: object
+  cosmos.nft.MsgMintResponse:
     type: object
   cosmos.nft.MsgRedelegateResponse:
     type: object
@@ -65596,9 +65633,6 @@ definitions:
         type: string
       uri:
         type: string
-      vesting_period:
-        type: string
-        format: int64
       reward_per_period:
         type: object
         properties:
@@ -65626,17 +65660,44 @@ definitions:
 
           NOTE: The amount field is an Int which implements the custom method
           signatures required by gogoproto.
-      last_vesting_time:
-        type: string
-        format: int64
-      vesting_counter:
+      last_vesting_block:
         type: string
         format: int64
       denom:
         type: string
+      start_vesting_block:
+        type: string
+        format: int64
     description: NFT defines the NFT.
   cosmos.nft.Params:
     type: object
+    properties:
+      module_admin:
+        type: string
+      bond_denom:
+        type: string
+      prefix:
+        type: string
+      nft_sequence:
+        type: string
+        format: uint64
+      total_vesting_time:
+        type: string
+        format: int64
+      vesting_period:
+        type: string
+        format: int64
+      vesting_periods_limit:
+        type: string
+        format: uint64
+      nft_token_amount:
+        type: string
+      batch_size:
+        type: string
+        format: uint64
+      batch_index:
+        type: string
+        format: uint64
     description: Params defines the parameters for the module.
   cosmos.nft.QueryAllNFTsByOwnerResponse:
     type: object
@@ -65652,9 +65713,6 @@ definitions:
               type: string
             uri:
               type: string
-            vesting_period:
-              type: string
-              format: int64
             reward_per_period:
               type: object
               properties:
@@ -65688,14 +65746,14 @@ definitions:
                 method
 
                 signatures required by gogoproto.
-            last_vesting_time:
-              type: string
-              format: int64
-            vesting_counter:
+            last_vesting_block:
               type: string
               format: int64
             denom:
               type: string
+            start_vesting_block:
+              type: string
+              format: int64
           description: NFT defines the NFT.
       pagination:
         type: object
@@ -65737,9 +65795,6 @@ definitions:
               type: string
             uri:
               type: string
-            vesting_period:
-              type: string
-              format: int64
             reward_per_period:
               type: object
               properties:
@@ -65773,14 +65828,14 @@ definitions:
                 method
 
                 signatures required by gogoproto.
-            last_vesting_time:
-              type: string
-              format: int64
-            vesting_counter:
+            last_vesting_block:
               type: string
               format: int64
             denom:
               type: string
+            start_vesting_block:
+              type: string
+              format: int64
           description: NFT defines the NFT.
       pagination:
         type: object
@@ -65853,9 +65908,6 @@ definitions:
             type: string
           uri:
             type: string
-          vesting_period:
-            type: string
-            format: int64
           reward_per_period:
             type: object
             properties:
@@ -65889,14 +65941,14 @@ definitions:
               method
 
               signatures required by gogoproto.
-          last_vesting_time:
-            type: string
-            format: int64
-          vesting_counter:
+          last_vesting_block:
             type: string
             format: int64
           denom:
             type: string
+          start_vesting_block:
+            type: string
+            format: int64
         description: NFT defines the NFT.
   cosmos.nft.QueryParamsResponse:
     type: object
@@ -65904,6 +65956,33 @@ definitions:
       params:
         description: params holds all the parameters of this module.
         type: object
+        properties:
+          module_admin:
+            type: string
+          bond_denom:
+            type: string
+          prefix:
+            type: string
+          nft_sequence:
+            type: string
+            format: uint64
+          total_vesting_time:
+            type: string
+            format: int64
+          vesting_period:
+            type: string
+            format: int64
+          vesting_periods_limit:
+            type: string
+            format: uint64
+          nft_token_amount:
+            type: string
+          batch_size:
+            type: string
+            format: uint64
+          batch_index:
+            type: string
+            format: uint64
     description: QueryParamsResponse is response type for the Query/Params RPC method.
   cosmos.params.v1beta1.ParamChange:
     type: object

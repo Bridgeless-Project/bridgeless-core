@@ -12,7 +12,8 @@ import (
 
 func (m msgServer) UpdateTransaction(goCtx context.Context, msg *types.MsgUpdateTransaction) (*types.MsgUpdateTransactionResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	if msg.Submitter != m.GetParams(ctx).RelayerAccount {
+
+	if !m.isRelayerAccount(msg.Submitter, m.GetParams(ctx).RelayerAccounts) {
 		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "submitter isn`t an authorized party")
 	}
 
@@ -40,4 +41,14 @@ func emitUpdateTransactionEvent(sdkCtx sdk.Context, transaction types.Transactio
 		sdk.NewAttribute(types.AttributeKeySignature, transaction.Signature),
 		sdk.NewAttribute(types.AttributeKeyIsWrapped, strconv.FormatBool(transaction.IsWrapped)),
 		sdk.NewAttribute(types.AttributeKeyCommissionAmount, transaction.CommissionAmount)))
+}
+
+func (m msgServer) isRelayerAccount(account string, relayerAccounts []string) bool {
+	for _, acc := range relayerAccounts {
+		if account == acc {
+			return true
+		}
+	}
+
+	return false
 }
