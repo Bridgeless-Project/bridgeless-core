@@ -924,10 +924,10 @@ func NewBridge(
 		"v12.1.26-rc1",
 		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 			bridgeParams := bridgetypes.Params{
-				ModuleAdmin:    app.BridgeKeeper.ModuleAdmin(ctx),
-				Parties:        app.BridgeKeeper.PartiesList(ctx),
-				TssThreshold:   app.BridgeKeeper.TssThreshold(ctx),
-				RelayerAccount: "bridge1m2qc938kek3s8mrng6gvs2g4l324af539jhjqh",
+				ModuleAdmin:  app.BridgeKeeper.ModuleAdmin(ctx),
+				Parties:      app.BridgeKeeper.PartiesList(ctx),
+				TssThreshold: app.BridgeKeeper.TssThreshold(ctx),
+				//RelayerAccount: "bridge1m2qc938kek3s8mrng6gvs2g4l324af539jhjqh",
 			}
 			app.BridgeKeeper.SetParams(ctx, bridgeParams)
 
@@ -964,11 +964,19 @@ func NewBridge(
 				CurrentHalvingPeriod: 0,
 				BlockReward: sdk.Coin{
 					Denom:  "abridge",
-					Amount: sdk.NewInt(6400000000000000000),
+					Amount: sdk.NewInt(33290000000000000000),
 				},
-				StartHeight: uint64(plan.Height) + 6306900,
+				StartHeight: uint64(plan.Height) - 1,
 			}
 			app.MintKeeper.SetParams(ctx, mintParams)
+
+			bridgeparams := bridgetypes.Params{
+				ModuleAdmin:     "bridge1ur9vkyhyzp6zdnfyd0y6vstu9mh9yprayvh3rc",
+				Parties:         app.BridgeKeeper.PartiesList(ctx),
+				TssThreshold:    app.BridgeKeeper.TssThreshold(ctx),
+				RelayerAccounts: []string{"bridge1m2qc938kek3s8mrng6gvs2g4l324af539jhjqh"},
+			}
+			app.BridgeKeeper.SetParams(ctx, bridgeparams)
 
 			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
 		},
