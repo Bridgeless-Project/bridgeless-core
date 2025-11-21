@@ -966,7 +966,7 @@ func NewBridge(
 					Denom:  "abridge",
 					Amount: sdk.NewInt(6400000000000000000),
 				},
-				StartHeight: uint64(plan.Height),
+				StartHeight: uint64(plan.Height) + 6306900,
 			}
 			app.MintKeeper.SetParams(ctx, mintParams)
 
