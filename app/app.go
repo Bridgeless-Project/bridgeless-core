@@ -465,6 +465,7 @@ func NewBridge(
 		app.GetSubspace(nfttypes.ModuleName),
 		app.BankKeeper,
 		app.StakingKeeper,
+		app.AccumulatorKeeper,
 	)
 
 	app.BankKeeper = app.BankKeeper.SetHooks(
