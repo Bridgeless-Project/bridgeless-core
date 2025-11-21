@@ -38,6 +38,7 @@ func GetTxCmd() *cobra.Command {
 		TxTssThresholdCmd(),
 		TxReferralCmd(),
 		TxReferralRewardsCmd(),
+		TxStopListCmd(),
 	)
 	// this line is used by starport scaffolding # 1
 
