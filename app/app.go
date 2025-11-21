@@ -957,6 +957,19 @@ func NewBridge(
 			}
 			app.AccumulatorKeeper.SetParams(ctx, accumulatorParams)
 
+			mintParams := minttypes.Params{
+				MintDenom:            "abridge",
+				HalvingBlocks:        6306900,
+				MaxHalvingPeriods:    7,
+				CurrentHalvingPeriod: 0,
+				BlockReward: sdk.Coin{
+					Denom:  "abridge",
+					Amount: sdk.NewInt(6400000000000000000),
+				},
+				StartHeight: uint64(plan.Height),
+			}
+			app.MintKeeper.SetParams(ctx, mintParams)
+
 			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
 		},
 	)
