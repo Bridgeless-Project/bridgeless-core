@@ -127,6 +127,7 @@ message TokenMetadata {
   string name = 1;
   string symbol = 2;
   string uri = 3;
+  string dex_name = 4;
 }
 
 message Token {
@@ -146,7 +147,8 @@ Example:
   "metadata": {
     "name": "TESTNET",
     "symbol": "TEST",
-    "uri": ""
+    "uri": "",
+    "dex_name": ""
   },
   "info": [
     {
@@ -330,7 +332,7 @@ message MsgSubmitTransactions {
   repeated core.bridge.Transaction transactions = 2 [(gogoproto.nullable) = false];
 }
 ```
-
+___
 ### RemoveTransaction
 **RemoveTransaction** - removes bridge transaction data from core.
 
@@ -361,47 +363,6 @@ message MsgAddTokenInfo {
   TokenInfo info = 3 [(gogoproto.nullable) = false];
 }
 ```
-
-___
-
-### SetReferral
-
-Message definition:
-```protobuf
-message MsgSetReferral {
-  string creator = 1;
-  Referral referral = 2 [(gogoproto.nullable) = false];
-}
-```
-
-### RemoveReferral
-Message definition:
-```protobuf
-message MsgRemoveReferral {
-  string creator = 1;
-  uint32 id = 2;
-}
-```
-
-### SetReferralRewards
-Message definition:
-```protobuf
-message MsgSetReferralRewards {
-  string creator = 1;
-  ReferralRewards rewards = 4 [(gogoproto.nullable) = false];
-}
-```
-
-### RemoveReferralRewards
-Message definition 
-```protobuf
-message MsgRemoveReferralRewards {
-  string creator = 1;
-  uint32 referrer_id = 2;
-  uint64 token_id = 3;
-}
-```
-
 ___
 
 ### RemoveTokenInfo
@@ -413,6 +374,49 @@ message MsgRemoveTokenInfo {
   string creator = 1;
   uint64 token_id = 2;
   string chain_id = 3;
+}
+```
+___
+
+### Referrals
+___
+
+### SetReferral
+
+Message definition:
+```protobuf
+message MsgSetReferral {
+  string creator = 1;
+  Referral referral = 2 [(gogoproto.nullable) = false];
+}
+```
+___
+
+### RemoveReferral
+Message definition:
+```protobuf
+message MsgRemoveReferral {
+  string creator = 1;
+  uint32 id = 2;
+}
+```
+___
+### SetReferralRewards
+Message definition:
+```protobuf
+message MsgSetReferralRewards {
+  string creator = 1;
+  ReferralRewards rewards = 4 [(gogoproto.nullable) = false];
+}
+```
+___
+### RemoveReferralRewards
+Message definition 
+```protobuf
+message MsgRemoveReferralRewards {
+  string creator = 1;
+  uint32 referrer_id = 2;
+  uint64 token_id = 3;
 }
 ```
 ___
@@ -470,7 +474,7 @@ Example of `chain.json`:
 ```
 ___
 ### DeleteChain
-**DeleteChain**-deletes chain data by chain id from core.
+**DeleteChain** - deletes chain data by chain id from core.
 
 ```
  bridgeless-cored tx bridge chains remove bridge1... 1
@@ -487,6 +491,7 @@ ___
 bridgeless-cored tx bridge referral set bridge1... referral-id=0 referral-withdrawal-address=bridge1... referral-commission-rate=5
 ```
 
+___
 ### RemoveReferral
 **RemoveReferral** - removes referral data by referral id from core.
 
@@ -495,13 +500,13 @@ bridgeless-cored tx bridge referral set bridge1... referral-id=0 referral-withdr
 ```
 
 ___
-### ReferralRewards
+### SetReferralRewards
 **SetReferralRewards** - adds new referral rewards data to core.
 
 ```
  bridgeless-cored tx bridge referral-rewards set bridge1... referral-id=1 token-id=1 to-claim=10abridge total-collected-amount=100abridge
 ```
-
+___
 ### RemoveReferralRewards
 **RemoveReferralRewards** - removes referral rewards data by referral id and token id from core.
 
@@ -695,7 +700,7 @@ referral:
   id: "1"
   withdrawal_address: bridge1qqqqqnqaea03090u62sd7e42jfv2lhllsckms0
 ```
-
+___
 ### GetQueryGetReferrals
 ```
 bridgeless-cored query bridge referrals
@@ -707,7 +712,7 @@ referrals:
     id: "1"
     withdrawal_address: bridge1qqqqqnqaea03090u62sd7e42jfv2lhllsckms0
 ```
-
+___
 ### GetReferralRewardsByToken
 ```
  bridgeless-cored query bridge referral-rewards 1 1
@@ -720,7 +725,7 @@ referral_rewards:
   token_id: "1"
   total_claimed_amount: "100"
 ```
-
+___
 ### GetQueryGetReferralsRewardsById
 ```
 bridgeless-cored query bridge referrals-rewards
