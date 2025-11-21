@@ -956,7 +956,10 @@ func NewBridge(
 				SuperAdmin: "bridge1ur9vkyhyzp6zdnfyd0y6vstu9mh9yprayvh3rc",
 			}
 			app.AccumulatorKeeper.SetParams(ctx, accumulatorParams)
-
+			newRewardsPeerBlock, ok := sdk.NewIntFromString("33290000000000000000")
+			if !ok {
+				panic("invalid new rewards per block")
+			}
 			mintParams := minttypes.Params{
 				MintDenom:            "abridge",
 				HalvingBlocks:        6306900,
@@ -964,7 +967,7 @@ func NewBridge(
 				CurrentHalvingPeriod: 0,
 				BlockReward: sdk.Coin{
 					Denom:  "abridge",
-					Amount: sdk.NewInt(33290000000000000000),
+					Amount: newRewardsPeerBlock,
 				},
 				StartHeight: uint64(plan.Height) - 1,
 			}
