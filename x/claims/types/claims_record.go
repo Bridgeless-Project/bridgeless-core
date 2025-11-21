@@ -17,10 +17,11 @@
 package types
 
 import (
+	gomath "math"
+
 	errorsmod "cosmossdk.io/errors"
 
 	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
-	gomath "math"
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"

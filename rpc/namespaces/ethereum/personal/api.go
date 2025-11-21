@@ -17,10 +17,11 @@ package personal
 
 import (
 	"context"
-	errorsmod "cosmossdk.io/errors"
 	"fmt"
 	"os"
 	"time"
+
+	errorsmod "cosmossdk.io/errors"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/backend"
 

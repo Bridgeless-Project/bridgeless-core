@@ -1,11 +1,12 @@
 package types
 
 import (
+	"math/big"
+	"strings"
+
 	errorsmod "cosmossdk.io/errors"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/ethereum/go-ethereum/common"
-	"math/big"
-	"strings"
 )
 
 func validateChain(chain *Chain) error {

@@ -16,8 +16,9 @@
 package types
 
 import (
-	errorsmod "cosmossdk.io/errors"
 	"errors"
+
+	errorsmod "cosmossdk.io/errors"
 	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"

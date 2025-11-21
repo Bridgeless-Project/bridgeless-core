@@ -20,6 +20,7 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 
 		&MsgSubmitTransactions{},
 		&MsgRemoveTransaction{},
+		&MsgUpdateTransaction{},
 
 		&MsgInsertChain{},
 		&MsgDeleteChain{},

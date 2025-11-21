@@ -17,7 +17,7 @@
 package types
 
 import (
-	context "context"
+	"context"
 
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"

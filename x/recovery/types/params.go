@@ -17,10 +17,11 @@
 package types
 
 import (
+	"time"
+
 	errorsmod "cosmossdk.io/errors"
 	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"time"
 )
 
 // ParamsKey params store key

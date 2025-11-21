@@ -1,9 +1,10 @@
 package contracts
 
 import (
-	errorsmod "cosmossdk.io/errors"
 	_ "embed" // embed compiled smart contract
 	"encoding/json"
+
+	errorsmod "cosmossdk.io/errors"
 
 	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 )

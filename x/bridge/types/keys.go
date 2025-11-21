@@ -24,6 +24,7 @@ const (
 	ParamModuleAdminKey   = "ModuleAdmin"
 	ParamModulePartiesKey = "Parties"
 	ParamTssThresholdKey  = "TssThreshold"
+	ParamRelayerAccounts  = "RelayerAccounts"
 
 	// ---- Store Prefixes ------
 	StoreTokenPrefix                  = "token"
@@ -34,6 +35,7 @@ const (
 	StoreTransactionSubmissionsPrefix = "transaction-submissions"
 	StoreReferralPrefix               = "referral"
 	StoreReferralRewardsPrefix        = "referral_rewards"
+	StoreStopListTransactionsPrefix   = "stop_list_transactions"
 
 	// Attributes keys for bridge events
 	AttributeKeyDepositTxHash     = "deposit_tx_hash"

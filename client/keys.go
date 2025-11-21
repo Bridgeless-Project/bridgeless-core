@@ -17,6 +17,7 @@ package client
 
 import (
 	"bufio"
+
 	errorsmod "cosmossdk.io/errors"
 
 	"github.com/cosmos/cosmos-sdk/client"

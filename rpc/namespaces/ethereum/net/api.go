@@ -17,8 +17,9 @@ package net
 
 import (
 	"context"
-	errorsmod "cosmossdk.io/errors"
 	"fmt"
+
+	errorsmod "cosmossdk.io/errors"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	"github.com/cosmos/cosmos-sdk/client"

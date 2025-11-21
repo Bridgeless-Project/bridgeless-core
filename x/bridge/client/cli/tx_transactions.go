@@ -22,6 +22,7 @@ func TxTransactionsCmd() *cobra.Command {
 	cmd.AddCommand(
 		CmdSubmitTx(),
 		CmdRemoveTx(),
+		CmdUpdateTx(),
 	)
 
 	return cmd
@@ -40,12 +41,40 @@ func CmdSubmitTx() *cobra.Command {
 			}
 
 			var tr []types.Transaction
-			tr, err = parseSubmitTx(args[1])
+			tr, err = parseTxs(args[1])
 			if err != nil {
 				return err
 			}
 
 			msg := types.NewMsgSubmitTransactions(clientCtx.GetFromAddress().String(), tr...)
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdUpdateTx() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "update [from_key_or_address] [path-to-json-tx]",
+		Short: "Update the transaction on the bridge module",
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			cmd.Flags().Set(flags.FlagFrom, args[0])
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			tr, err := parseTx(args[1])
+			if err != nil {
+				return err
+			}
+
+			msg := types.NewMsgUpdateTransaction(clientCtx.GetFromAddress().String(), *tr)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},

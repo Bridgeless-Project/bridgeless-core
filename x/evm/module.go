@@ -17,9 +17,10 @@ package evm
 
 import (
 	"context"
-	errorsmod "cosmossdk.io/errors"
 	"encoding/json"
 	"math/rand"
+
+	errorsmod "cosmossdk.io/errors"
 
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"

@@ -22,6 +22,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair([]byte(ParamModuleAdminKey), &p.ModuleAdmin, validateModuleAdmin),
 		paramtypes.NewParamSetPair([]byte(ParamModulePartiesKey), &p.Parties, validateModuleParties),
 		paramtypes.NewParamSetPair([]byte(ParamTssThresholdKey), &p.TssThreshold, validateTssThreshold),
+		paramtypes.NewParamSetPair([]byte(ParamRelayerAccounts), &p.RelayerAccounts, validateRelayerAccounts),
 	}
 }
 
@@ -84,6 +85,22 @@ func validateTssThreshold(i interface{}) error {
 	_, ok := i.(uint32)
 	if !ok {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
+	}
+
+	return nil
+}
+
+func validateRelayerAccounts(i interface{}) error {
+	relayerAccs, ok := i.([]string)
+	if !ok {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
+	}
+
+	for _, account := range relayerAccs {
+		_, err := sdk.AccAddressFromBech32(account)
+		if err != nil {
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid relayer account address: %s", err.Error())
+		}
 	}
 
 	return nil

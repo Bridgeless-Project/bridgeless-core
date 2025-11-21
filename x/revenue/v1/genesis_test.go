@@ -17,7 +17,7 @@ import (
 	feemarkettypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
-	revenue "github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1/types"
 )
 

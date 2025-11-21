@@ -3,11 +3,12 @@ package cli
 import (
 	"errors"
 	"fmt"
+	"math/big"
+
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
-	"math/big"
 )
 
 func CmdQueryTransactions() *cobra.Command {

@@ -170,7 +170,7 @@ import (
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/recovery"
 	recoverykeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/recovery/keeper"
 	recoverytypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/recovery/types"
-	revenue "github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1"
 	revenuekeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1/keeper"
 	revenuetypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1/types"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/vesting"
@@ -456,7 +456,13 @@ func NewBridge(
 	)
 
 	app.AccumulatorKeeper = accumulatorkeeper.NewKeeper(
-		appCodec, keys[accumulatortypes.StoreKey], keys[accumulatortypes.MemStoreKey], app.AccountKeeper, app.BankKeeper)
+		appCodec,
+		keys[accumulatortypes.StoreKey],
+		keys[accumulatortypes.MemStoreKey],
+		app.GetSubspace(accumulatortypes.ModuleName),
+		app.AccountKeeper,
+		app.BankKeeper,
+	)
 
 	app.NFTKeeper = nftkeeper.NewKeeper(
 		appCodec,
@@ -465,6 +471,7 @@ func NewBridge(
 		app.GetSubspace(nfttypes.ModuleName),
 		app.BankKeeper,
 		app.StakingKeeper,
+		app.AccumulatorKeeper,
 	)
 
 	app.BankKeeper = app.BankKeeper.SetHooks(

@@ -11884,13 +11884,13 @@
                         return r = a[u], e(r), r
                     }
                     if (delete a[i], u === i)
-                        for (; !o.call(a, ++u);) continue
+                        for (; !o.call(a, ++u);) ;
                 },
                 delete: e = function(t) {
                     var e = s[t];
                     if (e && (delete a[e], delete s[t], --n, u === e)) {
                         if (!n) return c = 0, void(u = 1);
-                        for (; !o.call(a, ++u);) continue
+                        for (; !o.call(a, ++u);) ;
                     }
                 },
                 clear: function() {

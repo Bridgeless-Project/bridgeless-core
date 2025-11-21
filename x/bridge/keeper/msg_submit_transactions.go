@@ -13,7 +13,7 @@ import (
 func (m msgServer) SubmitTransactions(goCtx context.Context, msg *types.MsgSubmitTransactions) (*types.MsgSubmitTransactionsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if !m.IsParty(msg.Submitter, ctx) {
+	if !m.IsParty(ctx, msg.Submitter) {
 		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "submitter isn`t an authorized party")
 	}
 
