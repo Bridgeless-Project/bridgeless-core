@@ -978,6 +978,11 @@ func NewBridge(
 			}
 			app.BridgeKeeper.SetParams(ctx, bridgeparams)
 
+			// Set +20% rewards for nft delegators
+			distributionparams := app.DistrKeeper.GetParams(ctx)
+			distributionparams.NftProposerReward = sdk.NewDecWithPrec(20, 2) // 20%
+			app.DistrKeeper.SetParams(ctx, distributionparams)
+
 			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
 		},
 	)
