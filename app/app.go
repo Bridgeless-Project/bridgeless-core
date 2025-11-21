@@ -929,6 +929,32 @@ func NewBridge(
 		},
 	)
 
+	app.UpgradeKeeper.SetUpgradeHandler(
+		"v12.1.27-rc1",
+		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
+			nftParams := nfttypes.Params{
+				ModuleAdmin:         "bridge1ur9vkyhyzp6zdnfyd0y6vstu9mh9yprayvh3rc",
+				BondDenom:           "abridge",
+				Prefix:              "bridge",
+				NftSequence:         0,
+				TotalVestingTime:    6307200,
+				VestingPeriod:       120,
+				VestingPeriodsLimit: 52560,
+				NftTokenAmount:      "64000000000000000000000",
+				BatchSize:           100,
+				BatchIndex:          0,
+			}
+			app.NFTKeeper.SetParams(ctx, nftParams)
+
+			accumulatorParams := accumulatortypes.Params{
+				SuperAdmin: "bridge1ur9vkyhyzp6zdnfyd0y6vstu9mh9yprayvh3rc",
+			}
+			app.AccumulatorKeeper.SetParams(ctx, accumulatorParams)
+
+			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
+		},
+	)
+
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
 			tmos.Exit(err.Error())
