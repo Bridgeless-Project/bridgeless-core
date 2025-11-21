@@ -924,12 +924,67 @@ func NewBridge(
 		"v12.1.26-rc1",
 		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 			bridgeParams := bridgetypes.Params{
-				ModuleAdmin:    app.BridgeKeeper.ModuleAdmin(ctx),
-				Parties:        app.BridgeKeeper.PartiesList(ctx),
-				TssThreshold:   app.BridgeKeeper.TssThreshold(ctx),
-				RelayerAccount: "bridge1m2qc938kek3s8mrng6gvs2g4l324af539jhjqh",
+				ModuleAdmin:  app.BridgeKeeper.ModuleAdmin(ctx),
+				Parties:      app.BridgeKeeper.PartiesList(ctx),
+				TssThreshold: app.BridgeKeeper.TssThreshold(ctx),
+				//RelayerAccount: "bridge1m2qc938kek3s8mrng6gvs2g4l324af539jhjqh",
 			}
 			app.BridgeKeeper.SetParams(ctx, bridgeParams)
+
+			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
+		},
+	)
+
+	app.UpgradeKeeper.SetUpgradeHandler(
+		"v12.1.27-rc1",
+		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
+			nftParams := nfttypes.Params{
+				ModuleAdmin:         "bridge1ur9vkyhyzp6zdnfyd0y6vstu9mh9yprayvh3rc",
+				BondDenom:           "abridge",
+				Prefix:              "bridge",
+				NftSequence:         0,
+				TotalVestingTime:    6307200,
+				VestingPeriod:       120,
+				VestingPeriodsLimit: 52560,
+				NftTokenAmount:      "64000000000000000000000",
+				BatchSize:           100,
+				BatchIndex:          0,
+			}
+			app.NFTKeeper.SetParams(ctx, nftParams)
+
+			accumulatorParams := accumulatortypes.Params{
+				SuperAdmin: "bridge1ur9vkyhyzp6zdnfyd0y6vstu9mh9yprayvh3rc",
+			}
+			app.AccumulatorKeeper.SetParams(ctx, accumulatorParams)
+			newRewardsPeerBlock, ok := sdk.NewIntFromString("33290000000000000000")
+			if !ok {
+				panic("invalid new rewards per block")
+			}
+			mintParams := minttypes.Params{
+				MintDenom:            "abridge",
+				HalvingBlocks:        6306900,
+				MaxHalvingPeriods:    7,
+				CurrentHalvingPeriod: 0,
+				BlockReward: sdk.Coin{
+					Denom:  "abridge",
+					Amount: newRewardsPeerBlock,
+				},
+				StartHeight: uint64(plan.Height) - 1,
+			}
+			app.MintKeeper.SetParams(ctx, mintParams)
+
+			bridgeparams := bridgetypes.Params{
+				ModuleAdmin:     "bridge1ur9vkyhyzp6zdnfyd0y6vstu9mh9yprayvh3rc",
+				Parties:         app.BridgeKeeper.PartiesList(ctx),
+				TssThreshold:    app.BridgeKeeper.TssThreshold(ctx),
+				RelayerAccounts: []string{"bridge1m2qc938kek3s8mrng6gvs2g4l324af539jhjqh"},
+			}
+			app.BridgeKeeper.SetParams(ctx, bridgeparams)
+
+			// Set +20% rewards for nft delegators
+			distributionparams := app.DistrKeeper.GetParams(ctx)
+			distributionparams.NftProposerReward = sdk.NewDecWithPrec(20, 2) // 20%
+			app.DistrKeeper.SetParams(ctx, distributionparams)
 
 			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
 		},
