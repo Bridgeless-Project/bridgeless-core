@@ -1,9 +1,6 @@
-package types
+package v24
 
 import (
-	v19 "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/versions/v19"
-	v21 "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/versions/v21"
-	v24 "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/versions/v24"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -23,26 +20,12 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 
 		&MsgSubmitTransactions{},
 		&MsgRemoveTransaction{},
-		&MsgUpdateTransaction{},
 
 		&MsgInsertChain{},
 		&MsgDeleteChain{},
 
 		&MsgDeleteToken{},
 		&MsgInsertToken{},
-
-		&v19.MsgAddTokenInfo{},
-		&v19.MsgInsertChain{},
-		&v19.MsgInsertToken{},
-		&v19.MsgRemoveTokenInfo{},
-		&v19.MsgSubmitTransactions{},
-		&v19.MsgUpdateToken{},
-
-		&v21.MsgAddTokenInfo{},
-		&v21.MsgInsertToken{},
-
-		&v24.MsgAddTokenInfo{},
-		&v24.MsgInsertToken{},
 	)
 	// this line is used by starport scaffolding # 3
 
