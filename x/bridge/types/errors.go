@@ -32,4 +32,5 @@ var (
 	ErrReferralIdMustBePositive     = errorsmod.Register(ModuleName, 1121, "referral id must be positive")
 	ErrTokenIdMustBePositive        = errorsmod.Register(ModuleName, 1122, "token id must be positive")
 	ErrInvalidDataType              = errorsmod.Register(ModuleName, 1123, "invalid data type")
+	ErrTranscationAlreadyProcessed  = errorsmod.Register(ModuleName, 1124, "transaction already processed")
 )
