@@ -53,13 +53,3 @@ func (m msgServer) isRelayerAccount(account string, relayerAccounts []string) bo
 
 	return false
 }
-
-func (m msgServer) isRelayerAccount(account string, relayerAccounts []string) bool {
-	for _, acc := range relayerAccounts {
-		if account == acc {
-			return true
-		}
-	}
-
-	return false
-}
