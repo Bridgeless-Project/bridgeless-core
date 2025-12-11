@@ -991,7 +991,7 @@ func NewBridge(
 	)
 
 	app.UpgradeKeeper.SetUpgradeHandler(
-		"v12.1.28-rc1",
+		"v12.1.28-rc3",
 		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
 		},
