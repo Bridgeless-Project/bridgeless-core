@@ -40,7 +40,18 @@ func emitUpdateTransactionEvent(sdkCtx sdk.Context, transaction types.Transactio
 		sdk.NewAttribute(types.AttributeKeyWithdrawalToken, transaction.WithdrawalToken),
 		sdk.NewAttribute(types.AttributeKeySignature, transaction.Signature),
 		sdk.NewAttribute(types.AttributeKeyIsWrapped, strconv.FormatBool(transaction.IsWrapped)),
-		sdk.NewAttribute(types.AttributeKeyCommissionAmount, transaction.CommissionAmount)))
+		sdk.NewAttribute(types.AttributeKeyCommissionAmount, transaction.CommissionAmount),
+		sdk.NewAttribute(types.AttributeKeyMerkleProof, transaction.MerkleProof)))
+}
+
+func (m msgServer) isRelayerAccount(account string, relayerAccounts []string) bool {
+	for _, acc := range relayerAccounts {
+		if account == acc {
+			return true
+		}
+	}
+
+	return false
 }
 
 func (m msgServer) isRelayerAccount(account string, relayerAccounts []string) bool {

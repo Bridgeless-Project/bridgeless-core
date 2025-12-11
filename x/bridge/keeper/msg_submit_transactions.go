@@ -56,6 +56,7 @@ func emitSubmitEvent(sdkCtx sdk.Context, transaction types.Transaction) {
 		sdk.NewAttribute(types.AttributeKeyWithdrawalToken, transaction.WithdrawalToken),
 		sdk.NewAttribute(types.AttributeKeySignature, transaction.Signature),
 		sdk.NewAttribute(types.AttributeKeyIsWrapped, strconv.FormatBool(transaction.IsWrapped)),
-		sdk.NewAttribute(types.AttributeKeyCommissionAmount, transaction.CommissionAmount)))
+		sdk.NewAttribute(types.AttributeKeyCommissionAmount, transaction.CommissionAmount),
+		sdk.NewAttribute(types.AttributeKeyMerkleProof, transaction.MerkleProof)))
 
 }
