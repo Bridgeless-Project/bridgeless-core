@@ -53,6 +53,7 @@ const (
 	AttributeKeySignature         = "signature"
 	AttributeKeyIsWrapped         = "is_wrapped"
 	AttributeKeyCommissionAmount  = "commission_amount"
+	AttributeKeyMerkleProof       = "merkle_proof"
 )
 
 func Prefix(p string) []byte {

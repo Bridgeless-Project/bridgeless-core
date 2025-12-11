@@ -26,6 +26,7 @@ message Transaction {
   string commission_amount = 15;
   string tx_data = 16;
   uint32 referral_id = 17;
+  string merkle_proof = 18;
 }
 
 message TransactionSubmissions{
