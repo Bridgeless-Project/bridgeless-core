@@ -19,7 +19,7 @@ func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var oldToken oldTypes.Token8
+		var oldToken oldTypes.Token
 		cdc.MustUnmarshal(iterator.Value(), &oldToken)
 
 		newToken := types.Token{
@@ -38,7 +38,7 @@ func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 	return nil
 }
 
-func setTokenPairs(sdkCtx sdk.Context, storeKey storetypes.StoreKey, cdc codec.BinaryCodec, current types.TokenInfo, pairs ...oldTypes.TokenInfo8) {
+func setTokenPairs(sdkCtx sdk.Context, storeKey storetypes.StoreKey, cdc codec.BinaryCodec, current types.TokenInfo, pairs ...oldTypes.TokenInfo) {
 	pStore := prefix.NewStore(sdkCtx.KVStore(storeKey), types.Prefix(types.StoreTokenPairsPrefix))
 	srcBranchStore := prefix.NewStore(pStore, types.TokenPairPrefix(current.ChainId, current.Address))
 
@@ -63,7 +63,7 @@ func setTokenPairs(sdkCtx sdk.Context, storeKey storetypes.StoreKey, cdc codec.B
 
 // getUpdatedTokenInfo iterate over old token info and convert it to new one. Once converted, it sets new token info to new
 // store and returns array of new token info. Also this function sets updated token info to token pairs store.
-func getUpdatedTokenInfo(ctx sdk.Context, token oldTypes.Token8, storeKey storetypes.StoreKey, cdc codec.BinaryCodec) []types.TokenInfo {
+func getUpdatedTokenInfo(ctx sdk.Context, token oldTypes.Token, storeKey storetypes.StoreKey, cdc codec.BinaryCodec) []types.TokenInfo {
 	tokenInfoStore := prefix.NewStore(ctx.KVStore(storeKey), types.Prefix(types.StoreTokenInfoPrefix))
 	tokenInfos := make([]types.TokenInfo, len(token.Info))
 
