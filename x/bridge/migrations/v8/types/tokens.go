@@ -247,8 +247,6 @@ func (m *Token) GetCommissionRate() string {
 	return ""
 }
 
-func init() { proto.RegisterFile("bridge/models/Token.proto", fileDescriptor_68574e97ac2633fb) }
-
 var fileDescriptor_68574e97ac2633fb = []byte{
 	// 499 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x52, 0xc1, 0x8e, 0xd3, 0x30,
