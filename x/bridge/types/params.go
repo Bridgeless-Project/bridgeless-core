@@ -28,7 +28,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 }
 
 // NewParams creates a new Params instance
-func NewParams(moduleAdmin string, parties []*Party, tssThreshold uint32, relayerAccounts []string, epochSequence int64) Params {
+func NewParams(moduleAdmin string, parties []*Party, tssThreshold uint32, relayerAccounts []string, epochSequence uint64) Params {
 	return Params{
 		ModuleAdmin:     moduleAdmin,
 		Parties:         parties,
@@ -123,13 +123,9 @@ func validateRelayerAccounts(i interface{}) error {
 }
 
 func validateEpochSequence(i interface{}) error {
-	seq, ok := i.(int64)
+	_, ok := i.(uint64)
 	if !ok {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
-	}
-
-	if seq < 0 {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid epoch sequence: %d", seq)
 	}
 
 	return nil
