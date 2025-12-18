@@ -23,20 +23,24 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair([]byte(ParamModulePartiesKey), &p.Parties, validateModuleParties),
 		paramtypes.NewParamSetPair([]byte(ParamTssThresholdKey), &p.TssThreshold, validateTssThreshold),
 		paramtypes.NewParamSetPair([]byte(ParamRelayerAccounts), &p.RelayerAccounts, validateRelayerAccounts),
+		paramtypes.NewParamSetPair([]byte(ParamEpochSequence), &p.EpochSequence, validateEpochSequence),
 	}
 }
 
 // NewParams creates a new Params instance
-func NewParams(moduleAdmin string, parties []*Party) Params {
+func NewParams(moduleAdmin string, parties []*Party, tssThreshold uint32, relayerAccounts []string, epochSequence int64) Params {
 	return Params{
-		ModuleAdmin: moduleAdmin,
-		Parties:     parties,
+		ModuleAdmin:     moduleAdmin,
+		Parties:         parties,
+		TssThreshold:    tssThreshold,
+		RelayerAccounts: relayerAccounts,
+		EpochSequence:   epochSequence,
 	}
 }
 
 // DefaultParams returns a default set of parameters
 func DefaultParams() Params {
-	return NewParams("", []*Party{})
+	return NewParams("", []*Party{}, 0, []string{}, 0)
 }
 
 // Validate validates the set of params
@@ -47,6 +51,18 @@ func (p Params) Validate() error {
 
 	if err := validateModuleParties(p.Parties); err != nil {
 		return errorsmod.Wrapf(ErrInvalidPartiesList, "invalid parties list (%s)", err)
+	}
+
+	if err := validateTssThreshold(p.TssThreshold); err != nil {
+		return errorsmod.Wrapf(ErrInvalidTssThreshold, "invalid TssThreshold (%s)", err)
+	}
+
+	if err := validateRelayerAccounts(p.RelayerAccounts); err != nil {
+		return errorsmod.Wrap(err, "invalid relayer accounts")
+	}
+
+	if err := validateEpochSequence(p.EpochSequence); err != nil {
+		return errorsmod.Wrapf(err, "invalid epoch sequence (%d)", p.EpochSequence)
 	}
 
 	return nil
@@ -101,6 +117,19 @@ func validateRelayerAccounts(i interface{}) error {
 		if err != nil {
 			return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid relayer account address: %s", err.Error())
 		}
+	}
+
+	return nil
+}
+
+func validateEpochSequence(i interface{}) error {
+	seq, ok := i.(int64)
+	if !ok {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
+	}
+
+	if seq < 0 {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid epoch sequence: %d", seq)
 	}
 
 	return nil

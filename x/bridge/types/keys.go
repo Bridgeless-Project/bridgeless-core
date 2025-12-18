@@ -25,6 +25,7 @@ const (
 	ParamModulePartiesKey = "Parties"
 	ParamTssThresholdKey  = "TssThreshold"
 	ParamRelayerAccounts  = "RelayerAccounts"
+	ParamEpochSequence    = "EpochSequence"
 
 	// ---- Store Prefixes ------
 	StoreTokenPrefix                  = "token"
