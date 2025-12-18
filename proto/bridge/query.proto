@@ -263,7 +263,7 @@ message QueryGetStopListTxsResponse{
 }
 
 message QueryEpochById {
-  int64 epoch_id = 1;
+  uint64 epoch_id = 1;
 }
 
 message QueryEpochByIdResponse {

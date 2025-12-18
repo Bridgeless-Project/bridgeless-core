@@ -564,7 +564,7 @@ paths:
                 properties:
                   id:
                     type: string
-                    format: int64
+                    format: uint64
                   start_block:
                     type: string
                     format: int64
@@ -773,7 +773,7 @@ paths:
           in: path
           required: true
           type: string
-          format: int64
+          format: uint64
       tags:
         - Query
   /cosmos/bridge/epoches:
@@ -792,7 +792,7 @@ paths:
                   properties:
                     id:
                       type: string
-                      format: int64
+                      format: uint64
                     start_block:
                       type: string
                       format: int64
@@ -1151,7 +1151,7 @@ paths:
                       type: string
                   epoch_sequence:
                     type: string
-                    format: int64
+                    format: uint64
             description: >-
               QueryParamsResponse is response type for the Query/Params RPC
               method.
@@ -51425,7 +51425,7 @@ definitions:
     properties:
       id:
         type: string
-        format: int64
+        format: uint64
       start_block:
         type: string
         format: int64
@@ -51501,7 +51501,7 @@ definitions:
           type: string
       epoch_sequence:
         type: string
-        format: int64
+        format: uint64
     description: Params defines the parameters for the module.
   core.bridge.Party:
     type: object
@@ -51518,7 +51518,7 @@ definitions:
           properties:
             id:
               type: string
-              format: int64
+              format: uint64
             start_block:
               type: string
               format: int64
@@ -51603,7 +51603,7 @@ definitions:
         properties:
           id:
             type: string
-            format: int64
+            format: uint64
           start_block:
             type: string
             format: int64
@@ -52179,7 +52179,7 @@ definitions:
               type: string
           epoch_sequence:
             type: string
-            format: int64
+            format: uint64
     description: QueryParamsResponse is response type for the Query/Params RPC method.
   core.bridge.QueryTransactionByIdResponse:
     type: object

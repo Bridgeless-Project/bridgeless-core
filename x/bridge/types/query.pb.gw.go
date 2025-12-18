@@ -1053,7 +1053,7 @@ func request_Query_GetEpochById_0(ctx context.Context, marshaler runtime.Marshal
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "epoch_id")
 	}
 
-	protoReq.EpochId, err = runtime.Int64(val)
+	protoReq.EpochId, err = runtime.Uint64(val)
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "epoch_id", err)
@@ -1080,7 +1080,7 @@ func local_request_Query_GetEpochById_0(ctx context.Context, marshaler runtime.M
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "epoch_id")
 	}
 
-	protoReq.EpochId, err = runtime.Int64(val)
+	protoReq.EpochId, err = runtime.Uint64(val)
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "epoch_id", err)
