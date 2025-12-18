@@ -8,6 +8,8 @@ import "bridge/models/transaction.proto";
 import "bridge/models/token.proto";
 import "bridge/models/chain.proto";
 import "bridge/models/referrals.proto";
+import "bridge/models/epoch.proto";
+
 
 // this line is used by starport scaffolding # 1
 
@@ -89,6 +91,14 @@ service Query {
 
   rpc GetStopListTxs(QueryGetStopListTxs) returns (QueryGetStopListTxsResponse) {
     option (google.api.http).get = "/cosmos/bridge/stoplist";
+  }
+
+  rpc GetAllEpoches(QueryAllEpoches) returns (QueryAllEpochesResponse) {
+    option (google.api.http).get = "/cosmos/bridge/epoches";
+  }
+
+  rpc GetEpochById(QueryEpochById) returns (QueryEpochByIdResponse) {
+    option (google.api.http).get = "/cosmos/bridge/epoch/{epoch_id}";
   }
 }
 
@@ -252,3 +262,19 @@ message QueryGetStopListTxsResponse{
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
+message QueryEpochById {
+  int64 epoch_id = 1;
+}
+
+message QueryEpochByIdResponse {
+  Epoch epoch = 1 [(gogoproto.nullable) = false];;
+}
+
+message QueryAllEpoches {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllEpochesResponse {
+  repeated Epoch epoches = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
