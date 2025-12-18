@@ -580,6 +580,9 @@ paths:
                     type: array
                     items:
                       type: string
+                  epoch_sequence:
+                    type: string
+                    format: int64
             description: >-
               QueryParamsResponse is response type for the Query/Params RPC
               method.
@@ -50903,6 +50906,9 @@ definitions:
         type: array
         items:
           type: string
+      epoch_sequence:
+        type: string
+        format: int64
     description: Params defines the parameters for the module.
   core.bridge.Party:
     type: object
@@ -51464,6 +51470,9 @@ definitions:
             type: array
             items:
               type: string
+          epoch_sequence:
+            type: string
+            format: int64
     description: QueryParamsResponse is response type for the Query/Params RPC method.
   core.bridge.QueryTransactionByIdResponse:
     type: object

@@ -8,6 +8,12 @@ import "gogoproto/gogo.proto";
 
 option go_package = "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types";
 
+message TransactionIdentifier {
+  string deposit_chain_id = 1;
+  string deposit_tx_hash = 2;
+  uint64 deposit_tx_index = 3;
+}
+
 message Transaction {
   string deposit_chain_id = 1;
   string deposit_tx_hash = 2;
