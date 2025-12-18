@@ -46,3 +46,21 @@ func (k Keeper) GetEpoch(sdkCtx sdk.Context, id uint64) (epoch types.Epoch, foun
 
 	return
 }
+
+func (k Keeper) GetEpochId(ctx sdk.Context) uint64 {
+	params := k.GetParams(ctx)
+	params.EpochSequence += 1
+
+	for {
+		_, ok := k.GetEpoch(ctx, params.EpochSequence)
+		if ok {
+			params.EpochSequence += 1
+			continue
+		}
+
+		break
+	}
+	k.SetParams(ctx, params)
+
+	return params.EpochSequence
+}
