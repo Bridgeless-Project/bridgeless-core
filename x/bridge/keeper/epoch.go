@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"strconv"
+
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -71,4 +73,25 @@ func (k Keeper) CreateEpoch(ctx sdk.Context, startBlock, endBlock int64) {
 		StartBlock: startBlock,
 		EndBlock:   endBlock,
 	})
+}
+
+func (k Keeper) SetNewEpochNeeded(ctx sdk.Context, status bool) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), []byte(types.StoreEpochesPrefix))
+	store.Set([]byte(types.StoreNewEpochNeededKey), []byte(strconv.FormatBool(status)))
+}
+
+func (k Keeper) GetNewEpochNeeded(ctx sdk.Context) (needed bool) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), []byte(types.StoreEpochesPrefix))
+
+	bz := store.Get([]byte(types.StoreNewEpochNeededKey))
+	if bz == nil {
+		return
+	}
+
+	needed, err := strconv.ParseBool(string(bz))
+	if err != nil {
+		return
+	}
+
+	return needed
 }

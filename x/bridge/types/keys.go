@@ -38,6 +38,7 @@ const (
 	StoreReferralRewardsPrefix        = "referral_rewards"
 	StoreStopListTransactionsPrefix   = "stop_list_transactions"
 	StoreEpochesPrefix                = "epoches"
+	StoreNewEpochNeededKey            = "new_epoch_needed_key"
 
 	// Attributes keys for bridge events
 	AttributeKeyDepositTxHash     = "deposit_tx_hash"
