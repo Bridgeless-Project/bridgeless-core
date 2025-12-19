@@ -275,6 +275,6 @@ message QueryAllEpoches {
 }
 
 message QueryAllEpochesResponse {
-  repeated Epoch epoches = 1;
-  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+  repeated Epoch epoches = 1 [(gogoproto.nullable) = false];;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
