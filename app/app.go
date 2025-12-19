@@ -806,6 +806,7 @@ func NewBridge(
 		nfttypes.ModuleName,
 		bridgetypes.ModuleName,
 		multisigtypes.ModuleName,
+		bridgetypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are

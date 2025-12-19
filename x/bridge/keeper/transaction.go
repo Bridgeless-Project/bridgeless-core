@@ -82,6 +82,18 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 	}
 
 	k.SetTransaction(ctx, *transaction)
+	currentEpoch, ok := k.GetEpoch(ctx, k.GetParams(ctx).EpochSequence)
+	if !ok {
+		k.SetNewEpochNeeded(ctx, true)
+		return types.ErrEpochNotFound
+	}
+
+	currentEpoch.Transactions = append(currentEpoch.Transactions, &types.TransactionIdentifier{
+		DepositChainId: transaction.DepositChainId,
+		DepositTxHash:  transaction.DepositTxHash,
+		DepositTxIndex: transaction.DepositTxIndex,
+	})
+
 	emitSubmitEvent(ctx, *transaction)
 
 	if types.IsDefaultReferralId(transaction.ReferralId) {
