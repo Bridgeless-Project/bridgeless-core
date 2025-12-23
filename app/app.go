@@ -483,6 +483,8 @@ func NewBridge(
 		app.StakingKeeper, app.NFTKeeper, authtypes.FeeCollectorName,
 	)
 
+	app.NFTKeeper.SetHooks(app.DistrKeeper.Hooks())
+
 	app.SlashingKeeper = slashingkeeper.NewKeeper(
 		appCodec, keys[slashingtypes.StoreKey], app.StakingKeeper, app.GetSubspace(slashingtypes.ModuleName),
 	)
