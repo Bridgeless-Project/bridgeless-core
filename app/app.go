@@ -1006,6 +1006,13 @@ func NewBridge(
 		},
 	)
 
+	app.UpgradeKeeper.SetUpgradeHandler(
+		"v12.1.28-rc6",
+		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
+			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
+		},
+	)
+
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
 			tmos.Exit(err.Error())
