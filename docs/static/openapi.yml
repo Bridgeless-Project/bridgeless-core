@@ -1849,6 +1849,8 @@ paths:
                     referral_id:
                       type: integer
                       format: int64
+                    merkle_proof:
+                      type: string
               pagination:
                 type: object
                 properties:
@@ -2170,6 +2172,8 @@ paths:
                   referral_id:
                     type: integer
                     format: int64
+                  merkle_proof:
+                    type: string
         default:
           description: An unexpected error response.
           schema:
@@ -3444,6 +3448,8 @@ paths:
                     referral_id:
                       type: integer
                       format: int64
+                    merkle_proof:
+                      type: string
                 description: Transactions is a list of transactions.
               pagination:
                 type: object
@@ -3770,6 +3776,8 @@ paths:
                   referral_id:
                     type: integer
                     format: int64
+                  merkle_proof:
+                    type: string
             description: >-
               QueryTransactionByIdResponse is response type for the
               Query/TransactionById RPC method.
@@ -26071,7 +26079,7 @@ paths:
           type: boolean
       tags:
         - Query
-  '/cosmos/nft/owners/{owner}':
+  '/cosmos/nft/owners/{owner}/nfts':
     get:
       operationId: CosmosNftGetAllNFTsByOwner
       responses:
@@ -51150,6 +51158,8 @@ definitions:
           referral_id:
             type: integer
             format: int64
+          merkle_proof:
+            type: string
   core.bridge.QueryGetStopListTxsResponse:
     type: object
     properties:
@@ -51195,6 +51205,8 @@ definitions:
             referral_id:
               type: integer
               format: int64
+            merkle_proof:
+              type: string
       pagination:
         type: object
         properties:
@@ -51496,6 +51508,8 @@ definitions:
           referral_id:
             type: integer
             format: int64
+          merkle_proof:
+            type: string
     description: >-
       QueryTransactionByIdResponse is response type for the
       Query/TransactionById RPC method.
@@ -51544,6 +51558,8 @@ definitions:
             referral_id:
               type: integer
               format: int64
+            merkle_proof:
+              type: string
         description: Transactions is a list of transactions.
       pagination:
         type: object
@@ -51707,6 +51723,8 @@ definitions:
       referral_id:
         type: integer
         format: int64
+      merkle_proof:
+        type: string
   core.bridge.TransactionSubmissions:
     type: object
     properties:
@@ -65612,6 +65630,8 @@ definitions:
             type: string
             format: uint64
     description: QueryParamsResponse is the response type for the Query/Params RPC method.
+  cosmos.nft.MsgBecameValidatorResponse:
+    type: object
   cosmos.nft.MsgDelegateResponse:
     type: object
   cosmos.nft.MsgMintResponse:
@@ -65619,6 +65639,8 @@ definitions:
   cosmos.nft.MsgRedelegateResponse:
     type: object
   cosmos.nft.MsgSendResponse:
+    type: object
+  cosmos.nft.MsgStakingWithdrawalRewardsResponse:
     type: object
   cosmos.nft.MsgUndelegateResponse:
     type: object
@@ -65984,6 +66006,48 @@ definitions:
             type: string
             format: uint64
     description: QueryParamsResponse is response type for the Query/Params RPC method.
+  cosmos.staking.v1beta1.CommissionRates:
+    type: object
+    properties:
+      rate:
+        type: string
+        description: 'rate is the commission rate charged to delegators, as a fraction.'
+      max_rate:
+        type: string
+        description: >-
+          max_rate defines the maximum commission rate which validator can ever
+          charge, as a fraction.
+      max_change_rate:
+        type: string
+        description: >-
+          max_change_rate defines the maximum daily increase of the validator
+          commission, as a fraction.
+    description: >-
+      CommissionRates defines the initial commission rates to be used for
+      creating
+
+      a validator.
+  cosmos.staking.v1beta1.Description:
+    type: object
+    properties:
+      moniker:
+        type: string
+        description: moniker defines a human-readable name for the validator.
+      identity:
+        type: string
+        description: >-
+          identity defines an optional identity signature (ex. UPort or
+          Keybase).
+      website:
+        type: string
+        description: website defines an optional website link.
+      security_contact:
+        type: string
+        description: security_contact defines an optional email for security contact.
+      details:
+        type: string
+        description: details define other optional details.
+    description: Description defines a validator description.
   cosmos.params.v1beta1.ParamChange:
     type: object
     properties:
@@ -66323,27 +66387,6 @@ definitions:
         format: date-time
         description: update_time is the last time the commission rate was changed.
     description: Commission defines commission parameters for a given validator.
-  cosmos.staking.v1beta1.CommissionRates:
-    type: object
-    properties:
-      rate:
-        type: string
-        description: 'rate is the commission rate charged to delegators, as a fraction.'
-      max_rate:
-        type: string
-        description: >-
-          max_rate defines the maximum commission rate which validator can ever
-          charge, as a fraction.
-      max_change_rate:
-        type: string
-        description: >-
-          max_change_rate defines the maximum daily increase of the validator
-          commission, as a fraction.
-    description: >-
-      CommissionRates defines the initial commission rates to be used for
-      creating
-
-      a validator.
   cosmos.staking.v1beta1.Delegation:
     type: object
     properties:
@@ -66408,27 +66451,6 @@ definitions:
     description: |-
       DelegationResponse is equivalent to Delegation except that it contains a
       balance in addition to shares which is more suitable for client responses.
-  cosmos.staking.v1beta1.Description:
-    type: object
-    properties:
-      moniker:
-        type: string
-        description: moniker defines a human-readable name for the validator.
-      identity:
-        type: string
-        description: >-
-          identity defines an optional identity signature (ex. UPort or
-          Keybase).
-      website:
-        type: string
-        description: website defines an optional website link.
-      security_contact:
-        type: string
-        description: security_contact defines an optional email for security contact.
-      details:
-        type: string
-        description: details define other optional details.
-    description: Description defines a validator description.
   cosmos.staking.v1beta1.HistoricalInfo:
     type: object
     properties:
