@@ -236,3 +236,8 @@ func (k Keeper) WriteAcknowledgement(ctx sdk.Context, channelCap *capabilitytype
 func (k Keeper) GetAppVersion(ctx sdk.Context, portID, channelID string) (string, bool) {
 	return k.ics4Wrapper.GetAppVersion(ctx, portID, channelID)
 }
+
+// ProcessStakingRewardsWithdrawal is used by NFT module to withdraw staking rewards. It allows to avoid importing the distribution module there.
+func (h Hooks) ProcessStakingRewardsWithdrawal(_ sdk.Context, _ sdk.AccAddress, _ sdk.ValAddress) (sdk.Coins, error) {
+	return nil, nil
+}
