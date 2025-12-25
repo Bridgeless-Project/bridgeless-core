@@ -25,6 +25,7 @@ const (
 	ParamModulePartiesKey = "Parties"
 	ParamTssThresholdKey  = "TssThreshold"
 	ParamRelayerAccounts  = "RelayerAccounts"
+	ParamEpochSequence    = "EpochSequence"
 
 	// ---- Store Prefixes ------
 	StoreTokenPrefix                  = "token"
@@ -36,6 +37,8 @@ const (
 	StoreReferralPrefix               = "referral"
 	StoreReferralRewardsPrefix        = "referral_rewards"
 	StoreStopListTransactionsPrefix   = "stop_list_transactions"
+	StoreEpochesPrefix                = "epoches"
+	StoreNewEpochNeededKey            = "new_epoch_needed_key"
 
 	// Attributes keys for bridge events
 	AttributeKeyDepositTxHash     = "deposit_tx_hash"
@@ -78,6 +81,10 @@ func KeyTokenInfo(chain, addr string) []byte {
 
 func KeyChain(chain string) []byte {
 	return []byte(chain)
+}
+
+func KeyEpoch(epoch uint64) []byte {
+	return []byte(strconv.FormatUint(epoch, 10))
 }
 
 func KeyReferralRewards(referraId uint32, tokenId uint64) []byte {
