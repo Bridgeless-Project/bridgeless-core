@@ -66,6 +66,11 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 		txSubmissions.TxHash = k.TxHash(transaction).String()
 	}
 
+	_, ok := k.GetTransaction(ctx, types.TransactionId(transaction))
+	if ok {
+		return nil
+	}
+
 	// If tx has been submitted before with the same address new submission is rejected
 	if isSubmitter(txSubmissions.Submitters, submitter) {
 		return errorsmod.Wrap(types.ErrTranscationAlreadySubmitted,
