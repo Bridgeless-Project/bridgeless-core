@@ -25266,6 +25266,29 @@ paths:
                   start_vesting_block:
                     type: string
                     format: int64
+                  vesting_periods_limit:
+                    type: string
+                    format: int64
+                  is_frozen:
+                    type: boolean
+                  total_vesting_time:
+                    type: string
+                    format: int64
+                  token_amount:
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                    description: >-
+                      Coin defines a token with a denomination and an amount.
+
+
+                      NOTE: The amount field is an Int which implements the
+                      custom method
+
+                      signatures required by gogoproto.
                 description: NFT defines the NFT.
         default:
           description: An unexpected error response.
@@ -25521,6 +25544,29 @@ paths:
                     start_vesting_block:
                       type: string
                       format: int64
+                    vesting_periods_limit:
+                      type: string
+                      format: int64
+                    is_frozen:
+                      type: boolean
+                    total_vesting_time:
+                      type: string
+                      format: int64
+                    token_amount:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
                   description: NFT defines the NFT.
               pagination:
                 type: object
@@ -26140,6 +26186,29 @@ paths:
                     start_vesting_block:
                       type: string
                       format: int64
+                    vesting_periods_limit:
+                      type: string
+                      format: int64
+                    is_frozen:
+                      type: boolean
+                    total_vesting_time:
+                      type: string
+                      format: int64
+                    token_amount:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
                   description: NFT defines the NFT.
               pagination:
                 type: object
@@ -26448,7 +26517,7 @@ paths:
                     format: int64
                   vesting_periods_limit:
                     type: string
-                    format: uint64
+                    format: int64
                   nft_token_amount:
                     type: string
                   batch_size:
@@ -65690,6 +65759,26 @@ definitions:
       start_vesting_block:
         type: string
         format: int64
+      vesting_periods_limit:
+        type: string
+        format: int64
+      is_frozen:
+        type: boolean
+      total_vesting_time:
+        type: string
+        format: int64
+      token_amount:
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
     description: NFT defines the NFT.
   cosmos.nft.Params:
     type: object
@@ -65711,7 +65800,7 @@ definitions:
         format: int64
       vesting_periods_limit:
         type: string
-        format: uint64
+        format: int64
       nft_token_amount:
         type: string
       batch_size:
@@ -65776,6 +65865,29 @@ definitions:
             start_vesting_block:
               type: string
               format: int64
+            vesting_periods_limit:
+              type: string
+              format: int64
+            is_frozen:
+              type: boolean
+            total_vesting_time:
+              type: string
+              format: int64
+            token_amount:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
           description: NFT defines the NFT.
       pagination:
         type: object
@@ -65858,6 +65970,29 @@ definitions:
             start_vesting_block:
               type: string
               format: int64
+            vesting_periods_limit:
+              type: string
+              format: int64
+            is_frozen:
+              type: boolean
+            total_vesting_time:
+              type: string
+              format: int64
+            token_amount:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
           description: NFT defines the NFT.
       pagination:
         type: object
@@ -65971,6 +66106,29 @@ definitions:
           start_vesting_block:
             type: string
             format: int64
+          vesting_periods_limit:
+            type: string
+            format: int64
+          is_frozen:
+            type: boolean
+          total_vesting_time:
+            type: string
+            format: int64
+          token_amount:
+            type: object
+            properties:
+              denom:
+                type: string
+              amount:
+                type: string
+            description: >-
+              Coin defines a token with a denomination and an amount.
+
+
+              NOTE: The amount field is an Int which implements the custom
+              method
+
+              signatures required by gogoproto.
         description: NFT defines the NFT.
   cosmos.nft.QueryParamsResponse:
     type: object
@@ -65996,7 +66154,7 @@ definitions:
             format: int64
           vesting_periods_limit:
             type: string
-            format: uint64
+            format: int64
           nft_token_amount:
             type: string
           batch_size:

@@ -205,8 +205,8 @@ github.com/Azure/azure-sdk-for-go/sdk/internal v0.8.3/go.mod h1:KLF4gFr6DcKFZwSu
 github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v0.3.0/go.mod h1:tPaiy8S5bQ+S5sOiDlINkp7+Ef339+Nz5L5XO+cnOHo=
 github.com/Azure/go-ansiterm v0.0.0-20210617225240-d185dfc1b5a1 h1:UQHMgLO+TxOElx5B5HZ4hJQsoJ/PvUvKRhJHDQXO8P8=
 github.com/Azure/go-ansiterm v0.0.0-20210617225240-d185dfc1b5a1/go.mod h1:xomTg63KZ2rFqZQzSB4Vz2SUXa1BpHTVz9L5PTmPC4E=
-github.com/Bridgeless-Project/cosmos-sdk v0.46.40 h1:BE+ePMBcKUi9cmjOnrgMug3tBoqCWsKjx0rr5456Tu4=
-github.com/Bridgeless-Project/cosmos-sdk v0.46.40/go.mod h1:Fd+nusYZsDtQcl1nya1cXPlmH0PyTkit3YJDRdtmM1k=
+github.com/Bridgeless-Project/cosmos-sdk v0.46.41-rc2 h1:XCNnW2d9/NXKBa6I9S7uv7PRmmKsJ+2d9Q9EwMsbGy8=
+github.com/Bridgeless-Project/cosmos-sdk v0.46.41-rc2/go.mod h1:Fd+nusYZsDtQcl1nya1cXPlmH0PyTkit3YJDRdtmM1k=
 github.com/Bridgeless-Project/ibc-go/v6 v6.1.15 h1:N9Wj3d1aht7UIPcwz0hs4kTFo8GV/lOWS7Js8CM2q5I=
 github.com/Bridgeless-Project/ibc-go/v6 v6.1.15/go.mod h1:aZD34GwyqtEsgQKYNzUpqfgOpP/ck1STF5GOwxUa4Oo=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
