@@ -12,4 +12,5 @@ message Params {
   repeated Party parties = 2;
   uint32 tss_threshold = 3;
   repeated string relayer_accounts = 4;
+  uint32 epoch = 5;
 }
