@@ -33,6 +33,7 @@ message Transaction {
   string tx_data = 16;
   uint32 referral_id = 17;
   string merkle_proof = 18;
+  uint32 epoch_id = 19;
 }
 
 message TransactionSubmissions{

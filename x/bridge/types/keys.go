@@ -38,6 +38,7 @@ const (
 	StoreStopListTransactionsPrefix   = "stop_list_transactions"
 	StoreEpochPrefix                  = "epoch"
 	StoreEpochChainSignaturePrefix    = "epoch_chain_signature"
+	StoreEpochTransactionPrefix       = "epoch_transaction"
 
 	// Attributes keys for bridge events
 	AttributeKeyDepositTxHash     = "deposit_tx_hash"
@@ -110,4 +111,8 @@ func KeyEpoch(epochId uint32) []byte {
 
 func KeyEpochChainSignature(chain string, epochId uint32) []byte {
 	return []byte(fmt.Sprintf("%s/%d", chain, epochId))
+}
+
+func KeyEpochTransaction(epochId uint32, txNonce uint64, txHash, chainId string) []byte {
+	return []byte(fmt.Sprintf("%s/%s/%s/%d", txHash, txNonce, chainId, epochId))
 }

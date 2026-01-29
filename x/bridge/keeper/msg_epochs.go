@@ -101,7 +101,8 @@ func (m msgServer) FinishEpochMigration(goCtx context.Context, msg *types.MsgFin
 	return &types.MsgFinishEpochMigrationResponse{}, nil
 }
 
-func determineEpochSigners(tssParties []*types.Party, tssInfo []types.TSSInfo) (result []*types.Party, err error) {
+func determineEpochSigners(tssParties []*types.Party, tssInfo []types.TSSInfo) ([]*types.Party, error) {
+	var err error
 	validate := func(tssParties []*types.Party, info types.TSSInfo) ([]*types.Party, error) {
 		for i, party := range tssParties {
 			if party.Address == info.Address {
@@ -118,11 +119,11 @@ func determineEpochSigners(tssParties []*types.Party, tssInfo []types.TSSInfo) (
 	}
 
 	for _, info := range tssInfo {
-		result, err = validate(result, info)
+		tssParties, err = validate(tssParties, info)
 		if err != nil {
 			return nil, errorsmod.Wrap(types.ErrInvalidPartiesList, "failed to validate TSS parties list")
 		}
 	}
 
-	return result, nil
+	return tssParties, nil
 }
