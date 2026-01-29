@@ -262,7 +262,7 @@ message QueryGetStopListTxsResponse{
 }
 
 message QueryGetEpochTransactions  {
-   uint64 epoch_id = 1;
+   uint32 epoch_id = 1;
    cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
@@ -272,7 +272,7 @@ message QueryGetEpochTransactionsResponse{
 }
 
 message QueryGetEpoch {
-  uint64 epoch_id = 1;
+  uint32 epoch_id = 1;
 }
 
 message QueryGetEpochByIdResponse {

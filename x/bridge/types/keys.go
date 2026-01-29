@@ -36,6 +36,8 @@ const (
 	StoreReferralPrefix               = "referral"
 	StoreReferralRewardsPrefix        = "referral_rewards"
 	StoreStopListTransactionsPrefix   = "stop_list_transactions"
+	StoreEpochPrefix                  = "epoch"
+	StoreEpochChainSignaturePrefix    = "epoch_chain_signature"
 
 	// Attributes keys for bridge events
 	AttributeKeyDepositTxHash     = "deposit_tx_hash"
@@ -54,6 +56,8 @@ const (
 	AttributeKeyIsWrapped         = "is_wrapped"
 	AttributeKeyCommissionAmount  = "commission_amount"
 	AttributeKeyMerkleProof       = "merkle_proof"
+	AttributeEpochId              = "epoch_id"
+	AttributeTssInfo              = "tss_info"
 )
 
 func Prefix(p string) []byte {
@@ -96,4 +100,14 @@ func KeyTransaction(id string) []byte {
 
 func KeyTransactionSubmissions(txHash string) []byte {
 	return []byte(txHash)
+}
+
+func KeyEpoch(epochId uint32) []byte {
+	bytes := make([]byte, 4)
+	binary.LittleEndian.PutUint32(bytes, epochId)
+	return bytes
+}
+
+func KeyEpochChainSignature(chain string, epochId uint32) []byte {
+	return []byte(fmt.Sprintf("%s/%d", chain, epochId))
 }

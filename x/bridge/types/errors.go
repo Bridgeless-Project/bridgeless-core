@@ -32,4 +32,7 @@ var (
 	ErrReferralIdMustBePositive     = errorsmod.Register(ModuleName, 1121, "referral id must be positive")
 	ErrTokenIdMustBePositive        = errorsmod.Register(ModuleName, 1122, "token id must be positive")
 	ErrInvalidDataType              = errorsmod.Register(ModuleName, 1123, "invalid data type")
+	ErrInvalidEpochID               = errorsmod.Register(ModuleName, 1124, "invalid epoch ID")
+	ErrPackEvent                    = errorsmod.Register(ModuleName, 1125, "failed to pack event")
+	ErrEpochNotFound                = errorsmod.Register(ModuleName, 1126, "epoch not found")
 )
