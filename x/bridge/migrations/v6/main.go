@@ -2,6 +2,7 @@ package v6
 
 import (
 	"fmt"
+
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
@@ -17,23 +18,24 @@ func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 
 	defer iterator.Close()
 
-	for ; iterator.Valid(); iterator.Next() {
-
-		// get oldTx data with unnecessary commission_amount field
-		var oldTx txSubmissions
-		cdc.MustUnmarshal(iterator.Value(), &oldTx)
-
-		newTx := types.TransactionSubmissions{
-			TxHash:     oldTx.TxHash,
-			Submitters: oldTx.Submitters,
-		}
-
-		// set new transaction instead of old one
-		txStore.Set(
-			[]byte(oldTx.TxHash),
-			cdc.MustMarshal(&newTx),
-		)
-	}
+	// NOTE: comment out migration
+	//for ; iterator.Valid(); iterator.Next() {
+	//
+	//	// get oldTx data with unnecessary commission_amount field
+	//	var oldTx txSubmissions
+	//	cdc.MustUnmarshal(iterator.Value(), &oldTx)
+	//
+	//	newTx := types.TransactionSubmissions{
+	//		TxHash:     oldTx.TxHash,
+	//		Submitters: oldTx.Submitters,
+	//	}
+	//
+	//	// set new transaction instead of old one
+	//	txStore.Set(
+	//		[]byte(oldTx.TxHash),
+	//		cdc.MustMarshal(&newTx),
+	//	)
+	//}
 
 	return nil
 }
