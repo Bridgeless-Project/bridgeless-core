@@ -46,6 +46,7 @@ func emitRemoveTransactionEvent(sdkCtx sdk.Context, transaction types.Transactio
 		sdk.NewAttribute(types.AttributeKeySignature, transaction.Signature),
 		sdk.NewAttribute(types.AttributeKeyIsWrapped, strconv.FormatBool(transaction.IsWrapped)),
 		sdk.NewAttribute(types.AttributeKeyCommissionAmount, transaction.CommissionAmount),
+		sdk.NewAttribute(types.AttributeKeyMerkleProof, transaction.MerkleProof),
 		sdk.NewAttribute(types.AttributeEpochId, big.NewInt(int64(transaction.EpochId)).String())))
 }
 

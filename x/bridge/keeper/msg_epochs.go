@@ -25,10 +25,6 @@ func (m msgServer) StartEpoch(goCtx context.Context, msg *types.MsgStartEpoch) (
 		return nil, errorsmod.Wrapf(types.ErrPermissionDenied, "only module admin can start a new epoch")
 	}
 
-	if params.Epoch+1 != msg.EpochId {
-		return nil, errorsmod.Wrapf(types.ErrInvalidEpochID, "invalid epoch ID: expected %d, got %d", params.Epoch+1, msg.EpochId)
-	}
-
 	_, found := m.Keeper.GetEpoch(ctx, msg.EpochId+1)
 	if found {
 		return nil, errorsmod.Wrapf(types.ErrInvalidEpochID, "epoch %d already started", msg.EpochId)
@@ -72,7 +68,7 @@ func (m msgServer) SetEpochSignature(goCtx context.Context, msg *types.MsgSetEpo
 	}
 
 	params := m.Keeper.GetParams(ctx)
-	isReadyTomigration := true
+	isReadyToMigration := true
 	for _, sig := range msg.EpochChainSignatures {
 		_, found := m.Keeper.GetEpoch(ctx, sig.EpochId)
 		if !found {
@@ -94,7 +90,7 @@ func (m msgServer) SetEpochSignature(goCtx context.Context, msg *types.MsgSetEpo
 		m.Keeper.SetEpochChainSignatureSubmission(ctx, sig.EpochId, sig.ChainType, submissions)
 
 		if len(submissions.Submitters) < int(params.TssThreshold+1) {
-			isReadyTomigration = false
+			isReadyToMigration = false
 			continue
 		}
 		if sig.Address != "" {
@@ -108,7 +104,7 @@ func (m msgServer) SetEpochSignature(goCtx context.Context, msg *types.MsgSetEpo
 		m.Keeper.SetEpochChainSignature(ctx, &sig)
 	}
 
-	if isReadyTomigration {
+	if isReadyToMigration {
 		epoch, _ := m.Keeper.GetEpoch(ctx, msg.EpochChainSignatures[0].EpochId)
 		epoch.Status = types.EpochStatus_FINALIZING
 		m.Keeper.SetEpoch(ctx, &epoch)
