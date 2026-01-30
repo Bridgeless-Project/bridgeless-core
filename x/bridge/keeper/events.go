@@ -73,7 +73,7 @@ func emitSubmitEvent(sdkCtx sdk.Context, transaction types.Transaction) {
 
 func emitStartEpochEvent(sdkCtx sdk.Context, epochId uint32, info string) {
 	sdkCtx.EventManager().EmitEvent(
-		sdk.NewEvent(types.EventType_DEPOSIT_SUBMITTED.String(),
+		sdk.NewEvent(types.EventType_STARTED_NEW_EPOCH.String(),
 			sdk.NewAttribute(types.AttributeEpochId, big.NewInt(int64(epochId)).String()),
 			sdk.NewAttribute(types.AttributeTssInfo, info),
 		),

@@ -125,7 +125,7 @@ func determineEpochSigners(tssParties []*types.Party, tssInfo []types.TSSInfo) (
 				if info.Active {
 					return nil, errorsmod.Wrap(types.ErrInvalidPartiesList, "duplicate active party found")
 				}
-				tssParties = slices.Delete(tssParties, i, 1)
+				tssParties = slices.Delete(tssParties, i, i+1)
 				return tssParties, nil
 			}
 		}
