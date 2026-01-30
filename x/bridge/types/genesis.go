@@ -67,12 +67,12 @@ func (gs GenesisState) Validate() error {
 
 	txsSubmissions := make(map[string]struct{})
 	for _, txSubmissions := range gs.TransactionsSubmissions {
-		if _, ok := txsSubmissions[txSubmissions.TxHash]; ok {
-			return errorsmod.Wrapf(bridgeTypes.ErrDuplicatedValue, "duplicate tx hash: %v", txSubmissions.TxHash)
+		if _, ok := txsSubmissions[txSubmissions.Hash]; ok {
+			return errorsmod.Wrapf(bridgeTypes.ErrDuplicatedValue, "duplicate tx hash: %v", txSubmissions.Hash)
 		}
 
 		if err := validateTransactionSubmissions(&txSubmissions); err != nil {
-			return errorsmod.Wrapf(err, "invalid tx submissions %v", txSubmissions.TxHash)
+			return errorsmod.Wrapf(err, "invalid tx submissions %v", txSubmissions.Hash)
 		}
 	}
 

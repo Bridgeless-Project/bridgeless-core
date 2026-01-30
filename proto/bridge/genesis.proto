@@ -17,7 +17,7 @@ message GenesisState {
   repeated Chain chains = 2 [(gogoproto.nullable) = false];
   repeated Token tokens = 3 [(gogoproto.nullable) = false];
   repeated Transaction transactions = 4 [(gogoproto.nullable) = false];
-  repeated TransactionSubmissions transactions_submissions = 5 [(gogoproto.nullable) = false];
+  repeated Submissions transactions_submissions = 5 [(gogoproto.nullable) = false];
   repeated Referral referrals = 6 [(gogoproto.nullable) = false];
   repeated ReferralRewards referralsRewards = 7 [(gogoproto.nullable) = false];
   // this line is used by starport scaffolding # genesis/proto/state

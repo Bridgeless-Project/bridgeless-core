@@ -15,6 +15,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	k.SetParams(ctx, genState.Params)
 	for _, chain := range genState.Chains {
 		k.SetChain(ctx, chain)
+		k.SetChainByType(ctx, chain)
 	}
 	for _, token := range genState.Tokens {
 		k.SetToken(ctx, token)
@@ -25,6 +26,13 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	}
 	for _, tx := range genState.Transactions {
 		k.SetTransaction(ctx, tx)
+		if tx.EpochId != 0 {
+			k.SetEpochTransaction(ctx, tx.EpochId, types.TransactionIdentifier{
+				DepositTxHash:  tx.DepositTxHash,
+				DepositTxIndex: tx.DepositTxIndex,
+				DepositChainId: tx.DepositChainId,
+			})
+		}
 	}
 
 	for _, txSubmissions := range genState.TransactionsSubmissions {

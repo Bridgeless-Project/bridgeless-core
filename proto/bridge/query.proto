@@ -7,6 +7,7 @@ import "bridge/params.proto";
 import "bridge/models/transaction.proto";
 import "bridge/models/token.proto";
 import "bridge/models/chain.proto";
+import "bridge/models/epoch.proto";
 import "bridge/models/referrals.proto";
 
 // this line is used by starport scaffolding # 1
@@ -89,6 +90,18 @@ service Query {
 
   rpc GetStopListTxs(QueryGetStopListTxs) returns (QueryGetStopListTxsResponse) {
     option (google.api.http).get = "/cosmos/bridge/stoplist";
+  }
+
+  rpc GetEpochTransactions(QueryGetEpochTransactions) returns (QueryGetEpochTransactionsResponse) {
+    option (google.api.http).get = "/cosmos/bridge/epoch/{epoch_id}/transaction";
+  }
+
+  rpc GetEpochById(QueryGetEpoch) returns (QueryGetEpochByIdResponse) {
+    option (google.api.http).get = "/cosmos/bridge/epoch/{epoch_id}";
+  }
+
+  rpc GetChainsByType(QueryGetChainsByType) returns (QueryGetChainsByTypeResponse) {
+    option (google.api.http).get = "/cosmos/bridge/chains/type/{chain_type}";
   }
 }
 
@@ -184,7 +197,7 @@ message QueryGetTxsSubmissions {
 }
 
 message QueryGetTxsSubmissionsResponse {
-  repeated TransactionSubmissions txs_submissions = 1 [(gogoproto.nullable) = false];
+  repeated Submissions txs_submissions = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
@@ -193,7 +206,7 @@ message QueryGetTxSubmissionsByHash{
 }
 
 message QueryGetTxSubmissionsByHashResponse{
-  TransactionSubmissions tx_submissions = 1[(gogoproto.nullable) = false];;
+  Submissions tx_submissions = 1[(gogoproto.nullable) = false];;
 }
 
 message QueryGetReferralById {
@@ -249,5 +262,33 @@ message QueryGetStopListTxs {
 
 message QueryGetStopListTxsResponse{
   repeated Transaction transactions = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetEpochTransactions  {
+   uint32 epoch_id = 1;
+   cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryGetEpochTransactionsResponse{
+  repeated TransactionIdentifier transactions = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetEpoch {
+  uint32 epoch_id = 1;
+}
+
+message QueryGetEpochByIdResponse {
+  Epoch epoch = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetChainsByType {
+  ChainType chain_type = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryGetChainsByTypeResponse {
+  repeated Chain chains = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
