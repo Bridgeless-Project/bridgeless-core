@@ -123,6 +123,6 @@ func KeyEpochChainSignatureSubmission(chainType ChainType, epochId uint32, hash 
 	return []byte(fmt.Sprintf("%d/%d/%s", chainType, epochId, hash))
 }
 
-func KeyEpochTransaction(epochId uint32, txNonce uint64, txHash string, chainType ChainType) []byte {
-	return []byte(fmt.Sprintf("%s/%s/%s/%d", txHash, txNonce, chainType, epochId))
+func KeyEpochTransaction(epochId uint32, txNonce uint64, txHash string) []byte {
+	return []byte(fmt.Sprintf("%s/%s/%s/%d", txHash, txNonce, epochId))
 }

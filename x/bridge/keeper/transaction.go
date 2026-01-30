@@ -126,12 +126,7 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 		return nil
 	}
 
-	depositChain, found := k.GetChain(ctx, transaction.DepositChainId)
-	if !found {
-		return errorsmod.Wrap(types.ErrChainNotFound, "deposit chain not found")
-	}
-
-	k.SetEpochTransaction(ctx, transaction.EpochId, depositChain.Type, types.TransactionIdentifier{
+	k.SetEpochTransaction(ctx, transaction.EpochId, types.TransactionIdentifier{
 		DepositTxHash:  transaction.DepositTxHash,
 		DepositTxIndex: transaction.DepositTxIndex,
 		DepositChainId: transaction.DepositChainId,
@@ -199,12 +194,7 @@ func (k Keeper) DeleteTx(ctx sdk.Context, depositTxHash string, depositTxIndex u
 	}
 
 	if transaction.EpochId != 0 {
-		depositChain, found := k.GetChain(ctx, transaction.DepositChainId)
-		if !found {
-			return errorsmod.Wrap(types.ErrChainNotFound, "deposit chain not found")
-		}
-
-		k.RemoveEpochTransaction(ctx, transaction.EpochId, depositChain.Type, types.TransactionIdentifier{
+		k.RemoveEpochTransaction(ctx, transaction.EpochId, types.TransactionIdentifier{
 			DepositTxHash:  transaction.DepositTxHash,
 			DepositTxIndex: transaction.DepositTxIndex,
 			DepositChainId: transaction.DepositChainId,

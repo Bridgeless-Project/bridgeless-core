@@ -10,8 +10,18 @@ import (
 )
 
 func (k queryServer) GetEpochTransactions(goctx context.Context, req *types.QueryGetEpochTransactions) (*types.QueryGetEpochTransactionsResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goctx)
+
+	txs, pageResponce, err := k.Keeper.GetPaginatedEpochTransactions(ctx, req.EpochId, req.Pagination)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryGetEpochTransactionsResponse{Transactions: txs, Pagination: pageResponce}, nil
 }
 
 func (k queryServer) GetEpochById(goctx context.Context, req *types.QueryGetEpoch) (*types.QueryGetEpochByIdResponse, error) {

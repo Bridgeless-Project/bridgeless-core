@@ -189,7 +189,7 @@ func (m *MsgVote) GetOption() VoteOption {
 	if m != nil {
 		return m.Option
 	}
-	return VoteOption_YES
+	return VoteOption_NO
 }
 
 type MsgVoteResponse struct {

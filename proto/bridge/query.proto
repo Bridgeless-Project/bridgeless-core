@@ -99,6 +99,8 @@ service Query {
   rpc GetEpochById(QueryGetEpoch) returns (QueryGetEpochByIdResponse) {
     option (google.api.http).get = "/cosmos/bridge/epoch/{epoch_id}";
   }
+
+
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
