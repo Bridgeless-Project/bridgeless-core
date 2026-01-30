@@ -63,7 +63,7 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 	threshold := k.GetParams(ctx).TssThreshold
 	txSubmissions, found := k.GetTransactionSubmissions(ctx, k.TxHash(transaction).String())
 	if !found {
-		txSubmissions.TxHash = k.TxHash(transaction).String()
+		txSubmissions.Hash = k.TxHash(transaction).String()
 	}
 
 	// If tx has been submitted before with the same address new submission is rejected
@@ -121,6 +121,17 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 		return errorsmod.Wrap(err, "failed to add referral rewards")
 	}
 
+	// we do not need to store tx for epoch 0
+	if transaction.EpochId == 0 {
+		return nil
+	}
+
+	k.SetEpochTransaction(ctx, transaction.EpochId, types.TransactionIdentifier{
+		DepositTxHash:  transaction.DepositTxHash,
+		DepositTxIndex: transaction.DepositTxIndex,
+		DepositChainId: transaction.DepositChainId,
+	})
+
 	return nil
 }
 
@@ -137,7 +148,7 @@ func (k Keeper) DeleteTx(ctx sdk.Context, depositTxHash string, depositTxIndex u
 	// Delete tx submissions
 	txSubmissions, found := k.GetTransactionSubmissions(ctx, k.TxHash(&transaction).String())
 	if found {
-		k.RemoveTransactionSubmissions(ctx, txSubmissions.TxHash)
+		k.RemoveTransactionSubmissions(ctx, txSubmissions.Hash)
 	}
 
 	// Minus referral rewards
@@ -180,6 +191,14 @@ func (k Keeper) DeleteTx(ctx sdk.Context, depositTxHash string, depositTxIndex u
 	err = k.AddReferralRewards(ctx, transaction.ReferralId, token.TokenId, referralRewards)
 	if err != nil {
 		return errorsmod.Wrap(err, "failed to minus referral rewards")
+	}
+
+	if transaction.EpochId != 0 {
+		k.RemoveEpochTransaction(ctx, transaction.EpochId, types.TransactionIdentifier{
+			DepositTxHash:  transaction.DepositTxHash,
+			DepositTxIndex: transaction.DepositTxIndex,
+			DepositChainId: transaction.DepositChainId,
+		})
 	}
 
 	emitRemoveTransactionEvent(ctx, transaction)

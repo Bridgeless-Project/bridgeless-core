@@ -10,19 +10,19 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 )
 
-func (k Keeper) SetTransactionSubmissions(sdkCtx sdk.Context, txSubmissions *types.TransactionSubmissions) {
+func (k Keeper) SetTransactionSubmissions(sdkCtx sdk.Context, txSubmissions *types.Submissions) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreTransactionSubmissionsPrefix))
-	tStore.Set(types.KeyTransactionSubmissions(txSubmissions.TxHash), k.cdc.MustMarshal(txSubmissions))
+	tStore.Set(types.KeyTransactionSubmissions(txSubmissions.Hash), k.cdc.MustMarshal(txSubmissions))
 }
 
 func (k Keeper) GetPaginatedTransactionsSubmissions(sdkCtx sdk.Context, pagination *query.PageRequest) (
-	[]types.TransactionSubmissions, *query.PageResponse, error) {
+	[]types.Submissions, *query.PageResponse, error) {
 
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreTransactionSubmissionsPrefix))
 
-	var txsWithSubmissions []types.TransactionSubmissions
+	var txsWithSubmissions []types.Submissions
 	pageRes, err := query.Paginate(tStore, pagination, func(key []byte, value []byte) error {
-		var txSubmissions types.TransactionSubmissions
+		var txSubmissions types.Submissions
 		if err := k.cdc.Unmarshal(value, &txSubmissions); err != nil {
 			return err
 		}
@@ -37,7 +37,7 @@ func (k Keeper) GetPaginatedTransactionsSubmissions(sdkCtx sdk.Context, paginati
 	return txsWithSubmissions, pageRes, nil
 }
 
-func (k Keeper) GetTransactionSubmissions(sdkCtx sdk.Context, txHash string) (txSubmissions types.TransactionSubmissions, found bool) {
+func (k Keeper) GetTransactionSubmissions(sdkCtx sdk.Context, txHash string) (txSubmissions types.Submissions, found bool) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreTransactionSubmissionsPrefix))
 
 	bz := tStore.Get(types.KeyTransactionSubmissions(txHash))
@@ -57,4 +57,8 @@ func (k Keeper) RemoveTransactionSubmissions(sdkCtx sdk.Context, txHash string) 
 
 func (k Keeper) TxHash(tx *types.Transaction) common.Hash {
 	return crypto.Keccak256Hash(k.cdc.MustMarshal(tx))
+}
+
+func (k Keeper) EpochSignatureHash(epochSig *types.EpochChainSignatures) common.Hash {
+	return crypto.Keccak256Hash(k.cdc.MustMarshal(epochSig))
 }

@@ -9,13 +9,13 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (k Keeper) SetChain(sdkCtx sdk.Context, chain types.Chain) {
-	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreChainPrefix))
+func (k Keeper) SetChain(ctx sdk.Context, chain types.Chain) {
+	cStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreChainPrefix))
 	cStore.Set(types.KeyChain(chain.Id), k.cdc.MustMarshal(&chain))
 }
 
-func (k Keeper) GetChain(sdkCtx sdk.Context, id string) (chain types.Chain, found bool) {
-	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreChainPrefix))
+func (k Keeper) GetChain(ctx sdk.Context, id string) (chain types.Chain, found bool) {
+	cStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreChainPrefix))
 	bz := cStore.Get(types.KeyChain(id))
 	if bz == nil {
 		return
@@ -47,8 +47,8 @@ func (k Keeper) GetChainsWithPagination(ctx sdk.Context, pagination *query.PageR
 	return chains, pageRes, nil
 }
 
-func (k Keeper) GetAllChains(sdkCtx sdk.Context) (chains []types.Chain) {
-	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreChainPrefix))
+func (k Keeper) GetAllChains(ctx sdk.Context) (chains []types.Chain) {
+	cStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreChainPrefix))
 	iterator := cStore.Iterator(nil, nil)
 	defer iterator.Close()
 
@@ -61,7 +61,59 @@ func (k Keeper) GetAllChains(sdkCtx sdk.Context) (chains []types.Chain) {
 	return
 }
 
-func (k Keeper) RemoveChain(sdkCtx sdk.Context, id string) {
-	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreChainPrefix))
+func (k Keeper) RemoveChain(ctx sdk.Context, id string) {
+	cStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreChainPrefix))
 	cStore.Delete(types.KeyChain(id))
+}
+
+// ------------------- Store Chain By Chain-type ------------------
+
+func (k Keeper) SetChainByType(ctx sdk.Context, chain types.Chain) {
+	cStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreChainTypePrefix))
+	chainTypeStore := prefix.NewStore(cStore, types.KeyChainType(chain.Type))
+
+	chainTypeStore.Set(types.KeyChain(chain.Id), k.cdc.MustMarshal(&chain))
+}
+
+func (k Keeper) GetAllChainsByType(ctx sdk.Context, chainType types.ChainType) (chains []types.Chain) {
+	cStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreChainTypePrefix))
+	chainTypeStore := prefix.NewStore(cStore, types.KeyChainType(chainType))
+
+	iterator := chainTypeStore.Iterator(nil, nil)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var chain types.Chain
+		k.cdc.MustUnmarshal(iterator.Value(), &chain)
+		chains = append(chains, chain)
+	}
+
+	return
+}
+
+func (k Keeper) GetChainsByTypeWithPagination(ctx sdk.Context, chainType types.ChainType, pagination *query.PageRequest) ([]types.Chain, *query.PageResponse, error) {
+	cStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreChainTypePrefix))
+	chainTypeStore := prefix.NewStore(cStore, types.KeyChainType(chainType))
+	var chains []types.Chain
+
+	pageRes, err := query.Paginate(chainTypeStore, pagination, func(key []byte, value []byte) error {
+		var chain types.Chain
+
+		k.cdc.MustUnmarshal(value, &chain)
+
+		chains = append(chains, chain)
+		return nil
+	})
+
+	if err != nil {
+		return nil, pageRes, status.Error(codes.Internal, err.Error())
+	}
+
+	return chains, pageRes, nil
+}
+
+func (k Keeper) RemoveChainTypeNetwork(ctx sdk.Context, chainType types.ChainType, chainId string) {
+	cStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreChainTypePrefix))
+	chainTypeStore := prefix.NewStore(cStore, types.KeyChainType(chainType))
+	chainTypeStore.Delete(types.KeyChain(chainId))
 }

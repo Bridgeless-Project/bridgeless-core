@@ -23,6 +23,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair([]byte(ParamModulePartiesKey), &p.Parties, validateModuleParties),
 		paramtypes.NewParamSetPair([]byte(ParamTssThresholdKey), &p.TssThreshold, validateTssThreshold),
 		paramtypes.NewParamSetPair([]byte(ParamRelayerAccounts), &p.RelayerAccounts, validateRelayerAccounts),
+		paramtypes.NewParamSetPair([]byte(ParamEpochId), &p.Epoch, validateEpochId),
 	}
 }
 
@@ -65,6 +66,7 @@ func validateModuleAdmin(i interface{}) error {
 
 	return nil
 }
+
 func validateModuleParties(i interface{}) error {
 	parties, ok := i.([]*Party)
 	if !ok {
@@ -101,6 +103,15 @@ func validateRelayerAccounts(i interface{}) error {
 		if err != nil {
 			return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid relayer account address: %s", err.Error())
 		}
+	}
+
+	return nil
+}
+
+func validateEpochId(i interface{}) error {
+	_, ok := i.(uint32)
+	if !ok {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
 	}
 
 	return nil

@@ -22,6 +22,7 @@ func (m msgServer) InsertChain(goCtx context.Context, msg *types.MsgInsertChain)
 	}
 
 	m.SetChain(ctx, msg.Chain)
+	m.SetChainByType(ctx, msg.Chain)
 
 	return &types.MsgInsertChainResponse{}, nil
 }
@@ -33,12 +34,13 @@ func (m msgServer) DeleteChain(goCtx context.Context, msg *types.MsgDeleteChain)
 		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "msg sender is not module admin")
 	}
 
-	_, found := m.GetChain(ctx, msg.ChainId)
+	chain, found := m.GetChain(ctx, msg.ChainId)
 	if !found {
 		return nil, errorsmod.Wrap(sdkerrors.ErrNotFound, "chain not found")
 	}
 
 	m.RemoveChain(ctx, msg.ChainId)
+	m.RemoveChainTypeNetwork(ctx, chain.Type, chain.Id)
 
 	return &types.MsgDeleteChainResponse{}, nil
 }
