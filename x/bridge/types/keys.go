@@ -27,18 +27,20 @@ const (
 	ParamRelayerAccounts  = "RelayerAccounts"
 
 	// ---- Store Prefixes ------
-	StoreTokenPrefix                  = "token"
-	StoreTokenInfoPrefix              = "token-info"
-	StoreTokenPairsPrefix             = "token-pairs"
-	StoreChainPrefix                  = "chain"
-	StoreTransactionPrefix            = "transaction"
-	StoreTransactionSubmissionsPrefix = "transaction-submissions"
-	StoreReferralPrefix               = "referral"
-	StoreReferralRewardsPrefix        = "referral_rewards"
-	StoreStopListTransactionsPrefix   = "stop_list_transactions"
-	StoreEpochPrefix                  = "epoch"
-	StoreEpochChainSignaturePrefix    = "epoch_chain_signature"
-	StoreEpochTransactionPrefix       = "epoch_transaction"
+	StoreTokenPrefix                         = "token"
+	StoreTokenInfoPrefix                     = "token-info"
+	StoreTokenPairsPrefix                    = "token-pairs"
+	StoreChainPrefix                         = "chain"
+	StoreChainTypePrefix                     = "chain"
+	StoreTransactionPrefix                   = "transaction"
+	StoreTransactionSubmissionsPrefix        = "transaction-submissions"
+	StoreReferralPrefix                      = "referral"
+	StoreReferralRewardsPrefix               = "referral_rewards"
+	StoreStopListTransactionsPrefix          = "stop_list_transactions"
+	StoreEpochPrefix                         = "epoch"
+	StoreEpochChainSignaturePrefix           = "epoch_chain_signature"
+	StoreEpochChainSignatureSubmissionPrefix = "epoch_chain_signature_submission"
+	StoreEpochTransactionPrefix              = "epoch_transaction"
 
 	// Attributes keys for bridge events
 	AttributeKeyDepositTxHash     = "deposit_tx_hash"
@@ -85,6 +87,10 @@ func KeyChain(chain string) []byte {
 	return []byte(chain)
 }
 
+func KeyChainType(chainType ChainType) []byte {
+	return []byte(chainType.String())
+}
+
 func KeyReferralRewards(referraId uint32, tokenId uint64) []byte {
 	return []byte(fmt.Sprintf("%d/%d", referraId, tokenId))
 }
@@ -109,10 +115,14 @@ func KeyEpoch(epochId uint32) []byte {
 	return bytes
 }
 
-func KeyEpochChainSignature(chain string, epochId uint32) []byte {
-	return []byte(fmt.Sprintf("%s/%d", chain, epochId))
+func KeyEpochChainSignature(chainType ChainType, epochId uint32) []byte {
+	return []byte(fmt.Sprintf("%d/%d", chainType, epochId))
 }
 
-func KeyEpochTransaction(epochId uint32, txNonce uint64, txHash, chainId string) []byte {
-	return []byte(fmt.Sprintf("%s/%s/%s/%d", txHash, txNonce, chainId, epochId))
+func KeyEpochChainSignatureSubmission(chainType ChainType, epochId uint32, hash string) []byte {
+	return []byte(fmt.Sprintf("%d/%d/%s", chainType, epochId, hash))
+}
+
+func KeyEpochTransaction(epochId uint32, txNonce uint64, txHash string, chainType ChainType) []byte {
+	return []byte(fmt.Sprintf("%s/%s/%s/%d", txHash, txNonce, chainType, epochId))
 }

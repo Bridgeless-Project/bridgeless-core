@@ -52,12 +52,12 @@ func (k Keeper) RemoveEpoch(sdkCtx sdk.Context, epochId uint32) {
 // ------------------- Epoch Signature ------------------
 func (k Keeper) SetEpochChainSignature(sdkCtx sdk.Context, epochSig *types.EpochChainSignatures) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochChainSignaturePrefix))
-	tStore.Set(types.KeyEpochChainSignature(epochSig.ChainId, epochSig.EpochId), k.cdc.MustMarshal(epochSig))
+	tStore.Set(types.KeyEpochChainSignature(epochSig.ChainType, epochSig.EpochId), k.cdc.MustMarshal(epochSig))
 }
 
-func (k Keeper) GetEpochChainSignature(sdkCtx sdk.Context, epochId uint32, chainId string) (epochChainSignatures types.EpochChainSignatures, found bool) {
+func (k Keeper) GetEpochChainSignature(sdkCtx sdk.Context, epochId uint32, chainType types.ChainType) (epochChainSignatures types.EpochChainSignatures, found bool) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochChainSignaturePrefix))
-	bz := tStore.Get(types.KeyEpochChainSignature(chainId, epochId))
+	bz := tStore.Get(types.KeyEpochChainSignature(chainType, epochId))
 	if bz == nil {
 		return epochChainSignatures, false
 	}
@@ -66,15 +66,31 @@ func (k Keeper) GetEpochChainSignature(sdkCtx sdk.Context, epochId uint32, chain
 	return epochChainSignatures, true
 }
 
-// --------------- Transactions ---------------------
-func (k Keeper) SetEpochTransaction(sdkCtx sdk.Context, chainId uint32, epochTransaction types.TransactionIdentifier) {
-	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochTransactionPrefix))
-	tStore.Set(types.KeyEpochTransaction(chainId, epochTransaction.DepositTxIndex, epochTransaction.DepositTxHash, epochTransaction.DepositTxHash), k.cdc.MustMarshal(&epochTransaction))
+func (k Keeper) SetEpochChainSignatureSubmission(sdkCtx sdk.Context, epochId uint32, chainType types.ChainType, submission types.Submissions) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochChainSignatureSubmissionPrefix))
+	tStore.Set(types.KeyEpochChainSignatureSubmission(chainType, epochId, submission.Hash), k.cdc.MustMarshal(&submission))
 }
 
-func (k Keeper) RemoveEpochTransaction(sdkCtx sdk.Context, chainId uint32, epochTransaction types.TransactionIdentifier) {
+func (k Keeper) GetEpochChainSignatureSubmission(sdkCtx sdk.Context, epochId uint32, chainType types.ChainType, hash string) (submission types.Submissions, found bool) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochChainSignatureSubmissionPrefix))
+	bz := tStore.Get(types.KeyEpochChainSignatureSubmission(chainType, epochId, hash))
+	if bz == nil {
+		return submission, false
+	}
+
+	k.cdc.MustUnmarshal(bz, &submission)
+	return submission, true
+}
+
+// --------------- Transactions ---------------------
+func (k Keeper) SetEpochTransaction(sdkCtx sdk.Context, epochId uint32, chainType types.ChainType, epochTransaction types.TransactionIdentifier) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochTransactionPrefix))
-	tStore.Delete(types.KeyEpochTransaction(chainId, epochTransaction.DepositTxIndex, epochTransaction.DepositTxHash, epochTransaction.DepositTxHash))
+	tStore.Set(types.KeyEpochTransaction(epochId, epochTransaction.DepositTxIndex, epochTransaction.DepositTxHash, chainType), k.cdc.MustMarshal(&epochTransaction))
+}
+
+func (k Keeper) RemoveEpochTransaction(sdkCtx sdk.Context, epochId uint32, chainType types.ChainType, epochTransaction types.TransactionIdentifier) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochTransactionPrefix))
+	tStore.Delete(types.KeyEpochTransaction(epochId, epochTransaction.DepositTxIndex, epochTransaction.DepositTxHash, chainType))
 }
 
 func (k Keeper) GetPaginatedEpochTransactions(sdkCtx sdk.Context, pagination *query.PageRequest) ([]types.TransactionIdentifier, *query.PageResponse, error) {

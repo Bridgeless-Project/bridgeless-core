@@ -51,8 +51,8 @@ func validateTransaction(tx *Transaction) error {
 	return nil
 }
 
-func validateTransactionSubmissions(txSubmissions *TransactionSubmissions) error {
-	if _, err := hexutil.Decode(txSubmissions.TxHash); err != nil {
+func validateTransactionSubmissions(txSubmissions *Submissions) error {
+	if _, err := hexutil.Decode(txSubmissions.Hash); err != nil {
 		return errorsmod.Wrap(ErrInvalidTxHash, err.Error())
 	}
 

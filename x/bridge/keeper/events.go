@@ -25,6 +25,7 @@ func emitUpdateTransactionEvent(sdkCtx sdk.Context, transaction types.Transactio
 		sdk.NewAttribute(types.AttributeKeySignature, transaction.Signature),
 		sdk.NewAttribute(types.AttributeKeyIsWrapped, strconv.FormatBool(transaction.IsWrapped)),
 		sdk.NewAttribute(types.AttributeKeyCommissionAmount, transaction.CommissionAmount),
+		sdk.NewAttribute(types.AttributeEpochId, big.NewInt(int64(transaction.EpochId)).String()),
 		sdk.NewAttribute(types.AttributeKeyMerkleProof, transaction.MerkleProof)))
 }
 
@@ -44,7 +45,8 @@ func emitRemoveTransactionEvent(sdkCtx sdk.Context, transaction types.Transactio
 		sdk.NewAttribute(types.AttributeKeyWithdrawalToken, transaction.WithdrawalToken),
 		sdk.NewAttribute(types.AttributeKeySignature, transaction.Signature),
 		sdk.NewAttribute(types.AttributeKeyIsWrapped, strconv.FormatBool(transaction.IsWrapped)),
-		sdk.NewAttribute(types.AttributeKeyCommissionAmount, transaction.CommissionAmount)))
+		sdk.NewAttribute(types.AttributeKeyCommissionAmount, transaction.CommissionAmount),
+		sdk.NewAttribute(types.AttributeEpochId, big.NewInt(int64(transaction.EpochId)).String())))
 }
 
 func emitSubmitEvent(sdkCtx sdk.Context, transaction types.Transaction) {
@@ -64,8 +66,9 @@ func emitSubmitEvent(sdkCtx sdk.Context, transaction types.Transaction) {
 		sdk.NewAttribute(types.AttributeKeySignature, transaction.Signature),
 		sdk.NewAttribute(types.AttributeKeyIsWrapped, strconv.FormatBool(transaction.IsWrapped)),
 		sdk.NewAttribute(types.AttributeKeyCommissionAmount, transaction.CommissionAmount),
-		sdk.NewAttribute(types.AttributeKeyMerkleProof, transaction.MerkleProof)))
-
+		sdk.NewAttribute(types.AttributeKeyMerkleProof, transaction.MerkleProof),
+		sdk.NewAttribute(types.AttributeEpochId, big.NewInt(int64(transaction.EpochId)).String()),
+	))
 }
 
 func emitStartEpochEvent(sdkCtx sdk.Context, epochId uint32, info string) {

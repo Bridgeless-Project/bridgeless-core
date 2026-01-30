@@ -36,7 +36,7 @@ message Transaction {
   uint32 epoch_id = 19;
 }
 
-message TransactionSubmissions{
-  string tx_hash = 1;
+message Submissions{
+  string hash = 1;
   repeated string submitters = 2;
 }

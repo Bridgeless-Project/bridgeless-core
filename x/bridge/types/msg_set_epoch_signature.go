@@ -10,7 +10,7 @@ const TypeMsgSetEpochSignature = "set_epoch_signature"
 
 var _ sdk.Msg = &MsgSetEpochSignature{}
 
-func NewMsgSetEpochSignature(creator string, data EpochChainSignatures) *MsgSetEpochSignature {
+func NewMsgSetEpochSignature(creator string, data []EpochChainSignatures) *MsgSetEpochSignature {
 	return &MsgSetEpochSignature{
 		Creator:              creator,
 		EpochChainSignatures: data,
@@ -40,16 +40,16 @@ func (msg *MsgSetEpochSignature) ValidateBasic() error {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
-	if msg.EpochChainSignatures.ChainId == "" {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "chain ID must be greater than zero")
-	}
-
-	if msg.EpochChainSignatures.EpochId == 0 {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "epoch ID must be greater than zero")
-	}
-
-	if msg.EpochChainSignatures.AddedSignature == nil && msg.EpochChainSignatures.RemovedSignature == nil {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "added and removed signature cannot be nil")
+	for _, chainSignature := range msg.EpochChainSignatures {
+		if chainSignature.AddedSignature == nil && chainSignature.RemovedSignature == nil {
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "added and removed signature cannot be nil")
+		}
+		if chainSignature.EpochId == 0 {
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "epoch ID must be greater than zero")
+		}
+		if chainSignature.ChainType < 0 {
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "epoch ID must be greater or equal than zero")
+		}
 	}
 
 	return nil

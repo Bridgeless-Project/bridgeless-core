@@ -47,7 +47,6 @@ func (m msgServer) StartEpoch(goCtx context.Context, msg *types.MsgStartEpoch) (
 		StartBlock:   uint64(ctx.BlockHeight()),
 		TssThreshold: msg.TssThreshold,
 	}
-	// we do not need to set up a relayer_addresses here
 
 	m.Keeper.SetEpoch(ctx, epoch)
 
@@ -68,37 +67,54 @@ func (m msgServer) SetEpochSignature(goCtx context.Context, msg *types.MsgSetEpo
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	_, found := m.Keeper.GetEpoch(ctx, msg.EpochChainSignatures.EpochId)
-	if !found {
-		return nil, errorsmod.Wrap(types.ErrInvalidEpochID, "epoch not found")
+	if !m.IsParty(ctx, msg.Creator) {
+		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "submitter isn`t an authorized party")
 	}
 
-	// TODO: add submitters
-	m.Keeper.SetEpochChainSignature(ctx, &msg.EpochChainSignatures)
-	return &types.MsgSetEpochSignatureResponse{}, nil
-}
-
-func (m msgServer) FinishEpochMigration(goCtx context.Context, msg *types.MsgFinishEpochMigration) (*types.MsgFinishEpochMigrationResponse, error) {
-	if msg == nil {
-		return nil, errorsmod.Wrap(types.ErrInvalidDataType, "message cannot be nil")
-	}
-	ctx := sdk.UnwrapSDKContext(goCtx)
 	params := m.Keeper.GetParams(ctx)
+	isReadyTomigration := true
+	for _, sig := range msg.EpochChainSignatures {
+		_, found := m.Keeper.GetEpoch(ctx, sig.EpochId)
+		if !found {
+			return nil, errorsmod.Wrap(types.ErrInvalidEpochID, "epoch not found")
+		}
 
-	if params.Epoch+1 != msg.EpochId {
-		return nil, errorsmod.Wrapf(types.ErrInvalidEpochID, "expected epoch ID %d, got %d", params.Epoch+1, msg.EpochId)
+		submissions, found := m.Keeper.GetEpochChainSignatureSubmission(ctx, sig.EpochId, sig.ChainType, m.Keeper.EpochSignatureHash(&sig).String())
+		if !found {
+			submissions.Hash = m.Keeper.EpochSignatureHash(&sig).String()
+		}
+
+		// If tx has been submitted before with the same address new submission is rejected
+		if isSubmitter(submissions.Submitters, msg.Creator) {
+			return nil, errorsmod.Wrap(types.ErrTranscationAlreadySubmitted,
+				"transaction has been already submitted by this address")
+		}
+
+		submissions.Submitters = append(submissions.Submitters, msg.Creator)
+		m.Keeper.SetEpochChainSignatureSubmission(ctx, sig.EpochId, sig.ChainType, submissions)
+
+		if len(submissions.Submitters) < int(params.TssThreshold+1) {
+			isReadyTomigration = false
+			continue
+		}
+		if sig.Address != "" {
+			chains := m.GetAllChainsByType(ctx, sig.ChainType)
+			for _, chain := range chains {
+				chain.BridgeAddress = sig.Address
+				m.SetChain(ctx, chain)
+				m.SetChainByType(ctx, chain)
+			}
+		}
+		m.Keeper.SetEpochChainSignature(ctx, &sig)
 	}
 
-	// validate that for all chains the signature set
-	epoch, found := m.Keeper.GetEpoch(ctx, msg.EpochId)
-	if !found {
-		return nil, errorsmod.Wrap(types.ErrInvalidEpochID, "epoch not found")
+	if isReadyTomigration {
+		epoch, _ := m.Keeper.GetEpoch(ctx, msg.EpochChainSignatures[0].EpochId)
+		epoch.Status = types.EpochStatus_FINALIZING
+		m.Keeper.SetEpoch(ctx, &epoch)
 	}
 
-	epoch.Status = types.EpochStatus_FINALIZING
-	m.Keeper.SetEpoch(ctx, &epoch)
-
-	return &types.MsgFinishEpochMigrationResponse{}, nil
+	return &types.MsgSetEpochSignatureResponse{}, nil
 }
 
 func determineEpochSigners(tssParties []*types.Party, tssInfo []types.TSSInfo) ([]*types.Party, error) {

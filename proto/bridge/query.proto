@@ -193,7 +193,7 @@ message QueryGetTxsSubmissions {
 }
 
 message QueryGetTxsSubmissionsResponse {
-  repeated TransactionSubmissions txs_submissions = 1 [(gogoproto.nullable) = false];
+  repeated Submissions txs_submissions = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
@@ -202,7 +202,7 @@ message QueryGetTxSubmissionsByHash{
 }
 
 message QueryGetTxSubmissionsByHashResponse{
-  TransactionSubmissions tx_submissions = 1[(gogoproto.nullable) = false];;
+  Submissions tx_submissions = 1[(gogoproto.nullable) = false];;
 }
 
 message QueryGetReferralById {
