@@ -26,6 +26,7 @@ const (
 	ParamTssThresholdKey  = "TssThreshold"
 	ParamRelayerAccounts  = "RelayerAccounts"
 	ParamEpochId          = "EpochId"
+	ParamSupportingTime   = "SupportingTime"
 
 	// ---- Store Prefixes ------
 	StoreTokenPrefix                         = "token"
@@ -42,26 +43,33 @@ const (
 	StoreEpochChainSignaturePrefix           = "epoch_chain_signature"
 	StoreEpochChainSignatureSubmissionPrefix = "epoch_chain_signature_submission"
 	StoreEpochTransactionPrefix              = "epoch_transaction"
+	StoreEpochPubkeyPrefix                   = "epoch_pubkey"
+	StoreEpochPubkeySubmissionPrefix         = "epoch_pubkey_submission"
 
 	// Attributes keys for bridge events
-	AttributeKeyDepositTxHash     = "deposit_tx_hash"
-	AttributeKeyDepositNonce      = "deposit_nonce"
-	AttributeKeyDepositChainId    = "deposit_chain_id"
-	AttributeKeyDepositBlock      = "deposit_block"
-	AttributeKeyDepositAmount     = "deposit_amount"
-	AttributeKeyDepositToken      = "deposit_token"
-	AttributeKeyWithdrawalAmount  = "withdrawal_amount"
-	AttributeKeyDepositor         = "depositor"
-	AttributeKeyReceiver          = "receiver"
-	AttributeKeyWithdrawalChainID = "withdrawal_chain_id"
-	AttributeKeyWithdrawalTxHash  = "withdrawal_tx_hash"
-	AttributeKeyWithdrawalToken   = "withdrawal_token"
-	AttributeKeySignature         = "signature"
-	AttributeKeyIsWrapped         = "is_wrapped"
-	AttributeKeyCommissionAmount  = "commission_amount"
-	AttributeKeyMerkleProof       = "merkle_proof"
-	AttributeEpochId              = "epoch_id"
-	AttributeTssInfo              = "tss_info"
+	AttributeKeyDepositTxHash      = "deposit_tx_hash"
+	AttributeKeyDepositNonce       = "deposit_nonce"
+	AttributeKeyDepositChainId     = "deposit_chain_id"
+	AttributeKeyDepositBlock       = "deposit_block"
+	AttributeKeyDepositAmount      = "deposit_amount"
+	AttributeKeyDepositToken       = "deposit_token"
+	AttributeKeyWithdrawalAmount   = "withdrawal_amount"
+	AttributeKeyDepositor          = "depositor"
+	AttributeKeyReceiver           = "receiver"
+	AttributeKeyWithdrawalChainID  = "withdrawal_chain_id"
+	AttributeKeyWithdrawalTxHash   = "withdrawal_tx_hash"
+	AttributeKeyWithdrawalToken    = "withdrawal_token"
+	AttributeKeySignature          = "signature"
+	AttributeKeyIsWrapped          = "is_wrapped"
+	AttributeKeyCommissionAmount   = "commission_amount"
+	AttributeKeyMerkleProof        = "merkle_proof"
+	AttributeEpochId               = "epoch_id"
+	AttributeTssInfo               = "tss_info"
+	AttributeEpochSignature        = "epoch_signature"
+	AttributeEpochSignatureData    = "epoch_signature_data"
+	AttributeEpochChainType        = "epoch_chain_type"
+	AttributeChainId               = "chain_id"
+	AttributeEpochSignatureAddress = "epoch_signature_address"
 )
 
 func Prefix(p string) []byte {
@@ -126,4 +134,14 @@ func KeyEpochChainSignatureSubmission(chainType ChainType, epochId uint32, hash 
 
 func KeyEpochTransaction(epochId uint32, txNonce uint64, txHash string) []byte {
 	return []byte(fmt.Sprintf("%s/%s/%s/%d", txHash, txNonce, epochId))
+}
+
+func KeyEpochPubkey(epochId uint32) []byte {
+	bytes := make([]byte, 4)
+	binary.LittleEndian.PutUint32(bytes, epochId)
+	return bytes
+}
+
+func KeyEpochPubkeySubmission(epochId uint32, pubkeyHash string) []byte {
+	return []byte(fmt.Sprintf("%d/%s", epochId, pubkeyHash))
 }

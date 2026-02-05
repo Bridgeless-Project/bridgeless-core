@@ -57,6 +57,55 @@ func (m msgServer) StartEpoch(goCtx context.Context, msg *types.MsgStartEpoch) (
 	return &types.MsgStartEpochResponse{}, nil
 }
 
+func (m msgServer) SetEpochPubkey(goCtx context.Context, msg *types.MsgSetEpochPubkey) (*types.MsgSetEpochPubkeyResponse, error) {
+	if msg == nil {
+		return nil, errorsmod.Wrap(types.ErrInvalidDataType, "message cannot be nil")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	if !m.IsParty(ctx, msg.Creator) {
+		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "submitter isn`t an authorized party")
+	}
+
+	_, found := m.Keeper.GetEpoch(ctx, msg.EpochId)
+	if !found {
+		return nil, errorsmod.Wrapf(types.ErrInvalidEpochID, "epoch %d not found", msg.EpochId)
+	}
+
+	// Check if pubkey is already set for this epoch
+	existingPubkey, found := m.Keeper.GetEpochPubkey(ctx, msg.EpochId)
+	if found && existingPubkey != "" {
+		return nil, errorsmod.Wrapf(types.ErrPubkeyAlreadySet, "epoch %d", msg.EpochId)
+	}
+
+	// Use pubkey as hash for submission tracking
+	pubkeyHash := msg.Pubkey
+
+	// Get existing submissions for this pubkey
+	submissions, found := m.Keeper.GetEpochPubkeySubmission(ctx, msg.EpochId, pubkeyHash)
+	if !found {
+		submissions.Hash = pubkeyHash
+	}
+
+	// Check if this party has already submitted
+	if isSubmitter(submissions.Submitters, msg.Creator) {
+		return nil, errorsmod.Wrap(types.ErrTranscationAlreadySubmitted,
+			"pubkey has been already submitted by this address")
+	}
+
+	// Add submitter to the list
+	submissions.Submitters = append(submissions.Submitters, msg.Creator)
+	m.Keeper.SetEpochPubkeySubmission(ctx, msg.EpochId, pubkeyHash, submissions)
+
+	// Check if threshold is reached
+	if len(submissions.Submitters) >= int(m.Keeper.GetParams(ctx).TssThreshold+1) {
+		// Threshold reached - store pubkey
+		m.Keeper.SetEpochPubkey(ctx, msg.EpochId, msg.Pubkey)
+	}
+
+	return &types.MsgSetEpochPubkeyResponse{}, nil
+}
+
 func (m msgServer) SetEpochSignature(goCtx context.Context, msg *types.MsgSetEpochSignature) (*types.MsgSetEpochSignatureResponse, error) {
 	if msg == nil {
 		return nil, errorsmod.Wrap(types.ErrInvalidDataType, "message cannot be nil")
@@ -73,6 +122,12 @@ func (m msgServer) SetEpochSignature(goCtx context.Context, msg *types.MsgSetEpo
 		_, found := m.Keeper.GetEpoch(ctx, sig.EpochId)
 		if !found {
 			return nil, errorsmod.Wrap(types.ErrInvalidEpochID, "epoch not found")
+		}
+
+		// Check if epoch pubkey is set - signatures cannot be submitted until pubkey is set
+		epochPubkey, pubkeyFound := m.Keeper.GetEpochPubkey(ctx, sig.EpochId)
+		if !pubkeyFound || epochPubkey == "" {
+			return nil, errorsmod.Wrapf(types.ErrPubkeyNotSet, "epoch %d pubkey must be set before submitting signatures", sig.EpochId)
 		}
 
 		submissions, found := m.Keeper.GetEpochChainSignatureSubmission(ctx, sig.EpochId, sig.ChainType, m.Keeper.EpochSignatureHash(&sig).String())
@@ -106,7 +161,7 @@ func (m msgServer) SetEpochSignature(goCtx context.Context, msg *types.MsgSetEpo
 
 	if isReadyToMigration {
 		epoch, _ := m.Keeper.GetEpoch(ctx, msg.EpochChainSignatures[0].EpochId)
-		epoch.Status = types.EpochStatus_FINALIZING
+		epoch.Status = types.EpochStatus_MIGRATION_FINALIZING
 		m.Keeper.SetEpoch(ctx, &epoch)
 	}
 

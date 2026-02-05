@@ -47,6 +47,7 @@ service Msg {
 
     rpc StartEpoch(MsgStartEpoch) returns (MsgStartEpochResponse);
     rpc SetEpochSignature(MsgSetEpochSignature) returns (MsgSetEpochSignatureResponse);
+    rpc SetEpochPubkey(MsgSetEpochPubkey) returns (MsgSetEpochPubkeyResponse);
 }
 
 // this line is used by starport scaffolding # proto/tx/message
@@ -220,5 +221,12 @@ message MsgSetEpochSignature {
 
 message MsgSetEpochSignatureResponse {}
 
+message MsgSetEpochPubkey {
+  option (cosmos.msg.v1.signer) = "creator";
 
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string pubkey = 2;
+  uint32 epoch_id = 3;
+}
 
+message MsgSetEpochPubkeyResponse {}

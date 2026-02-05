@@ -79,5 +79,15 @@ func emitStartEpochEvent(sdkCtx sdk.Context, epochId uint32, info string) {
 			sdk.NewAttribute(types.AttributeTssInfo, info),
 		),
 	)
+}
 
+func (k Keeper) EmitEpochUpdatedEvent(sdkCtx sdk.Context, epochId uint32, signatureData string, signature string, chainId string) {
+	sdkCtx.EventManager().EmitEvent(
+		sdk.NewEvent(types.EventType_EPOCH_UPDATED.String(),
+			sdk.NewAttribute(types.AttributeEpochId, big.NewInt(int64(epochId)).String()),
+			sdk.NewAttribute(types.AttributeChainId, chainId),
+			sdk.NewAttribute(types.AttributeEpochSignature, signature),
+			sdk.NewAttribute(types.AttributeEpochSignatureData, signatureData),
+		),
+	)
 }
