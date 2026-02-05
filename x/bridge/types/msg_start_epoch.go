@@ -10,11 +10,12 @@ const TypeMsgStartEpoch = "start_epoch"
 
 var _ sdk.Msg = &MsgStartEpoch{}
 
-func NewMsgStartEpoch(creator string, epochId uint32, info []TSSInfo) *MsgStartEpoch {
+func NewMsgStartEpoch(creator string, epochId uint32, info []TSSInfo, tssThreshold uint32) *MsgStartEpoch {
 	return &MsgStartEpoch{
-		Creator: creator,
-		EpochId: epochId,
-		Info:    info,
+		Creator:      creator,
+		EpochId:      epochId,
+		Info:         info,
+		TssThreshold: tssThreshold,
 	}
 }
 

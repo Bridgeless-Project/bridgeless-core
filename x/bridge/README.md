@@ -241,6 +241,132 @@ Example:
 ```
 ___
 
+### Epoch
+**Epoch** defines the epoch state for TSS key rotation and signature management.
+
+Definition:
+
+```protobuf
+enum EpochStatus {
+  INITIATED = 0;
+  FINALIZING = 1;
+  COMPLETE = 2;
+}
+
+message Epoch {
+  uint32 id = 1;
+  EpochStatus status = 2;
+  uint64 start_block = 3;
+  uint64 end_block = 4;
+  repeated Party parties = 5;
+  uint32 tss_threshold = 6;
+  repeated TSSInfo tss_info = 7;
+  string pubkey = 8;
+}
+```
+
+Example:
+```json
+{
+  "id": 1,
+  "status": "INITIATED",
+  "start_block": "100",
+  "end_block": "0",
+  "parties": [
+    {"address": "bridge1..."}
+  ],
+  "tss_threshold": 2,
+  "tss_info": [
+    {
+      "certificate": "cert_pem_content",
+      "domen": "tss-node1.example.com",
+      "address": "0x1234567890abcdef",
+      "active": true
+    }
+  ],
+  "pubkey": "02abc..."
+}
+```
+___
+
+### TSSInfo
+**TSSInfo** defines the TSS node information for an epoch.
+
+Definition:
+
+```protobuf
+message TSSInfo {
+  string certificate = 1;
+  string domen = 2;
+  string address = 3;
+  bool active = 4;
+}
+```
+
+Example:
+```json
+{
+  "certificate": "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
+  "domen": "tss-node1.example.com",
+  "address": "0x1234567890abcdef",
+  "active": true
+}
+```
+___
+
+### EpochChainSignatures
+**EpochChainSignatures** defines epoch signatures for a specific chain type.
+
+Definition:
+
+```protobuf
+message EpochChainSignatures {
+   uint32 epoch_id = 1;
+   ChainType chain_type = 2;
+   EpochSignature added_signature = 3;
+   EpochSignature removed_signature = 4;
+   string address = 5;
+   uint32 submittions = 6;
+}
+
+message EpochSignature {
+  EpochSignatureMod mod = 1;
+  uint32 epoch_id = 2;
+  string signature = 3;
+  EpochSignatureData data = 4;
+}
+
+message EpochSignatureData {
+  string new_signer = 1;
+  uint64 start_time = 2;
+  uint64 end_time = 3;
+  string nonce = 4;
+}
+```
+
+Example:
+```json
+{
+  "epoch_id": 1,
+  "chain_type": 1,
+  "added_signature": {
+    "mod": 1,
+    "epoch_id": 1,
+    "signature": "0xsignature...",
+    "data": {
+      "new_signer": "0xnewsigner...",
+      "start_time": 1234567890,
+      "end_time": 1234567899,
+      "nonce": "abc123"
+    }
+  },
+  "removed_signature": null,
+  "address": "0xcontractaddress...",
+  "submittions": 3
+}
+```
+___
+
 ## Transactions
 ## RPC
 ___
@@ -444,6 +570,57 @@ Message example:
 message MsgSetTssThreshold {
   string creator =1;
   uint32  amount = 2;
+}
+```
+___
+
+### Epochs
+___
+
+### StartEpoch
+
+**StartEpoch** - initiates a new epoch with TSS information. Only the module admin can start a new epoch.
+
+Message definition:
+```protobuf
+message MsgStartEpoch {
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint32 epoch_id = 2;
+  repeated TSSInfo info = 3 [(gogoproto.nullable) = false];
+  uint32 tss_threshold = 4;
+}
+```
+___
+
+### SetEpochSignature
+
+**SetEpochSignature** - submits epoch chain signatures. Only authorized parties can submit signatures. When the threshold is reached, the signatures are stored and the epoch status is updated.
+
+Message definition:
+```protobuf
+message MsgSetEpochSignature {
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  repeated EpochChainSignatures epoch_chain_signatures = 2 [(gogoproto.nullable) = false];
+}
+```
+___
+
+### SetEpochPubkey
+
+**SetEpochPubkey** - submits a public key for an epoch. Only authorized parties can submit pubkeys. When the threshold is reached, the pubkey is stored for the epoch.
+
+Message definition:
+```protobuf
+message MsgSetEpochPubkey {
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string pubkey = 2;
+  uint32 epoch_id = 3;
 }
 ```
 ___
@@ -659,6 +836,87 @@ ___
 ```
  bridgeless-cored tx bridge stop-list remove-tx bridge1... 0 0x0000000000000000000000000000000000000000 0
 ```
+___
+
+### Epochs
+___
+
+### StartEpoch
+
+**StartEpoch** - initiates a new epoch with TSS information from a JSON file.
+
+```
+bridgeless-cored tx bridge epochs start bridge1... epoch.json
+```
+
+Example of `epoch.json`:
+```json
+{
+  "epoch_id": 1,
+  "tss_info": [
+    {
+      "certificate": "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
+      "domen": "tss-node1.example.com",
+      "address": "0x1234567890abcdef",
+      "active": true
+    },
+    {
+      "certificate": "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
+      "domen": "tss-node2.example.com",
+      "address": "0xabcdef1234567890",
+      "active": true
+    }
+  ],
+  "tss_threshold": 2
+}
+```
+___
+
+### SetEpochSignature
+
+**SetEpochSignature** - submits epoch chain signatures from a JSON file.
+
+```
+bridgeless-cored tx bridge epochs set-signature bridge1... signatures.json
+```
+
+Example of `signatures.json`:
+```json
+[
+  {
+    "epoch_id": 1,
+    "chain_type": 1,
+    "added_signature": {
+      "mod": 1,
+      "epoch_id": 1,
+      "signature": "0xsignature...",
+      "data": {
+        "new_signer": "0xnewsigner...",
+        "start_time": 1234567890,
+        "end_time": 1234567899,
+        "nonce": "abc123"
+      }
+    },
+    "removed_signature": null,
+    "address": "0xcontractaddress...",
+    "submittions": 0
+  }
+]
+```
+___
+
+### SetEpochPubkey
+
+**SetEpochPubkey** - sets the public key for an epoch.
+
+```
+bridgeless-cored tx bridge epochs set-pubkey bridge1... 02abc123... 1
+```
+
+Arguments:
+- `bridge1...` - the sender address (must be an authorized party)
+- `02abc123...` - the public key
+- `1` - the epoch ID
 ___
 ___
 ## Query
@@ -1033,6 +1291,79 @@ transaction:
   withdrawal_chain_id: "0"
   withdrawal_token: 0x0000000000000000000000000000000000000000
   withdrawal_tx_hash: ""
+```
+___
+
+### Epochs
+___
+
+### QueryEpochById
+
+```
+bridgeless-cored query bridge epoch 1
+```
+
+Response example:
+
+```
+epoch:
+  id: 1
+  status: INITIATED
+  start_block: "100"
+  end_block: "0"
+  parties:
+  - address: bridge1...
+  - address: bridge1...
+  tss_threshold: 2
+  tss_info:
+  - certificate: "-----BEGIN CERTIFICATE-----..."
+    domen: "tss-node1.example.com"
+    address: "0x1234567890abcdef"
+    active: true
+  pubkey: "02abc..."
+```
+___
+
+### QueryEpochTransactions
+
+```
+bridgeless-cored query bridge epoch-transactions 1
+```
+
+Response example:
+
+```
+transactions:
+- deposit_tx_hash: "0x..."
+  deposit_tx_index: "0"
+  deposit_chain_id: "1"
+pagination:
+  next_key: null
+  total: "1"
+```
+___
+
+### QueryChainsByType
+
+```
+bridgeless-cored query bridge chains-by-type 1
+```
+
+Response example:
+
+```
+chains:
+- bridge_address: 0x...
+  id: "3"
+  operator: 0x...
+  type: EVM
+- bridge_address: 0x...
+  id: "4"
+  operator: 0x...
+  type: EVM
+pagination:
+  next_key: null
+  total: "2"
 ```
 ___
 

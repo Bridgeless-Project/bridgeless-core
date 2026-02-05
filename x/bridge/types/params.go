@@ -24,6 +24,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair([]byte(ParamTssThresholdKey), &p.TssThreshold, validateTssThreshold),
 		paramtypes.NewParamSetPair([]byte(ParamRelayerAccounts), &p.RelayerAccounts, validateRelayerAccounts),
 		paramtypes.NewParamSetPair([]byte(ParamEpochId), &p.Epoch, validateEpochId),
+		paramtypes.NewParamSetPair([]byte(ParamSupportingTime), &p.SupportingTime, validateSupportingTime),
 	}
 }
 
@@ -110,6 +111,15 @@ func validateRelayerAccounts(i interface{}) error {
 
 func validateEpochId(i interface{}) error {
 	_, ok := i.(uint32)
+	if !ok {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
+	}
+
+	return nil
+}
+
+func validateSupportingTime(i interface{}) error {
+	_, ok := i.(uint64)
 	if !ok {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
 	}

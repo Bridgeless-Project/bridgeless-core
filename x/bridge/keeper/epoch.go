@@ -89,6 +89,42 @@ func (k Keeper) GetEpochChainSignatureSubmission(sdkCtx sdk.Context, epochId uin
 	return submission, true
 }
 
+// ------------------- Epoch Pubkey ------------------
+func (k Keeper) SetEpochPubkey(sdkCtx sdk.Context, epochId uint32, pubkey string) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochPubkeyPrefix))
+	tStore.Set(types.KeyEpochPubkey(epochId), []byte(pubkey))
+}
+
+func (k Keeper) GetEpochPubkey(sdkCtx sdk.Context, epochId uint32) (pubkey string, found bool) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochPubkeyPrefix))
+
+	bz := tStore.Get(types.KeyEpochPubkey(epochId))
+	if bz == nil {
+		return "", false
+	}
+
+	return string(bz), true
+}
+
+func (k Keeper) SetEpochPubkeySubmission(sdkCtx sdk.Context, epochId uint32, pubkeyHash string, submission types.Submissions) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochPubkeySubmissionPrefix))
+	eStore := prefix.NewStore(tStore, types.KeyEpoch(epochId))
+	eStore.Set(types.KeyEpochPubkeySubmission(epochId, pubkeyHash), k.cdc.MustMarshal(&submission))
+}
+
+func (k Keeper) GetEpochPubkeySubmission(sdkCtx sdk.Context, epochId uint32, pubkeyHash string) (submission types.Submissions, found bool) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochPubkeySubmissionPrefix))
+	eStore := prefix.NewStore(tStore, types.KeyEpoch(epochId))
+
+	bz := eStore.Get(types.KeyEpochPubkeySubmission(epochId, pubkeyHash))
+	if bz == nil {
+		return submission, false
+	}
+
+	k.cdc.MustUnmarshal(bz, &submission)
+	return submission, true
+}
+
 // --------------- Transactions ---------------------
 func (k Keeper) SetEpochTransaction(sdkCtx sdk.Context, epochId uint32, epochTransaction types.TransactionIdentifier) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochTransactionPrefix))
