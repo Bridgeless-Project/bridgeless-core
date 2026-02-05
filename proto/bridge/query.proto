@@ -103,6 +103,10 @@ service Query {
   rpc GetChainsByType(QueryGetChainsByType) returns (QueryGetChainsByTypeResponse) {
     option (google.api.http).get = "/cosmos/bridge/chains/type/{chain_type}";
   }
+
+  rpc GetEpochPubKey(QueryGetEpochPubKey) returns (QueryGetEpochPubKeyResponse) {
+    option (google.api.http).get = "/cosmos/bridge/epoch/{epoch_id}/pubkey";
+  }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -291,4 +295,12 @@ message QueryGetChainsByType {
 message QueryGetChainsByTypeResponse {
   repeated Chain chains = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetEpochPubKey {
+  uint32 epoch_id = 1;
+}
+
+message QueryGetEpochPubKeyResponse {
+  string pub_key = 1;
 }

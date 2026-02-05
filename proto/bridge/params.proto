@@ -13,5 +13,7 @@ message Params {
   uint32 tss_threshold = 3;
   repeated string relayer_accounts = 4;
   uint32 epoch = 5;
+  // supporting_time is the number of blocks after epoch start when the previous epoch should be marked as completed
+  uint64 supporting_time = 6;
 }
 

@@ -38,3 +38,16 @@ func (k queryServer) GetEpochById(goctx context.Context, req *types.QueryGetEpoc
 	return &types.QueryGetEpochByIdResponse{Epoch: epoch}, nil
 
 }
+
+func (k queryServer) GetEpochPubKey(goctx context.Context, req *types.QueryGetEpochPubKey) (*types.QueryGetEpochPubKeyResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+	ctx := sdk.UnwrapSDKContext(goctx)
+	pubkey, found := k.GetEpochPubkey(ctx, req.EpochId)
+	if !found {
+		return nil, types.ErrEpochNotFound
+	}
+
+	return &types.QueryGetEpochPubKeyResponse{PubKey: pubkey}, nil
+}
