@@ -185,7 +185,7 @@ func CmdSetEpochPubkey() *cobra.Command {
 				return errorsmod.Wrap(err, "failed to parse epoch ID")
 			}
 
-			msg := types.NewMsgSetEpochPubkey(
+			msg := types.NewMsgSetEpochPubKey(
 				clientCtx.GetFromAddress().String(),
 				pubkey,
 				uint32(epochId),

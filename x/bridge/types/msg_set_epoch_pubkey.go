@@ -6,36 +6,36 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-const TypeMsgSetEpochPubkey = "set_epoch_pubkey"
+const TypeMsgSetEpochPubKey = "set_epoch_pubkey"
 
-var _ sdk.Msg = &MsgSetEpochPubkey{}
+var _ sdk.Msg = &MsgSetEpochPubKey{}
 
-func NewMsgSetEpochPubkey(creator string, pubkey string, epochId uint32) *MsgSetEpochPubkey {
-	return &MsgSetEpochPubkey{
+func NewMsgSetEpochPubKey(creator string, pubkey string, epochId uint32) *MsgSetEpochPubKey {
+	return &MsgSetEpochPubKey{
 		Creator: creator,
 		Pubkey:  pubkey,
 		EpochId: epochId,
 	}
 }
 
-func (msg *MsgSetEpochPubkey) Route() string {
+func (msg *MsgSetEpochPubKey) Route() string {
 	return RouterKey
 }
 
-func (msg *MsgSetEpochPubkey) Type() string {
-	return TypeMsgSetEpochPubkey
+func (msg *MsgSetEpochPubKey) Type() string {
+	return TypeMsgSetEpochPubKey
 }
 
-func (msg *MsgSetEpochPubkey) GetSigners() []sdk.AccAddress {
+func (msg *MsgSetEpochPubKey) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{sdk.MustAccAddressFromBech32(msg.Creator)}
 }
 
-func (msg *MsgSetEpochPubkey) GetSignBytes() []byte {
+func (msg *MsgSetEpochPubKey) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(msg)
 	return sdk.MustSortJSON(bz)
 }
 
-func (msg *MsgSetEpochPubkey) ValidateBasic() error {
+func (msg *MsgSetEpochPubKey) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)

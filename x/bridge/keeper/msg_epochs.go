@@ -57,7 +57,7 @@ func (m msgServer) StartEpoch(goCtx context.Context, msg *types.MsgStartEpoch) (
 	return &types.MsgStartEpochResponse{}, nil
 }
 
-func (m msgServer) SetEpochPubkey(goCtx context.Context, msg *types.MsgSetEpochPubkey) (*types.MsgSetEpochPubkeyResponse, error) {
+func (m msgServer) SetEpochPubKey(goCtx context.Context, msg *types.MsgSetEpochPubKey) (*types.MsgSetEpochPubKeyResponse, error) {
 	if msg == nil {
 		return nil, errorsmod.Wrap(types.ErrInvalidDataType, "message cannot be nil")
 	}
@@ -103,7 +103,7 @@ func (m msgServer) SetEpochPubkey(goCtx context.Context, msg *types.MsgSetEpochP
 		m.Keeper.SetEpochPubkey(ctx, msg.EpochId, msg.Pubkey)
 	}
 
-	return &types.MsgSetEpochPubkeyResponse{}, nil
+	return &types.MsgSetEpochPubKeyResponse{}, nil
 }
 
 func (m msgServer) SetEpochSignature(goCtx context.Context, msg *types.MsgSetEpochSignature) (*types.MsgSetEpochSignatureResponse, error) {
