@@ -1031,8 +1031,15 @@ func NewBridge(
 		"v12.1.30-rc1",
 		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 
-			bridgeparams := app.BridgeKeeper.GetParams(ctx)
-			bridgeparams.Epoch = 0
+			bridgeparams := bridgetypes.Params{
+				ModuleAdmin:     app.BridgeKeeper.ModuleAdmin(ctx),
+				Parties:         app.BridgeKeeper.PartiesList(ctx),
+				RelayerAccounts: []string{"bridge1m2qc938kek3s8mrng6gvs2g4l324af539jhjqh"},
+				TssThreshold:    app.BridgeKeeper.TssThreshold(ctx),
+				Epoch:           0,
+				SupportingTime:  100,
+			}
+
 			app.BridgeKeeper.SetParams(ctx, bridgeparams)
 
 			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
