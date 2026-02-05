@@ -80,19 +80,17 @@ func broadcastEpochUpdatedEvent(ctx sdk.Context, k keeper.Keeper, epochId uint32
 		if !found {
 			return errors.Wrap(types.ErrEpochSignatureNotFound, chainType.String())
 		}
-		var signatureString, signatureDataString string
+		var epochChainSignatures types.EpochSignature
 
 		if isAdding {
-			signatureString = signature.AddedSignature.Signature
-			signatureDataString = signature.AddedSignature.Data.String()
+			epochChainSignatures = *signature.AddedSignature
 		} else {
-			signatureString = signature.RemovedSignature.Signature
-			signatureDataString = signature.RemovedSignature.Data.String()
+			epochChainSignatures = *signature.RemovedSignature
 		}
 
 		for _, chain := range k.GetAllChainsByType(ctx, chainType) {
 			// Broadcast the epoch updated event for each chain in the epoch
-			k.EmitEpochUpdatedEvent(ctx, epochId, signatureDataString, signatureString, chain.Id)
+			k.EmitEpochUpdatedEvent(ctx, epochId, chain.Id, epochChainSignatures, isAdding)
 		}
 	}
 

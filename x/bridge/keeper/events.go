@@ -81,13 +81,17 @@ func emitStartEpochEvent(sdkCtx sdk.Context, epochId uint32, info string) {
 	)
 }
 
-func (k Keeper) EmitEpochUpdatedEvent(sdkCtx sdk.Context, epochId uint32, signatureData string, signature string, chainId string) {
+func (k Keeper) EmitEpochUpdatedEvent(sdkCtx sdk.Context, epochId uint32, chainId string, signature types.EpochSignature, isAdding bool) {
 	sdkCtx.EventManager().EmitEvent(
 		sdk.NewEvent(types.EventType_EPOCH_UPDATED.String(),
 			sdk.NewAttribute(types.AttributeEpochId, big.NewInt(int64(epochId)).String()),
 			sdk.NewAttribute(types.AttributeChainId, chainId),
-			sdk.NewAttribute(types.AttributeEpochSignature, signature),
-			sdk.NewAttribute(types.AttributeEpochSignatureData, signatureData),
+			sdk.NewAttribute(types.AttributeEpochSignature, signature.Signature),
+			sdk.NewAttribute(types.AttributeEpochSigner, signature.Data.NewSigner),
+			sdk.NewAttribute(types.AttributeEpochStartTime, strconv.FormatUint(signature.Data.StartTime, 10)),
+			sdk.NewAttribute(types.AttributeEpochEndTime, strconv.FormatUint(signature.Data.EndTime, 10)),
+			sdk.NewAttribute(types.AttributeEpochNonce, signature.Data.Nonce),
+			sdk.NewAttribute(types.AttributeEpochSignatureMode, strconv.FormatBool(isAdding)),
 		),
 	)
 }
