@@ -11,7 +11,7 @@ env:
 
 jobs:
   converge-github:
-    name: Skaffold Build To Github
+    name: Build To Github
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
@@ -33,14 +33,14 @@ jobs:
           IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
           CACHE_REPO: ghcr.io/${{ github.repository }}/cache
         run: |
-          buildah bud \
+          buildah build \
             --format docker \
             -f Dockerfile \
             --layers \
             --cache-from $CACHE_REPO \
             --cache-to $CACHE_REPO \
             -t $IMAGE \
-            --build-arg CI_ACCESS_TOKEN=$CI_ACCESS_TOKEN
+            --build-arg CI_ACCESS_TOKEN=$CI_ACCESS_TOKEN \
             .
 
       - name: Push Image
