@@ -12,7 +12,7 @@ env:
 jobs:
   converge-github:
     name: Build To Github
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -22,11 +22,6 @@ jobs:
       - name: Log in to registry
         # This is where you will update the personal access token to GITHUB_TOKEN
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-
-      - name: Install Buildah
-        run: |
-          sudo apt-get update
-          sudo apt-get -y install buildah
 
       - name: Build and Push Image
         env:
