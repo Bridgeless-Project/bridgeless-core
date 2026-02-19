@@ -26,8 +26,8 @@ jobs:
 
       - name: Build and Push Image
         env:
-          IMAGE: $GITHUB_REPOSITORY:${{ github.sha }}
-          CACHE_REPO: $GITHUB_REPOSITORY/cache
+          IMAGE: ${{ env.GITHUB_REPOSITORY }}:${{ github.sha }}
+          CACHE_REPO: ${{ env.GITHUB_REPOSITORY }}/cache
         run: |
           buildah build \
             --format docker \
@@ -41,5 +41,5 @@ jobs:
 
       - name: Push Image
         env:
-          IMAGE: $GITHUB_REPOSITORY:${{ github.sha }}
+          IMAGE: ${{ env.GITHUB_REPOSITORY }}:${{ github.sha }}
         run: buildah push $IMAGE
