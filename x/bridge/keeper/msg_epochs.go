@@ -63,11 +63,11 @@ func (m msgServer) SetEpochPubKey(goCtx context.Context, msg *types.MsgSetEpochP
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	if !m.IsParty(ctx, msg.Creator) {
+	if !m.IsEpochParty(ctx, msg.Creator, msg.EpochId) {
 		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "submitter isn`t an authorized party")
 	}
 
-	_, found := m.Keeper.GetEpoch(ctx, msg.EpochId)
+	newEpoch, found := m.Keeper.GetEpoch(ctx, msg.EpochId)
 	if !found {
 		return nil, errorsmod.Wrapf(types.ErrInvalidEpochID, "epoch %d not found", msg.EpochId)
 	}
@@ -98,7 +98,7 @@ func (m msgServer) SetEpochPubKey(goCtx context.Context, msg *types.MsgSetEpochP
 	m.Keeper.SetEpochPubkeySubmission(ctx, msg.EpochId, pubkeyHash, submissions)
 
 	// Check if threshold is reached
-	if len(submissions.Submitters) >= int(m.Keeper.GetParams(ctx).TssThreshold+1) {
+	if len(submissions.Submitters) == int(newEpoch.TssThreshold+1) {
 		// Threshold reached - store pubkey
 		m.Keeper.SetEpochPubkey(ctx, msg.EpochId, msg.Pubkey)
 	}
@@ -144,7 +144,7 @@ func (m msgServer) SetEpochSignature(goCtx context.Context, msg *types.MsgSetEpo
 		submissions.Submitters = append(submissions.Submitters, msg.Creator)
 		m.Keeper.SetEpochChainSignatureSubmission(ctx, sig.EpochId, sig.ChainType, submissions)
 
-		if len(submissions.Submitters) < int(params.TssThreshold+1) {
+		if len(submissions.Submitters) == int(params.TssThreshold+1) {
 			isReadyToMigration = false
 			continue
 		}

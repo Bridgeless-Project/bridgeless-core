@@ -41,3 +41,18 @@ func (k Keeper) TssThreshold(ctx sdk.Context) (threshold uint32) {
 	k.paramstore.Get(ctx, []byte(types.ParamTssThresholdKey), &threshold)
 	return
 }
+
+func (k Keeper) IsEpochParty(ctx sdk.Context, sender string, epochId uint32) bool {
+	epoch, found := k.GetEpoch(ctx, epochId)
+	if !found {
+		return false
+	}
+
+	for _, party := range epoch.Parties {
+		if party.Address == sender {
+			return true
+		}
+	}
+	return false
+
+}
