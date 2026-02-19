@@ -30,7 +30,6 @@ jobs:
           CACHE_REPO: ${{ env.GITHUB_REPOSITORY }}/cache
         run: |
           buildah build \
-            --format docker \
             -f Dockerfile \
             --layers \
             --cache-from $CACHE_REPO \
