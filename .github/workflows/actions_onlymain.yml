@@ -8,6 +8,7 @@ on:
 
 env:
   CI_ACCESS_TOKEN: ${{ secrets.CI_ACCESS_TOKEN }}
+  GITHUB_REPOSITORY: ghcr.io/bridgeless-project
 
 jobs:
   converge-github:
@@ -25,8 +26,8 @@ jobs:
 
       - name: Build and Push Image
         env:
-          IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
-          CACHE_REPO: ghcr.io/${{ github.repository }}/cache
+          IMAGE: $GITHUB_REPOSITORY:${{ github.sha }}
+          CACHE_REPO: $GITHUB_REPOSITORY/cache
         run: |
           buildah build \
             --format docker \
@@ -40,5 +41,5 @@ jobs:
 
       - name: Push Image
         env:
-          IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
+          IMAGE: $GITHUB_REPOSITORY:${{ github.sha }}
         run: buildah push $IMAGE
