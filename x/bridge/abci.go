@@ -26,6 +26,7 @@ func finishMigrationEpoch(ctx sdk.Context, k keeper.Keeper, params types.Params)
 	}
 
 	nextEpoch.Status = types.EpochStatus_RUNNING
+	nextEpoch.FinalizedBlock = uint64(ctx.BlockHeight())
 	k.SetEpoch(ctx, &nextEpoch)
 
 	epoch, _ := k.GetEpoch(ctx, params.Epoch)

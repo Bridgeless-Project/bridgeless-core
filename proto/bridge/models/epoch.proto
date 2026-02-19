@@ -32,6 +32,7 @@ message Epoch {
   repeated Party parties = 5;
   uint32 tss_threshold = 6;
   repeated TSSInfo tss_info = 7 [(gogoproto.nullable) = false];
+  uint64 finalized_block = 8;
 }
 
 message EpochSignature {

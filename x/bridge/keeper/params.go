@@ -26,3 +26,18 @@ func (k Keeper) IsParty(ctx sdk.Context, sender string) bool {
 	}
 	return false
 }
+
+func (k Keeper) IsEpochParty(ctx sdk.Context, sender string, epochId uint32) bool {
+	epoch, found := k.GetEpoch(ctx, epochId)
+	if !found {
+		return false
+	}
+
+	for _, party := range epoch.Parties {
+		if party.Address == sender {
+			return true
+		}
+	}
+	return false
+
+}

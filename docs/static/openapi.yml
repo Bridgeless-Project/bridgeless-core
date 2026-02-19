@@ -935,8 +935,9 @@ paths:
                           title: >-
                             if is not active it should be removed from signers
                             in this epoch
-                  pubkey:
+                  finalized_block:
                     type: string
+                    format: uint64
         default:
           description: An unexpected error response.
           schema:
@@ -52068,8 +52069,9 @@ definitions:
             active:
               type: boolean
               title: if is not active it should be removed from signers in this epoch
-      pubkey:
+      finalized_block:
         type: string
+        format: uint64
   core.bridge.EpochStatus:
     type: string
     enum:
@@ -52316,8 +52318,9 @@ definitions:
                   title: >-
                     if is not active it should be removed from signers in this
                     epoch
-          pubkey:
+          finalized_block:
             type: string
+            format: uint64
   core.bridge.QueryGetEpochPubKeyResponse:
     type: object
     properties:
