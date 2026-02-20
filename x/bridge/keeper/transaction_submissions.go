@@ -59,6 +59,11 @@ func (k Keeper) TxHash(tx *types.Transaction) common.Hash {
 	return crypto.Keccak256Hash(k.cdc.MustMarshal(tx))
 }
 
-func (k Keeper) EpochSignatureHash(epochSig *types.EpochChainSignatures) common.Hash {
-	return crypto.Keccak256Hash(k.cdc.MustMarshal(epochSig))
+func (k Keeper) EpochSignaturesHash(epochSigs []types.EpochChainSignatures) common.Hash {
+	bytes := make([]byte, 0)
+	for _, sig := range epochSigs {
+		bytes = append(bytes, k.cdc.MustMarshal(&sig)...)
+	}
+
+	return crypto.Keccak256Hash(bytes)
 }

@@ -154,6 +154,7 @@ Example JSON file format:
 			msg := types.NewMsgSetEpochSignature(
 				clientCtx.GetFromAddress().String(),
 				signatures,
+				nil, // TODO: fix it latter
 			)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)

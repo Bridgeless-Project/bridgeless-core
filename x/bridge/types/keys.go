@@ -72,6 +72,7 @@ const (
 	AttributeEpochStartTime       = "epoch_start_time"
 	AttributeEpochEndTime         = "epoch_end_time"
 	AttributeEpochSignatureMode   = "epoch_signature_mode"
+	AttributeTSSThreshold         = "tss_threshold"
 
 	AttributeEpochChainType        = "epoch_chain_type"
 	AttributeChainId               = "chain_id"
@@ -134,8 +135,8 @@ func KeyEpochChainSignature(chainType ChainType, epochId uint32) []byte {
 	return []byte(fmt.Sprintf("%d/%d", chainType, epochId))
 }
 
-func KeyEpochChainSignatureSubmission(chainType ChainType, epochId uint32, hash string) []byte {
-	return []byte(fmt.Sprintf("%d/%d/%s", chainType, epochId, hash))
+func KeyEpochChainSignatureSubmission(epochId uint32, hash string) []byte {
+	return []byte(fmt.Sprintf("%d/%d/%s", epochId, hash))
 }
 
 func KeyEpochTransaction(epochId uint32, txNonce uint64, txHash string) []byte {
