@@ -153,6 +153,7 @@ Example JSON file format:
 
 			msg := types.NewMsgSetEpochSignature(
 				clientCtx.GetFromAddress().String(),
+				0,
 				signatures,
 				nil, // TODO: fix it latter
 			)

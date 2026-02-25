@@ -47,6 +47,10 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		k.InsertReferralRewards(ctx, referralRewards.ReferralId, referralRewards.TokenId, referralRewards)
 	}
 
+	for _, epoch := range genState.Epochs {
+		k.SetEpoch(ctx, &epoch)
+	}
+	
 	if err := genState.Validate(); err != nil {
 		panic(errors.Wrap(err, "invalid genesis state"))
 	}

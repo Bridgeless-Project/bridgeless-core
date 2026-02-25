@@ -10,9 +10,10 @@ const TypeMsgSetEpochSignature = "set_epoch_signature"
 
 var _ sdk.Msg = &MsgSetEpochSignature{}
 
-func NewMsgSetEpochSignature(creator string, signatures []EpochChainSignatures, addresses []EpochBridgeAddress) *MsgSetEpochSignature {
+func NewMsgSetEpochSignature(creator string, epochId uint32, signatures []EpochChainSignatures, addresses []EpochBridgeAddress) *MsgSetEpochSignature {
 	return &MsgSetEpochSignature{
 		Creator:              creator,
+		EpochId:              epochId,
 		EpochChainSignatures: signatures,
 		Addresses:            addresses,
 	}
