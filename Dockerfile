@@ -38,7 +38,7 @@ RUN go build  -mod=mod  -o /usr/local/bin/bridgeless-core github.com/Bridgeless-
 FROM alpine:3.9
 
 RUN apk add --no-cache ca-certificates
-COPY ./config/genesis.json /config/genesis.json
+#COPY ./config/genesis.json /config/genesis.json
 COPY --from=buildbase /usr/local/bin/bridgeless-core /usr/local/bin/bridgeless-core
 COPY --from=buildbase /usr/local/bin/cosmovisor /usr/local/bin/cosmovisor
 ENTRYPOINT ["bridgeless-core"]
