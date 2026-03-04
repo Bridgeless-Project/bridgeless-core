@@ -72,12 +72,13 @@ func emitSubmitEvent(sdkCtx sdk.Context, transaction types.Transaction) {
 	))
 }
 
-func emitStartEpochEvent(sdkCtx sdk.Context, epochId uint32, info string, threshold uint32) {
+func emitStartEpochEvent(sdkCtx sdk.Context, epochId uint32, info string, threshold uint32, startTime int64) {
 	sdkCtx.EventManager().EmitEvent(
 		sdk.NewEvent(types.EventType_STARTED_NEW_EPOCH.String(),
 			sdk.NewAttribute(types.AttributeEpochId, big.NewInt(int64(epochId)).String()),
 			sdk.NewAttribute(types.AttributeTssInfo, info),
 			sdk.NewAttribute(types.AttributeTSSThreshold, new(big.Int).SetUint64(uint64(threshold)).String()),
+			sdk.NewAttribute(types.AttributeEpochStartTime, new(big.Int).SetInt64(startTime).String()),
 		),
 	)
 }

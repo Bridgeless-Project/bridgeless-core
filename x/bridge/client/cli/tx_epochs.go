@@ -87,6 +87,7 @@ Example JSON file format:
 				input.EpochID,
 				input.TSSInfo,
 				input.TSSThreshold,
+				input.StartTime,
 			)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)

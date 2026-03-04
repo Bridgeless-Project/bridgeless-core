@@ -10,12 +10,13 @@ const TypeMsgStartEpoch = "start_epoch"
 
 var _ sdk.Msg = &MsgStartEpoch{}
 
-func NewMsgStartEpoch(creator string, epochId uint32, info []TSSInfo, tssThreshold uint32) *MsgStartEpoch {
+func NewMsgStartEpoch(creator string, epochId uint32, info []TSSInfo, tssThreshold uint32, startTime int64) *MsgStartEpoch {
 	return &MsgStartEpoch{
 		Creator:      creator,
 		EpochId:      epochId,
 		Info:         info,
 		TssThreshold: tssThreshold,
+		StartTime:    startTime,
 	}
 }
 
@@ -50,5 +51,8 @@ func (msg *MsgStartEpoch) ValidateBasic() error {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "epoch ID must be greater than zero")
 	}
 
+	if msg.StartTime == 0 {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "start time must be greater than zero")
+	}
 	return nil
 }

@@ -207,6 +207,7 @@ message MsgStartEpoch {
   uint32 epoch_id = 2;
   repeated TSSInfo info = 3 [(gogoproto.nullable) = false];
   uint32 tss_threshold = 4;
+  int64 start_time = 5;
 }
 
 message MsgStartEpochResponse {}

@@ -52,7 +52,7 @@ func (m msgServer) StartEpoch(goCtx context.Context, msg *types.MsgStartEpoch) (
 		return nil, errorsmod.Wrapf(types.ErrPackEvent, "failed to marshal TSS info: %v", err)
 	}
 
-	emitStartEpochEvent(ctx, msg.EpochId, string(tssInfo), msg.TssThreshold)
+	emitStartEpochEvent(ctx, msg.EpochId, string(tssInfo), msg.TssThreshold, msg.StartTime)
 
 	return new(types.MsgStartEpochResponse), nil
 }
