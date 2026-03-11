@@ -72,11 +72,11 @@ func (m msgServer) SetEpochPubKey(goCtx context.Context, msg *types.MsgSetEpochP
 		return nil, errorsmod.Wrapf(types.ErrInvalidEpochID, "epoch %d not found", msg.EpochId)
 	}
 
-	// Check if pubkey is already set for this epoch
-	existingPubkey, found := m.Keeper.GetEpochPubkey(ctx, msg.EpochId)
-	if found && existingPubkey != "" {
-		return nil, errorsmod.Wrapf(types.ErrPubkeyAlreadySet, "epoch %d", msg.EpochId)
-	}
+	//// Check if pubkey is already set for this epoch
+	//existingPubkey, found := m.Keeper.GetEpochPubkey(ctx, msg.EpochId)
+	//if found && existingPubkey != "" {
+	//	return nil, errorsmod.Wrapf(types.ErrPubkeyAlreadySet, "epoch %d", msg.EpochId)
+	//}
 
 	// Use pubkey as hash for submission tracking
 	pubkeyHash := msg.Pubkey
