@@ -33,7 +33,7 @@ const (
 	StoreTokenInfoPrefix                     = "token-info"
 	StoreTokenPairsPrefix                    = "token-pairs"
 	StoreChainPrefix                         = "chain"
-	StoreChainTypePrefix                     = "chain"
+	StoreChainTypePrefix                     = "chain_type"
 	StoreTransactionPrefix                   = "transaction"
 	StoreTransactionSubmissionsPrefix        = "transaction-submissions"
 	StoreReferralPrefix                      = "referral"

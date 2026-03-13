@@ -151,6 +151,15 @@ func (m msgServer) SetEpochSignature(goCtx context.Context, msg *types.MsgSetEpo
 		m.Keeper.SetEpochChainSignature(ctx, &sig)
 	}
 
+	for _, chainAddress := range msg.Addresses {
+		chain, found := m.Keeper.GetChain(ctx, chainAddress.ChainId)
+		if !found {
+			return nil, errorsmod.Wrapf(types.ErrChainNotFound, "chain %s not found", chainAddress.ChainId)
+		}
+		chain.BridgeAddress = chainAddress.Address
+		m.Keeper.SetChain(ctx, chain)
+	}
+
 	epoch, _ := m.Keeper.GetEpoch(ctx, msg.EpochChainSignatures[0].EpochId)
 	epoch.Status = types.EpochStatus_MIGRATION_FINALIZING
 	m.Keeper.SetEpoch(ctx, &epoch)
