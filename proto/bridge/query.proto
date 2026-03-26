@@ -107,6 +107,10 @@ service Query {
   rpc GetEpochPubKey(QueryGetEpochPubKey) returns (QueryGetEpochPubKeyResponse) {
     option (google.api.http).get = "/cosmos/bridge/epoch/{epoch_id}/pubkey";
   }
+
+  rpc GetEpochSignature(QueryGetEpochSignature) returns (QueryGetEpochSignatureResponse) {
+    option (google.api.http).get = "/cosmos/bridge/epoch/{epoch_id}/signature/{chain_type}";
+  }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -303,4 +307,13 @@ message QueryGetEpochPubKey {
 
 message QueryGetEpochPubKeyResponse {
   string pub_key = 1;
+}
+
+message QueryGetEpochSignature {
+  uint32 epoch_id = 1;
+  ChainType chain_type = 2;
+}
+
+message QueryGetEpochSignatureResponse {
+    EpochChainSignatures epoch_chain_signatures = 1 [(gogoproto.nullable) = false];
 }
