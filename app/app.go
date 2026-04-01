@@ -1054,7 +1054,7 @@ func NewBridge(
 	)
 
 	app.UpgradeKeeper.SetUpgradeHandler(
-		"v12.1.30-rc3",
+		"v12.1.30-rc2.1",
 		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 			parties := make([]*bridgetypes.Party, 0)
 			parties = append(parties,
