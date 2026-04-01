@@ -58,6 +58,7 @@ type StartEpochInput struct {
 	EpochID      uint32          `json:"epoch_id"`
 	TSSInfo      []types.TSSInfo `json:"tss_info"`
 	TSSThreshold uint32          `json:"tss_threshold"`
+	StartTime    int64           `json:"start_time"`
 }
 
 // parseStartEpochInput parses the start epoch input from a JSON file

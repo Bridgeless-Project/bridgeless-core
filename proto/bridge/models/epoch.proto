@@ -54,8 +54,17 @@ message EpochChainSignatures {
    ChainType chain_type = 2;
    EpochSignature added_signature = 3;
    EpochSignature removed_signature = 4;
-   string address = 5; // address of the contract or account on the chain
-   uint32 submittions= 6; // number of times this signature has been submited
+}
+
+message EpochBridgeAddress {
+  uint32 epoch_id =1;
+  string chain_id =2;
+  string address = 3;
+}
+
+message EpochSubmissions {
+   uint32 epoch_id = 1;
+   uint32 submissions =2;
 }
 
 message TSSInfo {
