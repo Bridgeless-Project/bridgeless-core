@@ -1,0 +1,90 @@
+syntax = "proto3";
+package core.swap;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "swap/params.proto";
+import "swap/models/pool.proto";
+import "swap/models/transaction.proto";
+// this line is used by starport scaffolding # 1
+
+option go_package = "github.com/Bridgeless-Project/bridgeless-core/v12/x/swap/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/cosmos/swap/params";
+  }
+
+  rpc AllPool(QueryAllPools) returns (QueryAllPoolsResponse) {
+    option (google.api.http).get = "/cosmos/swap/pools";
+  }
+
+  rpc GetPoolByTokenId(QueryGetPoolByTokenId) returns (QueryGetPoolByTokenIdResponse) {
+    option (google.api.http).get = "/cosmos/swap/pools/{token_id}";
+  }
+
+  rpc AllSwaps(QueryAllSwaps) returns (QueryAllSwapsResponse) {
+    option (google.api.http).get = "/cosmos/swap/swaps";
+  }
+
+  rpc GetSwapById(QueryGetSwapById) returns (QueryGetSwapByIdResponse) {
+    option (google.api.http).get = "/cosmos/swap/swaps/{tx_hash}/{tx_nonce}/{chain_id}";
+  }
+
+  // this line is used by starport scaffolding # 2
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllPools {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllPoolsResponse {
+  repeated SwapPool pool = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+
+message QueryGetPoolByTokenId {
+  string token_id = 1;
+}
+
+message QueryGetPoolByTokenIdResponse {
+  SwapPool pool = 1 [(gogoproto.nullable) = false];
+}
+
+
+message QueryAllSwaps {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllSwapsResponse {
+  repeated SwapTransaction swap = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+
+message QueryGetSwapById {
+  string tx_hash = 1;
+  uint64 tx_nonce = 2;
+  string chain_id = 3;
+}
+
+message QueryGetSwapByIdResponse {
+  SwapTransaction swap = 1 [(gogoproto.nullable) = false];
+}
+
+
+
+// this line is used by starport scaffolding # 3

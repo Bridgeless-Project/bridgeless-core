@@ -1,0 +1,36 @@
+syntax = "proto3";
+package core.swap;
+
+import "google/protobuf/any.proto";
+import "swap/models/pool.proto";
+import "swap/models/transaction.proto";
+
+// this line is used by starport scaffolding # proto/tx/import
+
+option go_package = "github.com/Bridgeless-Project/bridgeless-core/v12/x/swap/types";
+
+// Msg defines the Msg service.
+service Msg {
+  rpc UpdatePool(MsgUpdatePool) returns (MsgUpdatePoolResponse);
+  rpc SubmitSwapTx(MsgSubmitSwapTx) returns (MsgSubmitSwapTxResponse);
+  // this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgUpdatePool {
+  string creator = 1;
+  SwapPool pool = 2;
+}
+
+message MsgUpdatePoolResponse {}
+
+
+message MsgSubmitSwapTx {
+  string creator = 1;
+  SwapTransaction tx = 2;
+  bool is_bridge_tx = 3; // indicates if the transaction is a bridge transaction or a native swap transaction
+}
+
+message MsgSubmitSwapTxResponse {}
+
+
+// this line is used by starport scaffolding # proto/tx/message
