@@ -252,6 +252,7 @@ var (
 		mint.AppModuleBasic{},
 		nft.AppModuleBasic{},
 		bridge.AppModuleBasic{},
+		swap.AppModuleBasic{},
 		multisig.AppModuleBasic{},
 	)
 
