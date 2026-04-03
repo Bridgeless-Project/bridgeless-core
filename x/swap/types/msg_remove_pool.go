@@ -6,26 +6,26 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-const TypeMsgUpdatePool = "update_pool"
+const TypeMsgRemovePool = "remove_pool"
 
-var _ sdk.Msg = &MsgUpdatePool{}
+var _ sdk.Msg = &MsgRemovePool{}
 
-func NewMsgUpdatePool(creator string, pool *SwapPool) *MsgUpdatePool {
-	return &MsgUpdatePool{
+func NewMsgRemovePool(creator string, tokenID string) *MsgRemovePool {
+	return &MsgRemovePool{
 		Creator: creator,
-		Pool:    pool,
+		TokenId: tokenID,
 	}
 }
 
-func (msg *MsgUpdatePool) Route() string {
+func (msg *MsgRemovePool) Route() string {
 	return RouterKey
 }
 
-func (msg *MsgUpdatePool) Type() string {
-	return TypeMsgUpdatePool
+func (msg *MsgRemovePool) Type() string {
+	return TypeMsgRemovePool
 }
 
-func (msg *MsgUpdatePool) GetSigners() []sdk.AccAddress {
+func (msg *MsgRemovePool) GetSigners() []sdk.AccAddress {
 	accAddress, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		panic(errorsmod.Wrapf(err, "failed to acc address from bech32 string, given string: %s", msg.Creator))
@@ -34,19 +34,19 @@ func (msg *MsgUpdatePool) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{accAddress}
 }
 
-func (msg *MsgUpdatePool) GetSignBytes() []byte {
+func (msg *MsgRemovePool) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(msg)
 	return sdk.MustSortJSON(bz)
 }
 
-func (msg *MsgUpdatePool) ValidateBasic() error {
+func (msg *MsgRemovePool) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address: %s", err)
 	}
 
-	if err = validatePool(msg.Pool); err != nil {
-		return err
+	if len(msg.TokenId) == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "token id cannot be empty")
 	}
 
 	return nil

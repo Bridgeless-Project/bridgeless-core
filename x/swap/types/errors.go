@@ -3,11 +3,13 @@ package types
 // DONTCOVER
 
 import (
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	errorsmod "cosmossdk.io/errors"
 )
 
 // x/swap module sentinel errors
 var (
-	ErrSample = sdkerrors.Register(ModuleName, 1100, "sample error")
-	
+	ErrPoolNotFound     = errorsmod.Register(ModuleName, 1100, "pool not found")
+	ErrSwapNotFound     = errorsmod.Register(ModuleName, 1101, "swap not found")
+	ErrPermissionDenied = errorsmod.Register(ModuleName, 1102, "permission denied")
+	ErrAlreadyExists    = errorsmod.Register(ModuleName, 1103, "entity already exists")
 )

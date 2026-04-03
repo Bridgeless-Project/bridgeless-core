@@ -3,19 +3,21 @@ package keeper_test
 import (
 	"testing"
 
+	testkeeper "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/swap/keeper"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/swap/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
-	testkeeper 	"github.com/Bridgeless-Project/bridgeless-core/v12/testutil/keeper"
-	"github.com/Bridgeless-Project/bridgeless-core/v12/x/swap/types"
 )
 
 func TestParamsQuery(t *testing.T) {
-	keeper, ctx := testkeeper.SwapKeeper(t)
+	kp, ctx := testkeeper.SwapKeeper(t)
+	qs := keeper.NewQueryServerImpl(*kp)
 	wctx := sdk.WrapSDKContext(ctx)
 	params := types.DefaultParams()
-	keeper.SetParams(ctx, params)
+	kp.SetParams(ctx, params)
 
-	response, err := keeper.Params(wctx, &types.QueryParamsRequest{})
+	response, err := qs.Params(wctx, &types.QueryParamsRequest{})
 	require.NoError(t, err)
 	require.Equal(t, &types.QueryParamsResponse{Params: params}, response)
 }

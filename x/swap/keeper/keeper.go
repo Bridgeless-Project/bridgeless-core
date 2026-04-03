@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -21,26 +20,6 @@ type (
 		paramstore paramtypes.Subspace
 	}
 )
-
-func (k Keeper) AllPool(ctx context.Context, pools *types.QueryAllPools) (*types.QueryAllPoolsResponse, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (k Keeper) GetPoolByTokenId(ctx context.Context, id *types.QueryGetPoolByTokenId) (*types.QueryGetPoolByTokenIdResponse, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (k Keeper) AllSwaps(ctx context.Context, swaps *types.QueryAllSwaps) (*types.QueryAllSwapsResponse, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (k Keeper) GetSwapById(ctx context.Context, id *types.QueryGetSwapById) (*types.QueryGetSwapByIdResponse, error) {
-	//TODO implement me
-	panic("implement me")
-}
 
 func NewKeeper(
 	cdc codec.BinaryCodec,
