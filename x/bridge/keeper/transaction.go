@@ -104,6 +104,11 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 		return errorsmod.Wrap(types.ErrInvalidDataType, "invalid withdrawal amount")
 	}
 
+	k.SetCommission(ctx, types.Commission{
+		TokenId: token.TokenId,
+		Amount:  commissionAmount.String(),
+	})
+
 	rewards, err := types.GetCommissionAmount(commissionAmount, referral.CommissionRate)
 	if err != nil {
 		return errorsmod.Wrap(err, "failed to calculate referral rewards")

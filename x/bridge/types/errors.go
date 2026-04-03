@@ -38,4 +38,5 @@ var (
 	ErrPubkeyAlreadySet             = errorsmod.Register(ModuleName, 1127, "pubkey already set for epoch")
 	ErrPubkeyNotSet                 = errorsmod.Register(ModuleName, 1128, "pubkey not set for epoch")
 	ErrEpochNotFound                = errorsmod.Register(ModuleName, 1129, "epoch not found")
+	ErrCommissionNotFound           = errorsmod.Register(ModuleName, 1130, "commission not found")
 )
