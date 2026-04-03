@@ -15,6 +15,7 @@ Swap module stores swap transactions, supported Uniswap V2 pools, and module par
 
 Swap module params contains next fields:
 - **Module admin** address - module admin is responsible for updating supported pools and changing swap-related configuration.
+- **Uniswap router address** - address of the Uniswap V2 router contract used during swap execution.
 
 Definition:
 
@@ -22,6 +23,7 @@ Definition:
 // Params defines the parameters for the module.
 message Params {
   string module_admin = 1;
+  string uniswap_router_address = 2;
 }
 ```
 
@@ -31,6 +33,7 @@ Example:
 {
   "params": {
     "module_admin": "bridge1...",
+    "uniswap_router_address": "0x0000000000000000000000000000000000000000"
   }
 }
 ```
@@ -46,6 +49,8 @@ message SwapPool {
   string token_id = 2;
 }
 ```
+
+`address` stores the hop token address used to build the router path for multi-hop swaps.
 
 Example:
 
@@ -68,6 +73,7 @@ message SwapTransaction {
   core.bridge.Transaction tx = 1;
   string final_receiver = 20;
   string final_amount = 21;
+  string amount_out_min = 22;
   string final_deposit_tx_hash = 23;
 }
 ```
@@ -97,6 +103,7 @@ Example:
   },
   "final_receiver": "0x0000000000000000000000000000000000000000",
   "final_amount": "990000000000000000",
+  "amount_out_min": "900000000000000000",
   "final_deposit_tx_hash": "0x1111111111111111111111111111111111111111"
 }
 ```
@@ -151,6 +158,7 @@ Example:
     },
     "final_receiver": "bc1...",
     "final_amount": "0",
+    "amount_out_min": "900000000000000000",
     "final_deposit_tx_hash": ""
   },
   "is_bridge_tx": true
@@ -265,15 +273,15 @@ When a user wants to swap **ETH -> BTC**, the Core MUST process two swaps:
 1. Core swaps **ETH -> NST**
 2. Core swaps **NST -> BTC**
 
-The same slippage value MUST be used for both swaps.
+The backend provides `amount_out_min`, and the same minimum output policy MUST be respected for the full route.
 
-During each swap, the Core MUST update the token-pair relation used by the protocol.
+During each swap, the Core derives the router path from the stored pools ordered by `token_id`.
 
 ---
 
 ## Recovery Flow
 
-If the user-provided slippage is too small, the wrapped tokens MUST be sent to the recovery address. Alternatively, the protocol address MAY hold the tokens, and the user can later request their withdrawal.
+If `amount_out_min` is too aggressive and the swap cannot be executed, the wrapped tokens MUST be sent to the recovery address. Alternatively, the protocol address MAY hold the tokens, and the user can later request their withdrawal.
 
 In the recovery flow, the user MUST receive the tokens from the **last successfully completed stage** before the error:
 - if the user swaps **BTC -> ETH** and the error occurs during the **wBTC -> NST** swap, the user MUST receive **wBTC**

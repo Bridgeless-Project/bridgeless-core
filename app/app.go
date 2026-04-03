@@ -617,6 +617,8 @@ func NewBridge(
 		keys[swaptypes.StoreKey],
 		keys[swaptypes.StoreKey],
 		app.GetSubspace(swaptypes.ModuleName),
+		app.BridgeKeeper,
+		app.Erc20Keeper,
 	)
 
 	app.RecoveryKeeper = recoverykeeper.NewKeeper(

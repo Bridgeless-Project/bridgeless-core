@@ -43,7 +43,7 @@ message MsgUpdatePoolResponse {}
 message MsgSubmitSwapTx {
   string creator = 1;
   SwapTransaction tx = 2;
-  bool is_bridge_tx = 3; // indicates if the transaction is a bridge transaction or a native swap transaction
+  bool is_bridge_tx = 3; // indicates if the native swap transaction
 }
 
 message MsgSubmitSwapTxResponse {}

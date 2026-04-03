@@ -31,6 +31,7 @@ type SwapTransaction struct {
 	Tx                 types.Transaction `protobuf:"bytes,1,opt,name=tx,proto3" json:"tx"`
 	FinalReceiver      string            `protobuf:"bytes,20,opt,name=final_receiver,json=finalReceiver,proto3" json:"final_receiver,omitempty"`
 	FinalAmount        string            `protobuf:"bytes,21,opt,name=final_amount,json=finalAmount,proto3" json:"final_amount,omitempty"`
+	AmountOutMin       string            `protobuf:"bytes,22,opt,name=amount_out_min,json=amountOutMin,proto3" json:"amount_out_min,omitempty"`
 	FinalDepositTxHash string            `protobuf:"bytes,23,opt,name=final_deposit_tx_hash,json=finalDepositTxHash,proto3" json:"final_deposit_tx_hash,omitempty"`
 }
 
@@ -84,6 +85,13 @@ func (m *SwapTransaction) GetFinalReceiver() string {
 func (m *SwapTransaction) GetFinalAmount() string {
 	if m != nil {
 		return m.FinalAmount
+	}
+	return ""
+}
+
+func (m *SwapTransaction) GetAmountOutMin() string {
+	if m != nil {
+		return m.AmountOutMin
 	}
 	return ""
 }
@@ -156,6 +164,15 @@ func (m *SwapTransaction) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xba
 	}
+	if len(m.AmountOutMin) > 0 {
+		i -= len(m.AmountOutMin)
+		copy(dAtA[i:], m.AmountOutMin)
+		i = encodeVarintTransaction(dAtA, i, uint64(len(m.AmountOutMin)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
+	}
 	if len(m.FinalAmount) > 0 {
 		i -= len(m.FinalAmount)
 		copy(dAtA[i:], m.FinalAmount)
@@ -211,6 +228,10 @@ func (m *SwapTransaction) Size() (n int) {
 		n += 2 + l + sovTransaction(uint64(l))
 	}
 	l = len(m.FinalAmount)
+	if l > 0 {
+		n += 2 + l + sovTransaction(uint64(l))
+	}
+	l = len(m.AmountOutMin)
 	if l > 0 {
 		n += 2 + l + sovTransaction(uint64(l))
 	}
@@ -352,6 +373,38 @@ func (m *SwapTransaction) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.FinalAmount = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AmountOutMin", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTransaction
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTransaction
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTransaction
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AmountOutMin = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 23:
 			if wireType != 2 {

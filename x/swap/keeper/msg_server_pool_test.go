@@ -14,7 +14,7 @@ func setupPoolMsgServer(t testing.TB) (types.MsgServer, keeper.Keeper, sdk.Conte
 	k, ctx := keepertest.SwapKeeper(t)
 	admin := sdk.AccAddress(make([]byte, 20)).String()
 	nonAdmin := sdk.AccAddress(bytesOf(20, 1)).String()
-	k.SetParams(ctx, types.NewParams(admin))
+	k.SetParams(ctx, types.NewParams(admin, "", "", types.DefaultSwapDeadlineSeconds))
 
 	return keeper.NewMsgServerImpl(*k), *k, ctx, admin, nonAdmin
 }

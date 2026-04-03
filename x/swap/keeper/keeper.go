@@ -18,6 +18,8 @@ type (
 		storeKey   storetypes.StoreKey
 		memKey     storetypes.StoreKey
 		paramstore paramtypes.Subspace
+		bridge     types.BridgeKeeper
+		erc20      types.ERC20Keeper
 	}
 )
 
@@ -26,7 +28,8 @@ func NewKeeper(
 	storeKey,
 	memKey storetypes.StoreKey,
 	ps paramtypes.Subspace,
-
+	bridgeKeeper types.BridgeKeeper,
+	erc20Keeper types.ERC20Keeper,
 ) *Keeper {
 	// set KeyTable if it has not already been set
 	if !ps.HasKeyTable() {
@@ -38,6 +41,8 @@ func NewKeeper(
 		storeKey:   storeKey,
 		memKey:     memKey,
 		paramstore: ps,
+		bridge:     bridgeKeeper,
+		erc20:      erc20Keeper,
 	}
 }
 

@@ -20,10 +20,14 @@ const (
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_swap"
 
-	ParamModuleAdminKey = "ModuleAdmin"
+	ParamModuleAdminKey          = "ModuleAdmin"
+	ParamUniswapRouterAddressKey = "UniswapRouterAddress"
+	ParamWrappedBridgeKey        = "WrappedBridge"
+	ParamSwapDeadlineSecondsKey  = "SwapDeadlineSeconds"
 
-	StorePoolPrefix = "pool"
-	StoreSwapPrefix = "swap"
+	StorePoolPrefix           = "pool"
+	StoreSwapPrefix           = "swap"
+	StoreSwapSubmissionPrefix = "swap_submission"
 )
 
 // ModuleAddress is the native module address for EVM
@@ -35,10 +39,6 @@ func init() {
 
 func Prefix(p string) []byte {
 	return []byte(p + "/")
-}
-
-func KeyPrefix(p string) []byte {
-	return Prefix(p)
 }
 
 func KeyPool(tokenID string) []byte {

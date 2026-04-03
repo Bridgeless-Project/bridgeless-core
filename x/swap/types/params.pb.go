@@ -25,7 +25,10 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Params defines the parameters for the module.
 type Params struct {
-	ModuleAdmin string `protobuf:"bytes,1,opt,name=module_admin,json=moduleAdmin,proto3" json:"module_admin,omitempty"`
+	ModuleAdmin          string `protobuf:"bytes,1,opt,name=module_admin,json=moduleAdmin,proto3" json:"module_admin,omitempty"`
+	UniswapRouterAddress string `protobuf:"bytes,2,opt,name=uniswap_router_address,json=uniswapRouterAddress,proto3" json:"uniswap_router_address,omitempty"`
+	WrappedBridge        string `protobuf:"bytes,3,opt,name=wrapped_bridge,json=wrappedBridge,proto3" json:"wrapped_bridge,omitempty"`
+	SwapDeadlineSeconds  uint64 `protobuf:"varint,4,opt,name=swap_deadline_seconds,json=swapDeadlineSeconds,proto3" json:"swap_deadline_seconds,omitempty"`
 }
 
 func (m *Params) Reset()         { *m = Params{} }
@@ -66,6 +69,27 @@ func (m *Params) GetModuleAdmin() string {
 		return m.ModuleAdmin
 	}
 	return ""
+}
+
+func (m *Params) GetUniswapRouterAddress() string {
+	if m != nil {
+		return m.UniswapRouterAddress
+	}
+	return ""
+}
+
+func (m *Params) GetWrappedBridge() string {
+	if m != nil {
+		return m.WrappedBridge
+	}
+	return ""
+}
+
+func (m *Params) GetSwapDeadlineSeconds() uint64 {
+	if m != nil {
+		return m.SwapDeadlineSeconds
+	}
+	return 0
 }
 
 func init() {
@@ -110,6 +134,25 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.SwapDeadlineSeconds != 0 {
+		i = encodeVarintParams(dAtA, i, uint64(m.SwapDeadlineSeconds))
+		i--
+		dAtA[i] = 0x20
+	}
+	if len(m.WrappedBridge) > 0 {
+		i -= len(m.WrappedBridge)
+		copy(dAtA[i:], m.WrappedBridge)
+		i = encodeVarintParams(dAtA, i, uint64(len(m.WrappedBridge)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.UniswapRouterAddress) > 0 {
+		i -= len(m.UniswapRouterAddress)
+		copy(dAtA[i:], m.UniswapRouterAddress)
+		i = encodeVarintParams(dAtA, i, uint64(len(m.UniswapRouterAddress)))
+		i--
+		dAtA[i] = 0x12
+	}
 	if len(m.ModuleAdmin) > 0 {
 		i -= len(m.ModuleAdmin)
 		copy(dAtA[i:], m.ModuleAdmin)
@@ -140,6 +183,17 @@ func (m *Params) Size() (n int) {
 	l = len(m.ModuleAdmin)
 	if l > 0 {
 		n += 1 + l + sovParams(uint64(l))
+	}
+	l = len(m.UniswapRouterAddress)
+	if l > 0 {
+		n += 1 + l + sovParams(uint64(l))
+	}
+	l = len(m.WrappedBridge)
+	if l > 0 {
+		n += 1 + l + sovParams(uint64(l))
+	}
+	if m.SwapDeadlineSeconds != 0 {
+		n += 1 + sovParams(uint64(m.SwapDeadlineSeconds))
 	}
 	return n
 }
@@ -211,6 +265,89 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			}
 			m.ModuleAdmin = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UniswapRouterAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UniswapRouterAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WrappedBridge", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.WrappedBridge = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SwapDeadlineSeconds", wireType)
+			}
+			m.SwapDeadlineSeconds = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.SwapDeadlineSeconds |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipParams(dAtA[iNdEx:])

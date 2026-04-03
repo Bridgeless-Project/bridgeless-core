@@ -12,4 +12,8 @@ var (
 	ErrSwapNotFound     = errorsmod.Register(ModuleName, 1101, "swap not found")
 	ErrPermissionDenied = errorsmod.Register(ModuleName, 1102, "permission denied")
 	ErrAlreadyExists    = errorsmod.Register(ModuleName, 1103, "entity already exists")
+	ErrInvalidConfig    = errorsmod.Register(ModuleName, 1104, "invalid config")
+	ErrInvalidRoute     = errorsmod.Register(ModuleName, 1105, "invalid route")
+	ErrAlreadySubmitted = errorsmod.Register(ModuleName, 1106, "swap already submitted")
+	ErrAlreadyProcessed = errorsmod.Register(ModuleName, 1107, "swap already processed")
 )
