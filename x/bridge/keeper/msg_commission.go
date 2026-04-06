@@ -35,6 +35,7 @@ func (m msgServer) UpdateCommission(goCtx context.Context, msg *types.MsgUpdateC
 		return nil, errorsmod.Wrap(types.ErrCommissionNotFound, "commission with this TokenID is not found")
 	}
 
+	commission.Amount = msg.Amount
 	m.Keeper.SetCommission(ctx, commission)
 
 	return &types.MsgUpdateCommissionResponse{}, nil

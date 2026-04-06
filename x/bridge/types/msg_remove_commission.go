@@ -10,11 +10,10 @@ const TypeMsgRemoveCommission = "remove_commission"
 
 var _ sdk.Msg = &MsgRemoveCommission{}
 
-func NewMsgRemoveCommission(creator string, tokenId uint64, amount string) *MsgRemoveCommission {
+func NewMsgRemoveCommission(creator string, tokenId uint64) *MsgRemoveCommission {
 	return &MsgRemoveCommission{
 		Creator: creator,
 		TokenId: tokenId,
-		Amount:  amount,
 	}
 }
 

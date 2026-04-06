@@ -40,20 +40,6 @@ func parseInsertChain(path string) (*types.Chain, error) {
 	return readFromJSON[types.Chain](path)
 }
 
-func parseCommission(arg string) (uint64, error) {
-	contents, err := os.ReadFile(arg)
-	if err != nil {
-		return 0, err
-	}
-
-	var commission types.Commission
-	if err := json.Unmarshal(contents, &commission); err != nil {
-		return 0, err
-	}
-
-	return commission.TokenId, nil
-}
-
 func readFromJSON[T any](path string) (*T, error) {
 	var result T
 	contents, err := os.ReadFile(path)

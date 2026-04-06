@@ -110,7 +110,6 @@ func CmdRemoveCommission() *cobra.Command {
 			msg := types.NewMsgRemoveCommission(
 				clientCtx.GetFromAddress().String(),
 				tokenId,
-				args[1],
 			)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
