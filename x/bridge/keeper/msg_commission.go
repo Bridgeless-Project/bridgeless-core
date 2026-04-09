@@ -53,7 +53,7 @@ func (m msgServer) RemoveCommission(goCtx context.Context, msg *types.MsgRemoveC
 		return nil, errorsmod.Wrap(types.ErrCommissionNotFound, "commission with this TokenID is not found")
 	}
 
-	m.Keeper.RemoveCommission(ctx, commission)
+	m.Keeper.RemoveCommission(ctx, commission.TokenId)
 
 	return &types.MsgRemoveCommissionResponse{}, nil
 }

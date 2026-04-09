@@ -137,7 +137,7 @@ func KeyEpochChainSignature(chainType ChainType, epochId uint32) []byte {
 }
 
 func KeyEpochChainSignatureSubmission(epochId uint32, hash string) []byte {
-	return []byte(fmt.Sprintf("%d/%d/%s", epochId, hash))
+	return []byte(fmt.Sprintf("%d/%s", epochId, hash))
 }
 
 func KeyEpochTransaction(epochId uint32, txNonce uint64, txHash string) []byte {

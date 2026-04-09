@@ -2,8 +2,9 @@ package cli
 
 import (
 	"context"
-	"strconv"
+	"math/big"
 
+	"cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -18,13 +19,13 @@ func CmdQueryGetCommissionByToken() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 
-			tokenId, err := strconv.ParseUint(args[0], 10, 64)
-			if err != nil {
-				return err
+			tokenId, ok := big.NewInt(0).SetString(args[0], 10)
+			if !ok {
+				return errors.Wrap(types.ErrInvalidDataType, "token-id must be a valid integer")
 			}
 
 			queryClient := types.NewQueryClient(clientCtx)
-			res, err := queryClient.GetCommissionByToken(context.Background(), &types.QueryGetCommissionByToken{TokenId: tokenId})
+			res, err := queryClient.GetCommissionByToken(context.Background(), &types.QueryGetCommissionByToken{TokenId: tokenId.Uint64()})
 			if err != nil {
 				return err
 			}

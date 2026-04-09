@@ -28,7 +28,7 @@ func (k queryServer) GetCommissions(goctx context.Context, req *types.QueryGetCo
 	}
 
 	ctx := sdk.UnwrapSDKContext(goctx)
-	commissions, pages, err := k.GetCommissionWithPagination(ctx, req.Pagination)
+	commissions, pages, err := k.GetCommissionsWithPagination(ctx, req.Pagination)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}

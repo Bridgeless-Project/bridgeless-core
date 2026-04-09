@@ -102,17 +102,17 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 			return errorsmod.Wrap(types.ErrReferralNotFound, "referral ID not found")
 		}
 
-		rewards, err := types.GetCommissionAmount(commissionAmount, referral.CommissionRate)
+		txReferralRewards, err := types.ComputeCommissionAmount(commissionAmount, referral.CommissionRate)
 		if err != nil {
 			return errorsmod.Wrap(err, "failed to calculate referral rewards")
 		}
 
-		commissionToAccumulate.Sub(commissionAmount, rewards)
+		commissionToAccumulate.Sub(commissionAmount, txReferralRewards)
 
 		referralRewards := types.ReferralRewards{
 			ReferralId:         transaction.ReferralId,
 			TokenId:            token.TokenId,
-			ToClaim:            sdk.NewIntFromBigInt(rewards).String(),
+			ToClaim:            sdk.NewIntFromBigInt(txReferralRewards).String(),
 			TotalClaimedAmount: sdk.NewInt(0).String(),
 		}
 
@@ -121,16 +121,14 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 		}
 	}
 
-	var total big.Int
+	total := new(big.Int).Set(commissionToAccumulate)
 	existingCommission, found := k.GetCommission(ctx, token.TokenId)
 	if found {
-		previousCommissionAmount, ok := big.NewInt(0).SetString(existingCommission.Amount, 10)
+		previousCommissionAmount, ok := new(big.Int).SetString(existingCommission.Amount, 10)
 		if !ok {
 			return errorsmod.Wrap(types.ErrInvalidDataType, "failed to parse existing commission amount")
 		}
 		total.Add(previousCommissionAmount, commissionToAccumulate)
-	} else {
-		total.Set(commissionToAccumulate)
 	}
 
 	k.SetCommission(ctx, types.Commission{
@@ -192,7 +190,7 @@ func (k Keeper) DeleteTx(ctx sdk.Context, depositTxHash string, depositTxIndex u
 		return errorsmod.Wrap(types.ErrInvalidDataType, "invalid withdrawal amount")
 	}
 
-	rewards, err := types.GetCommissionAmount(commissionAmount, referral.CommissionRate)
+	rewards, err := types.ComputeCommissionAmount(commissionAmount, referral.CommissionRate)
 	if err != nil {
 		return errorsmod.Wrap(err, "failed to calculate referral rewards")
 	}

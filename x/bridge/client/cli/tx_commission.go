@@ -1,8 +1,9 @@
 package cli
 
 import (
-	"strconv"
+	"math/big"
 
+	"cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -40,14 +41,14 @@ func CmdSetCommission() *cobra.Command {
 				return err
 			}
 
-			tokenId, err := strconv.ParseUint(args[0], 10, 64)
-			if err != nil {
-				return err
+			tokenId, ok := big.NewInt(0).SetString(args[0], 10)
+			if !ok {
+				return errors.Wrap(types.ErrInvalidDataType, "token-id must be a valid integer")
 			}
 
 			msg := types.NewMsgSetCommission(
 				clientCtx.GetFromAddress().String(),
-				tokenId,
+				tokenId.Uint64(),
 				args[1],
 			)
 
@@ -71,14 +72,14 @@ func CmdUpdateCommission() *cobra.Command {
 				return err
 			}
 
-			tokenId, err := strconv.ParseUint(args[0], 10, 64)
-			if err != nil {
-				return err
+			tokenId, ok := big.NewInt(0).SetString(args[0], 10)
+			if !ok {
+				return errors.Wrap(types.ErrInvalidDataType, "token-id must be a valid integer")
 			}
 
 			msg := types.NewMsgUpdateCommission(
 				clientCtx.GetFromAddress().String(),
-				tokenId,
+				tokenId.Uint64(),
 				args[1],
 			)
 
@@ -102,14 +103,14 @@ func CmdRemoveCommission() *cobra.Command {
 				return err
 			}
 
-			tokenId, err := strconv.ParseUint(args[0], 10, 64)
-			if err != nil {
-				return err
+			tokenId, ok := big.NewInt(0).SetString(args[0], 10)
+			if !ok {
+				return errors.Wrap(types.ErrInvalidDataType, "token-id must be a valid integer")
 			}
 
 			msg := types.NewMsgRemoveCommission(
 				clientCtx.GetFromAddress().String(),
-				tokenId,
+				tokenId.Uint64(),
 			)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)

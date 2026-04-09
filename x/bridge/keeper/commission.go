@@ -25,12 +25,12 @@ func (k Keeper) GetCommission(ctx sdk.Context, tokenId uint64) (types.Commission
 	return commission, true
 }
 
-func (k Keeper) RemoveCommission(ctx sdk.Context, commission types.Commission) {
+func (k Keeper) RemoveCommission(ctx sdk.Context, tokenId uint64) {
 	cStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreCommissionPrefix))
-	cStore.Delete(types.KeyCommission(commission.TokenId))
+	cStore.Delete(types.KeyCommission(tokenId))
 }
 
-func (k Keeper) GetCommissionWithPagination(ctx sdk.Context, pagination *query.PageRequest) ([]types.Commission, *query.PageResponse, error) {
+func (k Keeper) GetCommissionsWithPagination(ctx sdk.Context, pagination *query.PageRequest) ([]types.Commission, *query.PageResponse, error) {
 	cStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreCommissionPrefix))
 
 	var commissions []types.Commission
@@ -43,7 +43,7 @@ func (k Keeper) GetCommissionWithPagination(ctx sdk.Context, pagination *query.P
 		return nil
 	})
 	if err != nil {
-		return nil, nil, errorsmod.Wrap(err, "failed to get paginated commission")
+		return nil, nil, errorsmod.Wrap(err, "failed to get paginated commissions")
 	}
 
 	return commissions, pageRes, nil
