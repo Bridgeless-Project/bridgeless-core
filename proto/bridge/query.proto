@@ -9,6 +9,7 @@ import "bridge/models/token.proto";
 import "bridge/models/chain.proto";
 import "bridge/models/epoch.proto";
 import "bridge/models/referrals.proto";
+import "bridge/models/commission.proto";
 
 // this line is used by starport scaffolding # 1
 
@@ -39,6 +40,14 @@ service Query {
   // Tokens queries all the tokens.
   rpc GetTokens(QueryGetTokens) returns (QueryGetTokensResponse) {
     option (google.api.http).get = "/cosmos/bridge/tokens";
+  }
+
+  rpc GetCommissionByToken(QueryGetCommissionByToken) returns (QueryGetCommissionByTokenResponse) {
+    option (google.api.http).get = "/cosmos/bridge/tokens/commissions/{token_id}";
+  }
+
+  rpc GetCommissions(QueryGetCommissions) returns (QueryGetCommissionsResponse) {
+    option (google.api.http).get = "/cosmos/bridge/commissions";
   }
 
   // TokenPair queries an according token pair by src_chain, src_address and dst_chain.
@@ -316,4 +325,22 @@ message QueryGetEpochSignature {
 
 message QueryGetEpochSignatureResponse {
     EpochChainSignatures epoch_chain_signatures = 1 [(gogoproto.nullable) = false];
+}
+
+
+message QueryGetCommissionByToken {
+  uint64 token_id = 1;
+}
+
+message QueryGetCommissionByTokenResponse {
+  Commission commission = 1 [(gogoproto.nullable) = false];;
+}
+
+message QueryGetCommissions  {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryGetCommissionsResponse {
+  repeated Commission commissions = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }

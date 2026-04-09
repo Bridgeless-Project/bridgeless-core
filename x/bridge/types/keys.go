@@ -45,6 +45,7 @@ const (
 	StoreEpochTransactionPrefix              = "epoch_transaction"
 	StoreEpochPubkeyPrefix                   = "epoch_pubkey"
 	StoreEpochPubkeySubmissionPrefix         = "epoch_pubkey_submission"
+	StoreCommissionPrefix                    = "commission"
 
 	// Attributes keys for bridge events
 	AttributeKeyDepositTxHash     = "deposit_tx_hash"
@@ -136,11 +137,11 @@ func KeyEpochChainSignature(chainType ChainType, epochId uint32) []byte {
 }
 
 func KeyEpochChainSignatureSubmission(epochId uint32, hash string) []byte {
-	return []byte(fmt.Sprintf("%d/%d/%s", epochId, hash))
+	return []byte(fmt.Sprintf("%d/%s", epochId, hash))
 }
 
 func KeyEpochTransaction(epochId uint32, txNonce uint64, txHash string) []byte {
-	return []byte(fmt.Sprintf("%s/%s/%s/%d", txHash, txNonce, epochId))
+	return []byte(fmt.Sprintf("%s/%d/%d", txHash, txNonce, epochId))
 }
 
 func KeyEpochPubkey(epochId uint32) []byte {
@@ -151,4 +152,10 @@ func KeyEpochPubkey(epochId uint32) []byte {
 
 func KeyEpochPubkeySubmission(epochId uint32, pubkeyHash string) []byte {
 	return []byte(fmt.Sprintf("%d/%s", epochId, pubkeyHash))
+}
+
+func KeyCommission(tokenId uint64) []byte {
+	bytes := make([]byte, 8)
+	binary.LittleEndian.PutUint64(bytes, tokenId)
+	return bytes
 }
