@@ -21,3 +21,17 @@ func (k queryServer) GetCommissionByToken(goctx context.Context, req *types.Quer
 
 	return &types.QueryGetCommissionByTokenResponse{Commission: commission}, nil
 }
+
+func (k queryServer) GetCommissions(goctx context.Context, req *types.QueryGetCommissions) (*types.QueryGetCommissionsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goctx)
+	commissions, pages, err := k.GetCommissionWithPagination(ctx, req.Pagination)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryGetCommissionsResponse{Commissions: commissions, Pagination: pages}, nil
+}

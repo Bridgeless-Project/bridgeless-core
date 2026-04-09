@@ -46,6 +46,10 @@ service Query {
     option (google.api.http).get = "/cosmos/bridge/tokens/commissions/{token_id}";
   }
 
+  rpc GetCommissions(QueryGetCommissions) returns (QueryGetCommissionsResponse) {
+    option (google.api.http).get = "/cosmos/bridge/commissions";
+  }
+
   // TokenPair queries an according token pair by src_chain, src_address and dst_chain.
   rpc GetTokenPair(QueryGetTokenPair) returns (QueryGetTokenPairResponse) {
     option (google.api.http).get = "/cosmos/bridge/token-pair/{src_chain}/{src_address}/{dst_chain}";
@@ -316,4 +320,13 @@ message QueryGetCommissionByToken {
 
 message QueryGetCommissionByTokenResponse {
   Commission commission = 1 [(gogoproto.nullable) = false];;
+}
+
+message QueryGetCommissions  {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryGetCommissionsResponse {
+  repeated Commission commissions = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
