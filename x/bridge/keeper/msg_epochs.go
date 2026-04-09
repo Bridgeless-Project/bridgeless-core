@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"slices"
 
 	errorsmod "cosmossdk.io/errors"
@@ -157,8 +158,11 @@ func (m msgServer) SetEpochSignature(goCtx context.Context, msg *types.MsgSetEpo
 			return nil, errorsmod.Wrapf(types.ErrChainNotFound, "chain %s not found", chainAddress.ChainId)
 		}
 		chain.BridgeAddress = chainAddress.Address
+		fmt.Println("chain.BridgeAddress", chain.BridgeAddress)
 		m.Keeper.SetChain(ctx, chain)
 		m.Keeper.SetChainByType(ctx, chain)
+		fmt.Println("chains updated")
+
 	}
 
 	epoch.Status = types.EpochStatus_MIGRATION_FINALIZING
