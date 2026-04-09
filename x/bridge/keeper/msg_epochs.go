@@ -118,7 +118,7 @@ func (m msgServer) SetEpochSignature(goCtx context.Context, msg *types.MsgSetEpo
 
 	params := m.Keeper.GetParams(ctx)
 
-	_, found := m.Keeper.GetEpoch(ctx, msg.EpochId)
+	epoch, found := m.Keeper.GetEpoch(ctx, msg.EpochId)
 	if !found {
 		return nil, errorsmod.Wrap(types.ErrInvalidEpochID, "epoch not found")
 	}
@@ -158,9 +158,9 @@ func (m msgServer) SetEpochSignature(goCtx context.Context, msg *types.MsgSetEpo
 		}
 		chain.BridgeAddress = chainAddress.Address
 		m.Keeper.SetChain(ctx, chain)
+		m.Keeper.SetChainByType(ctx, chain)
 	}
 
-	epoch, _ := m.Keeper.GetEpoch(ctx, msg.EpochChainSignatures[0].EpochId)
 	epoch.Status = types.EpochStatus_MIGRATION_FINALIZING
 	m.Keeper.SetEpoch(ctx, &epoch)
 
