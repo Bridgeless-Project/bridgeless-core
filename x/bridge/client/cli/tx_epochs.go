@@ -87,6 +87,7 @@ Example JSON file format:
 				input.EpochID,
 				input.TSSInfo,
 				input.TSSThreshold,
+				input.StartTime,
 			)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
@@ -153,7 +154,9 @@ Example JSON file format:
 
 			msg := types.NewMsgSetEpochSignature(
 				clientCtx.GetFromAddress().String(),
+				0,
 				signatures,
+				nil, // TODO: fix it latter
 			)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
