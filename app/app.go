@@ -820,6 +820,7 @@ func NewBridge(
 		// SDK modules
 		capabilitytypes.ModuleName,
 		authtypes.ModuleName,
+		nfttypes.ModuleName,
 		banktypes.ModuleName,
 		distrtypes.ModuleName,
 		// NOTE: staking requires the claiming hook
@@ -852,7 +853,6 @@ func NewBridge(
 		crisistypes.ModuleName,
 		accumulatortypes.ModuleName,
 		minttypes.ModuleName,
-		nfttypes.ModuleName,
 		bridgetypes.ModuleName,
 		multisigtypes.ModuleName,
 	)
