@@ -2,10 +2,10 @@ package keeper_test
 
 import (
 	"math/big"
+	"reflect"
 	"testing"
 	"time"
 
-	"github.com/Bridgeless-Project/bridgeless-core/v12/contracts"
 	bridgetypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	swapkeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/swap/keeper"
@@ -22,6 +22,12 @@ import (
 	"github.com/tendermint/tendermint/libs/log"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 	tmdb "github.com/tendermint/tm-db"
+)
+
+const (
+	wrappedBridgeAddress = "0x2000000000000000000000000000000000000002"
+	swapperAddress       = "0x9999999999999999999999999999999999999999"
+	localDstTokenAddress = "0x4000000000000000000000000000000000000004"
 )
 
 type evmCall struct {
@@ -53,36 +59,39 @@ func (m mockBridgeKeeper) IsParty(_ sdk.Context, sender string) bool {
 	return false
 }
 
-func (m mockBridgeKeeper) GetChain(ctx sdk.Context, id string) (bridgetypes.Chain, bool) {
+func (m mockBridgeKeeper) GetChain(_ sdk.Context, id string) (bridgetypes.Chain, bool) {
 	chain, found := m.chains[id]
 	return chain, found
 }
 
-func (m mockBridgeKeeper) GetTokenInfo(ctx sdk.Context, chain, address string) (bridgetypes.TokenInfo, bool) {
+func (m mockBridgeKeeper) GetTokenInfo(_ sdk.Context, chain, address string) (bridgetypes.TokenInfo, bool) {
 	info, found := m.tokenInfo[chain+"|"+address]
 	return info, found
 }
 
-func (m mockBridgeKeeper) GetDstToken(ctx sdk.Context, srcAddr, srcChain, dscChain string) (bridgetypes.TokenInfo, bool) {
-	info, found := m.dstTokens[srcAddr+"|"+srcChain+"|"+dscChain]
+func (m mockBridgeKeeper) GetDstToken(_ sdk.Context, srcAddr, srcChain, dstChain string) (bridgetypes.TokenInfo, bool) {
+	info, found := m.dstTokens[srcAddr+"|"+srcChain+"|"+dstChain]
 	return info, found
 }
 
 type mockERC20Keeper struct {
 	calls       []evmCall
-	routerHash  string
-	routerRet   []byte
 	defaultHash string
 }
 
 func (m *mockERC20Keeper) CallEVM(
-	ctx sdk.Context,
+	_ sdk.Context,
 	contractABI abi.ABI,
 	from, contract common.Address,
 	commit bool,
 	method string,
 	args ...interface{},
 ) (*evmtypes.MsgEthereumTxResponse, error) {
+	_, err := contractABI.Pack(method, args...)
+	if err != nil {
+		return nil, err
+	}
+
 	m.calls = append(m.calls, evmCall{
 		method:   method,
 		from:     from,
@@ -91,13 +100,7 @@ func (m *mockERC20Keeper) CallEVM(
 		args:     args,
 	})
 
-	resp := &evmtypes.MsgEthereumTxResponse{Hash: m.defaultHash}
-	if method == "swapExactTokensForTokens" {
-		resp.Hash = m.routerHash
-		resp.Ret = m.routerRet
-	}
-
-	return resp, nil
+	return &evmtypes.MsgEthereumTxResponse{Hash: m.defaultHash}, nil
 }
 
 func newSubmitSwapKeeper(t testing.TB, bridge mockBridgeKeeper, erc20 *mockERC20Keeper) (*swapkeeper.Keeper, sdk.Context) {
@@ -115,24 +118,11 @@ func newSubmitSwapKeeper(t testing.TB, bridge mockBridgeKeeper, erc20 *mockERC20
 	paramsSubspace := typesparams.NewSubspace(cdc, swaptypes.Amino, storeKey, memStoreKey, "SwapParams")
 
 	k := swapkeeper.NewKeeper(cdc, storeKey, memStoreKey, paramsSubspace, bridge, erc20)
-	ctx := sdk.NewContext(stateStore, tmproto.Header{}, false, log.NewNopLogger())
+	ctx := sdk.NewContext(stateStore, tmproto.Header{ChainID: "core"}, false, log.NewNopLogger())
 	return k, ctx
 }
 
-func newRouterReturn(t *testing.T, amounts ...int64) []byte {
-	t.Helper()
-
-	values := make([]*big.Int, 0, len(amounts))
-	for _, amount := range amounts {
-		values = append(values, big.NewInt(amount))
-	}
-
-	ret, err := contracts.UniswapV2RouterV2Contract.ABI.Methods["swapExactTokensForTokens"].Outputs.Pack(values)
-	require.NoError(t, err)
-	return ret
-}
-
-func sampleSubmitSwapMsg(creator string, isBridge bool) *swaptypes.MsgSubmitSwapTx {
+func sampleSubmitSwapMsg(creator string) *swaptypes.MsgSubmitSwapTx {
 	return &swaptypes.MsgSubmitSwapTx{
 		Creator: creator,
 		Tx: &swaptypes.SwapTransaction{
@@ -149,23 +139,85 @@ func sampleSubmitSwapMsg(creator string, isBridge bool) *swaptypes.MsgSubmitSwap
 				Signature:         "0x1234",
 				WithdrawalAmount:  "0",
 				CommissionAmount:  "0",
+				TxData:            "recovery-recipient",
+				ReferralId:        12,
 			},
 			FinalReceiver: "dest-recipient",
 			AmountOutMin:  "90",
 		},
-		IsBridgeTx: isBridge,
 	}
 }
 
-func TestSubmitSwapTxRequiresParty(t *testing.T) {
-	bridge := mockBridgeKeeper{
-		params: bridgetypes.Params{},
+func submitSwapBridge(parties ...string) mockBridgeKeeper {
+	partyRecords := make([]*bridgetypes.Party, 0, len(parties))
+	for _, party := range parties {
+		partyRecords = append(partyRecords, &bridgetypes.Party{Address: party})
 	}
+
+	return mockBridgeKeeper{
+		params: bridgetypes.Params{
+			TssThreshold: 1,
+			Parties:      partyRecords,
+		},
+		chains: map[string]bridgetypes.Chain{
+			"2": {
+				Id:            "2",
+				BridgeAddress: "0x2222222222222222222222222222222222222222",
+				Confirmations: 1,
+				Name:          "destination",
+			},
+		},
+		tokenInfo: map[string]bridgetypes.TokenInfo{
+			"2|0x3000000000000000000000000000000000000003": {
+				Address:   "0x3000000000000000000000000000000000000003",
+				ChainId:   "2",
+				TokenId:   3,
+				IsWrapped: true,
+			},
+		},
+		dstTokens: map[string]bridgetypes.TokenInfo{
+			"0x3000000000000000000000000000000000000003|2|core": {
+				Address: localDstTokenAddress,
+				ChainId: "core",
+				TokenId: 3,
+			},
+		},
+	}
+}
+
+func setSubmitSwapParams(ctx sdk.Context, k *swapkeeper.Keeper, admin string, deadline uint64) {
+	k.SetParams(ctx, swaptypes.NewParams(admin, wrappedBridgeAddress, swapperAddress, deadline))
+}
+
+func bytesOf(length int, value byte) []byte {
+	bz := make([]byte, length)
+	for i := range bz {
+		bz[i] = value
+	}
+	return bz
+}
+
+func requireBigIntString(t *testing.T, value interface{}, expected string) {
+	t.Helper()
+
+	require.Equal(t, expected, value.(*big.Int).String())
+}
+
+func fieldByName(t *testing.T, value interface{}, name string) interface{} {
+	t.Helper()
+
+	field := reflect.ValueOf(value).FieldByName(name)
+	require.True(t, field.IsValid(), "missing field %s", name)
+	return field.Interface()
+}
+
+func TestSubmitSwapTxRequiresParty(t *testing.T) {
+	bridge := mockBridgeKeeper{params: bridgetypes.Params{}}
 	erc20 := &mockERC20Keeper{}
 	k, ctx := newSubmitSwapKeeper(t, bridge, erc20)
 	ms := swapkeeper.NewMsgServerImpl(*k)
 
-	_, err := ms.SubmitSwapTx(sdk.WrapSDKContext(ctx), sampleSubmitSwapMsg(sdk.AccAddress([]byte("not-party-addr-0001")).String(), false))
+	_, err := ms.SubmitSwapTx(sdk.WrapSDKContext(ctx), sampleSubmitSwapMsg(sdk.AccAddress([]byte("not-party-addr-0001")).String()))
 	require.Error(t, err)
 }
 
@@ -189,61 +241,28 @@ func TestSubmitSwapTxDuplicateSubmitter(t *testing.T) {
 	}
 	erc20 := &mockERC20Keeper{}
 	k, ctx := newSubmitSwapKeeper(t, bridge, erc20)
-	k.SetParams(ctx, swaptypes.NewParams(party, "0x9999999999999999999999999999999999999999", "0x2000000000000000000000000000000000000002", swaptypes.DefaultSwapDeadlineSeconds))
+	setSubmitSwapParams(ctx, k, party, swaptypes.DefaultSwapDeadlineSeconds)
 	ms := swapkeeper.NewMsgServerImpl(*k)
 
-	_, err := ms.SubmitSwapTx(sdk.WrapSDKContext(ctx), sampleSubmitSwapMsg(party, false))
+	_, err := ms.SubmitSwapTx(sdk.WrapSDKContext(ctx), sampleSubmitSwapMsg(party))
 	require.NoError(t, err)
 
-	_, err = ms.SubmitSwapTx(sdk.WrapSDKContext(ctx), sampleSubmitSwapMsg(party, false))
+	_, err = ms.SubmitSwapTx(sdk.WrapSDKContext(ctx), sampleSubmitSwapMsg(party))
 	require.Error(t, err)
 }
 
-func TestSubmitSwapTxThresholdAndExecutionWithoutBridgeDeposit(t *testing.T) {
+func TestSubmitSwapTxThresholdAndSwapperExecution(t *testing.T) {
 	partyA := sdk.AccAddress(make([]byte, 20)).String()
 	partyB := sdk.AccAddress(bytesOf(20, 2)).String()
-	bridge := mockBridgeKeeper{
-		params: bridgetypes.Params{
-			TssThreshold: 1,
-			Parties: []*bridgetypes.Party{
-				{Address: partyA},
-				{Address: partyB},
-			},
-		},
-		chains: map[string]bridgetypes.Chain{
-			"2": {
-				Id:            "2",
-				BridgeAddress: "0x2000000000000000000000000000000000000002",
-				Operator:      "0x2222222222222222222222222222222222222222",
-				Confirmations: 1,
-				Name:          "core-evm",
-			},
-		},
-		dstTokens: map[string]bridgetypes.TokenInfo{
-			"0x3000000000000000000000000000000000000003|2|": {
-				Address: "0x3000000000000000000000000000000000000003",
-				ChainId: "",
-				TokenId: 3,
-			},
-		},
-	}
-	erc20 := &mockERC20Keeper{
-		defaultHash: "0x01",
-		routerHash:  "0x02",
-		routerRet:   newRouterReturn(t, 100, 95),
-	}
+	bridge := submitSwapBridge(partyA, partyB)
+	erc20 := &mockERC20Keeper{defaultHash: "0xswapper"}
 	k, ctx := newSubmitSwapKeeper(t, bridge, erc20)
 	customDeadline := uint64(42)
-	k.SetParams(ctx, swaptypes.NewParams(
-		partyA,
-		"0x9999999999999999999999999999999999999999",
-		"0x2000000000000000000000000000000000000002",
-		customDeadline,
-	))
+	setSubmitSwapParams(ctx, k, partyA, customDeadline)
 	ms := swapkeeper.NewMsgServerImpl(*k)
 
-	msgA := sampleSubmitSwapMsg(partyA, false)
-	msgB := sampleSubmitSwapMsg(partyB, false)
+	msgA := sampleSubmitSwapMsg(partyA)
+	msgB := sampleSubmitSwapMsg(partyB)
 
 	_, err := ms.SubmitSwapTx(sdk.WrapSDKContext(ctx), msgA)
 	require.NoError(t, err)
@@ -257,95 +276,47 @@ func TestSubmitSwapTxThresholdAndExecutionWithoutBridgeDeposit(t *testing.T) {
 
 	stored, found := k.GetSwap(ctx, msgA.Tx.Tx.DepositTxHash, msgA.Tx.Tx.DepositTxIndex, msgA.Tx.Tx.DepositChainId)
 	require.True(t, found)
-	require.Equal(t, "95", stored.FinalAmount)
-	require.Empty(t, stored.FinalDepositTxHash)
+	require.Empty(t, stored.FinalAmount)
+	require.Equal(t, "0xswapper", stored.FinalDepositTxHash)
 
-	require.Len(t, erc20.calls, 2)
-	require.Equal(t, "withdrawERC20", erc20.calls[0].method)
-	require.Equal(t, "swapExactTokensForTokens", erc20.calls[1].method)
-	require.Equal(t, [][]byte{{0x12, 0x34}}, erc20.calls[0].args[6].([][]byte))
+	require.Len(t, erc20.calls, 1)
+	call := erc20.calls[0]
+	require.Equal(t, "withdrawSwapAndRoute", call.method)
+	require.Equal(t, swaptypes.ModuleAddress, call.from)
+	require.Equal(t, common.HexToAddress(swapperAddress), call.contract)
+	require.True(t, call.commit)
+	require.Len(t, call.args, 4)
 
-	path, ok := erc20.calls[1].args[2].([]common.Address)
-	require.True(t, ok)
+	withdrawParams := call.args[0]
+	require.Equal(t, common.HexToAddress(msgA.Tx.Tx.DepositToken), fieldByName(t, withdrawParams, "Token"))
+	requireBigIntString(t, fieldByName(t, withdrawParams, "Amount"), "100")
+	require.Equal(t, common.HexToHash(msgA.Tx.Tx.DepositTxHash), fieldByName(t, withdrawParams, "TxHash"))
+	requireBigIntString(t, fieldByName(t, withdrawParams, "TxNonce"), "7")
+	require.Equal(t, false, fieldByName(t, withdrawParams, "IsWrapped"))
+	require.Equal(t, [][]byte{{0x12, 0x34}}, fieldByName(t, withdrawParams, "Signatures"))
+
+	swapParams := call.args[1]
+	requireBigIntString(t, fieldByName(t, swapParams, "AmountIn"), "100")
+	requireBigIntString(t, fieldByName(t, swapParams, "MinDestinationAmount"), "90")
+	require.Equal(t, ctx.BlockTime().Add(time.Duration(customDeadline)*time.Second).Unix(), fieldByName(t, swapParams, "SwapDeadline").(*big.Int).Int64())
 	require.Equal(t, []common.Address{
 		common.HexToAddress(msgA.Tx.Tx.DepositToken),
-		common.HexToAddress("0x2000000000000000000000000000000000000002"),
-		common.HexToAddress(msgA.Tx.Tx.WithdrawalToken),
-	}, path)
+		common.HexToAddress(wrappedBridgeAddress),
+		common.HexToAddress(localDstTokenAddress),
+	}, fieldByName(t, swapParams, "Path"))
+	require.Equal(t, false, fieldByName(t, swapParams, "IsDestinationTokenNative"))
 
-	require.Equal(t, swaptypes.ModuleAddress, erc20.calls[1].args[3].(common.Address))
-	require.Equal(t, "100", erc20.calls[1].args[0].(*big.Int).String())
-	require.Equal(t, "90", erc20.calls[1].args[1].(*big.Int).String())
-	require.Equal(t, ctx.BlockTime().Add(time.Duration(customDeadline)*time.Second).Unix(), erc20.calls[1].args[4].(*big.Int).Int64())
-}
+	destinationDepositParams := call.args[2]
+	require.Equal(t, "dest-recipient", fieldByName(t, destinationDepositParams, "Receiver"))
+	require.Equal(t, "2", fieldByName(t, destinationDepositParams, "Network"))
+	require.Equal(t, true, fieldByName(t, destinationDepositParams, "IsWrapped"))
+	require.Equal(t, uint16(12), fieldByName(t, destinationDepositParams, "ReferralId"))
 
-func TestSubmitSwapTxBridgeDepositStoresMockHash(t *testing.T) {
-	partyA := sdk.AccAddress(make([]byte, 20)).String()
-	partyB := sdk.AccAddress(bytesOf(20, 3)).String()
-	msg := sampleSubmitSwapMsg(partyA, true)
-	bridge := mockBridgeKeeper{
-		params: bridgetypes.Params{
-			TssThreshold: 1,
-			Parties: []*bridgetypes.Party{
-				{Address: partyA},
-				{Address: partyB},
-			},
-		},
-		chains: map[string]bridgetypes.Chain{
-			"2": {
-				Id:            "2",
-				BridgeAddress: "0x2000000000000000000000000000000000000002",
-				Operator:      "0x2222222222222222222222222222222222222222",
-				Confirmations: 1,
-				Name:          "core-evm",
-			},
-		},
-		tokenInfo: map[string]bridgetypes.TokenInfo{
-			msg.Tx.Tx.WithdrawalChainId + "|" + msg.Tx.Tx.WithdrawalToken: {
-				Address:   msg.Tx.Tx.WithdrawalToken,
-				ChainId:   msg.Tx.Tx.WithdrawalChainId,
-				TokenId:   3,
-				IsWrapped: true,
-			},
-		},
-		dstTokens: map[string]bridgetypes.TokenInfo{
-			msg.Tx.Tx.WithdrawalToken + "|" + msg.Tx.Tx.WithdrawalChainId + "|": {
-				Address: msg.Tx.Tx.WithdrawalToken,
-				ChainId: "",
-				TokenId: 3,
-			},
-		},
-	}
-	erc20 := &mockERC20Keeper{
-		defaultHash: "0x01",
-		routerHash:  "0x02",
-		routerRet:   newRouterReturn(t, 100, 99),
-	}
-	k, ctx := newSubmitSwapKeeper(t, bridge, erc20)
-	k.SetParams(ctx, swaptypes.NewParams(
-		partyA,
-		"0x9999999999999999999999999999999999999999",
-		"0x2000000000000000000000000000000000000002",
-		swaptypes.DefaultSwapDeadlineSeconds,
-	))
-	ms := swapkeeper.NewMsgServerImpl(*k)
-
-	_, err := ms.SubmitSwapTx(sdk.WrapSDKContext(ctx), msg)
-	require.NoError(t, err)
-
-	_, err = ms.SubmitSwapTx(sdk.WrapSDKContext(ctx), &swaptypes.MsgSubmitSwapTx{
-		Creator:    partyB,
-		Tx:         msg.Tx,
-		IsBridgeTx: true,
-	})
-	require.NoError(t, err)
-
-	stored, found := k.GetSwap(ctx, msg.Tx.Tx.DepositTxHash, msg.Tx.Tx.DepositTxIndex, msg.Tx.Tx.DepositChainId)
-	require.True(t, found)
-	require.Equal(t, "99", stored.FinalAmount)
-	require.NotEmpty(t, stored.FinalDepositTxHash)
-	require.Len(t, erc20.calls, 3)
-	require.Equal(t, "depositERC20", erc20.calls[2].method)
+	fallbackDepositParams := call.args[3]
+	require.Equal(t, "recovery-recipient", fieldByName(t, fallbackDepositParams, "Receiver"))
+	require.Equal(t, "1", fieldByName(t, fallbackDepositParams, "Network"))
+	require.Equal(t, false, fieldByName(t, fallbackDepositParams, "IsWrapped"))
+	require.Equal(t, uint16(12), fieldByName(t, fallbackDepositParams, "ReferralId"))
 }
 
 func TestSubmitSwapTxRejectsAlreadyProcessedSwap(t *testing.T) {
@@ -357,41 +328,40 @@ func TestSubmitSwapTxRejectsAlreadyProcessedSwap(t *testing.T) {
 	}
 	erc20 := &mockERC20Keeper{}
 	k, ctx := newSubmitSwapKeeper(t, bridge, erc20)
-	k.SetParams(ctx, swaptypes.NewParams(
-		party,
-		"0x9999999999999999999999999999999999999999",
-		"0x2000000000000000000000000000000000000002",
-		swaptypes.DefaultSwapDeadlineSeconds,
-	))
-	existing := sampleSubmitSwapMsg(party, false).Tx
+	setSubmitSwapParams(ctx, k, party, swaptypes.DefaultSwapDeadlineSeconds)
+	existing := sampleSubmitSwapMsg(party).Tx
 	existing.FinalAmount = "42"
 	k.SetSwap(ctx, *existing)
 	ms := swapkeeper.NewMsgServerImpl(*k)
 
-	_, err := ms.SubmitSwapTx(sdk.WrapSDKContext(ctx), sampleSubmitSwapMsg(party, false))
+	_, err := ms.SubmitSwapTx(sdk.WrapSDKContext(ctx), sampleSubmitSwapMsg(party))
 	require.Error(t, err)
 }
 
-func TestSubmitSwapTxRejectsMissingRouterConfig(t *testing.T) {
+func TestSubmitSwapTxRejectsMissingSwapperConfig(t *testing.T) {
 	party := sdk.AccAddress(make([]byte, 20)).String()
-	bridge := mockBridgeKeeper{
-		params: bridgetypes.Params{
-			Parties: []*bridgetypes.Party{{Address: party}},
-		},
-		chains: map[string]bridgetypes.Chain{
-			"2": {
-				Id:            "2",
-				BridgeAddress: "0x2000000000000000000000000000000000000002",
-				Confirmations: 1,
-				Name:          "core-evm",
-			},
-		},
-	}
+	bridge := submitSwapBridge(party)
+	bridge.params.TssThreshold = 0
 	erc20 := &mockERC20Keeper{}
 	k, ctx := newSubmitSwapKeeper(t, bridge, erc20)
 	k.SetParams(ctx, swaptypes.DefaultParams())
 	ms := swapkeeper.NewMsgServerImpl(*k)
 
-	_, err := ms.SubmitSwapTx(sdk.WrapSDKContext(ctx), sampleSubmitSwapMsg(party, false))
+	_, err := ms.SubmitSwapTx(sdk.WrapSDKContext(ctx), sampleSubmitSwapMsg(party))
 	require.Error(t, err)
+}
+
+func TestSubmitSwapTxRejectsMissingTokenMapping(t *testing.T) {
+	party := sdk.AccAddress(make([]byte, 20)).String()
+	bridge := submitSwapBridge(party)
+	bridge.params.TssThreshold = 0
+	bridge.dstTokens = nil
+	erc20 := &mockERC20Keeper{}
+	k, ctx := newSubmitSwapKeeper(t, bridge, erc20)
+	setSubmitSwapParams(ctx, k, party, swaptypes.DefaultSwapDeadlineSeconds)
+	ms := swapkeeper.NewMsgServerImpl(*k)
+
+	_, err := ms.SubmitSwapTx(sdk.WrapSDKContext(ctx), sampleSubmitSwapMsg(party))
+	require.Error(t, err)
+	require.Len(t, erc20.calls, 0)
 }

@@ -18,12 +18,12 @@ func ParamKeyTable() paramtypes.KeyTable {
 }
 
 // NewParams creates a new Params instance
-func NewParams(moduleAdmin, uniswapRouterAddress, wrappedBridge string, swapDeadlineSeconds uint64) Params {
+func NewParams(moduleAdmin, wrappedBridge, swapperAddress string, swapDeadlineSeconds uint64) Params {
 	return Params{
-		ModuleAdmin:          moduleAdmin,
-		UniswapRouterAddress: uniswapRouterAddress,
-		WrappedBridge:        wrappedBridge,
-		SwapDeadlineSeconds:  swapDeadlineSeconds,
+		ModuleAdmin:         moduleAdmin,
+		WrappedBridge:       wrappedBridge,
+		SwapperAddress:      swapperAddress,
+		SwapDeadlineSeconds: swapDeadlineSeconds,
 	}
 }
 
@@ -36,8 +36,8 @@ func DefaultParams() Params {
 func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 	return paramtypes.ParamSetPairs{
 		paramtypes.NewParamSetPair([]byte(ParamModuleAdminKey), &p.ModuleAdmin, validateModuleAdmin),
-		paramtypes.NewParamSetPair([]byte(ParamUniswapRouterAddressKey), &p.UniswapRouterAddress, validateUniswapRouterAddress),
 		paramtypes.NewParamSetPair([]byte(ParamWrappedBridgeKey), &p.WrappedBridge, validateWrappedBridge),
+		paramtypes.NewParamSetPair([]byte(ParamSwapperAddressKey), &p.SwapperAddress, validateSwapperAddress),
 		paramtypes.NewParamSetPair([]byte(ParamSwapDeadlineSecondsKey), &p.SwapDeadlineSeconds, validateSwapDeadlineSeconds),
 	}
 }
@@ -47,11 +47,11 @@ func (p Params) Validate() error {
 	if err := validateModuleAdmin(p.ModuleAdmin); err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid module admin address (%s)", err)
 	}
-	if err := validateUniswapRouterAddress(p.UniswapRouterAddress); err != nil {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid uniswap router address (%s)", err)
-	}
 	if err := validateWrappedBridge(p.WrappedBridge); err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid wrapped bridge address (%s)", err)
+	}
+	if err := validateSwapperAddress(p.SwapperAddress); err != nil {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid swapper address (%s)", err)
 	}
 	if err := validateSwapDeadlineSeconds(p.SwapDeadlineSeconds); err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid swap deadline seconds (%s)", err)
@@ -77,27 +77,33 @@ func validateModuleAdmin(i interface{}) error {
 	return nil
 }
 
-func validateUniswapRouterAddress(i interface{}) error {
-	addr, ok := i.(string)
-	if !ok {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
-	}
-
-	if !common.IsHexAddress(addr) {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid uniswap router address: %s", addr)
-	}
-
-	return nil
-}
-
 func validateWrappedBridge(i interface{}) error {
 	addr, ok := i.(string)
 	if !ok {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
 	}
+	if addr == "" {
+		return nil
+	}
 
 	if !common.IsHexAddress(addr) {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid wrapped bridge address: %s", addr)
+	}
+
+	return nil
+}
+
+func validateSwapperAddress(i interface{}) error {
+	addr, ok := i.(string)
+	if !ok {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
+	}
+	if addr == "" {
+		return nil
+	}
+
+	if !common.IsHexAddress(addr) {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid swapper address: %s", addr)
 	}
 
 	return nil

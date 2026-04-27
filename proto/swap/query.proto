@@ -5,7 +5,6 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "swap/params.proto";
-import "swap/models/pool.proto";
 import "swap/models/transaction.proto";
 // this line is used by starport scaffolding # 1
 
@@ -16,14 +15,6 @@ service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/cosmos/swap/params";
-  }
-
-  rpc AllPool(QueryAllPools) returns (QueryAllPoolsResponse) {
-    option (google.api.http).get = "/cosmos/swap/pools";
-  }
-
-  rpc GetPoolByTokenId(QueryGetPoolByTokenId) returns (QueryGetPoolByTokenIdResponse) {
-    option (google.api.http).get = "/cosmos/swap/pools/{token_id}";
   }
 
   rpc AllSwaps(QueryAllSwaps) returns (QueryAllSwapsResponse) {
@@ -45,25 +36,6 @@ message QueryParamsResponse {
   // params holds all the parameters of this module.
   Params params = 1 [(gogoproto.nullable) = false];
 }
-
-message QueryAllPools {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
-}
-
-message QueryAllPoolsResponse {
-  repeated SwapPool pool = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
-
-
-message QueryGetPoolByTokenId {
-  string token_id = 1;
-}
-
-message QueryGetPoolByTokenIdResponse {
-  SwapPool pool = 1 [(gogoproto.nullable) = false];
-}
-
 
 message QueryAllSwaps {
   cosmos.base.query.v1beta1.PageRequest pagination = 1;

@@ -28,8 +28,7 @@ func (k Keeper) GetSwapSubmissions(ctx sdk.Context, hash string) (bridgetypes.Su
 
 func (k Keeper) SwapRequestHash(msg *swaptypes.MsgSubmitSwapTx) common.Hash {
 	payload := &swaptypes.MsgSubmitSwapTx{
-		Tx:         msg.Tx,
-		IsBridgeTx: msg.IsBridgeTx,
+		Tx: msg.Tx,
 	}
 
 	return crypto.Keccak256Hash(k.cdc.MustMarshal(payload))

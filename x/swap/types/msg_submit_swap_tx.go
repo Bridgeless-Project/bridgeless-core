@@ -10,11 +10,10 @@ const TypeMsgSubmitSwapTx = "submit_swap_tx"
 
 var _ sdk.Msg = &MsgSubmitSwapTx{}
 
-func NewMsgSubmitSwapTx(creator string, tx *SwapTransaction, isBridgeTx bool) *MsgSubmitSwapTx {
+func NewMsgSubmitSwapTx(creator string, tx *SwapTransaction) *MsgSubmitSwapTx {
 	return &MsgSubmitSwapTx{
-		Creator:    creator,
-		Tx:         tx,
-		IsBridgeTx: isBridgeTx,
+		Creator: creator,
+		Tx:      tx,
 	}
 }
 

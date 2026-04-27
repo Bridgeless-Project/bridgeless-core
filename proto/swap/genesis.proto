@@ -3,7 +3,6 @@ package core.swap;
 
 import "gogoproto/gogo.proto";
 import "swap/params.proto";
-import "swap/models/pool.proto";
 // this line is used by starport scaffolding # genesis/proto/import
 
 option go_package = "github.com/Bridgeless-Project/bridgeless-core/v12/x/swap/types";
@@ -11,7 +10,6 @@ option go_package = "github.com/Bridgeless-Project/bridgeless-core/v12/x/swap/ty
 // GenesisState defines the multisig module's genesis state.
 message GenesisState {
   Params params = 1 [(gogoproto.nullable) = false];
-  repeated SwapPool groupList = 2 [(gogoproto.nullable) = false];
 
   // this line is used by starport scaffolding # genesis/proto/state
 }

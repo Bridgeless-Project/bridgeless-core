@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	keepertest "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/keeper"
-	"github.com/Bridgeless-Project/bridgeless-core/v12/testutil/nullify"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/swap"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/swap/types"
 	"github.com/stretchr/testify/require"
@@ -12,8 +11,8 @@ import (
 
 func TestGenesis(t *testing.T) {
 	genesisState := types.GenesisState{
-		Params:	types.DefaultParams(),
-		
+		Params: types.DefaultParams(),
+
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
@@ -21,11 +20,7 @@ func TestGenesis(t *testing.T) {
 	swap.InitGenesis(ctx, *k, genesisState)
 	got := swap.ExportGenesis(ctx, *k)
 	require.NotNil(t, got)
-
-	nullify.Fill(&genesisState)
-	nullify.Fill(got)
-
-	
+	require.Equal(t, genesisState.Params, got.Params)
 
 	// this line is used by starport scaffolding # genesis/test/assert
 }

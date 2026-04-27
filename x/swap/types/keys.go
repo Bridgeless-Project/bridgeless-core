@@ -20,12 +20,11 @@ const (
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_swap"
 
-	ParamModuleAdminKey          = "ModuleAdmin"
-	ParamUniswapRouterAddressKey = "UniswapRouterAddress"
-	ParamWrappedBridgeKey        = "WrappedBridge"
-	ParamSwapDeadlineSecondsKey  = "SwapDeadlineSeconds"
+	ParamModuleAdminKey         = "ModuleAdmin"
+	ParamWrappedBridgeKey       = "WrappedBridge"
+	ParamSwapperAddressKey      = "SwapperAddress"
+	ParamSwapDeadlineSecondsKey = "SwapDeadlineSeconds"
 
-	StorePoolPrefix           = "pool"
 	StoreSwapPrefix           = "swap"
 	StoreSwapSubmissionPrefix = "swap_submission"
 )
@@ -39,10 +38,6 @@ func init() {
 
 func Prefix(p string) []byte {
 	return []byte(p + "/")
-}
-
-func KeyPool(tokenID string) []byte {
-	return []byte(tokenID)
 }
 
 func KeySwap(txHash string, txNonce uint64, chainID string) []byte {

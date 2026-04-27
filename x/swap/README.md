@@ -1,11 +1,12 @@
 # `x/swap`
 
 ## Abstract
-Swap module is developed to store swap data on-chain and process swap requests on the Core side.
 
-The module is responsible for connecting the bridge input flow, the internal swap execution, and the final deposit creation into one logical process. In other words, this module coordinates the full **bridge -> swap -> deposit** lifecycle.
+The swap module stores submitted swap requests and coordinates the Core-side swap flow after the required bridge party threshold is reached.
 
-Swap module stores swap transactions, supported Uniswap V2 pools, and module parameters required to execute swaps and recover funds in case of errors.
+Swap execution is delegated to the EVM `Swapper` contract. The module builds the `withdrawSwapAndRoute` request from the submitted bridge transaction, resolves the destination token address on the Cosmos chain through bridge token mappings, calls the contract, and stores the processed swap record.
+
+The module no longer stores swap pools. Route construction uses bridge token metadata plus the configured wrapped bridge token.
 
 ---
 
@@ -13,220 +14,92 @@ Swap module stores swap transactions, supported Uniswap V2 pools, and module par
 
 ### Params
 
-Swap module params contains next fields:
-- **Module admin** address - module admin is responsible for updating supported pools and changing swap-related configuration.
-- **Uniswap router address** - address of the Uniswap V2 router contract used during swap execution.
-
-Definition:
-
 ```protobuf
-// Params defines the parameters for the module.
 message Params {
   string module_admin = 1;
-  string uniswap_router_address = 2;
+  string wrapped_bridge = 3;
+  string swapper_address = 4;
+  uint64 swap_deadline_seconds = 5;
 }
 ```
 
-Example:
-
-```json
-{
-  "params": {
-    "module_admin": "bridge1...",
-    "uniswap_router_address": "0x0000000000000000000000000000000000000000"
-  }
-}
-```
-
-### SwapPool
-**SwapPool** defines supported Uniswap V2 pool properties used during swap execution.
-
-Definition:
-
-```protobuf
-message SwapPool {
-  string address = 1;
-  string token_id = 2;
-}
-```
-
-`address` stores the hop token address used to build the router path for multi-hop swaps.
-
-Example:
-
-```json
-{
-  "address": "0x0000000000000000000000000000000000000000",
-  "token_id": "1"
-}
-```
+- `module_admin` is retained for module configuration ownership.
+- `wrapped_bridge` is the middle token used in the swap path.
+- `swapper_address` is the EVM contract called by the module.
+- `swap_deadline_seconds` is added to the current block time when building Swapper swap params.
 
 ### SwapTransaction
-**SwapTransaction** defines swap transaction details.
-
-This entity partially duplicates the Bridge transaction data and extends it with swap-specific fields required to link the original user request with the final internal deposit created after swap execution.
-
-Definition:
 
 ```protobuf
 message SwapTransaction {
   core.bridge.Transaction tx = 1;
-  string final_receiver = 20;
-  string final_amount = 21;
-  string amount_out_min = 22;
-  string final_deposit_tx_hash = 23;
+  string final_receiver = 2;
+  string final_amount = 3;
+  string amount_out_min = 4;
+  string final_deposit_tx_hash = 5;
 }
 ```
 
-Example:
-
-```json
-{
-  "tx": {
-    "deposit_chain_id": "0",
-    "deposit_tx_hash": "0x0000000000000000000000000000000000000000",
-    "deposit_tx_index": "0",
-    "deposit_block": "0",
-    "deposit_token": "0x0000000000000000000000000000000000000000",
-    "deposit_amount": "1000000000000000000",
-    "depositor": "0x0000000000000000000000000000000000000000",
-    "receiver": "0x0000000000000000000000000000000000000000",
-    "withdrawal_chain_id": "1",
-    "withdrawal_tx_hash": "",
-    "withdrawal_token": "0x0000000000000000000000000000000000000000",
-    "signature": "",
-    "is_wrapped": true,
-    "withdrawal_amount": "0",
-    "commission_amount": "0",
-    "tx_data": "",
-    "referral_id": 0
-  },
-  "final_receiver": "0x0000000000000000000000000000000000000000",
-  "final_amount": "990000000000000000",
-  "amount_out_min": "900000000000000000",
-  "final_deposit_tx_hash": "0x1111111111111111111111111111111111111111"
-}
-```
+`final_amount` is not derived by the module because `withdrawSwapAndRoute` does not return the swap output amount. `final_deposit_tx_hash` stores the EVM response hash from the Swapper call.
 
 ---
 
 ## Messages
 
 ### MsgSubmitSwapTx
-**MsgSubmitSwapTx** initiates the swap flow on the Core side.
-
-This message starts the main module logic after the required number of TSS submissions is reached. After threshold validation, the module can mint or unlock wrapped tokens, execute the internal swap sequence, and create the internal deposit used for the final bridging step.
-
-The message must support both:
-- **Bridge transaction flow** - when swap is triggered from an external bridge deposit.
-- **Native swap flow** - when swap is initiated directly inside the protocol.
-
-Definition:
 
 ```protobuf
 message MsgSubmitSwapTx {
   string creator = 1;
   SwapTransaction tx = 2;
-  bool is_bridge_tx = 3;
 }
 ```
 
-Example:
+Only authorized bridge parties can submit swap transactions. The module hashes the request payload, tracks party submissions, and executes the Swapper call once the TSS threshold is reached.
 
-```json
-{
-  "creator": "bridge1...",
-  "tx": {
-    "tx": {
-      "deposit_chain_id": "0",
-      "deposit_tx_hash": "0xabc",
-      "deposit_tx_index": "1",
-      "deposit_block": "100",
-      "deposit_token": "0xeth",
-      "deposit_amount": "1000000000000000000",
-      "depositor": "0xuser",
-      "receiver": "0xuser",
-      "withdrawal_chain_id": "1",
-      "withdrawal_tx_hash": "",
-      "withdrawal_token": "0xbtc",
-      "signature": "",
-      "is_wrapped": true,
-      "withdrawal_amount": "0",
-      "commission_amount": "0",
-      "tx_data": "",
-      "referral_id": 0
-    },
-    "final_receiver": "bc1...",
-    "final_amount": "0",
-    "amount_out_min": "900000000000000000",
-    "final_deposit_tx_hash": ""
-  },
-  "is_bridge_tx": true
-}
+The module calls:
+
+```text
+Swapper.withdrawSwapAndRoute(
+  withdrawParams,
+  swapParams,
+  destinationDepositParams,
+  fallbackDepositParams
+)
 ```
 
-### MsgUpdatePool
-**MsgUpdatePool** registers or updates a supported Uniswap V2 pool.
+Argument sources:
 
-This message can only be called by the module admin.
+- `withdrawParams`: deposit token, deposit amount, deposit transaction hash/index, original wrapped flag, and decoded signatures.
+- `swapParams`: deposit amount, `amount_out_min`, deadline, path, and destination-native flag.
+- `destinationDepositParams`: `final_receiver`, withdrawal chain id, destination token wrapped flag, and referral id.
+- `fallbackDepositParams`: `tx.tx_data`, deposit chain id, original wrapped flag, and referral id.
 
-Definition:
+The swap path is:
 
-```protobuf
-message MsgUpdatePool {
-  string creator = 1;
-  SwapPool pool = 2;
-}
+```text
+[deposit_token, wrapped_bridge, destination_token_on_cosmos_chain]
 ```
 
-Example:
-
-```json
-{
-  "creator": "bridge1...",
-  "pool": {
-    "address": "0x0000000000000000000000000000000000000000",
-    "token_id": "1"
-  }
-}
-```
+The last address is resolved with bridge token mappings from the withdrawal token and withdrawal chain into the current Cosmos chain.
 
 ---
 
 ## Queries
 
-All stored entities must be accessible through GET messages.
-
 ### Params
-Returns module parameters.
 
 ```protobuf
 rpc Params(QueryParamsRequest) returns (QueryParamsResponse);
 ```
 
-### AllPool
-Returns the full list of supported pools.
-
-```protobuf
-rpc AllPool(QueryAllPools) returns (QueryAllPoolsResponse);
-```
-
-### GetPoolByTokenId
-Returns the pool associated with the given token id.
-
-```protobuf
-rpc GetPoolByTokenId(QueryGetPoolByTokenId) returns (QueryGetPoolByTokenIdResponse);
-```
-
 ### AllSwaps
-Returns the full list of stored swap transactions.
 
 ```protobuf
 rpc AllSwaps(QueryAllSwaps) returns (QueryAllSwapsResponse);
 ```
 
 ### GetSwapById
-Returns a single swap transaction by bridge transaction identifier.
 
 ```protobuf
 rpc GetSwapById(QueryGetSwapById) returns (QueryGetSwapByIdResponse);
@@ -236,53 +109,26 @@ rpc GetSwapById(QueryGetSwapById) returns (QueryGetSwapByIdResponse);
 
 ## Dependencies
 
-Swap module MUST import the **Bridge** and **EVM** keepers.
-
 ### Bridge keeper
-Bridge keeper is required to:
-- create the final internal deposit after swap execution,
-- store self-deposits in the Bridge store,
-- link the original deposit to the final withdrawal,
-- allow deposit creation without TSS governance checks when the caller is the Swap module address.
 
-This exception is required because the second deposit is created internally by the protocol as part of the swap flow, rather than directly from an external user action.
+The bridge keeper is used to authorize party submissions, read bridge threshold params, validate destination chains, and resolve token mappings for the Cosmos-chain route token.
 
 ### EVM keeper
-EVM keeper is required to:
-- call Uniswap contracts,
-- call Bridge contracts,
-- execute token swaps,
-- process contract-based bridging and deposit operations.
 
-To allow the protocol to call these contracts, their ABIs must be stored on the Core side.
+The EVM keeper is used to call the Swapper contract ABI from the swap module address.
 
 ---
 
 ## Processing Flow
 
-During each swap, the Core MUST:
-- validate that the number of TSS submissions has reached the required threshold,
-- load the original bridge transaction,
-- determine the supported swap route from the stored pools,
-- compute transaction parameters, including the final withdrawal amount,
-- execute the full **bridge -> swap -> deposit** flow either through a dedicated contract or through native protocol logic,
-- create the final internal deposit in the Bridge module,
-- store the resulting `SwapTransaction`.
+During each swap, the module:
 
-When a user wants to swap **ETH -> BTC**, the Core MUST process two swaps:
-1. Core swaps **ETH -> NST**
-2. Core swaps **NST -> BTC**
+- validates the submitter is an authorized bridge party,
+- rejects duplicate submitters and already processed swaps,
+- waits until the configured bridge TSS threshold is reached,
+- resolves the destination token address on the Cosmos chain,
+- builds Swapper withdraw, swap, destination deposit, and fallback deposit params,
+- calls `withdrawSwapAndRoute`,
+- stores the `SwapTransaction` with the Swapper EVM response hash.
 
-The backend provides `amount_out_min`, and the same minimum output policy MUST be respected for the full route.
-
-During each swap, the Core derives the router path from the stored pools ordered by `token_id`.
-
----
-
-## Recovery Flow
-
-If `amount_out_min` is too aggressive and the swap cannot be executed, the wrapped tokens MUST be sent to the recovery address. Alternatively, the protocol address MAY hold the tokens, and the user can later request their withdrawal.
-
-In the recovery flow, the user MUST receive the tokens from the **last successfully completed stage** before the error:
-- if the user swaps **BTC -> ETH** and the error occurs during the **wBTC -> NST** swap, the user MUST receive **wBTC**
-- if the error occurs during the **NST -> wETH** swap, the user MUST receive **NST** tokens at their recovery address
+Fallback routing is handled by the Swapper contract using `tx.tx_data` as the fallback receiver or recovery payload.
