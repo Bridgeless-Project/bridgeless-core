@@ -97,3 +97,11 @@ func (k Keeper) EmitEpochUpdatedEvent(sdkCtx sdk.Context, epochId uint32, chainI
 		),
 	)
 }
+
+func (k Keeper) EmitFinishEpochSupportEvent(sdkCtx sdk.Context, epochId uint32) {
+	sdkCtx.EventManager().EmitEvent(
+		sdk.NewEvent(types.EventType_EPOCH_SUPPORT_FINISHED.String(),
+			sdk.NewAttribute(types.AttributeEpochId, big.NewInt(int64(epochId)).String()),
+		),
+	)
+}
