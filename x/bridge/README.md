@@ -279,7 +279,7 @@ Example:
   "tss_info": [
     {
       "certificate": "cert_pem_content",
-      "domen": "tss-node1.example.com",
+      "domain": "tss-node1.example.com",
       "address": "0x1234567890abcdef",
       "active": true
     }
@@ -297,7 +297,7 @@ Definition:
 ```protobuf
 message TSSInfo {
   string certificate = 1;
-  string domen = 2;
+  string domain = 2;
   string address = 3;
   bool active = 4;
 }
@@ -307,7 +307,7 @@ Example:
 ```json
 {
   "certificate": "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
-  "domen": "tss-node1.example.com",
+  "domain": "tss-node1.example.com",
   "address": "0x1234567890abcdef",
   "active": true
 }
@@ -856,13 +856,13 @@ Example of `epoch.json`:
   "tss_info": [
     {
       "certificate": "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
-      "domen": "tss-node1.example.com",
+      "domain": "tss-node1.example.com",
       "address": "0x1234567890abcdef",
       "active": true
     },
     {
       "certificate": "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
-      "domen": "tss-node2.example.com",
+      "domain": "tss-node2.example.com",
       "address": "0xabcdef1234567890",
       "active": true
     }
@@ -1317,7 +1317,7 @@ epoch:
   tss_threshold: 2
   tss_info:
   - certificate: "-----BEGIN CERTIFICATE-----..."
-    domen: "tss-node1.example.com"
+    domain: "tss-node1.example.com"
     address: "0x1234567890abcdef"
     active: true
   pubkey: "02abc..."
