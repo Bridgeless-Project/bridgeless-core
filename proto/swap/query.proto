@@ -57,6 +57,4 @@ message QueryGetSwapByIdResponse {
   SwapTransaction swap = 1 [(gogoproto.nullable) = false];
 }
 
-
-
 // this line is used by starport scaffolding # 3

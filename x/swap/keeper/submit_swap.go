@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"math/big"
-	"time"
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/contracts"
@@ -49,26 +48,31 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 		return nil, errorsmod.Wrap(swaptypes.ErrInvalidConfig, "wrapped bridge address is not configured")
 	}
 
+	// its already bridgeless networks
 	if _, found := k.bridge.GetChain(ctx, msg.Tx.Tx.WithdrawalChainId); !found {
 		return nil, errorsmod.Wrapf(bridgetypes.ErrChainNotFound, "withdrawal chain not found: %s", msg.Tx.Tx.WithdrawalChainId)
 	}
 
-	destinationInfo, found := k.bridge.GetTokenInfo(ctx, msg.Tx.Tx.WithdrawalChainId, msg.Tx.Tx.WithdrawalToken)
+	//WithdrawalToken is the representation of deposited by user token
+	finalDestinationTokenInfo, found := k.bridge.GetTokenInfo(ctx, msg.Tx.FinalToken, msg.Tx.FinalChainId)
 	if !found {
 		return nil, errorsmod.Wrapf(bridgetypes.ErrTokenInfoNotFound, "token info not found for %s on chain %s", msg.Tx.Tx.WithdrawalToken, msg.Tx.Tx.WithdrawalChainId)
 	}
 
-	path, err := k.buildSwapPath(ctx, msg.Tx.Tx.DepositToken, msg.Tx.Tx.WithdrawalToken, msg.Tx.Tx.WithdrawalChainId)
+	// prepare the swap params
+	// There we build the path (WithdrawalToken -> WrappedBridge -> FinalTokenOnBridgeless) and the swap params for the swapper contract call
+	// if one of WithdrawalToken or FinalTokenOnBridgeless is WrappedBridge, the final path consist of 2 addresses only
+	path, err := k.buildSwapPath(ctx, msg.Tx.Tx.WithdrawalToken, msg.Tx.FinalToken, msg.Tx.FinalChainId)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "failed to build swap path")
 	}
 
-	amountIn, err := parseUintString(msg.Tx.Tx.DepositAmount, "deposit amount")
+	amountIn, err := parseUintString(msg.Tx.Tx.DepositAmount)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "failed to parse deposit amount")
 	}
 
-	amountOutMin, err := parseUintString(msg.Tx.AmountOutMin, "amount_out_min")
+	amountOutMin, err := parseUintString(msg.Tx.AmountOutMin)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "failed to parse amount_out_min")
 	}
@@ -78,12 +82,6 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 		return nil, errorsmod.Wrap(err, "failed to decode signature")
 	}
 
-	deadlineSeconds := params.SwapDeadlineSeconds
-	if deadlineSeconds == 0 {
-		deadlineSeconds = swaptypes.DefaultSwapDeadlineSeconds
-	}
-	deadline := big.NewInt(ctx.BlockTime().Add(time.Duration(deadlineSeconds) * time.Second).Unix())
-
 	txResp, err := k.erc20.CallEVM(
 		ctx,
 		contracts.SwapperContract.ABI,
@@ -92,7 +90,7 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 		true,
 		withdrawSwapAndRouteMethod,
 		swapperWithdrawParams{
-			Token:      common.HexToAddress(msg.Tx.Tx.DepositToken),
+			Token:      common.HexToAddress(msg.Tx.Tx.WithdrawalToken),
 			Amount:     amountIn,
 			TxHash:     common.HexToHash(msg.Tx.Tx.DepositTxHash),
 			TxNonce:    new(big.Int).SetUint64(msg.Tx.Tx.DepositTxIndex),
@@ -102,18 +100,18 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 		swapperSwapParams{
 			AmountIn:                 amountIn,
 			MinDestinationAmount:     amountOutMin,
-			SwapDeadline:             deadline,
+			SwapDeadline:             new(big.Int).SetUint64(msg.Tx.SwapDeadline),
 			Path:                     path,
-			IsDestinationTokenNative: isZeroAddress(destinationInfo.Address),
+			IsDestinationTokenNative: isZeroAddress(finalDestinationTokenInfo.Address),
 		},
 		swapperDepositParams{
 			Receiver:   msg.Tx.FinalReceiver,
-			Network:    msg.Tx.Tx.WithdrawalChainId,
-			IsWrapped:  destinationInfo.IsWrapped,
+			Network:    msg.Tx.FinalChainId,
+			IsWrapped:  finalDestinationTokenInfo.IsWrapped,
 			ReferralId: uint16(msg.Tx.Tx.ReferralId),
 		},
 		swapperDepositParams{
-			Receiver:   msg.Tx.Tx.TxData,
+			Receiver:   msg.Tx.Tx.Depositor,
 			Network:    msg.Tx.Tx.DepositChainId,
 			IsWrapped:  msg.Tx.Tx.IsWrapped,
 			ReferralId: uint16(msg.Tx.Tx.ReferralId),
@@ -144,6 +142,21 @@ func (k Keeper) buildSwapPath(ctx sdk.Context, sourceToken string, destinationTo
 		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid bridgeless token address: %s", token.Address)
 	}
 
+	// if one of tokens is WrappedBridge, we can skip it in the path and
+	// swap directly between the other token and WrappedBridge
+	if sourceToken == params.WrappedBridge || isZeroAddress(sourceToken) {
+		return []common.Address{
+			common.HexToAddress(sourceToken),
+			common.HexToAddress(token.Address),
+		}, nil
+	}
+	if token.Address == params.WrappedBridge || isZeroAddress(token.Address) {
+		return []common.Address{
+			common.HexToAddress(sourceToken),
+			common.HexToAddress(token.Address),
+		}, nil
+	}
+
 	return []common.Address{
 		common.HexToAddress(sourceToken),
 		common.HexToAddress(params.WrappedBridge),
@@ -151,13 +164,14 @@ func (k Keeper) buildSwapPath(ctx sdk.Context, sourceToken string, destinationTo
 	}, nil
 }
 
-func parseUintString(value, field string) (*big.Int, error) {
+func parseUintString(value string) (*big.Int, error) {
 	parsed, ok := new(big.Int).SetString(value, 10)
 	if !ok {
-		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid %s: %s", field, value)
+		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid big int: %s", value)
 	}
+
 	if parsed.Sign() < 0 {
-		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "%s cannot be negative: %s", field, value)
+		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "big int cannot be negative: %s", value)
 	}
 
 	return parsed, nil

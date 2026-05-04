@@ -2,7 +2,6 @@ syntax = "proto3";
 package core.swap;
 
 import "google/protobuf/any.proto";
-import "cosmos/base/query/v1beta1/pagination.proto";
 import "google/api/annotations.proto";
 import "gogoproto/gogo.proto";
 import "bridge/models/transaction.proto";
@@ -15,6 +14,8 @@ message SwapTransaction {
   string final_amount = 3; // amount of swapped tokens
   string amount_out_min = 4; // minimum acceptable output amount, provided by backend
   string final_deposit_tx_hash = 5;
+  string final_token = 6; // token user wanna get after swap (can be on Bridgeless chain or another one)
+  string final_chain_id = 7; // chain where user wanna get the final token (can be bridgeless chain or another one)
+  uint64 swap_deadline = 8; // timestamp until when the swap is valid, provided by
+  string sender = 9; // user who initiated the bridge transaction
 }
-
-

@@ -26,7 +26,7 @@ func (k Keeper) GetSwapSubmissions(ctx sdk.Context, hash string) (bridgetypes.Su
 	return submissions, true
 }
 
-func (k Keeper) SwapRequestHash(msg *swaptypes.MsgSubmitSwapTx) common.Hash {
+func (k Keeper) SwapHash(msg *swaptypes.MsgSubmitSwapTx) common.Hash {
 	payload := &swaptypes.MsgSubmitSwapTx{
 		Tx: msg.Tx,
 	}
