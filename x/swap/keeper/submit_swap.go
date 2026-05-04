@@ -72,7 +72,7 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 		return nil, errorsmod.Wrap(err, "failed to parse deposit amount")
 	}
 
-	amountOutMin, err := parseUintString(msg.Tx.AmountOutMin)
+	amountOutMin, err := parseUintString(msg.Tx.SwapOutAmount)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "failed to parse amount_out_min")
 	}
