@@ -51,3 +51,18 @@ func (k queryServer) GetEpochPubKey(goctx context.Context, req *types.QueryGetEp
 
 	return &types.QueryGetEpochPubKeyResponse{PubKey: pubkey}, nil
 }
+
+func (k queryServer) GetEpochSignature(goctx context.Context, req *types.QueryGetEpochSignature) (*types.QueryGetEpochSignatureResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+	ctx := sdk.UnwrapSDKContext(goctx)
+	signature, found := k.GetEpochChainSignature(ctx, req.EpochId, req.ChainType)
+	if !found {
+		signature = types.EpochChainSignatures{
+			EpochId:   req.EpochId,
+			ChainType: req.ChainType,
+		}
+	}
+	return &types.QueryGetEpochSignatureResponse{EpochChainSignatures: signature}, nil
+}

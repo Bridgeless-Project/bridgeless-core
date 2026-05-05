@@ -4,6 +4,7 @@ package core.bridge;
 import "gogoproto/gogo.proto";
 import "bridge/params.proto";
 import "bridge/models/token.proto";
+import "bridge/models/epoch.proto";
 import "bridge/models/chain.proto";
 import "bridge/models/transaction.proto";
 import "bridge/models/referrals.proto";
@@ -20,5 +21,6 @@ message GenesisState {
   repeated Submissions transactions_submissions = 5 [(gogoproto.nullable) = false];
   repeated Referral referrals = 6 [(gogoproto.nullable) = false];
   repeated ReferralRewards referralsRewards = 7 [(gogoproto.nullable) = false];
+  repeated Epoch epochs = 8 [(gogoproto.nullable) = false];
   // this line is used by starport scaffolding # genesis/proto/state
 }

@@ -70,17 +70,17 @@ func (k Keeper) GetEpochChainSignature(sdkCtx sdk.Context, epochId uint32, chain
 	return epochChainSignatures, true
 }
 
-func (k Keeper) SetEpochChainSignatureSubmission(sdkCtx sdk.Context, epochId uint32, chainType types.ChainType, submission types.Submissions) {
+func (k Keeper) SetEpochChainSignaturesSubmission(sdkCtx sdk.Context, epochId uint32, submission types.Submissions) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochChainSignatureSubmissionPrefix))
 	eStore := prefix.NewStore(tStore, types.KeyEpoch(epochId))
-	eStore.Set(types.KeyEpochChainSignatureSubmission(chainType, epochId, submission.Hash), k.cdc.MustMarshal(&submission))
+	eStore.Set(types.KeyEpochChainSignatureSubmission(epochId, submission.Hash), k.cdc.MustMarshal(&submission))
 }
 
-func (k Keeper) GetEpochChainSignatureSubmission(sdkCtx sdk.Context, epochId uint32, chainType types.ChainType, hash string) (submission types.Submissions, found bool) {
+func (k Keeper) GetEpochChainSignaturesSubmission(sdkCtx sdk.Context, epochId uint32, hash string) (submission types.Submissions, found bool) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochChainSignatureSubmissionPrefix))
 	eStore := prefix.NewStore(tStore, types.KeyEpoch(epochId))
 
-	bz := eStore.Get(types.KeyEpochChainSignatureSubmission(chainType, epochId, hash))
+	bz := eStore.Get(types.KeyEpochChainSignatureSubmission(epochId, hash))
 	if bz == nil {
 		return submission, false
 	}

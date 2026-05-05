@@ -16,6 +16,7 @@ func DefaultGenesis() *GenesisState {
 		Chains:       []Chain{},
 		Tokens:       []Token{},
 		Transactions: []Transaction{},
+		Epochs:       []Epoch{},
 	}
 }
 
@@ -73,6 +74,19 @@ func (gs GenesisState) Validate() error {
 
 		if err := validateTransactionSubmissions(&txSubmissions); err != nil {
 			return errorsmod.Wrapf(err, "invalid tx submissions %v", txSubmissions.Hash)
+		}
+	}
+
+	epochs := make(map[uint32]struct{})
+	for _, epoch := range gs.Epochs {
+		if _, ok := epochs[epoch.Id]; ok {
+			return errorsmod.Wrapf(bridgeTypes.ErrDuplicatedValue, "duplicate chain id: %s", epoch)
+		} else {
+			epochs[epoch.Id] = struct{}{}
+		}
+
+		if err := validateEpoch(&epoch); err != nil {
+			return errorsmod.Wrapf(err, "invalid epoch %s", epoch.Id)
 		}
 	}
 

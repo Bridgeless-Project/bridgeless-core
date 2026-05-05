@@ -57,7 +57,7 @@ func finishEpochSupport(ctx sdk.Context, k keeper.Keeper, params types.Params) e
 	}
 
 	prevEpoch, _ := k.GetEpoch(ctx, params.Epoch-1)
-	// ol=nly if the epoch status
+	// only if the epoch status
 	if prevEpoch.Status == types.EpochStatus_SHUTDOWN && prevEpoch.EndBlock <= uint64(ctx.BlockHeight()) {
 		prevEpoch.Status = types.EpochStatus_UNSUPPORTED
 		k.SetEpoch(ctx, &prevEpoch)
@@ -66,6 +66,9 @@ func finishEpochSupport(ctx sdk.Context, k keeper.Keeper, params types.Params) e
 			return errors.Wrap(err, "broadcast epoch updated event")
 		}
 	}
+
+	k.EmitFinishEpochSupportEvent(ctx, prevEpoch.Id)
+
 	return nil
 }
 

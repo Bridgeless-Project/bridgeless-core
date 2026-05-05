@@ -72,11 +72,13 @@ func emitSubmitEvent(sdkCtx sdk.Context, transaction types.Transaction) {
 	))
 }
 
-func emitStartEpochEvent(sdkCtx sdk.Context, epochId uint32, info string) {
+func emitStartEpochEvent(sdkCtx sdk.Context, epochId uint32, info string, threshold uint32, startTime int64) {
 	sdkCtx.EventManager().EmitEvent(
 		sdk.NewEvent(types.EventType_STARTED_NEW_EPOCH.String(),
 			sdk.NewAttribute(types.AttributeEpochId, big.NewInt(int64(epochId)).String()),
 			sdk.NewAttribute(types.AttributeTssInfo, info),
+			sdk.NewAttribute(types.AttributeTSSThreshold, new(big.Int).SetUint64(uint64(threshold)).String()),
+			sdk.NewAttribute(types.AttributeEpochStartTime, new(big.Int).SetInt64(startTime).String()),
 		),
 	)
 }
@@ -92,6 +94,14 @@ func (k Keeper) EmitEpochUpdatedEvent(sdkCtx sdk.Context, epochId uint32, chainI
 			sdk.NewAttribute(types.AttributeEpochEndTime, strconv.FormatUint(signature.Data.EndTime, 10)),
 			sdk.NewAttribute(types.AttributeEpochNonce, signature.Data.Nonce),
 			sdk.NewAttribute(types.AttributeEpochSignatureMode, strconv.FormatBool(isAdding)),
+		),
+	)
+}
+
+func (k Keeper) EmitFinishEpochSupportEvent(sdkCtx sdk.Context, epochId uint32) {
+	sdkCtx.EventManager().EmitEvent(
+		sdk.NewEvent(types.EventType_EPOCH_SUPPORT_FINISHED.String(),
+			sdk.NewAttribute(types.AttributeEpochId, big.NewInt(int64(epochId)).String()),
 		),
 	)
 }
