@@ -17,32 +17,31 @@ The module no longer stores swap pools. Route construction uses bridge token met
 ```protobuf
 message Params {
   string module_admin = 1;
-  string wrapped_bridge = 3;
-  string swapper_address = 4;
-  uint64 swap_deadline_seconds = 5;
+  string wrapped_bridge = 2;
+  string swapper_address = 3;
+  uint64 swaper_caller_address = 4;
 }
 ```
 
 - `module_admin` is retained for module configuration ownership.
 - `wrapped_bridge` is the middle token used in the swap path.
 - `swapper_address` is the EVM contract called by the module.
-- `swap_deadline_seconds` is added to the current block time when building Swapper swap params.
+- `swaper_caller_address` is the EVM address used by the module to call the Swapper contract.
 
 ### SwapTransaction
 
 ```protobuf
 message SwapTransaction {
-  core.bridge.Transaction tx = 1;
-  string final_receiver = 2;
-  string final_amount = 3;
-  string amount_out_min = 4;
-  string final_deposit_tx_hash = 5;
+  core.bridge.Transaction tx = 1 [(gogoproto.nullable) = false]; // Base transaction from bridge module
+  string final_receiver = 2; // in case of native swap the final receiver is the end user
+  string final_token = 3; // token user wanna get after swap (can be on Bridgeless chain or another one)
+  string final_chain_id = 4; // chain where user wanna get the final token (can be bridgeless chain or another one)
+  uint64 swap_deadline = 5; // timestamp until when the swap is valid, provided by
+  string swap_out_amount = 6; // minimum acceptable output amount, provided by backend
+  string final_deposit_tx_hash = 7; // do not used on the submit endpoint
 }
 ```
 
-`final_amount` is not derived by the module because `withdrawSwapAndRoute` does not return the swap output amount. `final_deposit_tx_hash` stores the EVM response hash from the Swapper call.
-
----
 
 ## Messages
 
@@ -73,7 +72,7 @@ Argument sources:
 - `withdrawParams`: deposit token, deposit amount, deposit transaction hash/index, original wrapped flag, and decoded signatures.
 - `swapParams`: deposit amount, `amount_out_min`, deadline, path, and destination-native flag.
 - `destinationDepositParams`: `final_receiver`, withdrawal chain id, destination token wrapped flag, and referral id.
-- `fallbackDepositParams`: `tx.tx_data`, deposit chain id, original wrapped flag, and referral id.
+- `fallbackDepositParams`: `tx.tx_data`, deposit chain id, wrapped flag, and referral id.
 
 The swap path is:
 

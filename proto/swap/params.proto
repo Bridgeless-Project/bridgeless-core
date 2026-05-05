@@ -10,6 +10,5 @@ message Params {
   string module_admin = 1;
   string wrapped_bridge = 2;
   string swapper_address = 3;
-  uint64 swap_deadline_seconds = 4;
-  string swapper_caller_address = 5; // evm address
+  string swapper_caller_address = 4; // evm address
 }

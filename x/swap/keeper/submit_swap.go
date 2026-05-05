@@ -97,6 +97,7 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 		return nil, errorsmod.Wrap(err, "failed to execute swapper withdraw swap and route")
 	}
 
+	k.Logger(ctx).Info("swap executed successfully", "txHash", txResp.Hash)
 	msg.Tx.FinalDepositTxHash = txResp.Hash
 	return msg.Tx, nil
 }

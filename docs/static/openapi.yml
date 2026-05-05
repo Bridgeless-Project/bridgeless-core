@@ -8435,9 +8435,6 @@ paths:
                     type: string
                   swapper_address:
                     type: string
-                  swap_deadline_seconds:
-                    type: string
-                    format: uint64
                   swapper_caller_address:
                     type: string
                     title: evm address
@@ -55931,9 +55928,6 @@ definitions:
         type: string
       swapper_address:
         type: string
-      swap_deadline_seconds:
-        type: string
-        format: uint64
       swapper_caller_address:
         type: string
         title: evm address
@@ -56129,9 +56123,6 @@ definitions:
             type: string
           swapper_address:
             type: string
-          swap_deadline_seconds:
-            type: string
-            format: uint64
           swapper_caller_address:
             type: string
             title: evm address
