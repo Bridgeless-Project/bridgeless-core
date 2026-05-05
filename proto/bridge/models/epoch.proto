@@ -69,7 +69,7 @@ message EpochSubmissions {
 
 message TSSInfo {
   string certificate = 1;
-  string domen = 2;
+  string domain = 2;
   string address = 3;
   bool active = 4; // if is not active it should be removed from signers in this epoch
 }

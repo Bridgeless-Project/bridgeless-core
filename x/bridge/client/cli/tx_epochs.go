@@ -37,7 +37,7 @@ func TxEpochsCmd() *cobra.Command {
 //	  "tss_info": [
 //	    {
 //	      "certificate": "cert1",
-//	      "domen": "domain1.com",
+//	      "domain": "domain1.com",
 //	      "address": "0x...",
 //	      "active": true
 //	    }
@@ -56,13 +56,13 @@ Example JSON file format:
   "tss_info": [
     {
       "certificate": "cert_pem_content",
-      "domen": "tss-node1.example.com",
+      "domain": "tss-node1.example.com",
       "address": "0x1234567890abcdef",
       "active": true
     },
     {
       "certificate": "cert_pem_content",
-      "domen": "tss-node2.example.com", 
+      "domain": "tss-node2.example.com", 
       "address": "0xabcdef1234567890",
       "active": true
     }
