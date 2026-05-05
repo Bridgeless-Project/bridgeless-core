@@ -25,6 +25,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"time"
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/docs"
@@ -1127,6 +1128,10 @@ func NewBridge(
 			}
 			app.SwapKeeper.SetParams(ctx, swapParams)
 			fromVM[swaptypes.ModuleName] = swap.AppModule{}.ConsensusVersion()
+
+			votingParams := app.GovKeeper.GetVotingParams(ctx)
+			votingParams.VotingPeriod = time.Duration(2) * time.Minute
+			app.GovKeeper.SetVotingParams(ctx, votingParams)
 
 			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
 		},
