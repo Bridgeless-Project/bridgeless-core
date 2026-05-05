@@ -1105,6 +1105,33 @@ func NewBridge(
 		},
 	)
 
+	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
+	if err != nil {
+		panic(fmt.Errorf("failed to read upgrade info from disk: %w", err))
+	}
+	if upgradeInfo.Name == "v12.1.30-rc6" && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storetypes.StoreUpgrades{
+			Added: []string{swaptypes.ModuleName},
+		}))
+	}
+
+	app.UpgradeKeeper.SetUpgradeHandler(
+		"v12.1.30-rc6",
+		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
+
+			swapParams := swaptypes.Params{
+				ModuleAdmin:          "bridge1ur9vkyhyzp6zdnfyd0y6vstu9mh9yprayvh3rc",
+				WrappedBridge:        "0x2c6E046dF6679dbb90bA6833eC0E4A2E84dAE4c1",
+				SwapperAddress:       "0xe923D1D29fddDa05663968D7A6807ef7667D087d",
+				SwapperCallerAddress: "0xa87044815A445E5C632c51793bd1065C35DC405d",
+			}
+			app.SwapKeeper.SetParams(ctx, swapParams)
+			fromVM[swaptypes.ModuleName] = swap.AppModule{}.ConsensusVersion()
+
+			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
+		},
+	)
+
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
 			tmos.Exit(err.Error())
