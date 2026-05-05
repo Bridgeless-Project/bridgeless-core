@@ -30,7 +30,6 @@ import (
 	"github.com/Bridgeless-Project/bridgeless-core/v12/docs"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge"
 	multisigkeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/multisig/keeper"
-	"github.com/Bridgeless-Project/bridgeless-core/v12/x/swap"
 	"github.com/cosmos/cosmos-sdk/x/accumulator"
 	accumulatorkeeper "github.com/cosmos/cosmos-sdk/x/accumulator/keeper"
 	accumulatortypes "github.com/cosmos/cosmos-sdk/x/accumulator/types"
@@ -153,7 +152,6 @@ import (
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket"
 	feemarketkeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/keeper"
 	feemarkettypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
-	swaptypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/swap/types"
 
 	// unnamed import of statik for swagger UI support
 	_ "github.com/Bridgeless-Project/bridgeless-core/v12/client/docs/statik"
@@ -168,7 +166,6 @@ import (
 	erc20client "github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/client"
 	erc20keeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/keeper"
 	erc20types "github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
-	swapkeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/swap/keeper"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/recovery"
 	recoverykeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/recovery/keeper"
@@ -252,7 +249,6 @@ var (
 		mint.AppModuleBasic{},
 		nft.AppModuleBasic{},
 		bridge.AppModuleBasic{},
-		swap.AppModuleBasic{},
 		multisig.AppModuleBasic{},
 	)
 
@@ -272,7 +268,6 @@ var (
 		minttypes.ModuleName:           {authtypes.Minter, authtypes.Staking, authtypes.Burner},
 		nfttypes.ModuleName:            nil,
 		bridgetypes.ModuleName:         nil,
-		swaptypes.ModuleName:           nil,
 		multisigtypes.ModuleName:       nil,
 	}
 
@@ -343,8 +338,6 @@ type Bridge struct {
 	NFTKeeper    *nftkeeper.Keeper
 	BridgeKeeper *bridgekeeper.Keeper
 
-	SwapKeeper *swapkeeper.Keeper
-
 	MultisigKeeper multisigkeeper.Keeper
 
 	// the module manager
@@ -408,7 +401,6 @@ func NewBridge(
 		minttypes.StoreKey,
 		nfttypes.StoreKey,
 		bridgetypes.StoreKey,
-		swaptypes.StoreKey,
 		multisigtypes.StoreKey,
 	)
 
@@ -612,15 +604,6 @@ func NewBridge(
 		app.Erc20Keeper, // Add ERC20 Keeper for ERC20 transfers
 	)
 
-	app.SwapKeeper = swapkeeper.NewKeeper(
-		appCodec,
-		keys[swaptypes.StoreKey],
-		keys[swaptypes.StoreKey],
-		app.GetSubspace(swaptypes.ModuleName),
-		app.BridgeKeeper,
-		app.Erc20Keeper,
-	)
-
 	app.RecoveryKeeper = recoverykeeper.NewKeeper(
 		keys[recoverytypes.StoreKey],
 		appCodec,
@@ -746,7 +729,6 @@ func NewBridge(
 		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper),
 		nft.NewAppModule(appCodec, *app.NFTKeeper, app.AccountKeeper, app.BankKeeper),
 		bridge.NewAppModule(appCodec, *app.BridgeKeeper),
-		swap.NewAppModule(appCodec, *app.SwapKeeper, app.AccountKeeper, app.BankKeeper),
 		multisig.NewAppModule(appCodec, app.MultisigKeeper, app.AccountKeeper),
 	)
 
@@ -787,7 +769,6 @@ func NewBridge(
 		minttypes.ModuleName,
 		nfttypes.ModuleName,
 		bridgetypes.ModuleName,
-		swaptypes.ModuleName,
 		multisigtypes.ModuleName,
 	)
 
@@ -826,7 +807,6 @@ func NewBridge(
 		minttypes.ModuleName,
 		nfttypes.ModuleName,
 		bridgetypes.ModuleName,
-		swaptypes.ModuleName,
 		multisigtypes.ModuleName,
 	)
 
@@ -874,7 +854,6 @@ func NewBridge(
 		minttypes.ModuleName,
 		nfttypes.ModuleName,
 		bridgetypes.ModuleName,
-		swaptypes.ModuleName,
 		multisigtypes.ModuleName,
 	)
 
@@ -1216,7 +1195,5 @@ func initParamsKeeper(
 	paramsKeeper.Subspace(minttypes.ModuleName)
 	paramsKeeper.Subspace(nfttypes.ModuleName)
 	paramsKeeper.Subspace(bridgetypes.ModuleName)
-	paramsKeeper.Subspace(swaptypes.ModuleName)
-
 	return paramsKeeper
 }
