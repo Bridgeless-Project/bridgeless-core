@@ -32,28 +32,32 @@ func DefaultParams() Params {
 // ParamSetPairs get the params.ParamSet
 func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 	return paramtypes.ParamSetPairs{
-		paramtypes.NewParamSetPair([]byte(ParamModuleAdminKey), &p.ModuleAdmin, validateModuleAdmin),
-		paramtypes.NewParamSetPair([]byte(ParamWrappedBridgeKey), &p.WrappedBridge, validateWrappedBridge),
-		paramtypes.NewParamSetPair([]byte(ParamSwapperAddressKey), &p.SwapperAddress, validateSwapperAddress),
+		paramtypes.NewParamSetPair([]byte(ParamModuleAdminKey), &p.ModuleAdmin, validateBech32Address),
+		paramtypes.NewParamSetPair([]byte(ParamWrappedBridgeKey), &p.WrappedBridge, validateEVMAddress),
+		paramtypes.NewParamSetPair([]byte(ParamSwapperAddressKey), &p.SwapperAddress, validateEVMAddress),
+		paramtypes.NewParamSetPair([]byte(ParamSwapperCallerAddressKey), &p.SwapperCallerAddress, validateEVMAddress),
 	}
 }
 
 // Validate validates the set of params
 func (p Params) Validate() error {
-	if err := validateModuleAdmin(p.ModuleAdmin); err != nil {
+	if err := validateBech32Address(p.ModuleAdmin); err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid module admin address (%s)", err)
 	}
-	if err := validateWrappedBridge(p.WrappedBridge); err != nil {
+	if err := validateEVMAddress(p.WrappedBridge); err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid wrapped bridge address (%s)", err)
 	}
-	if err := validateSwapperAddress(p.SwapperAddress); err != nil {
+	if err := validateEVMAddress(p.SwapperAddress); err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid swapper address (%s)", err)
+	}
+	if err := validateEVMAddress(p.SwapperCallerAddress); err != nil {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid swapper caller address (%s)", err)
 	}
 
 	return nil
 }
 
-func validateModuleAdmin(i interface{}) error {
+func validateBech32Address(i interface{}) error {
 	adm, ok := i.(string)
 	if !ok {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
@@ -70,23 +74,7 @@ func validateModuleAdmin(i interface{}) error {
 	return nil
 }
 
-func validateWrappedBridge(i interface{}) error {
-	addr, ok := i.(string)
-	if !ok {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
-	}
-	if addr == "" {
-		return nil
-	}
-
-	if !common.IsHexAddress(addr) {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid wrapped bridge address: %s", addr)
-	}
-
-	return nil
-}
-
-func validateSwapperAddress(i interface{}) error {
+func validateEVMAddress(i interface{}) error {
 	addr, ok := i.(string)
 	if !ok {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)

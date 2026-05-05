@@ -2,9 +2,6 @@ package types
 
 import (
 	"fmt"
-
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/ethereum/go-ethereum/common"
 )
 
 const (
@@ -20,21 +17,14 @@ const (
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_swap"
 
-	ParamModuleAdminKey         = "ModuleAdmin"
-	ParamWrappedBridgeKey       = "WrappedBridge"
-	ParamSwapperAddressKey      = "SwapperAddress"
-	ParamSwapDeadlineSecondsKey = "SwapDeadlineSeconds"
+	ParamModuleAdminKey          = "ModuleAdmin"
+	ParamWrappedBridgeKey        = "WrappedBridge"
+	ParamSwapperAddressKey       = "SwapperAddress"
+	ParamSwapperCallerAddressKey = "SwapperCallerAddress"
 
 	StoreSwapPrefix           = "swap"
 	StoreSwapSubmissionPrefix = "swap_submission"
 )
-
-// ModuleAddress is the native module address for EVM
-var ModuleAddress common.Address
-
-func init() {
-	ModuleAddress = common.BytesToAddress(authtypes.NewModuleAddress(ModuleName).Bytes())
-}
 
 func Prefix(p string) []byte {
 	return []byte(p + "/")

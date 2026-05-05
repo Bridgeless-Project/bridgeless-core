@@ -15,30 +15,6 @@ import (
 
 const withdrawSwapAndRouteMethod = "withdrawSwapAndRoute"
 
-type swapperWithdrawParams struct {
-	Token      common.Address
-	Amount     *big.Int
-	TxHash     common.Hash
-	TxNonce    *big.Int
-	IsWrapped  bool
-	Signatures [][]byte
-}
-
-type swapperSwapParams struct {
-	AmountIn                 *big.Int
-	MinDestinationAmount     *big.Int
-	SwapDeadline             *big.Int
-	Path                     []common.Address
-	IsDestinationTokenNative bool
-}
-
-type swapperDepositParams struct {
-	Receiver   string
-	Network    string
-	IsWrapped  bool
-	ReferralId uint16
-}
-
 func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*swaptypes.SwapTransaction, error) {
 	params := k.GetParams(ctx)
 	if !common.IsHexAddress(params.SwapperAddress) {
@@ -85,36 +61,36 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 	txResp, err := k.erc20.CallEVM(
 		ctx,
 		contracts.SwapperContract.ABI,
-		swaptypes.ModuleAddress,
+		common.HexToAddress(params.SwapperCallerAddress), // the address which calls swapper contract
 		common.HexToAddress(params.SwapperAddress),
 		true,
 		withdrawSwapAndRouteMethod,
-		swapperWithdrawParams{
+		swaptypes.SwapperWithdrawParams{
 			Token:      common.HexToAddress(msg.Tx.Tx.WithdrawalToken),
 			Amount:     amountIn,
-			TxHash:     common.HexToHash(msg.Tx.Tx.DepositTxHash),
+			TxHash:     txHashToBytes32(msg.Tx.Tx.DepositTxHash),
 			TxNonce:    new(big.Int).SetUint64(msg.Tx.Tx.DepositTxIndex),
 			IsWrapped:  msg.Tx.Tx.IsWrapped,
 			Signatures: [][]byte{signatureBytes},
 		},
-		swapperSwapParams{
+		swaptypes.SwapperSwapParams{
 			AmountIn:                 amountIn,
 			MinDestinationAmount:     amountOutMin,
 			SwapDeadline:             new(big.Int).SetUint64(msg.Tx.SwapDeadline),
 			Path:                     path,
 			IsDestinationTokenNative: isZeroAddress(finalDestinationTokenInfo.Address),
 		},
-		swapperDepositParams{
+		swaptypes.SwapperDepositParams{
 			Receiver:   msg.Tx.FinalReceiver,
 			Network:    msg.Tx.FinalChainId,
 			IsWrapped:  finalDestinationTokenInfo.IsWrapped,
-			ReferralId: uint16(msg.Tx.Tx.ReferralId),
+			ReferralId: new(big.Int).SetUint64(uint64(msg.Tx.Tx.ReferralId)),
 		},
-		swapperDepositParams{
+		swaptypes.SwapperDepositParams{
 			Receiver:   msg.Tx.Tx.Depositor,
 			Network:    msg.Tx.Tx.DepositChainId,
 			IsWrapped:  msg.Tx.Tx.IsWrapped,
-			ReferralId: uint16(msg.Tx.Tx.ReferralId),
+			ReferralId: new(big.Int).SetUint64(uint64(msg.Tx.Tx.ReferralId)),
 		},
 	)
 	if err != nil {
@@ -134,9 +110,9 @@ func (k Keeper) buildSwapPath(ctx sdk.Context, sourceToken string, destinationTo
 		return nil, errorsmod.Wrap(swaptypes.ErrInvalidConfig, "wrapped bridge address is not configured")
 	}
 
-	token, found := k.bridge.GetDstToken(ctx, destinationToken, destinationChain, ctx.ChainID())
+	token, found := k.bridge.GetDstToken(ctx, destinationToken, destinationChain, getChainId(ctx))
 	if !found {
-		return nil, errorsmod.Wrapf(bridgetypes.ErrTokenInfoNotFound, "no token info found for destination token %s on chain %s", destinationToken, destinationChain)
+		return nil, errorsmod.Wrapf(bridgetypes.ErrTokenInfoNotFound, "no token info found for destination token %s on chain %s", destinationToken, getChainId(ctx))
 	}
 	if !common.IsHexAddress(token.Address) {
 		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid bridgeless token address: %s", token.Address)
@@ -162,21 +138,4 @@ func (k Keeper) buildSwapPath(ctx sdk.Context, sourceToken string, destinationTo
 		common.HexToAddress(params.WrappedBridge),
 		common.HexToAddress(token.Address),
 	}, nil
-}
-
-func parseUintString(value string) (*big.Int, error) {
-	parsed, ok := new(big.Int).SetString(value, 10)
-	if !ok {
-		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid big int: %s", value)
-	}
-
-	if parsed.Sign() < 0 {
-		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "big int cannot be negative: %s", value)
-	}
-
-	return parsed, nil
-}
-
-func isZeroAddress(address string) bool {
-	return common.HexToAddress(address) == (common.Address{})
 }

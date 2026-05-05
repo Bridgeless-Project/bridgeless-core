@@ -15,5 +15,5 @@ message SwapTransaction {
   string final_chain_id = 4; // chain where user wanna get the final token (can be bridgeless chain or another one)
   uint64 swap_deadline = 5; // timestamp until when the swap is valid, provided by
   string swap_out_amount = 6; // minimum acceptable output amount, provided by backend
-
   string final_deposit_tx_hash = 7; // do not used on the submit endpoint
+}

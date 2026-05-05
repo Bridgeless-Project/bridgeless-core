@@ -11,4 +11,5 @@ message Params {
   string wrapped_bridge = 2;
   string swapper_address = 3;
   uint64 swap_deadline_seconds = 4;
+  string swapper_caller_address = 5; // evm address
 }
