@@ -10,6 +10,7 @@ import "bridge/models/chain.proto";
 import "bridge/models/party.proto";
 import "bridge/models/referrals.proto";
 import "bridge/models/epoch.proto";
+import "bridge/models/commission.proto";
 
 import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
@@ -48,6 +49,10 @@ service Msg {
     rpc StartEpoch(MsgStartEpoch) returns (MsgStartEpochResponse);
     rpc SetEpochSignature(MsgSetEpochSignature) returns (MsgSetEpochSignatureResponse);
     rpc SetEpochPubKey(MsgSetEpochPubKey) returns (MsgSetEpochPubKeyResponse);
+
+    rpc SetCommission(MsgSetCommission) returns (MsgSetCommissionResponse);
+    rpc UpdateCommission(MsgUpdateCommission) returns (MsgUpdateCommissionResponse);
+    rpc RemoveCommission(MsgRemoveCommission) returns (MsgRemoveCommissionResponse);
 }
 
 // this line is used by starport scaffolding # proto/tx/message
@@ -232,3 +237,32 @@ message MsgSetEpochPubKey {
 }
 
 message MsgSetEpochPubKeyResponse {}
+
+message MsgSetCommission{
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 token_id = 2;
+  string amount = 3;
+}
+
+message MsgSetCommissionResponse {}
+
+message MsgUpdateCommission{
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 token_id = 2;
+  string amount = 3;
+}
+
+message MsgUpdateCommissionResponse {}
+
+message MsgRemoveCommission{
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 token_id = 2;
+}
+
+message MsgRemoveCommissionResponse {}

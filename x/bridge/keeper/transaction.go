@@ -84,15 +84,6 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 	k.SetTransaction(ctx, *transaction)
 	emitSubmitEvent(ctx, *transaction)
 
-	if types.IsDefaultReferralId(transaction.ReferralId) {
-		return nil
-	}
-
-	referral, ok := k.GetReferral(ctx, transaction.ReferralId)
-	if !ok {
-		return errorsmod.Wrap(types.ErrReferralNotFound, "referral ID not found")
-	}
-
 	token, ok := k.GetTokenInfo(ctx, transaction.DepositChainId, transaction.DepositToken)
 	if !ok {
 		return errorsmod.Wrap(types.ErrTokenInfoNotFound, "token info not found for deposit token")
@@ -104,22 +95,46 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 		return errorsmod.Wrap(types.ErrInvalidDataType, "invalid withdrawal amount")
 	}
 
-	rewards, err := types.GetCommissionAmount(commissionAmount, referral.CommissionRate)
-	if err != nil {
-		return errorsmod.Wrap(err, "failed to calculate referral rewards")
+	commissionToAccumulate := new(big.Int).Set(commissionAmount)
+	if !types.IsDefaultReferralId(transaction.ReferralId) {
+		referral, ok := k.GetReferral(ctx, transaction.ReferralId)
+		if !ok {
+			return errorsmod.Wrap(types.ErrReferralNotFound, "referral ID not found")
+		}
+
+		txReferralRewards, err := types.ComputeCommissionAmount(commissionAmount, referral.CommissionRate)
+		if err != nil {
+			return errorsmod.Wrap(err, "failed to calculate referral rewards")
+		}
+
+		commissionToAccumulate.Sub(commissionAmount, txReferralRewards)
+
+		referralRewards := types.ReferralRewards{
+			ReferralId:         transaction.ReferralId,
+			TokenId:            token.TokenId,
+			ToClaim:            sdk.NewIntFromBigInt(txReferralRewards).String(),
+			TotalClaimedAmount: sdk.NewInt(0).String(),
+		}
+
+		if err = k.AddReferralRewards(ctx, transaction.ReferralId, token.TokenId, referralRewards); err != nil {
+			return errorsmod.Wrap(err, "failed to add referral rewards")
+		}
 	}
 
-	referralRewards := types.ReferralRewards{
-		ReferralId:         transaction.ReferralId,
-		TokenId:            token.TokenId,
-		ToClaim:            sdk.NewIntFromBigInt(rewards).String(),
-		TotalClaimedAmount: sdk.NewInt(0).String(), // not used when adding referral rewards and should be 0
+	total := new(big.Int).Set(commissionToAccumulate)
+	existingCommission, found := k.GetCommission(ctx, token.TokenId)
+	if found {
+		previousCommissionAmount, ok := new(big.Int).SetString(existingCommission.Amount, 10)
+		if !ok {
+			return errorsmod.Wrap(types.ErrInvalidDataType, "failed to parse existing commission amount")
+		}
+		total.Add(previousCommissionAmount, commissionToAccumulate)
 	}
 
-	err = k.AddReferralRewards(ctx, transaction.ReferralId, token.TokenId, referralRewards)
-	if err != nil {
-		return errorsmod.Wrap(err, "failed to add referral rewards")
-	}
+	k.SetCommission(ctx, types.Commission{
+		TokenId: token.TokenId,
+		Amount:  total.String(),
+	})
 
 	// we do not need to store tx for epoch 0
 	if transaction.EpochId == 0 {
@@ -175,7 +190,7 @@ func (k Keeper) DeleteTx(ctx sdk.Context, depositTxHash string, depositTxIndex u
 		return errorsmod.Wrap(types.ErrInvalidDataType, "invalid withdrawal amount")
 	}
 
-	rewards, err := types.GetCommissionAmount(commissionAmount, referral.CommissionRate)
+	rewards, err := types.ComputeCommissionAmount(commissionAmount, referral.CommissionRate)
 	if err != nil {
 		return errorsmod.Wrap(err, "failed to calculate referral rewards")
 	}
