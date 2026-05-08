@@ -122,7 +122,7 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 	}
 
 	total := new(big.Int).Set(commissionToAccumulate)
-	existingCommission, found := k.GetCommission(ctx, token.TokenId)
+	existingCommission, found := k.GetCommission(ctx, transaction.EpochId, token.TokenId)
 	if found {
 		previousCommissionAmount, ok := new(big.Int).SetString(existingCommission.Amount, 10)
 		if !ok {
@@ -131,7 +131,7 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 		total.Add(previousCommissionAmount, commissionToAccumulate)
 	}
 
-	k.SetEpochCommission(ctx, transaction.EpochId, types.Commission{
+	k.SetCommission(ctx, transaction.EpochId, types.Commission{
 		TokenId: token.TokenId,
 		Amount:  total.String(),
 	})

@@ -330,6 +330,7 @@ message QueryGetEpochSignatureResponse {
 
 message QueryGetCommissionByToken {
   uint64 token_id = 1;
+  uint32 epoch_id = 2;
 }
 
 message QueryGetCommissionByTokenResponse {
@@ -338,6 +339,7 @@ message QueryGetCommissionByTokenResponse {
 
 message QueryGetCommissions  {
   cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  uint32 epoch_id = 2;
 }
 
 message QueryGetCommissionsResponse {

@@ -27,6 +27,9 @@ type BridgeKeeper interface {
 	GetChain(ctx sdk.Context, id string) (bridgetypes.Chain, bool)
 	GetTokenInfo(ctx sdk.Context, chain, address string) (bridgetypes.TokenInfo, bool)
 	GetDstToken(sdkCtx sdk.Context, srcAddr, srcChain, dscChain string) (info bridgetypes.TokenInfo, found bool)
+
+	SetCommission(ctx sdk.Context, epochId uint32, commission bridgetypes.Commission)
+	GetCommission(ctx sdk.Context, epochId uint32, tokenId uint64) (bridgetypes.Commission, bool)
 }
 
 type ERC20Keeper interface {

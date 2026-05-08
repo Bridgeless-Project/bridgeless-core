@@ -1165,6 +1165,11 @@ paths:
           in: query
           required: false
           type: boolean
+        - name: epoch_id
+          in: query
+          required: false
+          type: integer
+          format: int64
       tags:
         - Query
   /cosmos/bridge/epoch/{epoch_id}:
@@ -5044,6 +5049,11 @@ paths:
           required: true
           type: string
           format: uint64
+        - name: epoch_id
+          in: query
+          required: false
+          type: integer
+          format: int64
       tags:
         - Query
   /cosmos/bridge/tokens/{id}:
