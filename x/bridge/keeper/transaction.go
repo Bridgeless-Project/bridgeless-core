@@ -131,7 +131,7 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 		total.Add(previousCommissionAmount, commissionToAccumulate)
 	}
 
-	k.SetCommission(ctx, types.Commission{
+	k.SetEpochCommission(ctx, transaction.EpochId, types.Commission{
 		TokenId: token.TokenId,
 		Amount:  total.String(),
 	})

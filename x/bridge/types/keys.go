@@ -159,3 +159,7 @@ func KeyCommission(tokenId uint64) []byte {
 	binary.LittleEndian.PutUint64(bytes, tokenId)
 	return bytes
 }
+
+func KeyEpochCommission(epochId uint32, tokenId uint64) []byte {
+	return []byte(fmt.Sprintf("%d/%d", epochId, tokenId))
+}
