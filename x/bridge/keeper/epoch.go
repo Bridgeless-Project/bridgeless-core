@@ -157,3 +157,10 @@ func (k Keeper) GetPaginatedEpochTransactions(sdkCtx sdk.Context, epochId uint32
 
 	return transactionIds, pageRes, nil
 }
+
+// --------------- Commissions ---------------------
+func (k Keeper) SetEpochCommission(sdkCtx sdk.Context, epochId uint32, commission types.Commission) {
+	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreCommissionPrefix))
+	eStore := prefix.NewStore(cStore, types.KeyEpoch(epochId))
+	eStore.Set(types.KeyEpochCommission(epochId, commission.TokenId), k.cdc.MustMarshal(&commission))
+}

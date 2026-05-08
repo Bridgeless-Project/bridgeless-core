@@ -92,8 +92,8 @@ func ValidateChainTransaction(tx *Transaction, chainType ChainType) error {
 	return nil
 }
 
-// GetCommissionAmount returns a commission amount basing on provided amount and commission rate.
-func GetCommissionAmount(amount *big.Int, commissionRate string) (*big.Int, error) {
+// ComputeCommissionAmount returns a commission amount basing on provided amount and commission rate.
+func ComputeCommissionAmount(amount *big.Int, commissionRate string) (*big.Int, error) {
 	rate, err := sdkmath.LegacyNewDecFromStr(commissionRate)
 
 	if err != nil {
