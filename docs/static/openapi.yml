@@ -8713,6 +8713,11 @@ paths:
                     final_deposit_tx_hash:
                       type: string
                       title: do not used on the submit endpoint
+                    is_fee_distribution:
+                      type: boolean
+                      title: >-
+                        if true, we need to update the fee store on the bridge
+                        module
               pagination:
                 type: object
                 properties:
@@ -9066,6 +9071,11 @@ paths:
                   final_deposit_tx_hash:
                     type: string
                     title: do not used on the submit endpoint
+                  is_fee_distribution:
+                    type: boolean
+                    title: >-
+                      if true, we need to update the fee store on the bridge
+                      module
         default:
           description: An unexpected error response.
           schema:
@@ -56009,6 +56019,9 @@ definitions:
             final_deposit_tx_hash:
               type: string
               title: do not used on the submit endpoint
+            is_fee_distribution:
+              type: boolean
+              title: if true, we need to update the fee store on the bridge module
       pagination:
         type: object
         properties:
@@ -56110,6 +56123,9 @@ definitions:
           final_deposit_tx_hash:
             type: string
             title: do not used on the submit endpoint
+          is_fee_distribution:
+            type: boolean
+            title: if true, we need to update the fee store on the bridge module
   core.swap.QueryParamsResponse:
     type: object
     properties:
@@ -56199,6 +56215,9 @@ definitions:
       final_deposit_tx_hash:
         type: string
         title: do not used on the submit endpoint
+      is_fee_distribution:
+        type: boolean
+        title: if true, we need to update the fee store on the bridge module
   cosmos.accumulator.Admin:
     type: object
     properties:

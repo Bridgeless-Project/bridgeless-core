@@ -83,6 +83,14 @@ func emitStartEpochEvent(sdkCtx sdk.Context, epochId uint32, info string, thresh
 	)
 }
 
+func emitDistributeFees(sdkCtx sdk.Context, epochId uint32) {
+	sdkCtx.EventManager().EmitEvent(
+		sdk.NewEvent(types.EventType_DISTRIBUTE_FEES.String(),
+			sdk.NewAttribute(types.AttributeEpochId, big.NewInt(int64(epochId)).String()),
+		),
+	)
+}
+
 func (k Keeper) EmitEpochUpdatedEvent(sdkCtx sdk.Context, epochId uint32, chainId string, signature types.EpochSignature, isAdding bool) {
 	sdkCtx.EventManager().EmitEvent(
 		sdk.NewEvent(types.EventType_EPOCH_UPDATED.String(),
