@@ -118,7 +118,7 @@ func (m msgServer) RemoveEpochPubKey(goCtx context.Context, msg *types.MsgRemove
 
 	pubkey, found := m.Keeper.GetEpochPubkey(ctx, msg.EpochId)
 	if !found {
-		return nil, types.ErrEpochNotFound
+		return nil, errorsmod.Wrap(types.ErrEpochNotFound, "epoch pubkey not found")
 	}
 
 	_, found = m.Keeper.GetEpochPubkeySubmission(ctx, msg.EpochId, pubkey)
