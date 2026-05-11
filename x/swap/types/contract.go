@@ -29,3 +29,7 @@ type SwapperDepositParams struct {
 	IsWrapped  bool
 	ReferralId *big.Int
 }
+
+type AmountsListResponse struct {
+	Amounts []*big.Int `json:"amounts"`
+}

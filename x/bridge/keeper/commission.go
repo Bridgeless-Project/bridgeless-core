@@ -54,3 +54,19 @@ func (k Keeper) GetCommissionsWithPagination(sdkCtx sdk.Context, epochId uint32,
 
 	return commissions, pageRes, nil
 }
+
+func (k Keeper) GetAllCommissions(sdkCtx sdk.Context, epochId uint32) (commissions []types.Commission) {
+	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreCommissionPrefix))
+	eStore := prefix.NewStore(cStore, types.KeyEpoch(epochId))
+
+	iterator := eStore.Iterator(nil, nil)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var commission types.Commission
+		k.cdc.MustUnmarshal(iterator.Value(), &commission)
+		commissions = append(commissions, commission)
+	}
+
+	return
+}

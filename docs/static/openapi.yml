@@ -2259,8 +2259,10 @@ paths:
                     type: string
                     format: uint64
                     title: >-
-                      supporting_time is the number of blocks after epoch start
+                      supporting_time is the numbery of blocks after epoch start
                       when the previous epoch should be marked as completed
+                  uniswap_router_address:
+                    type: string
             description: >-
               QueryParamsResponse is response type for the Query/Params RPC
               method.
@@ -8947,6 +8949,9 @@ paths:
                   swapper_address:
                     type: string
                   swapper_caller_address:
+                    type: string
+                    title: evm address
+                  uniswap_router_address:
                     type: string
                     title: evm address
             description: >-
@@ -53913,8 +53918,10 @@ definitions:
         type: string
         format: uint64
         title: >-
-          supporting_time is the number of blocks after epoch start when the
+          supporting_time is the numbery of blocks after epoch start when the
           previous epoch should be marked as completed
+      uniswap_router_address:
+        type: string
     description: Params defines the parameters for the module.
   core.bridge.Party:
     type: object
@@ -54783,8 +54790,10 @@ definitions:
             type: string
             format: uint64
             title: >-
-              supporting_time is the number of blocks after epoch start when the
-              previous epoch should be marked as completed
+              supporting_time is the numbery of blocks after epoch start when
+              the previous epoch should be marked as completed
+          uniswap_router_address:
+            type: string
     description: QueryParamsResponse is response type for the Query/Params RPC method.
   core.bridge.QueryTransactionByIdResponse:
     type: object
@@ -56510,6 +56519,9 @@ definitions:
       swapper_caller_address:
         type: string
         title: evm address
+      uniswap_router_address:
+        type: string
+        title: evm address
     description: Params defines the parameters for the module.
   core.swap.QueryAllSwapsResponse:
     type: object
@@ -56709,6 +56721,9 @@ definitions:
           swapper_address:
             type: string
           swapper_caller_address:
+            type: string
+            title: evm address
+          uniswap_router_address:
             type: string
             title: evm address
     description: QueryParamsResponse is response type for the Query/Params RPC method.

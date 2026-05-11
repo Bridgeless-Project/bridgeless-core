@@ -74,27 +74,100 @@ func (m *Commission) GetAmount() string {
 	return ""
 }
 
+type CommissionDistributionInfo struct {
+	TokenId   int64    `protobuf:"varint,1,opt,name=token_id,json=tokenId,proto3" json:"token_id,omitempty"`
+	AmountIn  string   `protobuf:"bytes,2,opt,name=amountIn,proto3" json:"amountIn,omitempty"`
+	AmountOut string   `protobuf:"bytes,3,opt,name=amountOut,proto3" json:"amountOut,omitempty"`
+	Path      []string `protobuf:"bytes,4,rep,name=path,proto3" json:"path,omitempty"`
+}
+
+func (m *CommissionDistributionInfo) Reset()         { *m = CommissionDistributionInfo{} }
+func (m *CommissionDistributionInfo) String() string { return proto.CompactTextString(m) }
+func (*CommissionDistributionInfo) ProtoMessage()    {}
+func (*CommissionDistributionInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_885a61d9cea47028, []int{1}
+}
+func (m *CommissionDistributionInfo) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CommissionDistributionInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_CommissionDistributionInfo.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *CommissionDistributionInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CommissionDistributionInfo.Merge(m, src)
+}
+func (m *CommissionDistributionInfo) XXX_Size() int {
+	return m.Size()
+}
+func (m *CommissionDistributionInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_CommissionDistributionInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CommissionDistributionInfo proto.InternalMessageInfo
+
+func (m *CommissionDistributionInfo) GetTokenId() int64 {
+	if m != nil {
+		return m.TokenId
+	}
+	return 0
+}
+
+func (m *CommissionDistributionInfo) GetAmountIn() string {
+	if m != nil {
+		return m.AmountIn
+	}
+	return ""
+}
+
+func (m *CommissionDistributionInfo) GetAmountOut() string {
+	if m != nil {
+		return m.AmountOut
+	}
+	return ""
+}
+
+func (m *CommissionDistributionInfo) GetPath() []string {
+	if m != nil {
+		return m.Path
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*Commission)(nil), "core.bridge.Commission")
+	proto.RegisterType((*CommissionDistributionInfo)(nil), "core.bridge.CommissionDistributionInfo")
 }
 
 func init() { proto.RegisterFile("bridge/models/commission.proto", fileDescriptor_885a61d9cea47028) }
 
 var fileDescriptor_885a61d9cea47028 = []byte{
-	// 195 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x4b, 0x2a, 0xca, 0x4c,
-	0x49, 0x4f, 0xd5, 0xcf, 0xcd, 0x4f, 0x49, 0xcd, 0x29, 0xd6, 0x4f, 0xce, 0xcf, 0xcd, 0xcd, 0x2c,
-	0x2e, 0xce, 0xcc, 0xcf, 0xd3, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x4e, 0xce, 0x2f, 0x4a,
-	0xd5, 0x83, 0x28, 0x52, 0xb2, 0xe7, 0xe2, 0x72, 0x86, 0x2b, 0x10, 0x92, 0xe4, 0xe2, 0x28, 0xc9,
-	0xcf, 0x4e, 0xcd, 0x8b, 0xcf, 0x4c, 0x91, 0x60, 0x54, 0x60, 0xd4, 0x60, 0x09, 0x62, 0x07, 0xf3,
-	0x3d, 0x53, 0x84, 0xc4, 0xb8, 0xd8, 0x12, 0x73, 0xf3, 0x4b, 0xf3, 0x4a, 0x24, 0x98, 0x14, 0x18,
-	0x35, 0x38, 0x83, 0xa0, 0x3c, 0xa7, 0xa8, 0x13, 0x8f, 0xe4, 0x18, 0x2f, 0x3c, 0x92, 0x63, 0x7c,
-	0xf0, 0x48, 0x8e, 0x71, 0xc2, 0x63, 0x39, 0x86, 0x0b, 0x8f, 0xe5, 0x18, 0x6e, 0x3c, 0x96, 0x63,
-	0x88, 0x72, 0x48, 0xcf, 0x2c, 0xc9, 0x28, 0x4d, 0xd2, 0x4b, 0xce, 0xcf, 0xd5, 0x77, 0x02, 0xdb,
-	0x96, 0x93, 0x5a, 0x5c, 0xac, 0x1b, 0x50, 0x94, 0x9f, 0x95, 0x9a, 0x5c, 0xa2, 0x9f, 0x84, 0x10,
-	0x02, 0x39, 0x48, 0xbf, 0xcc, 0xd0, 0x48, 0xbf, 0x02, 0x2a, 0xaa, 0x5f, 0x52, 0x59, 0x90, 0x5a,
-	0x9c, 0xc4, 0x06, 0x76, 0xb0, 0x31, 0x20, 0x00, 0x00, 0xff, 0xff, 0x42, 0x4b, 0xd0, 0xdc, 0xd2,
-	0x00, 0x00, 0x00,
+	// 265 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x90, 0xb1, 0x4e, 0xc3, 0x30,
+	0x18, 0x84, 0x63, 0x12, 0x95, 0xc6, 0x6c, 0x1e, 0x50, 0xa8, 0x90, 0x15, 0x75, 0xca, 0x42, 0x2c,
+	0xe0, 0x01, 0x40, 0x85, 0x25, 0x13, 0x28, 0x63, 0x17, 0xd4, 0x24, 0xa6, 0x35, 0x34, 0xfe, 0xa3,
+	0xf8, 0x0f, 0x82, 0x07, 0x60, 0xe7, 0xb1, 0x18, 0x3b, 0x32, 0xa2, 0xe4, 0x45, 0x10, 0x4e, 0xd4,
+	0x0c, 0xdd, 0xee, 0xee, 0x3f, 0x7d, 0xd2, 0x7f, 0x94, 0x67, 0xb5, 0x2a, 0xd6, 0x52, 0x94, 0x50,
+	0xc8, 0xad, 0x11, 0x39, 0x94, 0xa5, 0x32, 0x46, 0x81, 0x8e, 0xab, 0x1a, 0x10, 0xd8, 0x49, 0x0e,
+	0xb5, 0x8c, 0xfb, 0xd2, 0xfc, 0x86, 0xd2, 0xbb, 0x7d, 0x81, 0x9d, 0xd1, 0x29, 0xc2, 0xab, 0xd4,
+	0x4f, 0xaa, 0x08, 0x48, 0x48, 0x22, 0x2f, 0x3d, 0xb6, 0x3e, 0x29, 0xd8, 0x29, 0x9d, 0xac, 0x4a,
+	0x68, 0x34, 0x06, 0x47, 0x21, 0x89, 0xfc, 0x74, 0x70, 0xf3, 0x4f, 0x42, 0x67, 0x23, 0xe1, 0x5e,
+	0x19, 0xac, 0x55, 0xd6, 0xa0, 0x02, 0x9d, 0xe8, 0x67, 0x38, 0x20, 0xba, 0x23, 0x71, 0x46, 0xa7,
+	0x3d, 0x23, 0xd1, 0x03, 0x73, 0xef, 0xd9, 0x39, 0xf5, 0x7b, 0xfd, 0xd0, 0x60, 0xe0, 0xda, 0xe3,
+	0x18, 0x30, 0x46, 0xbd, 0x6a, 0x85, 0x9b, 0xc0, 0x0b, 0xdd, 0xc8, 0x4f, 0xad, 0x5e, 0x2c, 0xbf,
+	0x5b, 0x4e, 0x76, 0x2d, 0x27, 0xbf, 0x2d, 0x27, 0x5f, 0x1d, 0x77, 0x76, 0x1d, 0x77, 0x7e, 0x3a,
+	0xee, 0x2c, 0x6f, 0xd7, 0x0a, 0x37, 0x4d, 0x16, 0xe7, 0x50, 0x8a, 0x85, 0xfd, 0x7a, 0x2b, 0x8d,
+	0xb9, 0x78, 0xac, 0xe1, 0x45, 0xe6, 0x28, 0xb2, 0x31, 0xfa, 0x1f, 0x46, 0xbc, 0x5d, 0x5e, 0x89,
+	0xf7, 0x21, 0x15, 0xf8, 0x51, 0x49, 0x93, 0x4d, 0xec, 0x70, 0xd7, 0x7f, 0x01, 0x00, 0x00, 0xff,
+	0xff, 0x33, 0xce, 0x4e, 0xe4, 0x5a, 0x01, 0x00, 0x00,
 }
 
 func (m *Commission) Marshal() (dAtA []byte, err error) {
@@ -132,6 +205,57 @@ func (m *Commission) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *CommissionDistributionInfo) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CommissionDistributionInfo) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommissionDistributionInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Path) > 0 {
+		for iNdEx := len(m.Path) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Path[iNdEx])
+			copy(dAtA[i:], m.Path[iNdEx])
+			i = encodeVarintCommission(dAtA, i, uint64(len(m.Path[iNdEx])))
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.AmountOut) > 0 {
+		i -= len(m.AmountOut)
+		copy(dAtA[i:], m.AmountOut)
+		i = encodeVarintCommission(dAtA, i, uint64(len(m.AmountOut)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.AmountIn) > 0 {
+		i -= len(m.AmountIn)
+		copy(dAtA[i:], m.AmountIn)
+		i = encodeVarintCommission(dAtA, i, uint64(len(m.AmountIn)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.TokenId != 0 {
+		i = encodeVarintCommission(dAtA, i, uint64(m.TokenId))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintCommission(dAtA []byte, offset int, v uint64) int {
 	offset -= sovCommission(v)
 	base := offset
@@ -155,6 +279,32 @@ func (m *Commission) Size() (n int) {
 	l = len(m.Amount)
 	if l > 0 {
 		n += 1 + l + sovCommission(uint64(l))
+	}
+	return n
+}
+
+func (m *CommissionDistributionInfo) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TokenId != 0 {
+		n += 1 + sovCommission(uint64(m.TokenId))
+	}
+	l = len(m.AmountIn)
+	if l > 0 {
+		n += 1 + l + sovCommission(uint64(l))
+	}
+	l = len(m.AmountOut)
+	if l > 0 {
+		n += 1 + l + sovCommission(uint64(l))
+	}
+	if len(m.Path) > 0 {
+		for _, s := range m.Path {
+			l = len(s)
+			n += 1 + l + sovCommission(uint64(l))
+		}
 	}
 	return n
 }
@@ -244,6 +394,171 @@ func (m *Commission) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Amount = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipCommission(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthCommission
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CommissionDistributionInfo) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowCommission
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CommissionDistributionInfo: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CommissionDistributionInfo: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TokenId", wireType)
+			}
+			m.TokenId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommission
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TokenId |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AmountIn", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommission
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCommission
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommission
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AmountIn = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AmountOut", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommission
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCommission
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommission
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AmountOut = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCommission
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCommission
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthCommission
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Path = append(m.Path, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

@@ -78,6 +78,8 @@ const (
 	AttributeEpochChainType        = "epoch_chain_type"
 	AttributeChainId               = "chain_id"
 	AttributeEpochSignatureAddress = "epoch_signature_address"
+
+	AttributeCommissions = "commissions"
 )
 
 func Prefix(p string) []byte {

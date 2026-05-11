@@ -5,6 +5,7 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/contracts"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"
 	bridgetypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	swaptypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/swap/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -13,7 +14,10 @@ import (
 	"github.com/ethereum/go-ethereum/common/hexutil"
 )
 
-const withdrawSwapAndRouteMethod = "withdrawSwapAndRoute"
+const (
+	getAmountsOutMethod        = "getAmountsOut"
+	withdrawSwapAndRouteMethod = "withdrawSwapAndRoute"
+)
 
 func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*swaptypes.SwapTransaction, error) {
 	params := k.GetParams(ctx)
@@ -43,12 +47,12 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 		return nil, errorsmod.Wrap(err, "failed to build swap path")
 	}
 
-	amountIn, err := parseUintString(msg.Tx.Tx.DepositAmount)
+	amountIn, err := utils.ParseUintString(msg.Tx.Tx.DepositAmount)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "failed to parse deposit amount")
 	}
 
-	amountOutMin, err := parseUintString(msg.Tx.SwapOutAmount)
+	amountOutMin, err := utils.ParseUintString(msg.Tx.SwapOutAmount)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "failed to parse amount_out_min")
 	}
@@ -68,7 +72,7 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 		swaptypes.SwapperWithdrawParams{
 			Token:      common.HexToAddress(msg.Tx.Tx.WithdrawalToken),
 			Amount:     amountIn,
-			TxHash:     txHashToBytes32(msg.Tx.Tx.DepositTxHash),
+			TxHash:     utils.TxHashToBytes32(msg.Tx.Tx.DepositTxHash),
 			TxNonce:    new(big.Int).SetUint64(msg.Tx.Tx.DepositTxIndex),
 			IsWrapped:  msg.Tx.Tx.IsWrapped,
 			Signatures: [][]byte{signatureBytes},
@@ -78,7 +82,7 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 			MinDestinationAmount:     amountOutMin,
 			SwapDeadline:             new(big.Int).SetUint64(msg.Tx.SwapDeadline),
 			Path:                     path,
-			IsDestinationTokenNative: isZeroAddress(finalDestinationTokenInfo.Address),
+			IsDestinationTokenNative: utils.IsZeroAddress(finalDestinationTokenInfo.Address),
 		},
 		swaptypes.SwapperDepositParams{
 			Receiver:   msg.Tx.FinalReceiver,
@@ -111,9 +115,9 @@ func (k Keeper) buildSwapPath(ctx sdk.Context, sourceToken string, destinationTo
 		return nil, errorsmod.Wrap(swaptypes.ErrInvalidConfig, "wrapped bridge address is not configured")
 	}
 
-	token, found := k.bridge.GetDstToken(ctx, destinationToken, destinationChain, getChainId(ctx))
+	token, found := k.bridge.GetDstToken(ctx, destinationToken, destinationChain, utils.GetChainId(ctx))
 	if !found {
-		return nil, errorsmod.Wrapf(bridgetypes.ErrTokenInfoNotFound, "no token info found for destination token %s on chain %s", destinationToken, getChainId(ctx))
+		return nil, errorsmod.Wrapf(bridgetypes.ErrTokenInfoNotFound, "no token info found for destination token %s on chain %s", destinationToken, utils.GetChainId(ctx))
 	}
 	if !common.IsHexAddress(token.Address) {
 		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid bridgeless token address: %s", token.Address)
@@ -121,13 +125,13 @@ func (k Keeper) buildSwapPath(ctx sdk.Context, sourceToken string, destinationTo
 
 	// if one of tokens is WrappedBridge, we can skip it in the path and
 	// swap directly between the other token and WrappedBridge
-	if sourceToken == params.WrappedBridge || isZeroAddress(sourceToken) {
+	if sourceToken == params.WrappedBridge || utils.IsZeroAddress(sourceToken) {
 		return []common.Address{
 			common.HexToAddress(sourceToken),
 			common.HexToAddress(token.Address),
 		}, nil
 	}
-	if token.Address == params.WrappedBridge || isZeroAddress(token.Address) {
+	if token.Address == params.WrappedBridge || utils.IsZeroAddress(token.Address) {
 		return []common.Address{
 			common.HexToAddress(sourceToken),
 			common.HexToAddress(token.Address),
