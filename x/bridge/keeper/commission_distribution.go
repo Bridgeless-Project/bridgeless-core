@@ -10,8 +10,11 @@ import (
 func (k Keeper) GetCommissionPrices(ctx sdk.Context, epochId uint32) ([]bridgetypes.CommissionDistributionInfo, error) {
 	commissionsInfo := make([]bridgetypes.CommissionDistributionInfo, 0)
 	for _, commission := range k.GetAllCommissions(ctx, epochId) {
-		amount, found := sdk.NewIntFromString(commission.Amount)
-		if !found {
+		amount, ok := sdk.NewIntFromString(commission.Amount)
+		if !ok {
+			continue
+		}
+		if amount.IsZero() {
 			continue
 		}
 

@@ -71,9 +71,11 @@ func (k Keeper) ComputeSwapPrice(ctx sdk.Context, sourceToken string, amountIn *
 		return nil, nil, errorsmod.Wrap(err, "failed to extract amount from response")
 	}
 
-	if len(amountRes.Amounts) != 2 {
+	// the getAmountsOutMethod returns the list of prices [In, Out].
+	// this function MUST return second element of array
+	if len(amountRes.Amounts) < 2 {
 		return nil, nil, errorsmod.Wrapf(types.ErrInvalidRoute, "unexpected number of amounts in response: expected 2, got %d", len(amountRes.Amounts))
 	}
 
-	return amountRes.Amounts[0], pairPath, nil
+	return amountRes.Amounts[1], pairPath, nil
 }

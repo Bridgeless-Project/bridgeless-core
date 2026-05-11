@@ -39,10 +39,6 @@ func (msg *MsgDistributeFees) ValidateBasic() error {
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
-
-	if msg.EpochId == 0 {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "epoch ID must be greater than zero")
-	}
-
+	
 	return nil
 }
