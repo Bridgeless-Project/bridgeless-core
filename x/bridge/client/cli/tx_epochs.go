@@ -24,6 +24,7 @@ func TxEpochsCmd() *cobra.Command {
 		CmdStartEpoch(),
 		CmdSetEpochSignature(),
 		CmdSetEpochPubkey(),
+		CmdRemoveEpochPubkey(),
 	)
 
 	return cmd
@@ -193,6 +194,41 @@ func CmdSetEpochPubkey() *cobra.Command {
 				pubkey,
 				uint32(epochId),
 			)
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// CmdRemoveEpochPubkey creates a CLI command for removing epoch pubkey
+func CmdRemoveEpochPubkey() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "remove-pubkey [epoch_id]",
+		Short: "Remove the public key for a specific epoch",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			epochID, err := strconv.ParseUint(args[0], 10, 32)
+			if err != nil {
+				return err
+			}
+
+			msg := types.NewMsgRemoveEpochPubKey(
+				clientCtx.GetFromAddress().String(),
+				uint32(epochID),
+			)
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
