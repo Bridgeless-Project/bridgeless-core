@@ -106,6 +106,31 @@ func (m msgServer) SetEpochPubKey(goCtx context.Context, msg *types.MsgSetEpochP
 	return new(types.MsgSetEpochPubKeyResponse), nil
 }
 
+func (m msgServer) RemoveEpochPubKey(goCtx context.Context, msg *types.MsgRemoveEpochPubKey) (*types.MsgRemoveEpochPubKeyResponse, error) {
+	if msg == nil {
+		return nil, errorsmod.Wrap(types.ErrInvalidDataType, "message cannot be nil")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	if !m.IsParty(ctx, msg.Creator) {
+		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "submitter isn`t an authorized party")
+	}
+
+	pubkey, found := m.Keeper.GetEpochPubkey(ctx, msg.EpochId)
+	if !found {
+		return nil, types.ErrEpochNotFound
+	}
+
+	_, found = m.Keeper.GetEpochPubkeySubmission(ctx, msg.EpochId, pubkey)
+	if !found {
+		return nil, errorsmod.Wrap(types.ErrEpochNotFound, "epoch pubkey submission not found")
+	}
+
+	m.Keeper.RemoveEpochPubkeySubmission(ctx, msg.EpochId, pubkey)
+	m.Keeper.RemoveEpochPubkey(ctx, msg.EpochId)
+	return &types.MsgRemoveEpochPubKeyResponse{}, nil
+}
+
 func (m msgServer) SetEpochSignature(goCtx context.Context, msg *types.MsgSetEpochSignature) (*types.MsgSetEpochSignatureResponse, error) {
 	if msg == nil {
 		return nil, errorsmod.Wrap(types.ErrInvalidDataType, "message cannot be nil")
