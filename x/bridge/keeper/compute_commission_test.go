@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_GetCommissionAmount(t *testing.T) {
+func Test_ComputeCommissionAmount(t *testing.T) {
 
 	type tc struct {
 		withdrawalAmount *big.Int
@@ -62,7 +62,7 @@ func Test_GetCommissionAmount(t *testing.T) {
 
 	for name, tCase := range testCases {
 		t.Run(name, func(t *testing.T) {
-			result, _ := types.GetCommissionAmount(tCase.withdrawalAmount, tCase.commissionRate)
+			result, _ := types.ComputeCommissionAmount(tCase.withdrawalAmount, tCase.commissionRate)
 			require.Equal(t, tCase.expected, result)
 		})
 	}
