@@ -27,7 +27,7 @@ type SwapperDepositParams struct {
 	Receiver   string
 	Network    string
 	IsWrapped  bool
-	ReferralId *big.Int
+	ReferralId uint16
 }
 
 type AmountsListResponse struct {
