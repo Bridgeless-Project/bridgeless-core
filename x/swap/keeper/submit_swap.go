@@ -30,9 +30,9 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 	}
 
 	//WithdrawalToken is the representation of deposited by user token
-	finalDestinationTokenInfo, found := k.bridge.GetTokenInfo(ctx, msg.Tx.FinalToken, msg.Tx.FinalChainId)
+	finalDestinationTokenInfo, found := k.bridge.GetTokenInfo(ctx, msg.Tx.FinalChainId, msg.Tx.FinalToken)
 	if !found {
-		return nil, errorsmod.Wrapf(bridgetypes.ErrTokenInfoNotFound, "token info not found for %s on chain %s", msg.Tx.Tx.WithdrawalToken, msg.Tx.Tx.WithdrawalChainId)
+		return nil, errorsmod.Wrapf(bridgetypes.ErrTokenInfoNotFound, "token info not found for %s on chain %s", msg.Tx.FinalToken, msg.Tx.FinalChainId)
 	}
 
 	// prepare the swap params
@@ -84,14 +84,12 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 			Receiver:   msg.Tx.FinalReceiver,
 			Network:    msg.Tx.FinalChainId,
 			IsWrapped:  finalDestinationTokenInfo.IsWrapped,
-			ReferralId: new(big.Int).SetUint64(uint64(msg.Tx.Tx.ReferralId)),
-		},
+			ReferralId: uint16(msg.Tx.Tx.ReferralId)},
 		swaptypes.SwapperDepositParams{
 			Receiver:   msg.Tx.Tx.Depositor,
 			Network:    msg.Tx.Tx.DepositChainId,
 			IsWrapped:  msg.Tx.Tx.IsWrapped,
-			ReferralId: new(big.Int).SetUint64(uint64(msg.Tx.Tx.ReferralId)),
-		},
+			ReferralId: uint16(msg.Tx.Tx.ReferralId)},
 	)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "failed to execute swapper withdraw swap and route")
