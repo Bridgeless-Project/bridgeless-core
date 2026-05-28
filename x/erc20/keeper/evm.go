@@ -176,6 +176,31 @@ func (k Keeper) CallEVM(
 	return resp, nil
 }
 
+// CallEVMAsTx performs a trusted smart contract method call and records it with
+// real Ethereum transaction metadata.
+func (k Keeper) CallEVMAsTx(
+	ctx sdk.Context,
+	abi abi.ABI,
+	from, contract common.Address,
+	commit bool,
+	method string,
+	args ...interface{},
+) (*evmtypes.MsgEthereumTxResponse, error) {
+	data, err := abi.Pack(method, args...)
+	if err != nil {
+		return nil, errorsmod.Wrap(
+			types.ErrABIPack,
+			errorsmod.Wrap(err, "failed to create transaction data").Error(),
+		)
+	}
+
+	resp, err := k.CallEVMWithDataAsTx(ctx, from, &contract, data, commit)
+	if err != nil {
+		return nil, errorsmod.Wrapf(err, "contract call failed: method '%s', contract '%s'", method, contract)
+	}
+	return resp, nil
+}
+
 // CallEVMWithData performs a smart contract method call using contract data
 func (k Keeper) CallEVMWithData(
 	ctx sdk.Context,
@@ -234,12 +259,119 @@ func (k Keeper) CallEVMWithData(
 		return nil, errorsmod.Wrap(evmtypes.ErrVMExecution, res.VmError)
 	}
 
-	err = k.evmKeeper.BroadcastTxResponce(ctx, from.String(), amount.String(), contract.String(), ethtypes.AccessListTxType, nonce, res)
+	err = k.evmKeeper.BroadcastTxResponse(ctx, from.String(), amount.String(), contract.String(), ethtypes.AccessListTxType, nonce, res)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to broadcast tx")
 	}
-	
+
 	return res, nil
+}
+
+// CallEVMWithDataAsTx performs a trusted smart contract call using a transaction
+// object for Ethereum hash/log metadata, while preserving CallEVMWithData's
+// signature-bypassing direct execution flow.
+func (k Keeper) CallEVMWithDataAsTx(
+	ctx sdk.Context,
+	from common.Address,
+	contract *common.Address,
+	data []byte,
+	commit bool,
+) (*evmtypes.MsgEthereumTxResponse, error) {
+	nonce, err := k.accountKeeper.GetSequence(ctx, from.Bytes())
+	if err != nil {
+		return nil, err
+	}
+
+	gasCap, err := k.estimateGasCap(ctx, from, contract, data, commit)
+	if err != nil {
+		return nil, err
+	}
+
+	amount := big.NewInt(0)
+	accessList := ethtypes.AccessList{}
+	msgEthTx := evmtypes.NewTx(&evmtypes.EvmTxArgs{
+		Nonce:    nonce,
+		GasLimit: gasCap,
+		Input:    data,
+		GasPrice: big.NewInt(0),
+		ChainID:  k.evmKeeper.ChainID(),
+		Amount:   amount,
+		To:       contract,
+		Accesses: &accessList,
+	})
+	msgEthTx.From = from.Hex()
+
+	tx := msgEthTx.AsTransaction()
+	txConfig := k.evmKeeper.TxConfig(ctx, tx.Hash())
+	cfg, err := k.evmKeeper.EVMConfig(ctx, sdk.ConsAddress(ctx.BlockHeader().ProposerAddress), k.evmKeeper.ChainID())
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "failed to load evm config")
+	}
+
+	msg := ethtypes.NewMessage(
+		from,
+		contract,
+		nonce,
+		amount,
+		gasCap,
+		big.NewInt(0),
+		big.NewInt(0),
+		big.NewInt(0),
+		data,
+		accessList,
+		!commit,
+	)
+
+	res, err := k.evmKeeper.ApplyMessageWithConfig(ctx, msg, nil, commit, cfg, txConfig)
+	if err != nil {
+		return nil, err
+	}
+
+	if res.Failed() {
+		return nil, errorsmod.Wrap(evmtypes.ErrVMExecution, res.VmError)
+	}
+
+	recipient := ""
+	if contract != nil {
+		recipient = contract.String()
+	}
+	if err = k.evmKeeper.BroadcastTxResponse(ctx, from.String(), amount.String(), recipient, tx.Type(), uint64(txConfig.TxIndex), res); err != nil {
+		return nil, errors.Wrap(err, "failed to broadcast tx")
+	}
+
+	return res, nil
+}
+
+func (k Keeper) estimateGasCap(
+	ctx sdk.Context,
+	from common.Address,
+	contract *common.Address,
+	data []byte,
+	commit bool,
+) (uint64, error) {
+	gasCap := config.DefaultGasCap
+	if !commit {
+		return gasCap, nil
+	}
+
+	args, err := json.Marshal(evmtypes.TransactionArgs{
+		From: &from,
+		To:   contract,
+		Data: (*hexutil.Bytes)(&data),
+	})
+	if err != nil {
+		return 0, errorsmod.Wrapf(errortypes.ErrJSONMarshal, "failed to marshal tx args: %s", err.Error())
+	}
+
+	gasRes, err := k.evmKeeper.EstimateGas(sdk.WrapSDKContext(ctx), &evmtypes.EthCallRequest{
+		Args:   args,
+		GasCap: config.DefaultGasCap,
+	})
+	if err != nil {
+		return 0, err
+	}
+
+	return gasRes.Gas, nil
 }
 
 // monitorApprovalEvent returns an error if the given transactions logs include

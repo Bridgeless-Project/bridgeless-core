@@ -58,7 +58,7 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 		return nil, errorsmod.Wrap(err, "failed to decode signature")
 	}
 
-	txResp, err := k.erc20.CallEVM(
+	txResp, err := k.erc20.CallEVMAsTx(
 		ctx,
 		contracts.SwapperContract.ABI,
 		common.HexToAddress(params.SwapperCallerAddress), // the address which calls swapper contract

@@ -87,8 +87,8 @@ func (k *Keeper) EthereumTx(goCtx context.Context, msg *types.MsgEthereumTx) (*t
 			}
 		}
 	}()
-	
-	err = k.BroadcastTxResponce(ctx,
+
+	err = k.BroadcastTxResponse(ctx,
 		sender,
 		tx.Value().String(),
 		tx.To().String(),
@@ -103,7 +103,7 @@ func (k *Keeper) EthereumTx(goCtx context.Context, msg *types.MsgEthereumTx) (*t
 	return response, nil
 }
 
-func (k *Keeper) BroadcastTxResponce(
+func (k *Keeper) BroadcastTxResponse(
 	ctx sdk.Context,
 	sender string,
 	amount string,
