@@ -19,11 +19,10 @@ package types
 import (
 	"context"
 
-	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core"
@@ -66,6 +65,15 @@ type EVMKeeper interface {
 	GetAccountWithoutBalance(ctx sdk.Context, addr common.Address) *statedb.Account
 	EstimateGas(c context.Context, req *evmtypes.EthCallRequest) (*evmtypes.EstimateGasResponse, error)
 	ApplyMessage(ctx sdk.Context, msg core.Message, tracer vm.EVMLogger, commit bool) (*evmtypes.MsgEthereumTxResponse, error)
+	BroadcastTxResponce(
+		ctx sdk.Context,
+		sender string,
+		amount string,
+		recipient string,
+		txType uint8,
+		txIndex uint64,
+		response *evmtypes.MsgEthereumTxResponse,
+	) error
 }
 
 // StakingKeeper defines the expected interface needed to retrieve the staking denom.
