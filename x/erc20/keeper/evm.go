@@ -31,6 +31,7 @@ import (
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/pkg/errors"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/contracts"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
@@ -209,11 +210,12 @@ func (k Keeper) CallEVMWithData(
 		gasCap = gasRes.Gas
 	}
 
+	amount := big.NewInt(0)
 	msg := ethtypes.NewMessage(
 		from,
 		contract,
 		nonce,
-		big.NewInt(0), // amount
+		amount,        // amount
 		gasCap,        // gasLimit
 		big.NewInt(0), // gasFeeCap
 		big.NewInt(0), // gasTipCap
@@ -232,6 +234,11 @@ func (k Keeper) CallEVMWithData(
 		return nil, errorsmod.Wrap(evmtypes.ErrVMExecution, res.VmError)
 	}
 
+	err = k.evmKeeper.BroadcastTxResponce(ctx, from.String(), amount.String(), contract.String(), ethtypes.AccessListTxType, nonce, res)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to broadcast tx")
+	}
+	
 	return res, nil
 }
 
