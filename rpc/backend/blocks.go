@@ -31,6 +31,8 @@ import (
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/trie"
 	"github.com/pkg/errors"
+	abci "github.com/tendermint/tendermint/abci/types"
+	"github.com/tendermint/tendermint/libs/log"
 	tmrpctypes "github.com/tendermint/tendermint/rpc/core/types"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -283,9 +285,104 @@ func (b *Backend) EthMsgsFromTendermintBlock(
 			ethMsg.Hash = ethMsg.AsTransaction().Hash().Hex()
 			result = append(result, ethMsg)
 		}
+
+		result = append(result, internalEthMsgsFromEvents(txResults[i].Events, b.logger)...)
 	}
 
 	return result
+}
+
+func internalEthMsgsFromEvents(events []abci.Event, logger log.Logger) []*evmtypes.MsgEthereumTx {
+	msgs := make([]*evmtypes.MsgEthereumTx, 0)
+	for _, event := range events {
+		if event.Type != evmtypes.EventTypeInternalEthereumTx {
+			continue
+		}
+
+		msg, err := internalEthMsgFromEvent(event)
+		if err != nil {
+			logger.Debug("failed to parse internal ethereum tx event", "error", err.Error())
+			continue
+		}
+		msgs = append(msgs, msg)
+	}
+	return msgs
+}
+
+func internalEthTxHashes(blockRes *tmrpctypes.ResultBlockResults) map[common.Hash]struct{} {
+	hashes := make(map[common.Hash]struct{})
+	for _, result := range blockRes.TxsResults {
+		for _, event := range result.Events {
+			if event.Type != evmtypes.EventTypeInternalEthereumTx {
+				continue
+			}
+			for _, attr := range event.Attributes {
+				if string(attr.Key) == evmtypes.AttributeKeyEthereumTxHash {
+					hashes[common.HexToHash(string(attr.Value))] = struct{}{}
+					break
+				}
+			}
+		}
+	}
+	return hashes
+}
+
+func internalEthMsgFromEvent(event abci.Event) (*evmtypes.MsgEthereumTx, error) {
+	attrs := make(map[string]string, len(event.Attributes))
+	for _, attr := range event.Attributes {
+		attrs[string(attr.Key)] = string(attr.Value)
+	}
+
+	nonce, err := strconv.ParseUint(attrs[evmtypes.AttributeKeyTxNonce], 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	gasLimit, err := strconv.ParseUint(attrs[evmtypes.AttributeKeyTxGasLimit], 10, 64)
+	if err != nil {
+		return nil, err
+	}
+
+	input, err := hexutil.Decode(attrs[evmtypes.AttributeKeyEthereumTxInput])
+	if err != nil {
+		return nil, err
+	}
+
+	gasPrice, ok := new(big.Int).SetString(attrs[evmtypes.AttributeKeyTxGasPrice], 10)
+	if !ok {
+		return nil, fmt.Errorf("invalid internal ethereum tx gas price")
+	}
+	amount, ok := new(big.Int).SetString(attrs[evmtypes.AttributeKeyTxAmount], 10)
+	if !ok {
+		return nil, fmt.Errorf("invalid internal ethereum tx amount")
+	}
+	chainID, ok := new(big.Int).SetString(attrs[evmtypes.AttributeKeyTxChainID], 10)
+	if !ok {
+		return nil, fmt.Errorf("invalid internal ethereum tx chain ID")
+	}
+
+	var to *common.Address
+	if recipient := attrs[evmtypes.AttributeKeyRecipient]; recipient != "" {
+		if !common.IsHexAddress(recipient) {
+			return nil, fmt.Errorf("invalid internal ethereum tx recipient")
+		}
+		addr := common.HexToAddress(recipient)
+		to = &addr
+	}
+
+	accessList := ethtypes.AccessList{}
+	msg := evmtypes.NewTx(&evmtypes.EvmTxArgs{
+		Nonce:    nonce,
+		GasLimit: gasLimit,
+		Input:    input,
+		GasPrice: gasPrice,
+		ChainID:  chainID,
+		Amount:   amount,
+		To:       to,
+		Accesses: &accessList,
+	})
+	msg.From = attrs[evmtypes.AttributeKeyEthereumTxFrom]
+	msg.Hash = attrs[evmtypes.AttributeKeyEthereumTxHash]
+	return msg, nil
 }
 
 // HeaderByNumber returns the block header identified by height.
@@ -382,6 +479,7 @@ func (b *Backend) RPCBlockFromTendermintBlock(
 	}
 
 	msgs := b.EthMsgsFromTendermintBlock(resBlock, blockRes)
+	internalHashes := internalEthTxHashes(blockRes)
 	for txIndex, ethMsg := range msgs {
 		if !fullTx {
 			hash := common.HexToHash(ethMsg.Hash)
@@ -392,14 +490,13 @@ func (b *Backend) RPCBlockFromTendermintBlock(
 		tx := ethMsg.AsTransaction()
 		height := uint64(block.Height) //#nosec G701 -- checked for int overflow already
 		index := uint64(txIndex)       //#nosec G701 -- checked for int overflow already
-		rpcTx, err := rpctypes.NewRPCTransaction(
-			tx,
-			common.BytesToHash(block.Hash()),
-			height,
-			index,
-			baseFee,
-			b.chainID,
-		)
+		blockHash := common.BytesToHash(block.Hash())
+		var rpcTx *rpctypes.RPCTransaction
+		if _, internal := internalHashes[common.HexToHash(ethMsg.Hash)]; internal {
+			rpcTx, err = rpctypes.NewTrustedTransactionFromMsg(ethMsg, blockHash, height, index, baseFee, b.chainID)
+		} else {
+			rpcTx, err = rpctypes.NewTransactionFromMsg(ethMsg, blockHash, height, index, baseFee, b.chainID)
+		}
 		if err != nil {
 			b.logger.Debug("NewTransactionFromData for receipt failed", "hash", tx.Hash().Hex(), "error", err.Error())
 			continue

@@ -19,6 +19,7 @@ package keeper
 import (
 	"encoding/json"
 	"math/big"
+	"strconv"
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/server/config"
@@ -338,6 +339,26 @@ func (k Keeper) CallEVMWithDataAsTx(
 	if err = k.evmKeeper.BroadcastTxResponse(ctx, from.String(), amount.String(), recipient, tx.Type(), uint64(txConfig.TxIndex), res); err != nil {
 		return nil, errors.Wrap(err, "failed to broadcast tx")
 	}
+
+	// indexer keys
+	chainID := big.NewInt(0)
+	if tx.ChainId() != nil {
+		chainID = tx.ChainId()
+	}
+	ctx.EventManager().EmitEvent(sdk.NewEvent(
+		evmtypes.EventTypeInternalEthereumTx,
+		sdk.NewAttribute(evmtypes.AttributeKeyEthereumTxHash, res.Hash),
+		sdk.NewAttribute(evmtypes.AttributeKeyEthereumTxFrom, from.Hex()),
+		sdk.NewAttribute(evmtypes.AttributeKeyRecipient, recipient),
+		sdk.NewAttribute(evmtypes.AttributeKeyEthereumTxInput, hexutil.Encode(data)),
+		sdk.NewAttribute(evmtypes.AttributeKeyTxNonce, strconv.FormatUint(nonce, 10)),
+		sdk.NewAttribute(evmtypes.AttributeKeyTxGasLimit, strconv.FormatUint(gasCap, 10)),
+		sdk.NewAttribute(evmtypes.AttributeKeyTxGasPrice, "0"),
+		sdk.NewAttribute(evmtypes.AttributeKeyTxAmount, amount.String()),
+		sdk.NewAttribute(evmtypes.AttributeKeyTxChainID, chainID.String()),
+		sdk.NewAttribute(evmtypes.AttributeKeyTxType, strconv.FormatUint(uint64(tx.Type()), 10)),
+		sdk.NewAttribute(evmtypes.AttributeKeyTxIndex, strconv.FormatUint(uint64(txConfig.TxIndex), 10)),
+	))
 
 	return res, nil
 }
