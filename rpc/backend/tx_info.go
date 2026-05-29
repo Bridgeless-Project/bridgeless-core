@@ -194,13 +194,6 @@ func (b *Backend) GetTransactionReceipt(hash common.Hash) (map[string]interface{
 		b.logger.Debug("decoding failed", "error", err.Error())
 		return nil, fmt.Errorf("failed to decode tx: %w", err)
 	}
-	ethMsg := tx.GetMsgs()[res.MsgIndex].(*evmtypes.MsgEthereumTx)
-
-	txData, err := evmtypes.UnpackTxData(ethMsg.Data)
-	if err != nil {
-		b.logger.Error("failed to unpack tx data", "error", err.Error())
-		return nil, err
-	}
 
 	cumulativeGasUsed := uint64(0)
 	blockRes, err := b.TendermintBlockResultByNumber(&res.Height)
@@ -208,6 +201,29 @@ func (b *Backend) GetTransactionReceipt(hash common.Hash) (map[string]interface{
 		b.logger.Debug("failed to retrieve block results", "height", res.Height, "error", err.Error())
 		return nil, nil
 	}
+
+	var ethMsg *evmtypes.MsgEthereumTx
+	if int(res.MsgIndex) < len(tx.GetMsgs()) {
+		ethMsg, _ = tx.GetMsgs()[res.MsgIndex].(*evmtypes.MsgEthereumTx)
+	}
+	if ethMsg == nil {
+		for _, msg := range b.EthMsgsFromTendermintBlock(resBlock, blockRes) {
+			if msg.Hash == hexTx {
+				ethMsg = msg
+				break
+			}
+		}
+	}
+	if ethMsg == nil {
+		return nil, errors.New("invalid ethereum tx")
+	}
+
+	txData, err := evmtypes.UnpackTxData(ethMsg.Data)
+	if err != nil {
+		b.logger.Error("failed to unpack tx data", "error", err.Error())
+		return nil, err
+	}
+
 	for _, txResult := range blockRes.TxsResults[0:res.TxIndex] {
 		cumulativeGasUsed += uint64(txResult.GasUsed) // #nosec G701 -- checked for int overflow already
 	}
@@ -219,14 +235,19 @@ func (b *Backend) GetTransactionReceipt(hash common.Hash) (map[string]interface{
 	} else {
 		status = hexutil.Uint(ethtypes.ReceiptStatusSuccessful)
 	}
-	chainID, err := b.ChainID()
-	if err != nil {
-		return nil, err
-	}
-
-	from, err := ethMsg.GetSender(chainID.ToInt())
-	if err != nil {
-		return nil, err
+	_, internal := internalEthTxHashes(blockRes)[hash]
+	var from common.Address
+	if internal {
+		from = common.HexToAddress(ethMsg.From)
+	} else {
+		chainID, err := b.ChainID()
+		if err != nil {
+			return nil, err
+		}
+		from, err = ethMsg.GetSender(chainID.ToInt())
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	// parse tx logs from events
