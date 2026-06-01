@@ -78,7 +78,7 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 			MinDestinationAmount:     amountOutMin,
 			SwapDeadline:             new(big.Int).SetUint64(msg.Tx.SwapDeadline),
 			Path:                     path,
-			IsDestinationTokenNative: isZeroAddress(finalDestinationTokenInfo.Address),
+			IsDestinationTokenNative: isZeroAddress(finalDestinationTokenInfo.Address) && finalDestinationTokenInfo.ChainId == getChainId(ctx),
 		},
 		swaptypes.SwapperDepositParams{
 			Receiver:   msg.Tx.FinalReceiver,
