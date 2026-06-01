@@ -20,6 +20,7 @@ type (
 		paramstore paramtypes.Subspace
 		bridge     types.BridgeKeeper
 		erc20      types.ERC20Keeper
+		staking    types.StakingKeeper
 	}
 )
 
@@ -30,6 +31,7 @@ func NewKeeper(
 	ps paramtypes.Subspace,
 	bridgeKeeper types.BridgeKeeper,
 	erc20Keeper types.ERC20Keeper,
+	staking types.StakingKeeper,
 ) *Keeper {
 	// set KeyTable if it has not already been set
 	if !ps.HasKeyTable() {
@@ -43,6 +45,7 @@ func NewKeeper(
 		paramstore: ps,
 		bridge:     bridgeKeeper,
 		erc20:      erc20Keeper,
+		staking:    staking,
 	}
 }
 

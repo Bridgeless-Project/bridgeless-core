@@ -32,6 +32,16 @@ service Query {
     option (google.api.http).get = "/cosmos/bridge/transactions/{chain_id}/{tx_hash}/{tx_nonce}";
   }
 
+  // SystemWithdrawals queries all the system withdrawals.
+  rpc SystemWithdrawals(QuerySystemWithdrawalsRequest) returns (QuerySystemWithdrawalsResponse) {
+    option (google.api.http).get = "/cosmos/bridge/system-withdrawals";
+  }
+
+  // SystemWithdrawalById queries a system withdrawal by ID.
+  rpc SystemWithdrawalById(QuerySystemWithdrawalByIdRequest) returns (QuerySystemWithdrawalByIdResponse) {
+    option (google.api.http).get = "/cosmos/bridge/system-withdrawals/{tx_hash}/{tx_index}";
+  }
+
   // Token by id queries a token by id.
   rpc GetTokenById(QueryGetTokenById) returns (QueryGetTokenByIdResponse) {
     option (google.api.http).get = "/cosmos/bridge/tokens/{id}";
@@ -74,6 +84,14 @@ service Query {
 
   rpc GetTxSubmissionsByHash(QueryGetTxSubmissionsByHash) returns (QueryGetTxSubmissionsByHashResponse){
     option (google.api.http).get = "/cosmos/bridge/txs_submissions/{tx_hash}";
+  }
+
+  rpc GetSystemTxsSubmissions(QueryGetSystemTxsSubmissions) returns (QueryGetSystemTxsSubmissionsResponse){
+    option (google.api.http).get = "/cosmos/bridge/system_txs_submissions";
+  }
+
+  rpc GetSystemTxSubmissionsByHash(QueryGetSystemTxSubmissionsByHash) returns (QueryGetSystemTxSubmissionsByHashResponse){
+    option (google.api.http).get = "/cosmos/bridge/system_txs_submissions/{tx_hash}";
   }
 
   rpc GetReferralById(QueryGetReferralById) returns (QueryGetReferralByIdResponse) {
@@ -157,6 +175,28 @@ message QueryTransactionsResponse {
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
+// QuerySystemWithdrawalByIdRequest is request type for the Query/SystemWithdrawalById RPC method.
+message QuerySystemWithdrawalByIdRequest {
+  string tx_hash = 1;
+  uint64 tx_index = 2;
+}
+
+// QuerySystemWithdrawalByIdResponse is response type for the Query/SystemWithdrawalById RPC method.
+message QuerySystemWithdrawalByIdResponse {
+  core.bridge.SystemWithdrawal withdrawal = 1 [(gogoproto.nullable) = false];
+}
+
+// QuerySystemWithdrawalsRequest is request type for the Query/SystemWithdrawals RPC method.
+message QuerySystemWithdrawalsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QuerySystemWithdrawalsResponse is response type for the Query/SystemWithdrawals RPC method.
+message QuerySystemWithdrawalsResponse {
+  repeated core.bridge.SystemWithdrawal withdrawals = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
 message QueryGetTokenById {
   uint64 id = 1;
 }
@@ -223,6 +263,23 @@ message QueryGetTxSubmissionsByHash{
 }
 
 message QueryGetTxSubmissionsByHashResponse{
+  Submissions tx_submissions = 1[(gogoproto.nullable) = false];;
+}
+
+message QueryGetSystemTxsSubmissions {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryGetSystemTxsSubmissionsResponse {
+  repeated Submissions txs_submissions = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetSystemTxSubmissionsByHash{
+  string tx_hash = 1;
+}
+
+message QueryGetSystemTxSubmissionsByHashResponse{
   Submissions tx_submissions = 1[(gogoproto.nullable) = false];;
 }
 
@@ -330,6 +387,7 @@ message QueryGetEpochSignatureResponse {
 
 message QueryGetCommissionByToken {
   uint64 token_id = 1;
+  uint32 epoch_id = 2;
 }
 
 message QueryGetCommissionByTokenResponse {
@@ -338,6 +396,7 @@ message QueryGetCommissionByTokenResponse {
 
 message QueryGetCommissions  {
   cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  uint32 epoch_id = 2;
 }
 
 message QueryGetCommissionsResponse {

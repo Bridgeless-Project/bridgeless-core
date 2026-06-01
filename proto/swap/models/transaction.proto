@@ -16,4 +16,6 @@ message SwapTransaction {
   uint64 swap_deadline = 5; // timestamp until when the swap is valid, provided by
   string swap_out_amount = 6; // minimum acceptable output amount, provided by backend
   string final_deposit_tx_hash = 7; // do not used on the submit endpoint
+
+  bool  is_fee_distribution = 8; // if true, we need to update the fee store on the bridge module
 }

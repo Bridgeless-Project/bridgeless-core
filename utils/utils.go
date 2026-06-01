@@ -18,10 +18,13 @@ package utils
 
 import (
 	"fmt"
+	"math/big"
 	"strings"
 
 	ibctransfertypes "github.com/cosmos/ibc-go/v6/modules/apps/transfer/types"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/crypto"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/ethsecp256k1"
 
@@ -181,4 +184,49 @@ func ComputeIBCDenom(
 	denom string,
 ) string {
 	return ComputeIBCDenomTrace(portID, channelID, denom).IBCDenom()
+}
+
+func ParseUintString(value string) (*big.Int, error) {
+	parsed, ok := new(big.Int).SetString(value, 10)
+	if !ok {
+		return nil, errorsmod.Wrapf(errortypes.ErrInvalidRequest, "invalid big int: %s", value)
+	}
+
+	if parsed.Sign() < 0 {
+		return nil, errorsmod.Wrapf(errortypes.ErrInvalidRequest, "big int cannot be negative: %s", value)
+	}
+
+	return parsed, nil
+}
+
+func IsZeroAddress(address string) bool {
+	return common.HexToAddress(address) == (common.Address{})
+}
+
+func GetChainId(ctx sdk.Context) string {
+	// the chian-id returns something like cosmos_1234-1
+	prefixAndChain := strings.Split(ctx.ChainID(), "_") // split to [cosmos, 1234-1]
+	if len(prefixAndChain) != 2 {
+		return ctx.ChainID()
+	}
+
+	evmChainIDWithSuffix := strings.Split(prefixAndChain[1], "-") // split to [1234, 1]
+	if len(evmChainIDWithSuffix) != 2 {
+		return prefixAndChain[1]
+	}
+
+	return evmChainIDWithSuffix[0]
+}
+
+func TxHashToBytes32(txHash string) [32]byte {
+	var res [32]byte
+	hashBytes, err := hexutil.Decode(txHash)
+	if err != nil || len(hashBytes) != 32 {
+		bytes := crypto.Keccak256(([]byte)(txHash))
+		copy(res[:], bytes)
+		return res
+	}
+
+	copy(res[:], hashBytes)
+	return res
 }

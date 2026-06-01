@@ -19,6 +19,18 @@ func (m msgServer) SubmitSwapTx(goCtx context.Context, msg *types.MsgSubmitSwapT
 	if !m.bridge.IsParty(ctx, msg.Creator) {
 		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "creator is not an authorized bridge party")
 	}
+	
+	var (
+		commission *bridgetypes.Commission
+		err        error
+	)
+
+	if msg.Tx.IsFeeDistribution {
+		commission, err = m.computeCommission(ctx, msg.Tx)
+		if err != nil {
+			return nil, errorsmod.Wrap(err, "failed to compute commission")
+		}
+	}
 
 	if _, found := m.GetSwap(ctx, msg.Tx.Tx.DepositTxHash, msg.Tx.Tx.DepositTxIndex, msg.Tx.Tx.DepositChainId); found {
 		return nil, errorsmod.Wrap(types.ErrAlreadyProcessed, "swap was already executed")
@@ -44,9 +56,27 @@ func (m msgServer) SubmitSwapTx(goCtx context.Context, msg *types.MsgSubmitSwapT
 
 	swap, err := m.executeSwap(ctx, msg)
 	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "failed to execute swap")
 	}
 
 	m.SetSwap(ctx, *swap)
+	if msg.Tx.IsFeeDistribution {
+		if commission == nil {
+			return nil, errorsmod.Wrap(sdkerrors.ErrInsufficientFee, "commission is nil")
+		}
+
+		m.bridge.SetCommission(ctx, msg.Tx.Tx.EpochId, *commission)
+
+		amount, ok := sdk.NewIntFromString(commission.Amount)
+		if !ok {
+			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "invalid commission amount: %s", commission.Amount)
+		}
+
+		err = m.bridge.PartiesDistributeFee(ctx, msg.Tx.Tx.EpochId, sdk.NewCoin(m.staking.BondDenom(ctx), amount))
+		if err != nil {
+			return nil, errorsmod.Wrap(err, "failed to distribute fee among parties")
+		}
+	}
+
 	return &types.MsgSubmitSwapTxResponse{}, nil
 }

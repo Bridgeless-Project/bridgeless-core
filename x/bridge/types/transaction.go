@@ -16,6 +16,10 @@ func TransactionId(tx *Transaction) string {
 	return fmt.Sprintf("%s/%v/%s", tx.DepositTxHash, tx.DepositTxIndex, tx.DepositChainId)
 }
 
+func SystemTransactionId(tx *SystemWithdrawal) string {
+	return fmt.Sprintf("%s/%v", tx.TxHash, tx.TxIndex)
+}
+
 func validateTransaction(tx *Transaction) error {
 	if tx == nil {
 		return fmt.Errorf("transaction is nil")

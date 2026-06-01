@@ -27,7 +27,14 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 
 		&MsgDeleteToken{},
 		&MsgInsertToken{},
+
+		&MsgDistributeFees{},
+
+		&MsgSetEpochPubKey{},
+		&MsgStartEpoch{},
+		&MsgSetEpochSignature{},
 	)
+
 	// this line is used by starport scaffolding # 3
 
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)

@@ -11,4 +11,5 @@ message Params {
   string wrapped_bridge = 2;
   string swapper_address = 3;
   string swapper_caller_address = 4; // evm address
+  string uniswap_router_address = 5; // evm address
 }

@@ -8,16 +8,19 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/query"
 )
 
-func (k Keeper) SetCommission(ctx sdk.Context, commission types.Commission) {
-	cStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreCommissionPrefix))
-	cStore.Set(types.KeyCommission(commission.TokenId), k.cdc.MustMarshal(&commission))
+func (k Keeper) SetCommission(sdkCtx sdk.Context, epochId uint32, commission types.Commission) {
+	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreCommissionPrefix))
+	eStore := prefix.NewStore(cStore, types.KeyEpoch(epochId))
+
+	eStore.Set(types.KeyEpochCommission(epochId, commission.TokenId), k.cdc.MustMarshal(&commission))
 }
 
-func (k Keeper) GetCommission(ctx sdk.Context, tokenId uint64) (types.Commission, bool) {
-	cStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreCommissionPrefix))
+func (k Keeper) GetCommission(sdkCtx sdk.Context, epochId uint32, tokenId uint64) (types.Commission, bool) {
+	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreCommissionPrefix))
+	eStore := prefix.NewStore(cStore, types.KeyEpoch(epochId))
 
 	var commission types.Commission
-	bz := cStore.Get(types.KeyCommission(tokenId))
+	bz := eStore.Get(types.KeyCommission(tokenId))
 	if bz == nil {
 		return commission, false
 	}
@@ -25,16 +28,19 @@ func (k Keeper) GetCommission(ctx sdk.Context, tokenId uint64) (types.Commission
 	return commission, true
 }
 
-func (k Keeper) RemoveCommission(ctx sdk.Context, tokenId uint64) {
-	cStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreCommissionPrefix))
-	cStore.Delete(types.KeyCommission(tokenId))
+func (k Keeper) RemoveCommission(sdkCtx sdk.Context, epochId uint32, tokenId uint64) {
+	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreCommissionPrefix))
+	eStore := prefix.NewStore(cStore, types.KeyEpoch(epochId))
+
+	eStore.Delete(types.KeyCommission(tokenId))
 }
 
-func (k Keeper) GetCommissionsWithPagination(ctx sdk.Context, pagination *query.PageRequest) ([]types.Commission, *query.PageResponse, error) {
-	cStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreCommissionPrefix))
+func (k Keeper) GetCommissionsWithPagination(sdkCtx sdk.Context, epochId uint32, pagination *query.PageRequest) ([]types.Commission, *query.PageResponse, error) {
+	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreCommissionPrefix))
+	eStore := prefix.NewStore(cStore, types.KeyEpoch(epochId))
 
 	var commissions []types.Commission
-	pageRes, err := query.Paginate(cStore, pagination, func(key []byte, value []byte) error {
+	pageRes, err := query.Paginate(eStore, pagination, func(key []byte, value []byte) error {
 		var commission types.Commission
 		if err := k.cdc.Unmarshal(value, &commission); err != nil {
 			return err
@@ -47,4 +53,20 @@ func (k Keeper) GetCommissionsWithPagination(ctx sdk.Context, pagination *query.
 	}
 
 	return commissions, pageRes, nil
+}
+
+func (k Keeper) GetAllCommissions(sdkCtx sdk.Context, epochId uint32) (commissions []types.Commission) {
+	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreCommissionPrefix))
+	eStore := prefix.NewStore(cStore, types.KeyEpoch(epochId))
+
+	iterator := eStore.Iterator(nil, nil)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var commission types.Commission
+		k.cdc.MustUnmarshal(iterator.Value(), &commission)
+		commissions = append(commissions, commission)
+	}
+
+	return
 }
