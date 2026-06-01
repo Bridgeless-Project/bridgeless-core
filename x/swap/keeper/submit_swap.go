@@ -47,7 +47,7 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 		return nil, errorsmod.Wrap(err, "failed to build swap path")
 	}
 
-	amountIn, err := utils.ParseUintString(msg.Tx.Tx.DepositAmount)
+	amountIn, err := parseUintString(msg.Tx.Tx.WithdrawalAmount)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "failed to parse deposit amount")
 	}

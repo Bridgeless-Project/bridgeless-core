@@ -49,6 +49,7 @@ service Msg {
     rpc StartEpoch(MsgStartEpoch) returns (MsgStartEpochResponse);
     rpc SetEpochSignature(MsgSetEpochSignature) returns (MsgSetEpochSignatureResponse);
     rpc SetEpochPubKey(MsgSetEpochPubKey) returns (MsgSetEpochPubKeyResponse);
+    rpc RemoveEpochPubKey(MsgRemoveEpochPubKey) returns (MsgRemoveEpochPubKeyResponse);
 
     rpc DistributeFees(MsgDistributeFees) returns (MsgDistributeFeesResponse);
 
@@ -280,3 +281,12 @@ message MsgDistributeFees {
 }
 
 message MsgDistributeFeesResponse {}
+
+message MsgRemoveEpochPubKey{
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint32 epoch_id = 2;
+}
+
+message MsgRemoveEpochPubKeyResponse {}

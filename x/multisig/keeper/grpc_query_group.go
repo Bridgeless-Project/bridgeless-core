@@ -32,7 +32,6 @@ func (k Keeper) GroupAll(goCtx context.Context, req *types.QueryAllGroupRequest)
 		groups = append(groups, group)
 		return nil
 	})
-
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
