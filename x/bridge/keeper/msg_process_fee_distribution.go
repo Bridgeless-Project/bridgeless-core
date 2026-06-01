@@ -8,7 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func (m msgServer) ProcessSystemWithdrawal(goCtx context.Context, msg *types.MsgProcessSystemWithdrawal) (*types.MsgDistributeFeesResponse, error) {
+func (m msgServer) ProcessSystemWithdrawal(goCtx context.Context, msg *types.MsgProcessSystemWithdrawal) (*types.MsgProcessSystemWithdrawalResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if !m.IsParty(ctx, msg.Creator) {
@@ -20,6 +20,6 @@ func (m msgServer) ProcessSystemWithdrawal(goCtx context.Context, msg *types.Msg
 			return nil, errorsmod.Wrap(types.InvalidTransaction, err.Error())
 		}
 	}
-	return &types.MsgDistributeFeesResponse{}, nil
+	return &types.MsgProcessSystemWithdrawalResponse{}, nil
 
 }

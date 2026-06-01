@@ -81,3 +81,73 @@ func CmdQueryTransactionById() *cobra.Command {
 
 	return cmd
 }
+
+func CmdQuerySystemWithdrawals() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "system-withdrawals",
+		Short: "Query bridge system withdrawals",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+			res, err := queryClient.SystemWithdrawals(cmd.Context(), &types.QuerySystemWithdrawalsRequest{Pagination: pageReq})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+	flags.AddPaginationFlagsToCmd(cmd, "system withdrawals")
+
+	return cmd
+}
+
+func CmdQuerySystemWithdrawalById() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "system-withdrawal [tx_hash] [tx_index]",
+		Short: "Query bridge system withdrawal by its id",
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			index, ok := big.NewInt(0).SetString(args[1], 10)
+			if !ok {
+				return errors.New(fmt.Sprintf("invalid tx index: %s", args[1]))
+			}
+
+			if index.Cmp(big.NewInt(0)) == -1 {
+				return errors.New(fmt.Sprintf("negative tx index: %s", args[1]))
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+			res, err := queryClient.SystemWithdrawalById(cmd.Context(), &types.QuerySystemWithdrawalByIdRequest{
+				TxHash:  args[0],
+				TxIndex: index.Uint64(),
+			})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}

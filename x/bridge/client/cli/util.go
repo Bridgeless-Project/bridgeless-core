@@ -32,6 +32,18 @@ func parseTx(path string) (*types.Transaction, error) {
 	return tx, nil
 }
 
+func parseSystemWithdrawals(path string) ([]types.SystemWithdrawal, error) {
+	var withdrawals []types.SystemWithdrawal
+	contents, err := os.ReadFile(path)
+	if err != nil {
+		return nil, errors.Wrap(err, "error reading file")
+	}
+	if err = json.Unmarshal(contents, &withdrawals); err != nil {
+		return nil, errors.Wrap(err, "failed to unmarshal system withdrawals")
+	}
+	return withdrawals, nil
+}
+
 func parseInsertToken(path string) (*types.Token, error) {
 	return readFromJSON[types.Token](path)
 }
