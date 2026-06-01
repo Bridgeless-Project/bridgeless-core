@@ -10,8 +10,11 @@ import (
 	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
+	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/stretchr/testify/mock"
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmlog "github.com/tendermint/tendermint/libs/log"
 	tmrpctypes "github.com/tendermint/tendermint/rpc/core/types"
@@ -282,8 +285,30 @@ func (suite *BackendTestSuite) TestGetTransactionByBlockHashAndIndex() {
 
 func (suite *BackendTestSuite) TestGetTransactionByBlockAndIndex() {
 	msgEthTx, bz := suite.buildEthereumTx()
+	internalFrom := common.HexToAddress("0x1111111111111111111111111111111111111111")
+	internalTo := common.HexToAddress("0x2222222222222222222222222222222222222222")
+	internalData := []byte{0x12, 0x34}
+	internalAccessList := ethtypes.AccessList{}
+	internalMsg := evmtypes.NewTx(&evmtypes.EvmTxArgs{
+		Nonce:    7,
+		GasLimit: 21000,
+		Input:    internalData,
+		GasPrice: big.NewInt(0),
+		ChainID:  big.NewInt(9000),
+		Amount:   big.NewInt(0),
+		To:       &internalTo,
+		Accesses: &internalAccessList,
+	})
+	internalMsg.From = internalFrom.Hex()
+	internalMsg.Hash = internalMsg.AsTransaction().Hash().Hex()
+	builder := suite.backend.clientCtx.TxConfig.NewTxBuilder()
+	bankMsg := banktypes.NewMsgSend(suite.acc, suite.acc, sdk.NewCoins())
+	suite.Require().NoError(builder.SetMsgs(bankMsg))
+	bankTxBz, err := suite.backend.clientCtx.TxConfig.TxEncoder()(builder.GetTx())
+	suite.Require().NoError(err)
 
 	defaultBlock := types.MakeBlock(1, []types.Tx{bz}, nil, nil)
+	internalBlock := types.MakeBlock(1, []types.Tx{bankTxBz}, nil, nil)
 	defaultResponseDeliverTx := []*abci.ResponseDeliverTx{
 		{
 			Code: 0,
@@ -299,10 +324,46 @@ func (suite *BackendTestSuite) TestGetTransactionByBlockAndIndex() {
 			},
 		},
 	}
+	internalResponseDeliverTx := []*abci.ResponseDeliverTx{
+		{
+			Code: 0,
+			Events: []abci.Event{
+				{Type: evmtypes.EventTypeEthereumTx, Attributes: []abci.EventAttribute{
+					{Key: []byte("ethereumTxHash"), Value: []byte(internalMsg.Hash)},
+					{Key: []byte("txIndex"), Value: []byte("0")},
+					{Key: []byte("amount"), Value: []byte("0")},
+					{Key: []byte("txGasUsed"), Value: []byte("21000")},
+					{Key: []byte("txHash"), Value: []byte("")},
+					{Key: []byte("recipient"), Value: []byte(internalTo.Hex())},
+				}},
+				{Type: evmtypes.EventTypeInternalEthereumTx, Attributes: []abci.EventAttribute{
+					{Key: []byte(evmtypes.AttributeKeyEthereumTxHash), Value: []byte(internalMsg.Hash)},
+					{Key: []byte(evmtypes.AttributeKeyEthereumTxFrom), Value: []byte(internalFrom.Hex())},
+					{Key: []byte(evmtypes.AttributeKeyRecipient), Value: []byte(internalTo.Hex())},
+					{Key: []byte(evmtypes.AttributeKeyEthereumTxInput), Value: []byte(hexutil.Encode(internalData))},
+					{Key: []byte(evmtypes.AttributeKeyTxNonce), Value: []byte("7")},
+					{Key: []byte(evmtypes.AttributeKeyTxGasLimit), Value: []byte("21000")},
+					{Key: []byte(evmtypes.AttributeKeyTxGasPrice), Value: []byte("0")},
+					{Key: []byte(evmtypes.AttributeKeyTxAmount), Value: []byte("0")},
+					{Key: []byte(evmtypes.AttributeKeyTxChainID), Value: []byte("9000")},
+					{Key: []byte(evmtypes.AttributeKeyTxType), Value: []byte("1")},
+					{Key: []byte(evmtypes.AttributeKeyTxIndex), Value: []byte("0")},
+				}},
+			},
+		},
+	}
 
 	txFromMsg, _ := rpctypes.NewTransactionFromMsg(
 		msgEthTx,
 		common.BytesToHash(defaultBlock.Hash().Bytes()),
+		1,
+		0,
+		big.NewInt(1),
+		suite.backend.chainID,
+	)
+	internalTxFromMsg, _ := rpctypes.NewTrustedTransactionFromMsg(
+		internalMsg,
+		common.BytesToHash(internalBlock.Hash().Bytes()),
 		1,
 		0,
 		big.NewInt(1),
@@ -374,6 +435,20 @@ func (suite *BackendTestSuite) TestGetTransactionByBlockAndIndex() {
 			&tmrpctypes.ResultBlock{Block: defaultBlock},
 			0,
 			txFromMsg,
+			true,
+		},
+		{
+			"pass - returns internal ethereum tx from cosmos tx event",
+			func() {
+				queryClient := suite.backend.queryClient.QueryClient.(*mocks.EVMQueryClient)
+				client := suite.backend.clientCtx.Client.(*mocks.Client)
+				client.On("BlockResults", rpctypes.ContextWithHeight(1), mock.AnythingOfType("*int64")).
+					Return(&tmrpctypes.ResultBlockResults{Height: 1, TxsResults: internalResponseDeliverTx}, nil)
+				RegisterBaseFee(queryClient, sdk.NewInt(1))
+			},
+			&tmrpctypes.ResultBlock{Block: internalBlock},
+			0,
+			internalTxFromMsg,
 			true,
 		},
 	}

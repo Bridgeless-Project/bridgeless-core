@@ -53,16 +53,30 @@ func (b *Backend) GetTransactionByHash(txHash common.Hash) (*rpctypes.RPCTransac
 		return nil, err
 	}
 
-	// the `res.MsgIndex` is inferred from tx index, should be within the bound.
-	msg, ok := tx.GetMsgs()[res.MsgIndex].(*evmtypes.MsgEthereumTx)
-	if !ok {
-		return nil, errors.New("invalid ethereum tx")
-	}
-
 	blockRes, err := b.TendermintBlockResultByNumber(&block.Block.Height)
 	if err != nil {
 		b.logger.Debug("block result not found", "height", block.Block.Height, "error", err.Error())
 		return nil, nil
+	}
+
+	var msg *evmtypes.MsgEthereumTx
+	// For normal Ethereum txs, MsgIndex points to an actual MsgEthereumTx. For
+	// trusted internal EVM calls, MsgIndex points to the parsed event position
+	// and the Cosmos tx message is the outer module message, so reconstruct it
+	// from block events.
+	if int(res.MsgIndex) < len(tx.GetMsgs()) {
+		msg, _ = tx.GetMsgs()[res.MsgIndex].(*evmtypes.MsgEthereumTx)
+	}
+	if msg == nil {
+		for _, ethMsg := range b.EthMsgsFromTendermintBlock(block, blockRes) {
+			if ethMsg.Hash == hexTx {
+				msg = ethMsg
+				break
+			}
+		}
+	}
+	if msg == nil {
+		return nil, errors.New("invalid ethereum tx")
 	}
 
 	if res.EthTxIndex == -1 {
@@ -91,6 +105,16 @@ func (b *Backend) GetTransactionByHash(txHash common.Hash) (*rpctypes.RPCTransac
 
 	height := uint64(res.Height)    //#nosec G701 -- checked for int overflow already
 	index := uint64(res.EthTxIndex) //#nosec G701 -- checked for int overflow already
+	if _, internal := internalEthTxHashes(blockRes)[common.HexToHash(msg.Hash)]; internal {
+		return rpctypes.NewTrustedTransactionFromMsg(
+			msg,
+			common.BytesToHash(block.BlockID.Hash.Bytes()),
+			height,
+			index,
+			baseFee,
+			b.chainID,
+		)
+	}
 	return rpctypes.NewTransactionFromMsg(
 		msg,
 		common.BytesToHash(block.BlockID.Hash.Bytes()),
@@ -170,13 +194,6 @@ func (b *Backend) GetTransactionReceipt(hash common.Hash) (map[string]interface{
 		b.logger.Debug("decoding failed", "error", err.Error())
 		return nil, fmt.Errorf("failed to decode tx: %w", err)
 	}
-	ethMsg := tx.GetMsgs()[res.MsgIndex].(*evmtypes.MsgEthereumTx)
-
-	txData, err := evmtypes.UnpackTxData(ethMsg.Data)
-	if err != nil {
-		b.logger.Error("failed to unpack tx data", "error", err.Error())
-		return nil, err
-	}
 
 	cumulativeGasUsed := uint64(0)
 	blockRes, err := b.TendermintBlockResultByNumber(&res.Height)
@@ -184,6 +201,29 @@ func (b *Backend) GetTransactionReceipt(hash common.Hash) (map[string]interface{
 		b.logger.Debug("failed to retrieve block results", "height", res.Height, "error", err.Error())
 		return nil, nil
 	}
+
+	var ethMsg *evmtypes.MsgEthereumTx
+	if int(res.MsgIndex) < len(tx.GetMsgs()) {
+		ethMsg, _ = tx.GetMsgs()[res.MsgIndex].(*evmtypes.MsgEthereumTx)
+	}
+	if ethMsg == nil {
+		for _, msg := range b.EthMsgsFromTendermintBlock(resBlock, blockRes) {
+			if msg.Hash == hexTx {
+				ethMsg = msg
+				break
+			}
+		}
+	}
+	if ethMsg == nil {
+		return nil, errors.New("invalid ethereum tx")
+	}
+
+	txData, err := evmtypes.UnpackTxData(ethMsg.Data)
+	if err != nil {
+		b.logger.Error("failed to unpack tx data", "error", err.Error())
+		return nil, err
+	}
+
 	for _, txResult := range blockRes.TxsResults[0:res.TxIndex] {
 		cumulativeGasUsed += uint64(txResult.GasUsed) // #nosec G701 -- checked for int overflow already
 	}
@@ -195,14 +235,19 @@ func (b *Backend) GetTransactionReceipt(hash common.Hash) (map[string]interface{
 	} else {
 		status = hexutil.Uint(ethtypes.ReceiptStatusSuccessful)
 	}
-	chainID, err := b.ChainID()
-	if err != nil {
-		return nil, err
-	}
-
-	from, err := ethMsg.GetSender(chainID.ToInt())
-	if err != nil {
-		return nil, err
+	_, internal := internalEthTxHashes(blockRes)[hash]
+	var from common.Address
+	if internal {
+		from = common.HexToAddress(ethMsg.From)
+	} else {
+		chainID, err := b.ChainID()
+		if err != nil {
+			return nil, err
+		}
+		from, err = ethMsg.GetSender(chainID.ToInt())
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	// parse tx logs from events
@@ -393,12 +438,18 @@ func (b *Backend) GetTransactionByBlockAndIndex(block *tmrpctypes.ResultBlock, i
 			return nil, nil
 		}
 
-		var ok bool
 		// msgIndex is inferred from tx events, should be within bound.
-		msg, ok = tx.GetMsgs()[res.MsgIndex].(*evmtypes.MsgEthereumTx)
-		if !ok {
-			b.logger.Debug("invalid ethereum tx", "height", block.Block.Header, "index", idx)
-			return nil, nil
+		if int(res.MsgIndex) < len(tx.GetMsgs()) {
+			msg, _ = tx.GetMsgs()[res.MsgIndex].(*evmtypes.MsgEthereumTx)
+		}
+		if msg == nil {
+			i := int(idx) // #nosec G701
+			ethMsgs := b.EthMsgsFromTendermintBlock(block, blockRes)
+			if i >= len(ethMsgs) {
+				b.logger.Debug("block txs index out of bound", "index", i)
+				return nil, nil
+			}
+			msg = ethMsgs[i]
 		}
 	} else {
 		i := int(idx) // #nosec G701
@@ -419,6 +470,16 @@ func (b *Backend) GetTransactionByBlockAndIndex(block *tmrpctypes.ResultBlock, i
 
 	height := uint64(block.Block.Height) // #nosec G701 -- checked for int overflow already
 	index := uint64(idx)                 // #nosec G701 -- checked for int overflow already
+	if _, internal := internalEthTxHashes(blockRes)[common.HexToHash(msg.Hash)]; internal {
+		return rpctypes.NewTrustedTransactionFromMsg(
+			msg,
+			common.BytesToHash(block.Block.Hash()),
+			height,
+			index,
+			baseFee,
+			b.chainID,
+		)
+	}
 	return rpctypes.NewTransactionFromMsg(
 		msg,
 		common.BytesToHash(block.Block.Hash()),
