@@ -19,10 +19,17 @@ func (m msgServer) SubmitSwapTx(goCtx context.Context, msg *types.MsgSubmitSwapT
 	if !m.bridge.IsParty(ctx, msg.Creator) {
 		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "creator is not an authorized bridge party")
 	}
+	
+	var (
+		commission *bridgetypes.Commission
+		err        error
+	)
 
-	commission, err := m.computeCommission(ctx, msg.Tx)
-	if err != nil {
-		return nil, errorsmod.Wrap(err, "failed to compute commission")
+	if msg.Tx.IsFeeDistribution {
+		commission, err = m.computeCommission(ctx, msg.Tx)
+		if err != nil {
+			return nil, errorsmod.Wrap(err, "failed to compute commission")
+		}
 	}
 
 	if _, found := m.GetSwap(ctx, msg.Tx.Tx.DepositTxHash, msg.Tx.Tx.DepositTxIndex, msg.Tx.Tx.DepositChainId); found {

@@ -30,7 +30,7 @@ func (k Keeper) computeCommission(ctx sdk.Context, tx *types.SwapTransaction) (*
 		return nil, errorsmod.Wrapf(bridgetypes.ErrInvalidCommission, "invalid commission amount: %s", commission.Amount)
 	}
 
-	withdrawalAmount, ok := new(big.Int).SetString(commission.Amount, 10)
+	withdrawalAmount, ok := new(big.Int).SetString(tx.Tx.WithdrawalAmount, 10)
 	if !ok {
 		return nil, errorsmod.Wrapf(bridgetypes.ErrInvalidAmount, "invalid withdrawal amount: %s", tx.Tx.WithdrawalAmount)
 	}

@@ -47,7 +47,7 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 		return nil, errorsmod.Wrap(err, "failed to build swap path")
 	}
 
-	amountIn, err := parseUintString(msg.Tx.Tx.WithdrawalAmount)
+	amountIn, err := utils.ParseUintString(msg.Tx.Tx.WithdrawalAmount)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "failed to parse deposit amount")
 	}
@@ -82,7 +82,7 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 			MinDestinationAmount:     amountOutMin,
 			SwapDeadline:             new(big.Int).SetUint64(msg.Tx.SwapDeadline),
 			Path:                     path,
-			IsDestinationTokenNative: utils.IsZeroAddress(finalDestinationTokenInfo.Address),
+			IsDestinationTokenNative: utils.IsZeroAddress(finalDestinationTokenInfo.Address) && finalDestinationTokenInfo.ChainId == utils.GetChainId(ctx),
 		},
 		swaptypes.SwapperDepositParams{
 			Receiver:   msg.Tx.FinalReceiver,

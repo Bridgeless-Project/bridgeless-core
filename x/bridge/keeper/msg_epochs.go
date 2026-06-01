@@ -24,21 +24,7 @@ func (m msgServer) DistributeFees(goCtx context.Context, msg *types.MsgDistribut
 	if _, found := m.GetEpoch(ctx, msg.EpochId); !found {
 		return nil, errorsmod.Wrapf(types.ErrInvalidEpochID, "epoch %d not found", msg.EpochId)
 	}
-
-	info, err := m.GetCommissionPrices(ctx, msg.EpochId)
-	if err != nil {
-		return nil, errorsmod.Wrap(err, "failed to get commission distribution info")
-	}
-
-	for _, commission := range info {
-		comBt, err := commission.Marshal()
-		if err != nil {
-			return nil, errorsmod.Wrap(err, "failed to marshal commission distribution info")
-		}
-
-		emitDistributeFees(ctx, msg.EpochId, comBt)
-
-	}
+	emitDistributeFees(ctx, msg.EpochId)
 
 	return &types.MsgDistributeFeesResponse{}, nil
 }

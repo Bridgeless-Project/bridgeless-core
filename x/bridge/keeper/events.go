@@ -72,6 +72,19 @@ func emitSubmitEvent(sdkCtx sdk.Context, transaction types.Transaction) {
 	))
 }
 
+func emitSystemSubmitEvent(sdkCtx sdk.Context, transaction types.SystemWithdrawal) {
+	sdkCtx.EventManager().EmitEvent(sdk.NewEvent(types.EventType_DEPOSIT_SUBMITTED.String(),
+		sdk.NewAttribute(types.AttributeKeyDepositTxHash, transaction.TxHash),
+		sdk.NewAttribute(types.AttributeKeyDepositNonce, big.NewInt(int64(transaction.TxIndex)).String()),
+		sdk.NewAttribute(types.AttributeKeyWithdrawalAmount, transaction.Amount),
+		sdk.NewAttribute(types.AttributeKeyReceiver, transaction.Receiver),
+		sdk.NewAttribute(types.AttributeKeyWithdrawalToken, transaction.Token),
+		sdk.NewAttribute(types.AttributeKeySignature, transaction.Signature),
+		sdk.NewAttribute(types.AttributeKeyIsWrapped, strconv.FormatBool(transaction.IsWrapped)),
+		sdk.NewAttribute(types.AttributeEpochId, big.NewInt(int64(transaction.EpochId)).String()),
+	))
+}
+
 func emitStartEpochEvent(sdkCtx sdk.Context, epochId uint32, info string, threshold uint32, startTime int64) {
 	sdkCtx.EventManager().EmitEvent(
 		sdk.NewEvent(types.EventType_STARTED_NEW_EPOCH.String(),
@@ -83,11 +96,10 @@ func emitStartEpochEvent(sdkCtx sdk.Context, epochId uint32, info string, thresh
 	)
 }
 
-func emitDistributeFees(sdkCtx sdk.Context, epochId uint32, info []byte) {
+func emitDistributeFees(sdkCtx sdk.Context, epochId uint32) {
 	sdkCtx.EventManager().EmitEvent(
 		sdk.NewEvent(types.EventType_DISTRIBUTE_FEES.String(),
 			sdk.NewAttribute(types.AttributeEpochId, big.NewInt(int64(epochId)).String()),
-			sdk.NewAttribute(types.AttributeCommissions, string(info)),
 		),
 	)
 }

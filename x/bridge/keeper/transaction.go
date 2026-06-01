@@ -270,3 +270,81 @@ func isSubmitter(submitters []string, submitter string) bool {
 
 	return false
 }
+
+// ----------------------SYSTEM TRANSACTIONS----------------------
+
+func (k Keeper) SystemWithdrawal(ctx sdk.Context, withdrawal *types.SystemWithdrawal, submitter string) error {
+	// Check whether tx has enough submissions to be added to core
+	threshold := k.GetParams(ctx).TssThreshold
+	txSubmissions, found := k.GetSystemTransactionSubmissions(ctx, k.TxHash(withdrawal).String())
+	if !found {
+		txSubmissions.Hash = k.TxHash(withdrawal).String()
+	}
+
+	// If tx has been submitted before with the same address new submission is rejected
+	if isSubmitter(txSubmissions.Submitters, submitter) {
+		return errorsmod.Wrap(types.ErrTranscationAlreadySubmitted,
+			"transaction has been already submitted by this address")
+	}
+
+	txSubmissions.Submitters = append(txSubmissions.Submitters, submitter)
+	k.SetSystemTransactionSubmissions(ctx, &txSubmissions)
+
+	// If tx has not been submitted yet or has not enough submissions (less than tss threshold param)
+	// it is not set to core
+	if len(txSubmissions.Submitters) != int(threshold+1) {
+		return nil
+	}
+
+	k.SetSystemTransaction(ctx, *withdrawal)
+	emitSystemSubmitEvent(ctx, *withdrawal)
+
+	return nil
+}
+
+func (k Keeper) SetSystemTransaction(sdkCtx sdk.Context, withdrawal types.SystemWithdrawal) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreSystemTransactionPrefix))
+	tStore.Set(types.KeyTransaction(types.SystemTransactionId(&withdrawal)), k.cdc.MustMarshal(&withdrawal))
+}
+
+func (k Keeper) GetSystemTransaction(sdkCtx sdk.Context, id string) (types.SystemWithdrawal, bool) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreSystemTransactionPrefix))
+
+	var transaction types.SystemWithdrawal
+	bz := tStore.Get(types.KeyTransaction(id))
+	if bz == nil {
+		return transaction, false
+	}
+
+	k.cdc.MustUnmarshal(bz, &transaction)
+	return transaction, true
+}
+
+func (k Keeper) RemoveSystemTransaction(sdkCtx sdk.Context, id string) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreSystemTransactionPrefix))
+	tStore.Delete(types.KeyTransaction(id))
+}
+
+func (k Keeper) GetPaginatedSystemTransactions(
+	sdkCtx sdk.Context, pagination *query.PageRequest,
+) (
+	[]types.SystemWithdrawal, *query.PageResponse, error,
+) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreSystemTransactionPrefix))
+
+	var systemTransactions []types.SystemWithdrawal
+	pageRes, err := query.Paginate(tStore, pagination, func(key []byte, value []byte) error {
+		var transaction types.SystemWithdrawal
+		if err := k.cdc.Unmarshal(value, &transaction); err != nil {
+			return err
+		}
+		systemTransactions = append(systemTransactions, transaction)
+		return nil
+	})
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return systemTransactions, pageRes, nil
+}

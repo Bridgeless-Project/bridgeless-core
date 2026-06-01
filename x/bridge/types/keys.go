@@ -29,13 +29,16 @@ const (
 	ParamSupportingTime   = "SupportingTime"
 
 	// ---- Store Prefixes ------
-	StoreTokenPrefix                         = "token"
-	StoreTokenInfoPrefix                     = "token-info"
-	StoreTokenPairsPrefix                    = "token-pairs"
-	StoreChainPrefix                         = "chain"
-	StoreChainTypePrefix                     = "chain_type"
-	StoreTransactionPrefix                   = "transaction"
-	StoreTransactionSubmissionsPrefix        = "transaction-submissions"
+	StoreTokenPrefix                        = "token"
+	StoreTokenInfoPrefix                    = "token-info"
+	StoreTokenPairsPrefix                   = "token-pairs"
+	StoreChainPrefix                        = "chain"
+	StoreChainTypePrefix                    = "chain_type"
+	StoreTransactionPrefix                  = "transaction"
+	StoreTransactionSubmissionsPrefix       = "transaction-submissions"
+	StoreSystemTransactionSubmissionsPrefix = "system-transaction-submissions"
+	StoreSystemTransactionPrefix            = "system-transaction"
+
 	StoreReferralPrefix                      = "referral"
 	StoreReferralRewardsPrefix               = "referral_rewards"
 	StoreStopListTransactionsPrefix          = "stop_list_transactions"
