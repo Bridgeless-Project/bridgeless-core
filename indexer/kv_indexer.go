@@ -81,49 +81,75 @@ func (kv *KVIndexer) IndexBlock(block *tmtypes.Block, txResults []*abci.Response
 			continue
 		}
 
-		if !isEthTx(tx) {
-			continue
-		}
-
 		txs, err := rpctypes.ParseTxResult(result, tx)
 		if err != nil {
 			kv.logger.Error("Fail to parse event", "err", err, "block", height, "txIndex", txIndex)
 			continue
 		}
+		if len(txs.Txs) == 0 {
+			if isEthTx(tx) && result.Code != abci.CodeTypeOK {
+				var cumulativeGasUsed uint64
+				for msgIndex, msg := range tx.GetMsgs() {
+					ethMsg, ok := msg.(*evmtypes.MsgEthereumTx)
+					if !ok {
+						continue
+					}
+					txResult := evmostypes.TxResult{
+						Height:            height,
+						TxIndex:           uint32(txIndex),
+						MsgIndex:          uint32(msgIndex),
+						EthTxIndex:        ethTxIndex,
+						GasUsed:           ethMsg.GetGas(),
+						Failed:            true,
+						CumulativeGasUsed: cumulativeGasUsed + ethMsg.GetGas(),
+					}
+					cumulativeGasUsed = txResult.CumulativeGasUsed
+					ethTxIndex++
+
+					if err := saveTxResult(kv.clientCtx.Codec, batch, ethMsg.AsTransaction().Hash(), &txResult); err != nil {
+						return errorsmod.Wrapf(err, "IndexBlock %d", height)
+					}
+				}
+			}
+			continue
+		}
 
 		var cumulativeGasUsed uint64
-		for msgIndex, msg := range tx.GetMsgs() {
-			ethMsg := msg.(*evmtypes.MsgEthereumTx)
-			txHash := common.HexToHash(ethMsg.Hash)
-
+		for msgIndex := range txs.Txs {
+			parsedTx := txs.GetTxByMsgIndex(msgIndex)
+			if parsedTx == nil {
+				kv.logger.Error("msg index not found in events", "msgIndex", msgIndex)
+				continue
+			}
 			txResult := evmostypes.TxResult{
 				Height:     height,
 				TxIndex:    uint32(txIndex),
 				MsgIndex:   uint32(msgIndex),
 				EthTxIndex: ethTxIndex,
 			}
-			if result.Code != abci.CodeTypeOK {
-				// exceeds block gas limit scenario, set gas used to gas limit because that's what's charged by ante handler.
-				// some old versions don't emit any events, so workaround here directly.
-				txResult.GasUsed = ethMsg.GetGas()
-				txResult.Failed = true
-			} else {
-				parsedTx := txs.GetTxByMsgIndex(msgIndex)
-				if parsedTx == nil {
-					kv.logger.Error("msg index not found in events", "msgIndex", msgIndex)
-					continue
-				}
-				if parsedTx.EthTxIndex >= 0 && parsedTx.EthTxIndex != ethTxIndex {
+			if parsedTx.EthTxIndex >= 0 {
+				if parsedTx.EthTxIndex != ethTxIndex {
 					kv.logger.Error("eth tx index don't match", "expect", ethTxIndex, "found", parsedTx.EthTxIndex)
 				}
-				txResult.GasUsed = parsedTx.GasUsed
-				txResult.Failed = parsedTx.Failed
+				txResult.EthTxIndex = parsedTx.EthTxIndex
 			}
+			txResult.GasUsed = parsedTx.GasUsed
+			txResult.Failed = parsedTx.Failed
 
 			cumulativeGasUsed += txResult.GasUsed
 			txResult.CumulativeGasUsed = cumulativeGasUsed
 			ethTxIndex++
 
+			txHash := parsedTx.Hash
+			if txHash == (common.Hash{}) && isEthTx(tx) && msgIndex < len(tx.GetMsgs()) {
+				if ethMsg, ok := tx.GetMsgs()[msgIndex].(*evmtypes.MsgEthereumTx); ok {
+					txHash = ethMsg.AsTransaction().Hash()
+				}
+			}
+			if txHash == (common.Hash{}) {
+				kv.logger.Error("eth tx hash not found in events", "msgIndex", msgIndex)
+				continue
+			}
 			if err := saveTxResult(kv.clientCtx.Codec, batch, txHash, &txResult); err != nil {
 				return errorsmod.Wrapf(err, "IndexBlock %d", height)
 			}
