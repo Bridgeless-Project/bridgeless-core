@@ -464,6 +464,7 @@ func NewBridge(
 		keys[bridgetypes.StoreKey],
 		app.GetSubspace(bridgetypes.ModuleName),
 		app.BankKeeper,
+		app.Erc20Keeper,
 	)
 
 	app.AccumulatorKeeper = accumulatorkeeper.NewKeeper(
@@ -604,6 +605,7 @@ func NewBridge(
 			app.Erc20Keeper.Hooks(),
 			app.RevenueKeeper.Hooks(),
 			app.ClaimsKeeper.Hooks(),
+			app.BridgeKeeper.Hooks(),
 		),
 	)
 

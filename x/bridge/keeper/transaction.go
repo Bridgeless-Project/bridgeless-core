@@ -304,7 +304,7 @@ func (k Keeper) SystemWithdrawal(ctx sdk.Context, withdrawal *types.SystemWithdr
 
 func (k Keeper) SetSystemTransaction(sdkCtx sdk.Context, withdrawal types.SystemWithdrawal) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreSystemTransactionPrefix))
-	tStore.Set(types.KeyTransaction(types.SystemTransactionId(&withdrawal)), k.cdc.MustMarshal(&withdrawal))
+	tStore.Set(types.KeyTransaction(withdrawal.TxHash), k.cdc.MustMarshal(&withdrawal))
 }
 
 func (k Keeper) GetSystemTransaction(sdkCtx sdk.Context, id string) (types.SystemWithdrawal, bool) {

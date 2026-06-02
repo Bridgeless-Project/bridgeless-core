@@ -52,7 +52,8 @@ message SystemWithdrawal {
   bool is_wrapped = 7;
   string amount = 8;
   uint32 epoch_id = 9;
-  ReferralRewards referral_rewards = 10;
+  repeated ReferralRewards referral_rewards = 10 [(gogoproto.nullable) = false];
+  string status = 11;
 }
 
 

@@ -61,10 +61,7 @@ func (k queryServer) SystemWithdrawalById(goCtx context.Context, req *types.Quer
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	withdrawal, found := k.GetSystemTransaction(ctx, types.SystemTransactionId(&types.SystemWithdrawal{
-		TxHash:  req.TxHash,
-		TxIndex: req.TxIndex,
-	}))
+	withdrawal, found := k.GetSystemTransaction(ctx, req.TxHash)
 	if !found {
 		return nil, status.Error(codes.NotFound, "system withdrawal not found")
 	}

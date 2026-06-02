@@ -387,10 +387,6 @@ func local_request_Query_GetTokens_0(ctx context.Context, marshaler runtime.Mars
 
 }
 
-var (
-	filter_Query_GetCommissionByToken_0 = &utilities.DoubleArray{Encoding: map[string]int{"token_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
-)
-
 func request_Query_GetCommissionByToken_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq QueryGetCommissionByToken
 	var metadata runtime.ServerMetadata
@@ -413,11 +409,15 @@ func request_Query_GetCommissionByToken_0(ctx context.Context, marshaler runtime
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "token_id", err)
 	}
 
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	val, ok = pathParams["epoch_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "epoch_id")
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_GetCommissionByToken_0); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+
+	protoReq.EpochId, err = runtime.Uint32(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "epoch_id", err)
 	}
 
 	msg, err := client.GetCommissionByToken(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -447,11 +447,15 @@ func local_request_Query_GetCommissionByToken_0(ctx context.Context, marshaler r
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "token_id", err)
 	}
 
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	val, ok = pathParams["epoch_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "epoch_id")
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_GetCommissionByToken_0); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+
+	protoReq.EpochId, err = runtime.Uint32(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "epoch_id", err)
 	}
 
 	msg, err := server.GetCommissionByToken(ctx, &protoReq)
@@ -2920,7 +2924,7 @@ var (
 
 	pattern_Query_GetTokens_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "tokens"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_GetCommissionByToken_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"cosmos", "bridge", "tokens", "commissions", "token_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetCommissionByToken_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"cosmos", "bridge", "tokens", "commissions", "token_id", "epoch_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_Query_GetCommissions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "commissions"}, "", runtime.AssumeColonVerbOpt(true)))
 

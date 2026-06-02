@@ -3,7 +3,9 @@ package types
 import (
 	"math/big"
 
+	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
 )
 
@@ -18,4 +20,15 @@ type BankKeeper interface {
 
 type BridgeHook interface {
 	GetTokenPrice(ctx sdk.Context, tokenAddress string, amountIn *big.Int) (*big.Int, []common.Address, error)
+}
+
+type ERC20Keeper interface {
+	CallEVM(
+		ctx sdk.Context,
+		abi abi.ABI,
+		from, contract common.Address,
+		commit bool,
+		method string,
+		args ...interface{},
+	) (*evmtypes.MsgEthereumTxResponse, error)
 }

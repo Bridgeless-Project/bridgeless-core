@@ -53,7 +53,7 @@ service Query {
   }
 
   rpc GetCommissionByToken(QueryGetCommissionByToken) returns (QueryGetCommissionByTokenResponse) {
-    option (google.api.http).get = "/cosmos/bridge/tokens/commissions/{token_id}";
+    option (google.api.http).get = "/cosmos/bridge/tokens/commissions/{token_id}/{epoch_id}";
   }
 
   rpc GetCommissions(QueryGetCommissions) returns (QueryGetCommissionsResponse) {

@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 const (
@@ -21,12 +24,13 @@ const (
 	MemStoreKey = "mem_bridge"
 
 	// ----- Param Keys -----
-	ParamModuleAdminKey   = "ModuleAdmin"
-	ParamModulePartiesKey = "Parties"
-	ParamTssThresholdKey  = "TssThreshold"
-	ParamRelayerAccounts  = "RelayerAccounts"
-	ParamEpochId          = "EpochId"
-	ParamSupportingTime   = "SupportingTime"
+	ParamModuleAdminKey       = "ModuleAdmin"
+	ParamModulePartiesKey     = "Parties"
+	ParamTssThresholdKey      = "TssThreshold"
+	ParamRelayerAccounts      = "RelayerAccounts"
+	ParamEpochId              = "EpochId"
+	ParamSupportingTime       = "SupportingTime"
+	ParamUniswapRouterAddress = "UniswapRouterAddress"
 
 	// ---- Store Prefixes ------
 	StoreTokenPrefix                        = "token"
@@ -84,6 +88,13 @@ const (
 
 	AttributeCommissions = "commissions"
 )
+
+// ModuleAddress is the native module address for EVM
+var ModuleAddress common.Address
+
+func init() {
+	ModuleAddress = common.BytesToAddress(authtypes.NewModuleAddress(ModuleName).Bytes())
+}
 
 func Prefix(p string) []byte {
 	return []byte(p + "/")

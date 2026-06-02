@@ -19,6 +19,7 @@ type (
 		memKey     storetypes.StoreKey
 		paramstore paramtypes.Subspace
 		bank       types.BankKeeper
+		erc20      types.ERC20Keeper
 		hooks      types.BridgeHook
 	}
 )
@@ -29,6 +30,7 @@ func NewKeeper(
 	memKey storetypes.StoreKey,
 	ps paramtypes.Subspace,
 	bankkeeper types.BankKeeper,
+	erc20 types.ERC20Keeper,
 ) *Keeper {
 	// set KeyTable if it has not already been set
 	if !ps.HasKeyTable() {
@@ -41,6 +43,7 @@ func NewKeeper(
 		memKey:     memKey,
 		paramstore: ps,
 		bank:       bankkeeper,
+		erc20:      erc20,
 	}
 }
 
@@ -56,7 +59,12 @@ func (k *Keeper) PartiesDistributeFee(ctx sdk.Context, epochId uint32, fee sdk.C
 
 	tokensToSend := fee.Amount.QuoRaw(int64(len(epoch.Parties)))
 	for _, party := range epoch.Parties {
-		err := k.bank.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.AccAddress(party.Address), sdk.NewCoins(sdk.NewCoin(fee.Denom, tokensToSend)))
+		partyAddress, err := sdk.AccAddressFromBech32(party.Address)
+		if err != nil {
+			return errors.Wrap(err, "invalid party address")
+		}
+
+		err = k.bank.SendCoinsFromModuleToAccount(ctx, types.ModuleName, partyAddress, sdk.NewCoins(sdk.NewCoin(fee.Denom, tokensToSend)))
 		if err != nil {
 			return errors.Wrap(err, "failed to distribute fee to party")
 		}
