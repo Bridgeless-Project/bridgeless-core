@@ -195,7 +195,7 @@ func (k Keeper) CallEVMAsTx(
 		)
 	}
 
-	resp, err := k.CallEVMWithDataAsTx(ctx, from, &contract, data, commit)
+	resp, err := k.CallEVMWithDataAsTx(ctx, from, contract, data, commit)
 	if err != nil {
 		return nil, errorsmod.Wrapf(err, "contract call failed: method '%s', contract '%s'", method, contract)
 	}
@@ -231,7 +231,7 @@ func (k Keeper) CallEVMWithData(
 			GasCap: config.DefaultGasCap,
 		})
 		if err != nil {
-			return nil, err
+			return nil, errorsmod.Wrap(err, "failed to estimate gas cap")
 		}
 		gasCap = gasRes.Gas
 	}
@@ -253,7 +253,7 @@ func (k Keeper) CallEVMWithData(
 
 	res, err := k.evmKeeper.ApplyMessage(ctx, msg, evmtypes.NewNoOpTracer(), commit)
 	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "failed to apply message")
 	}
 
 	if res.Failed() {
@@ -262,7 +262,7 @@ func (k Keeper) CallEVMWithData(
 
 	err = k.evmKeeper.BroadcastTxResponse(ctx, from.String(), amount.String(), contract.String(), ethtypes.AccessListTxType, nonce, res)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to broadcast tx")
+		return nil, errorsmod.Wrap(err, "failed to broadcast tx")
 	}
 
 	return res, nil
@@ -274,22 +274,23 @@ func (k Keeper) CallEVMWithData(
 func (k Keeper) CallEVMWithDataAsTx(
 	ctx sdk.Context,
 	from common.Address,
-	contract *common.Address,
+	contract common.Address,
 	data []byte,
 	commit bool,
 ) (*evmtypes.MsgEthereumTxResponse, error) {
 	nonce, err := k.accountKeeper.GetSequence(ctx, from.Bytes())
 	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "failed to get account sequence")
 	}
 
 	gasCap, err := k.estimateGasCap(ctx, from, contract, data, commit)
 	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "failed to estimate gas cap")
 	}
 
-	amount := big.NewInt(0)
+	// This list MUST be empty
 	accessList := ethtypes.AccessList{}
+	amount := big.NewInt(0)
 	msgEthTx := evmtypes.NewTx(&evmtypes.EvmTxArgs{
 		Nonce:    nonce,
 		GasLimit: gasCap,
@@ -297,21 +298,21 @@ func (k Keeper) CallEVMWithDataAsTx(
 		GasPrice: big.NewInt(0),
 		ChainID:  k.evmKeeper.ChainID(),
 		Amount:   amount,
-		To:       contract,
+		To:       &contract,
 		Accesses: &accessList,
 	})
 	msgEthTx.From = from.Hex()
 
 	tx := msgEthTx.AsTransaction()
 	txConfig := k.evmKeeper.TxConfig(ctx, tx.Hash())
-	cfg, err := k.evmKeeper.EVMConfig(ctx, sdk.ConsAddress(ctx.BlockHeader().ProposerAddress), k.evmKeeper.ChainID())
+	cfg, err := k.evmKeeper.EVMConfig(ctx, ctx.BlockHeader().ProposerAddress, k.evmKeeper.ChainID())
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "failed to load evm config")
 	}
 
 	msg := ethtypes.NewMessage(
 		from,
-		contract,
+		&contract,
 		nonce,
 		amount,
 		gasCap,
@@ -323,33 +324,39 @@ func (k Keeper) CallEVMWithDataAsTx(
 		!commit,
 	)
 
+	// The tracer MUST be nil here
 	res, err := k.evmKeeper.ApplyMessageWithConfig(ctx, msg, nil, commit, cfg, txConfig)
 	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "failed to apply tx")
 	}
 
 	if res.Failed() {
 		return nil, errorsmod.Wrap(evmtypes.ErrVMExecution, res.VmError)
 	}
 
-	recipient := ""
-	if contract != nil {
-		recipient = contract.String()
-	}
-	if err = k.evmKeeper.BroadcastTxResponse(ctx, from.String(), amount.String(), recipient, tx.Type(), uint64(txConfig.TxIndex), res); err != nil {
+	if err = k.evmKeeper.BroadcastTxResponse(
+		ctx,
+		from.String(),
+		amount.String(),
+		contract.String(),
+		tx.Type(),
+		uint64(txConfig.TxIndex),
+		res,
+	); err != nil {
 		return nil, errors.Wrap(err, "failed to broadcast tx")
 	}
 
-	// indexer keys
 	chainID := big.NewInt(0)
 	if tx.ChainId() != nil {
 		chainID = tx.ChainId()
 	}
+
+	// Broadcast InternalEthereumTx event
 	ctx.EventManager().EmitEvent(sdk.NewEvent(
 		evmtypes.EventTypeInternalEthereumTx,
 		sdk.NewAttribute(evmtypes.AttributeKeyEthereumTxHash, res.Hash),
 		sdk.NewAttribute(evmtypes.AttributeKeyEthereumTxFrom, from.Hex()),
-		sdk.NewAttribute(evmtypes.AttributeKeyRecipient, recipient),
+		sdk.NewAttribute(evmtypes.AttributeKeyRecipient, contract.String()),
 		sdk.NewAttribute(evmtypes.AttributeKeyEthereumTxInput, hexutil.Encode(data)),
 		sdk.NewAttribute(evmtypes.AttributeKeyTxNonce, strconv.FormatUint(nonce, 10)),
 		sdk.NewAttribute(evmtypes.AttributeKeyTxGasLimit, strconv.FormatUint(gasCap, 10)),
@@ -366,7 +373,7 @@ func (k Keeper) CallEVMWithDataAsTx(
 func (k Keeper) estimateGasCap(
 	ctx sdk.Context,
 	from common.Address,
-	contract *common.Address,
+	contract common.Address,
 	data []byte,
 	commit bool,
 ) (uint64, error) {
@@ -377,7 +384,7 @@ func (k Keeper) estimateGasCap(
 
 	args, err := json.Marshal(evmtypes.TransactionArgs{
 		From: &from,
-		To:   contract,
+		To:   &contract,
 		Data: (*hexutil.Bytes)(&data),
 	})
 	if err != nil {
@@ -389,7 +396,7 @@ func (k Keeper) estimateGasCap(
 		GasCap: config.DefaultGasCap,
 	})
 	if err != nil {
-		return 0, err
+		return 0, errorsmod.Wrapf(err, "failed to estimate gas cap")
 	}
 
 	return gasRes.Gas, nil

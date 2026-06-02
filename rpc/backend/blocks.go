@@ -335,35 +335,35 @@ func internalEthMsgFromEvent(event abci.Event) (*evmtypes.MsgEthereumTx, error) 
 
 	nonce, err := strconv.ParseUint(attrs[evmtypes.AttributeKeyTxNonce], 10, 64)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "failed to parse tx nonce")
 	}
 	gasLimit, err := strconv.ParseUint(attrs[evmtypes.AttributeKeyTxGasLimit], 10, 64)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "failed to parse gas limit")
 	}
 
 	input, err := hexutil.Decode(attrs[evmtypes.AttributeKeyEthereumTxInput])
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "failed to decode transaction input")
 	}
 
 	gasPrice, ok := new(big.Int).SetString(attrs[evmtypes.AttributeKeyTxGasPrice], 10)
 	if !ok {
-		return nil, fmt.Errorf("invalid internal ethereum tx gas price")
+		return nil, errors.New("invalid internal eth tx gas price")
 	}
 	amount, ok := new(big.Int).SetString(attrs[evmtypes.AttributeKeyTxAmount], 10)
 	if !ok {
-		return nil, fmt.Errorf("invalid internal ethereum tx amount")
+		return nil, errors.New("invalid internal eth tx amount")
 	}
 	chainID, ok := new(big.Int).SetString(attrs[evmtypes.AttributeKeyTxChainID], 10)
 	if !ok {
-		return nil, fmt.Errorf("invalid internal ethereum tx chain ID")
+		return nil, errors.New("invalid internal eth tx chain ID")
 	}
 
 	var to *common.Address
 	if recipient := attrs[evmtypes.AttributeKeyRecipient]; recipient != "" {
 		if !common.IsHexAddress(recipient) {
-			return nil, fmt.Errorf("invalid internal ethereum tx recipient")
+			return nil, errors.New("invalid internal ethereum tx recipient")
 		}
 		addr := common.HexToAddress(recipient)
 		to = &addr
