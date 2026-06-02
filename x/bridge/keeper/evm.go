@@ -19,6 +19,8 @@ import (
 
 const contractEventDeposited = "DepositedERC20"
 
+const transferMethod = "transfer"
+
 // PostTxProcessing listens for configured bridge contract deposit events and
 // distributes the corresponding stored system withdrawal fees.
 func (k Keeper) PostTxProcessing(ctx sdk.Context, _ core.Message, receipt *ethtypes.Receipt) error {
@@ -176,13 +178,13 @@ func (k Keeper) distributeReferralReward(ctx sdk.Context, rewards types.Referral
 }
 
 func (k Keeper) sendTokens(ctx sdk.Context, amount *big.Int, token common.Address, receiver common.Address) error {
-	_, err := k.erc20.CallEVM(
+	_, err := k.erc20.CallEVMAsTx(
 		ctx,
 		contracts.ERC20BurnableContract.ABI,
 		types.ModuleAddress,
 		token,
 		true,
-		"transfer",
+		transferMethod,
 		receiver,
 		amount,
 	)
