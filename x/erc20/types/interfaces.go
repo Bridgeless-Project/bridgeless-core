@@ -18,6 +18,7 @@ package types
 
 import (
 	"context"
+	"math/big"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -61,11 +62,22 @@ type StakingKeeper interface {
 
 // EVMKeeper defines the expected EVM keeper interface used on erc20
 type EVMKeeper interface {
+	ChainID() *big.Int
 	GetParams(ctx sdk.Context) evmtypes.Params
 	GetAccountWithoutBalance(ctx sdk.Context, addr common.Address) *statedb.Account
+	EVMConfig(ctx sdk.Context, proposerAddress sdk.ConsAddress, chainID *big.Int) (*statedb.EVMConfig, error)
+	TxConfig(ctx sdk.Context, txHash common.Hash) statedb.TxConfig
 	EstimateGas(c context.Context, req *evmtypes.EthCallRequest) (*evmtypes.EstimateGasResponse, error)
 	ApplyMessage(ctx sdk.Context, msg core.Message, tracer vm.EVMLogger, commit bool) (*evmtypes.MsgEthereumTxResponse, error)
-	BroadcastTxResponce(
+	ApplyMessageWithConfig(
+		ctx sdk.Context,
+		msg core.Message,
+		tracer vm.EVMLogger,
+		commit bool,
+		cfg *statedb.EVMConfig,
+		txConfig statedb.TxConfig,
+	) (*evmtypes.MsgEthereumTxResponse, error)
+	BroadcastTxResponse(
 		ctx sdk.Context,
 		sender string,
 		amount string,

@@ -57,10 +57,13 @@ func TestKVIndexer(t *testing.T) {
 	txBz2, err := clientCtx.TxConfig.TxEncoder()(tmTx2)
 	require.NoError(t, err)
 
+	internalTxHash := common.HexToHash("0x1111111111111111111111111111111111111111111111111111111111111111")
+
 	testCases := []struct {
 		name        string
 		block       *tmtypes.Block
 		blockResult []*abci.ResponseDeliverTx
+		expHash     common.Hash
 		expSuccess  bool
 	}{
 		{
@@ -81,6 +84,7 @@ func TestKVIndexer(t *testing.T) {
 					},
 				},
 			},
+			common.Hash{},
 			true,
 		},
 		{
@@ -103,6 +107,7 @@ func TestKVIndexer(t *testing.T) {
 					},
 				},
 			},
+			common.Hash{},
 			true,
 		},
 		{
@@ -115,6 +120,28 @@ func TestKVIndexer(t *testing.T) {
 					Events: []abci.Event{},
 				},
 			},
+			common.Hash{},
+			true,
+		},
+		{
+			"success, internal ethereum tx from cosmos tx",
+			&tmtypes.Block{Header: tmtypes.Header{Height: 1}, Data: tmtypes.Data{Txs: []tmtypes.Tx{txBz2}}},
+			[]*abci.ResponseDeliverTx{
+				{
+					Code: 0,
+					Events: []abci.Event{
+						{Type: types.EventTypeEthereumTx, Attributes: []abci.EventAttribute{
+							{Key: []byte("ethereumTxHash"), Value: []byte(internalTxHash.Hex())},
+							{Key: []byte("txIndex"), Value: []byte("0")},
+							{Key: []byte("amount"), Value: []byte("0")},
+							{Key: []byte("txGasUsed"), Value: []byte("21000")},
+							{Key: []byte("txHash"), Value: []byte("")},
+							{Key: []byte("recipient"), Value: []byte("0x775b87ef5D82ca211811C1a02CE0fE0CA3a455d7")},
+						}},
+					},
+				},
+			},
+			internalTxHash,
 			true,
 		},
 		{
@@ -127,6 +154,7 @@ func TestKVIndexer(t *testing.T) {
 					Events: []abci.Event{},
 				},
 			},
+			common.Hash{},
 			false,
 		},
 		{
@@ -138,6 +166,7 @@ func TestKVIndexer(t *testing.T) {
 					Events: []abci.Event{},
 				},
 			},
+			common.Hash{},
 			false,
 		},
 		{
@@ -149,6 +178,7 @@ func TestKVIndexer(t *testing.T) {
 					Events: []abci.Event{},
 				},
 			},
+			common.Hash{},
 			false,
 		},
 	}
@@ -169,6 +199,10 @@ func TestKVIndexer(t *testing.T) {
 				require.NoError(t, err)
 				require.Equal(t, int64(-1), last)
 			} else {
+				expHash := tc.expHash
+				if expHash == (common.Hash{}) {
+					expHash = txHash
+				}
 				first, err := idxer.FirstIndexedBlock()
 				require.NoError(t, err)
 				require.Equal(t, tc.block.Header.Height, first)
@@ -177,7 +211,7 @@ func TestKVIndexer(t *testing.T) {
 				require.NoError(t, err)
 				require.Equal(t, tc.block.Header.Height, last)
 
-				res1, err := idxer.GetByTxHash(txHash)
+				res1, err := idxer.GetByTxHash(expHash)
 				require.NoError(t, err)
 				require.NotNil(t, res1)
 				res2, err := idxer.GetByBlockAndIndex(1, 0)

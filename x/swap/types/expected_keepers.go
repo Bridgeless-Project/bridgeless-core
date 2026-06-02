@@ -38,4 +38,12 @@ type ERC20Keeper interface {
 		method string,
 		args ...interface{},
 	) (*evmtypes.MsgEthereumTxResponse, error)
+	CallEVMAsTx(
+		ctx sdk.Context,
+		abi abi.ABI,
+		from, contract common.Address,
+		commit bool,
+		method string,
+		args ...interface{},
+	) (*evmtypes.MsgEthereumTxResponse, error)
 }

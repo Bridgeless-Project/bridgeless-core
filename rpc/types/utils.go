@@ -168,6 +168,30 @@ func NewTransactionFromMsg(
 	return NewRPCTransaction(tx, blockHash, blockNumber, index, baseFee, chainID)
 }
 
+// NewTrustedTransactionFromMsg returns an RPC transaction for an internally
+// generated Ethereum tx whose sender was trusted by the module instead of
+// recovered from an Ethereum signature.
+func NewTrustedTransactionFromMsg(
+	msg *evmtypes.MsgEthereumTx,
+	blockHash common.Hash,
+	blockNumber, index uint64,
+	baseFee *big.Int,
+	chainID *big.Int,
+) (*RPCTransaction, error) {
+	tx := msg.AsTransaction()
+	rpcTx, err := NewRPCTransaction(tx, blockHash, blockNumber, index, baseFee, chainID)
+	if err != nil {
+		return nil, err
+	}
+	if msg.From != "" {
+		rpcTx.From = common.HexToAddress(msg.From)
+	}
+	if msg.Hash != "" {
+		rpcTx.Hash = common.HexToHash(msg.Hash)
+	}
+	return rpcTx, nil
+}
+
 // NewTransactionFromData returns a transaction that will serialize to the RPC
 // representation, with the given location metadata set (if available).
 func NewRPCTransaction(
