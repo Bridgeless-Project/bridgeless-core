@@ -11,17 +11,17 @@ import (
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/core"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
 )
 
-const contractEventDeposited = "DepositedERC20"
+const (
+	contractEventWithdrawn = "WithdrawnERC20"
+)
 
 const transferMethod = "transfer"
 
-// PostTxProcessing listens for configured bridge contract deposit events and
+// PostTxProcessing listens for configured bridge contract withdrawal events and
 // distributes the corresponding stored system withdrawal fees.
 func (k Keeper) PostTxProcessing(ctx sdk.Context, _ core.Message, receipt *ethtypes.Receipt) error {
 	if receipt == nil || len(receipt.Logs) == 0 {
@@ -43,20 +43,20 @@ func (k Keeper) PostTxProcessing(ctx sdk.Context, _ core.Message, receipt *ethty
 			return errorsmod.Wrap(err, "failed to resolve bridge contract event")
 		}
 
-		if event.Name != contractEventDeposited {
+		if event.Name != contractEventWithdrawn {
 			continue
 		}
 
-		eventBody := contractstypes.BridgeDepositedERC20{}
+		eventBody := contractstypes.BridgeWithdrawnERC20{}
 		if err = utils.UnpackLog(contracts.BridgeContract.ABI, &eventBody, event.Name, evmLog); err != nil {
 			k.Logger(ctx).Info("failed to unpack event body")
 			continue
 		}
 
-		withdrawal, found := k.GetSystemTransaction(ctx, hexutil.Encode(crypto.Keccak256(eventBody.Amount.Bytes(), eventBody.Token.Bytes(), []byte(eventBody.Receiver))))
+		withdrawal, found := k.GetSystemTransaction(ctx, ConstructSystemTxHash(eventBody.Amount, eventBody.Token.Bytes(), eventBody.Receiver.Bytes()))
 		if !found {
 			k.Logger(ctx).Info(
-				"system withdrawal for EVM deposit log not found",
+				"system withdrawal for EVM withdrawal log not found",
 				"tx_hash", evmLog.TxHash.Hex(),
 				"tx_index", evmLog.TxIndex,
 				"log_index", evmLog.Index,
@@ -65,7 +65,7 @@ func (k Keeper) PostTxProcessing(ctx sdk.Context, _ core.Message, receipt *ethty
 		}
 
 		if len(withdrawal.Result) != 0 {
-			k.Logger(ctx).Debug("already have result for EVM deposit log")
+			k.Logger(ctx).Debug("already have result for EVM withdrawal log")
 			continue
 		}
 
