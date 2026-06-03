@@ -53,7 +53,13 @@ message SystemWithdrawal {
   string amount = 8;
   uint32 epoch_id = 9;
   repeated ReferralRewards referral_rewards = 10 [(gogoproto.nullable) = false];
-  string status = 11;
+  repeated TxResult result = 11 [(gogoproto.nullable) = false];
+}
+
+message TxResult  {
+   string tx_hash =1;
+   string address = 2;
+   uint32 referral_id =3;
 }
 
 

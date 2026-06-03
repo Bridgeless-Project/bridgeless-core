@@ -1,6 +1,8 @@
 package types
 
 import (
+	"fmt"
+
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -43,6 +45,18 @@ func (msg *MsgProcessSystemWithdrawal) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address: %s", err)
+	}
+
+	if len(msg.Withdrawal) == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "withdrawals cannot be empty")
+	}
+
+	for i, withdrawal := range msg.Withdrawal {
+		if err = validateSystemWithdrawal(&withdrawal); err != nil {
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest,
+				fmt.Sprintf("invalid system withdrawal at index %d: %s", i, err),
+			)
+		}
 	}
 
 	return nil

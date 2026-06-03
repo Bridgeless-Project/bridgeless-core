@@ -51,6 +51,62 @@ func validateTransaction(tx *Transaction) error {
 	return nil
 }
 
+func validateSystemWithdrawal(withdrawal *SystemWithdrawal) error {
+	if withdrawal == nil {
+		return errors.New("system withdrawal is nil")
+	}
+
+	if withdrawal.TxHash == "" {
+		return errors.New("tx hash cannot be empty")
+	}
+	if _, err := hexutil.Decode(withdrawal.TxHash); err != nil {
+		return errorsmod.Wrap(ErrInvalidTxHash, err.Error())
+	}
+
+	_, ok := big.NewInt(0).SetString(withdrawal.Amount, 10)
+	if !ok {
+		return errors.New(fmt.Sprintf("invalid amount: %s", withdrawal.Amount))
+	}
+
+	if withdrawal.Receiver == "" {
+		return errors.New("receiver cannot be empty")
+	}
+
+	if withdrawal.Token == "" {
+		return errors.New("token cannot be empty")
+	}
+
+	if !common.IsHexAddress(withdrawal.Token) {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidAddress, fmt.Sprintf("invalid token address: %s", withdrawal.Token))
+	}
+
+	if withdrawal.Signature == "" {
+		return errors.New("signature cannot be empty")
+	}
+
+	for _, rewards := range withdrawal.ReferralRewards {
+		if err := validateReferralRewards(&rewards); err != nil {
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid referral rewards %d: %s", rewards.ReferralId, err)
+		}
+
+		if IsDefaultReferralId(rewards.ReferralId) {
+			continue
+		}
+
+		if rewards.TokenId == 0 {
+			return errors.New("referral reward token id must be greater than zero")
+		}
+
+		_, ok = big.NewInt(0).SetString(rewards.ToClaim, 10)
+		if !ok {
+			return errors.New("invalid referral reward to claim amount")
+		}
+
+	}
+
+	return nil
+}
+
 func validateTransactionSubmissions(txSubmissions *Submissions) error {
 	if _, err := hexutil.Decode(txSubmissions.Hash); err != nil {
 		return errorsmod.Wrap(ErrInvalidTxHash, err.Error())
