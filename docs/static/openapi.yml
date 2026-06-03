@@ -2259,7 +2259,7 @@ paths:
                     type: string
                     format: uint64
                     title: >-
-                      supporting_time is the numbery of blocks after epoch start
+                      supporting_time is the number of blocks after epoch start
                       when the previous epoch should be marked as completed
                   uniswap_router_address:
                     type: string
@@ -4115,8 +4115,18 @@ paths:
                             type: string
                           total_claimed_amount:
                             type: string
-                    status:
-                      type: string
+                    result:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          tx_hash:
+                            type: string
+                          address:
+                            type: string
+                          referral_id:
+                            type: integer
+                            format: int64
               pagination:
                 type: object
                 properties:
@@ -4441,8 +4451,18 @@ paths:
                           type: string
                         total_claimed_amount:
                           type: string
-                  status:
-                    type: string
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        tx_hash:
+                          type: string
+                        address:
+                          type: string
+                        referral_id:
+                          type: integer
+                          format: int64
             description: >-
               QuerySystemWithdrawalByIdResponse is response type for the
               Query/SystemWithdrawalById RPC method.
@@ -54999,7 +55019,7 @@ definitions:
         type: string
         format: uint64
         title: >-
-          supporting_time is the numbery of blocks after epoch start when the
+          supporting_time is the number of blocks after epoch start when the
           previous epoch should be marked as completed
       uniswap_router_address:
         type: string
@@ -55923,8 +55943,8 @@ definitions:
             type: string
             format: uint64
             title: >-
-              supporting_time is the numbery of blocks after epoch start when
-              the previous epoch should be marked as completed
+              supporting_time is the number of blocks after epoch start when the
+              previous epoch should be marked as completed
           uniswap_router_address:
             type: string
     description: QueryParamsResponse is response type for the Query/Params RPC method.
@@ -55970,8 +55990,18 @@ definitions:
                   type: string
                 total_claimed_amount:
                   type: string
-          status:
-            type: string
+          result:
+            type: array
+            items:
+              type: object
+              properties:
+                tx_hash:
+                  type: string
+                address:
+                  type: string
+                referral_id:
+                  type: integer
+                  format: int64
     description: >-
       QuerySystemWithdrawalByIdResponse is response type for the
       Query/SystemWithdrawalById RPC method.
@@ -56019,8 +56049,18 @@ definitions:
                     type: string
                   total_claimed_amount:
                     type: string
-            status:
-              type: string
+            result:
+              type: array
+              items:
+                type: object
+                properties:
+                  tx_hash:
+                    type: string
+                  address:
+                    type: string
+                  referral_id:
+                    type: integer
+                    format: int64
       pagination:
         type: object
         properties:
@@ -56253,8 +56293,18 @@ definitions:
               type: string
             total_claimed_amount:
               type: string
-      status:
-        type: string
+      result:
+        type: array
+        items:
+          type: object
+          properties:
+            tx_hash:
+              type: string
+            address:
+              type: string
+            referral_id:
+              type: integer
+              format: int64
   core.bridge.TSSInfo:
     type: object
     properties:
@@ -56391,6 +56441,16 @@ definitions:
       deposit_tx_index:
         type: string
         format: uint64
+  core.bridge.TxResult:
+    type: object
+    properties:
+      tx_hash:
+        type: string
+      address:
+        type: string
+      referral_id:
+        type: integer
+        format: int64
   cosmos.base.query.v1beta1.PageRequest:
     type: object
     properties:

@@ -59,6 +59,7 @@ func validateSystemWithdrawal(withdrawal *SystemWithdrawal) error {
 	if withdrawal.TxHash == "" {
 		return errors.New("tx hash cannot be empty")
 	}
+
 	if _, err := hexutil.Decode(withdrawal.TxHash); err != nil {
 		return errorsmod.Wrap(ErrInvalidTxHash, err.Error())
 	}

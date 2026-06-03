@@ -30,7 +30,7 @@ type Params struct {
 	TssThreshold    uint32   `protobuf:"varint,3,opt,name=tss_threshold,json=tssThreshold,proto3" json:"tss_threshold,omitempty"`
 	RelayerAccounts []string `protobuf:"bytes,4,rep,name=relayer_accounts,json=relayerAccounts,proto3" json:"relayer_accounts,omitempty"`
 	Epoch           uint32   `protobuf:"varint,5,opt,name=epoch,proto3" json:"epoch,omitempty"`
-	// supporting_time is the numbery of blocks after epoch start when the previous epoch should be marked as completed
+	// supporting_time is the number of blocks after epoch start when the previous epoch should be marked as completed
 	SupportingTime       uint64 `protobuf:"varint,6,opt,name=supporting_time,json=supportingTime,proto3" json:"supporting_time,omitempty"`
 	UniswapRouterAddress string `protobuf:"bytes,7,opt,name=uniswap_router_address,json=uniswapRouterAddress,proto3" json:"uniswap_router_address,omitempty"`
 }
