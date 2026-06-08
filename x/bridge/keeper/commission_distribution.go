@@ -37,6 +37,7 @@ func (k Keeper) GetCommissionPrices(ctx sdk.Context, epochId uint32) ([]bridgety
 			AmountIn:  amount.String(),
 			AmountOut: amountOut.String(),
 			Path:      pathStr,
+			TokenId:   int64(commission.TokenId),
 		})
 	}
 

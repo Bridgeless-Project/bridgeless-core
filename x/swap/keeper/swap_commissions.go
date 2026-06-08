@@ -15,7 +15,7 @@ func (k Keeper) computeCommission(ctx sdk.Context, tx *types.SwapTransaction) (*
 	if !tx.IsFeeDistribution {
 		return nil, nil
 	}
-	depositTokenInfo, found := k.bridge.GetTokenInfo(ctx, tx.Tx.DepositToken, tx.Tx.DepositChainId)
+	depositTokenInfo, found := k.bridge.GetTokenInfo(ctx, tx.Tx.DepositChainId, tx.Tx.DepositToken)
 	if !found {
 		return nil, errorsmod.Wrapf(bridgetypes.ErrTokenInfoNotFound, "token info not found for %s on chain %s", tx.Tx.WithdrawalToken, tx.Tx.WithdrawalChainId)
 	}

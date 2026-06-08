@@ -83,6 +83,20 @@ func (k Keeper) FeeDistribute(ctx sdk.Context, withdrawal types.SystemWithdrawal
 		return errorsmod.Wrapf(types.ErrInvalidAmount, "amount %s", withdrawal.Amount)
 	}
 
+	// Update commission
+	defer func() {
+		tokenInfo, found := k.GetTokenInfo(ctx, utils.GetChainId(ctx), tokenAddress.Hex())
+		if !found {
+			k.Logger(ctx).Error("token info not found")
+			return
+		}
+
+		k.SetCommission(ctx, withdrawal.EpochId, types.Commission{
+			TokenId: tokenInfo.TokenId,
+			Amount:  remaining.String(),
+		})
+	}()
+
 	epoch, found := k.GetEpoch(ctx, withdrawal.EpochId)
 	if !found {
 		return errorsmod.Wrapf(types.ErrEpochNotFound, "epoch %d not found", withdrawal.EpochId)
@@ -109,6 +123,7 @@ func (k Keeper) FeeDistribute(ctx sdk.Context, withdrawal types.SystemWithdrawal
 	if remaining.Sign() < 0 {
 		return errorsmod.Wrapf(types.ErrInvalidAmount, "referral rewards are negative: %s", remaining.String())
 	}
+
 	if remaining.Sign() == 0 {
 		return nil
 	}
@@ -153,6 +168,10 @@ func (k Keeper) FeeDistribute(ctx sdk.Context, withdrawal types.SystemWithdrawal
 func (k Keeper) distributeReferralReward(ctx sdk.Context, rewards types.ReferralRewards, tokenAddress common.Address) (*big.Int, string, string, error) {
 	if types.IsDefaultReferralId(rewards.ReferralId) || rewards.ToClaim == "" {
 		return big.NewInt(0), "", "", nil
+	}
+
+	if err := k.validateToken(ctx, rewards.TokenId, tokenAddress); err != nil {
+		return big.NewInt(0), "", "", errorsmod.Wrap(err, "failed to validate token")
 	}
 
 	referral, found := k.GetReferral(ctx, rewards.ReferralId)
@@ -218,4 +237,23 @@ func (k Keeper) sendTokens(ctx sdk.Context, amount *big.Int, token common.Addres
 		return "", errorsmod.Wrapf(err, "failed to call erc20 burn")
 	}
 	return tx.Hash, nil
+}
+
+func (k Keeper) validateToken(ctx sdk.Context, tokenId uint64, tokenAddress common.Address) error {
+	rewardTokenInfo, err := k.tokenOnBridgeless(ctx, tokenId)
+	if err != nil {
+		return errorsmod.Wrap(err, "failed to resolve token")
+	}
+	if !common.IsHexAddress(rewardTokenInfo.Address) {
+		return errorsmod.Wrapf(types.ErrTokenInfoNotFound,
+			"invalid bridgeless token address %s for token ID %d", rewardTokenInfo.Address, tokenId)
+	}
+	rewardTokenAddress := common.HexToAddress(rewardTokenInfo.Address)
+	if rewardTokenAddress != tokenAddress {
+		return errorsmod.Wrapf(types.ErrInvalidDataType,
+			"token ID %d resolves to %s, but withdrawal token is %s",
+			tokenId, rewardTokenAddress.Hex(), tokenAddress.Hex())
+	}
+
+	return nil
 }

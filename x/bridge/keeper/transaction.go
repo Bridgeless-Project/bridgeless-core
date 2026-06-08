@@ -275,7 +275,12 @@ func isSubmitter(submitters []string, submitter string) bool {
 
 func (k Keeper) SystemWithdrawal(ctx sdk.Context, withdrawal *types.SystemWithdrawal, submitter string) error {
 	// Check whether tx has enough submissions to be added to core
-	threshold := k.GetParams(ctx).TssThreshold
+
+	epoch, found := k.GetEpoch(ctx, withdrawal.EpochId)
+	if !found {
+		return errorsmod.Wrap(types.ErrEpochNotFound, "epoch not found")
+	}
+
 	txSubmissions, found := k.GetSystemTransactionSubmissions(ctx, k.TxHash(withdrawal).String())
 	if !found {
 		txSubmissions.Hash = k.TxHash(withdrawal).String()
@@ -292,7 +297,7 @@ func (k Keeper) SystemWithdrawal(ctx sdk.Context, withdrawal *types.SystemWithdr
 
 	// If tx has not been submitted yet or has not enough submissions (less than tss threshold param)
 	// it is not set to core
-	if len(txSubmissions.Submitters) != int(threshold+1) {
+	if len(txSubmissions.Submitters) != int(epoch.TssThreshold+1) {
 		return nil
 	}
 

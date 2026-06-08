@@ -299,6 +299,7 @@ message MsgProcessSystemWithdrawal {
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   repeated  SystemWithdrawal withdrawal = 2 [(gogoproto.nullable) = false];
+  uint32 epoch_id = 3;
 }
 
 message MsgProcessSystemWithdrawalResponse {}

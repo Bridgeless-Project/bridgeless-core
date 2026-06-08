@@ -12,10 +12,11 @@ const TypeMsgProcessSystemWithdrawal = "process_system_transaction"
 
 var _ sdk.Msg = &MsgProcessSystemWithdrawal{}
 
-func NewMsgProcessSystemWithdrawal(creator string, withdrawals ...SystemWithdrawal) *MsgProcessSystemWithdrawal {
+func NewMsgProcessSystemWithdrawal(creator string, epochId uint32, withdrawals ...SystemWithdrawal) *MsgProcessSystemWithdrawal {
 	return &MsgProcessSystemWithdrawal{
 		Creator:    creator,
 		Withdrawal: withdrawals,
+		EpochId:    epochId,
 	}
 }
 

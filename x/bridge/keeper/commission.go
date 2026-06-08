@@ -20,7 +20,7 @@ func (k Keeper) GetCommission(sdkCtx sdk.Context, epochId uint32, tokenId uint64
 	eStore := prefix.NewStore(cStore, types.KeyEpoch(epochId))
 
 	var commission types.Commission
-	bz := eStore.Get(types.KeyCommission(tokenId))
+	bz := eStore.Get(types.KeyEpochCommission(epochId, tokenId))
 	if bz == nil {
 		return commission, false
 	}
@@ -32,7 +32,7 @@ func (k Keeper) RemoveCommission(sdkCtx sdk.Context, epochId uint32, tokenId uin
 	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreCommissionPrefix))
 	eStore := prefix.NewStore(cStore, types.KeyEpoch(epochId))
 
-	eStore.Delete(types.KeyCommission(tokenId))
+	eStore.Delete(types.KeyEpochCommission(epochId, tokenId))
 }
 
 func (k Keeper) GetCommissionsWithPagination(sdkCtx sdk.Context, epochId uint32, pagination *query.PageRequest) ([]types.Commission, *query.PageResponse, error) {
