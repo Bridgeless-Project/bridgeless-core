@@ -14,7 +14,7 @@ func (k queryServer) GetCommissionByToken(goctx context.Context, req *types.Quer
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 	ctx := sdk.UnwrapSDKContext(goctx)
-	commission, found := k.GetCommission(ctx, req.TokenId)
+	commission, found := k.GetCommission(ctx, req.EpochId, req.TokenId)
 	if !found {
 		return nil, types.ErrCommissionNotFound
 	}
@@ -28,7 +28,7 @@ func (k queryServer) GetCommissions(goctx context.Context, req *types.QueryGetCo
 	}
 
 	ctx := sdk.UnwrapSDKContext(goctx)
-	commissions, pages, err := k.GetCommissionsWithPagination(ctx, req.Pagination)
+	commissions, pages, err := k.GetCommissionsWithPagination(ctx, req.EpochId, req.Pagination)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}

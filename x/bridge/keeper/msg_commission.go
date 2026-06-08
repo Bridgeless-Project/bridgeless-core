@@ -15,7 +15,7 @@ func (m msgServer) SetCommission(goCtx context.Context, msg *types.MsgSetCommiss
 		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "msg sender is not module admin")
 	}
 
-	m.Keeper.SetCommission(ctx, types.Commission{
+	m.Keeper.SetCommission(ctx, msg.Epoch, types.Commission{
 		TokenId: msg.TokenId,
 		Amount:  msg.Amount,
 	})
@@ -30,13 +30,13 @@ func (m msgServer) UpdateCommission(goCtx context.Context, msg *types.MsgUpdateC
 		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "msg sender is not module admin")
 	}
 
-	commission, found := m.Keeper.GetCommission(ctx, msg.TokenId)
+	commission, found := m.Keeper.GetCommission(ctx, msg.Epoch, msg.TokenId)
 	if !found {
 		return nil, errorsmod.Wrap(types.ErrCommissionNotFound, "commission with this TokenID is not found")
 	}
 
 	commission.Amount = msg.Amount
-	m.Keeper.SetCommission(ctx, commission)
+	m.Keeper.SetCommission(ctx, msg.Epoch, commission)
 
 	return &types.MsgUpdateCommissionResponse{}, nil
 }
@@ -48,12 +48,12 @@ func (m msgServer) RemoveCommission(goCtx context.Context, msg *types.MsgRemoveC
 		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "msg sender is not module admin")
 	}
 
-	commission, found := m.Keeper.GetCommission(ctx, msg.TokenId)
+	commission, found := m.Keeper.GetCommission(ctx, msg.Epoch, msg.TokenId)
 	if !found {
 		return nil, errorsmod.Wrap(types.ErrCommissionNotFound, "commission with this TokenID is not found")
 	}
 
-	m.Keeper.RemoveCommission(ctx, commission.TokenId)
+	m.Keeper.RemoveCommission(ctx, msg.Epoch, commission.TokenId)
 
 	return &types.MsgRemoveCommissionResponse{}, nil
 }

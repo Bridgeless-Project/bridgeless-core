@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 const (
@@ -21,21 +24,25 @@ const (
 	MemStoreKey = "mem_bridge"
 
 	// ----- Param Keys -----
-	ParamModuleAdminKey   = "ModuleAdmin"
-	ParamModulePartiesKey = "Parties"
-	ParamTssThresholdKey  = "TssThreshold"
-	ParamRelayerAccounts  = "RelayerAccounts"
-	ParamEpochId          = "EpochId"
-	ParamSupportingTime   = "SupportingTime"
+	ParamModuleAdminKey       = "ModuleAdmin"
+	ParamModulePartiesKey     = "Parties"
+	ParamTssThresholdKey      = "TssThreshold"
+	ParamRelayerAccounts      = "RelayerAccounts"
+	ParamEpochId              = "EpochId"
+	ParamSupportingTime       = "SupportingTime"
+	ParamUniswapRouterAddress = "UniswapRouterAddress"
 
 	// ---- Store Prefixes ------
-	StoreTokenPrefix                         = "token"
-	StoreTokenInfoPrefix                     = "token-info"
-	StoreTokenPairsPrefix                    = "token-pairs"
-	StoreChainPrefix                         = "chain"
-	StoreChainTypePrefix                     = "chain_type"
-	StoreTransactionPrefix                   = "transaction"
-	StoreTransactionSubmissionsPrefix        = "transaction-submissions"
+	StoreTokenPrefix                        = "token"
+	StoreTokenInfoPrefix                    = "token-info"
+	StoreTokenPairsPrefix                   = "token-pairs"
+	StoreChainPrefix                        = "chain"
+	StoreChainTypePrefix                    = "chain_type"
+	StoreTransactionPrefix                  = "transaction"
+	StoreTransactionSubmissionsPrefix       = "transaction-submissions"
+	StoreSystemTransactionSubmissionsPrefix = "system-transaction-submissions"
+	StoreSystemTransactionPrefix            = "system-transaction"
+
 	StoreReferralPrefix                      = "referral"
 	StoreReferralRewardsPrefix               = "referral_rewards"
 	StoreStopListTransactionsPrefix          = "stop_list_transactions"
@@ -78,7 +85,16 @@ const (
 	AttributeEpochChainType        = "epoch_chain_type"
 	AttributeChainId               = "chain_id"
 	AttributeEpochSignatureAddress = "epoch_signature_address"
+
+	AttributeCommissions = "commissions"
 )
+
+// ModuleAddress is the native module address for EVM
+var ModuleAddress common.Address
+
+func init() {
+	ModuleAddress = common.BytesToAddress(authtypes.NewModuleAddress(ModuleName).Bytes())
+}
 
 func Prefix(p string) []byte {
 	return []byte(p + "/")
@@ -152,12 +168,6 @@ func KeyEpochPubkey(epochId uint32) []byte {
 
 func KeyEpochPubkeySubmission(epochId uint32, pubkeyHash string) []byte {
 	return []byte(fmt.Sprintf("%d/%s", epochId, pubkeyHash))
-}
-
-func KeyCommission(tokenId uint64) []byte {
-	bytes := make([]byte, 8)
-	binary.LittleEndian.PutUint64(bytes, tokenId)
-	return bytes
 }
 
 func KeyEpochCommission(epochId uint32, tokenId uint64) []byte {

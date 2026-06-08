@@ -51,9 +51,13 @@ service Msg {
     rpc SetEpochPubKey(MsgSetEpochPubKey) returns (MsgSetEpochPubKeyResponse);
     rpc RemoveEpochPubKey(MsgRemoveEpochPubKey) returns (MsgRemoveEpochPubKeyResponse);
 
+    rpc DistributeFees(MsgDistributeFees) returns (MsgDistributeFeesResponse);
+
     rpc SetCommission(MsgSetCommission) returns (MsgSetCommissionResponse);
     rpc UpdateCommission(MsgUpdateCommission) returns (MsgUpdateCommissionResponse);
     rpc RemoveCommission(MsgRemoveCommission) returns (MsgRemoveCommissionResponse);
+
+    rpc ProcessSystemWithdrawal(MsgProcessSystemWithdrawal) returns (MsgProcessSystemWithdrawalResponse);
 }
 
 // this line is used by starport scaffolding # proto/tx/message
@@ -245,6 +249,7 @@ message MsgSetCommission{
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 token_id = 2;
   string amount = 3;
+  uint32 epoch = 4;
 }
 
 message MsgSetCommissionResponse {}
@@ -255,6 +260,7 @@ message MsgUpdateCommission{
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 token_id = 2;
   string amount = 3;
+  uint32 epoch = 4;
 }
 
 message MsgUpdateCommissionResponse {}
@@ -264,9 +270,19 @@ message MsgRemoveCommission{
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 token_id = 2;
+  uint32 epoch = 4;
 }
 
 message MsgRemoveCommissionResponse {}
+
+message MsgDistributeFees {
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint32 epoch_id = 2;
+}
+
+message MsgDistributeFeesResponse {}
 
 message MsgRemoveEpochPubKey{
   option (cosmos.msg.v1.signer) = "creator";
@@ -276,3 +292,13 @@ message MsgRemoveEpochPubKey{
 }
 
 message MsgRemoveEpochPubKeyResponse {}
+
+
+message MsgProcessSystemWithdrawal {
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  repeated  SystemWithdrawal withdrawal = 2 [(gogoproto.nullable) = false];
+}
+
+message MsgProcessSystemWithdrawalResponse {}

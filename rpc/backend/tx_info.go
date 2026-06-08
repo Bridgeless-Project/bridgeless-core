@@ -221,7 +221,7 @@ func (b *Backend) GetTransactionReceipt(hash common.Hash) (map[string]interface{
 	txData, err := evmtypes.UnpackTxData(ethMsg.Data)
 	if err != nil {
 		b.logger.Error("failed to unpack tx data", "error", err.Error())
-		return nil, err
+		return nil, errors.Wrap(err, "failed to unpack tx data")
 	}
 
 	for _, txResult := range blockRes.TxsResults[0:res.TxIndex] {
