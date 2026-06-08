@@ -51,17 +51,12 @@ func CmdProcessSystemWithdrawal() *cobra.Command {
 				return err
 			}
 
-			epochId, err := strconv.ParseUint(args[1], 10, 32)
-			if err != nil {
-				return errorsmod.Wrap(err, "failed to parse epoch ID")
-			}
-
-			withdrawals, err := parseSystemWithdrawals(args[2])
+			withdrawals, err := parseSystemWithdrawals(args[1])
 			if err != nil {
 				return err
 			}
 
-			msg := types.NewMsgProcessSystemWithdrawal(clientCtx.GetFromAddress().String(), uint32(epochId), withdrawals...)
+			msg := types.NewMsgProcessSystemWithdrawal(clientCtx.GetFromAddress().String(), withdrawals...)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
