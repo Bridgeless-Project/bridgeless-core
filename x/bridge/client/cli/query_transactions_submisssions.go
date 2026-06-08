@@ -73,3 +73,68 @@ func CmdQueryTransactionSubmissionsByHash() *cobra.Command {
 
 	return cmd
 }
+
+func CmdQuerySystemTransactionsSubmissions() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "system-transactions-submissions",
+		Short: "Query bridge system transaction submissions",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+			res, err := queryClient.GetSystemTxsSubmissions(cmd.Context(), &types.QueryGetSystemTxsSubmissions{Pagination: pageReq})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+	flags.AddPaginationFlagsToCmd(cmd, "system txs")
+
+	return cmd
+}
+
+func CmdQuerySystemTransactionSubmissionsByHash() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "system-transaction-submissions [tx_hash]",
+		Short: "Query bridge system transaction submissions by hash",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			_, err = hexutil.Decode(args[0])
+			if err != nil {
+				return errorsmod.Wrap(err, "invalid transaction hash")
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+			res, err := queryClient.GetSystemTxSubmissionsByHash(cmd.Context(), &types.QueryGetSystemTxSubmissionsByHash{
+				TxHash: args[0],
+			})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}

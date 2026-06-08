@@ -10,6 +10,25 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+func (m msgServer) DistributeFees(goCtx context.Context, msg *types.MsgDistributeFees) (*types.MsgDistributeFeesResponse, error) {
+	if msg == nil {
+		return nil, errorsmod.Wrap(types.ErrInvalidDataType, "message cannot be nil")
+	}
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	params := m.Keeper.GetParams(ctx)
+	if params.ModuleAdmin != msg.Creator {
+		return nil, errorsmod.Wrapf(types.ErrPermissionDenied, "only module admin can start a fee distribution")
+	}
+
+	if _, found := m.GetEpoch(ctx, msg.EpochId); !found {
+		return nil, errorsmod.Wrapf(types.ErrInvalidEpochID, "epoch %d not found", msg.EpochId)
+	}
+	emitDistributeFees(ctx, msg.EpochId)
+
+	return &types.MsgDistributeFeesResponse{}, nil
+}
+
 func (m msgServer) StartEpoch(goCtx context.Context, msg *types.MsgStartEpoch) (*types.MsgStartEpochResponse, error) {
 	if msg == nil {
 		return nil, errorsmod.Wrap(types.ErrInvalidDataType, "message cannot be nil")
@@ -51,7 +70,6 @@ func (m msgServer) StartEpoch(goCtx context.Context, msg *types.MsgStartEpoch) (
 	if err != nil {
 		return nil, errorsmod.Wrapf(types.ErrPackEvent, "failed to marshal TSS info: %v", err)
 	}
-
 	emitStartEpochEvent(ctx, msg.EpochId, string(tssInfo), msg.TssThreshold, msg.StartTime)
 
 	return new(types.MsgStartEpochResponse), nil
