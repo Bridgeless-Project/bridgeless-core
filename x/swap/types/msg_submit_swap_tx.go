@@ -44,6 +44,9 @@ func (msg *MsgSubmitSwapTx) ValidateBasic() error {
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address: %s", err)
 	}
+	if msg.Tx == nil {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "swap transaction cannot be nil")
+	}
 
 	return nil
 }
