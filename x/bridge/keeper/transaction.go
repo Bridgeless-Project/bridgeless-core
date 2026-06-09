@@ -84,18 +84,20 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 	k.SetTransaction(ctx, *transaction)
 	emitSubmitEvent(ctx, *transaction)
 
-	token, ok := k.GetTokenInfo(ctx, transaction.DepositChainId, transaction.DepositToken)
-	if !ok {
-		return errorsmod.Wrap(types.ErrTokenInfoNotFound, "token info not found for deposit token")
-	}
-
 	// Rewards for referral are taken from CommissionAmount
 	commissionAmount, ok := big.NewInt(0).SetString(transaction.CommissionAmount, 10)
 	if !ok {
 		return errorsmod.Wrap(types.ErrInvalidDataType, "invalid withdrawal amount")
 	}
 
-	commissionToAccumulate := new(big.Int).Set(commissionAmount)
+	withdrawalToken, ok := k.GetTokenInfo(ctx, transaction.WithdrawalChainId, transaction.WithdrawalToken)
+	if !ok {
+		return errorsmod.Wrap(types.ErrTokenInfoNotFound, "withdrawal token not found")
+	}
+
+	// Transform commission decimals to bridgeless decimals (18)
+	commissionAmount = TransformAmount(commissionAmount, withdrawalToken.Decimals, 18)
+
 	if !types.IsDefaultReferralId(transaction.ReferralId) {
 		referral, ok := k.GetReferral(ctx, transaction.ReferralId)
 		if !ok {
@@ -107,33 +109,33 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 			return errorsmod.Wrap(err, "failed to calculate referral rewards")
 		}
 
-		commissionToAccumulate.Sub(commissionAmount, txReferralRewards)
+		commissionAmount.Sub(commissionAmount, txReferralRewards)
 
 		referralRewards := types.ReferralRewards{
 			ReferralId:         transaction.ReferralId,
-			TokenId:            token.TokenId,
+			TokenId:            withdrawalToken.TokenId,
 			ToClaim:            sdk.NewIntFromBigInt(txReferralRewards).String(),
 			TotalClaimedAmount: sdk.NewInt(0).String(),
 		}
 
-		if err = k.AddReferralRewards(ctx, transaction.ReferralId, token.TokenId, referralRewards); err != nil {
+		if err = k.AddReferralRewards(ctx, transaction.ReferralId, withdrawalToken.TokenId, referralRewards); err != nil {
 			return errorsmod.Wrap(err, "failed to add referral rewards")
 		}
 	}
 
-	total := new(big.Int).Set(commissionToAccumulate)
-	existingCommission, found := k.GetCommission(ctx, transaction.EpochId, token.TokenId)
+	existingCommission, found := k.GetCommission(ctx, transaction.EpochId, withdrawalToken.TokenId)
 	if found {
 		previousCommissionAmount, ok := new(big.Int).SetString(existingCommission.Amount, 10)
 		if !ok {
 			return errorsmod.Wrap(types.ErrInvalidDataType, "failed to parse existing commission amount")
 		}
-		total.Add(previousCommissionAmount, commissionToAccumulate)
+
+		commissionAmount.Add(previousCommissionAmount, commissionAmount)
 	}
 
 	k.SetCommission(ctx, transaction.EpochId, types.Commission{
-		TokenId: token.TokenId,
-		Amount:  total.String(),
+		TokenId: withdrawalToken.TokenId,
+		Amount:  commissionAmount.String(),
 	})
 
 	// we do not need to store tx for epoch 0

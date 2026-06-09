@@ -5,6 +5,7 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/contracts"
+	bridgekeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/keeper"
 	bridgetypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/swap/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -15,14 +16,15 @@ func (k Keeper) computeCommission(ctx sdk.Context, tx *types.SwapTransaction) (*
 	if !tx.IsFeeDistribution {
 		return nil, nil
 	}
-	depositTokenInfo, found := k.bridge.GetTokenInfo(ctx, tx.Tx.DepositChainId, tx.Tx.DepositToken)
-	if !found {
-		return nil, errorsmod.Wrapf(bridgetypes.ErrTokenInfoNotFound, "token info not found for %s on chain %s", tx.Tx.WithdrawalToken, tx.Tx.WithdrawalChainId)
+
+	withdrawalToken, ok := k.bridge.GetTokenInfo(ctx, tx.Tx.WithdrawalChainId, tx.Tx.WithdrawalToken)
+	if !ok {
+		return nil, errorsmod.Wrap(bridgetypes.ErrTokenInfoNotFound, "withdrawal token not found")
 	}
 
-	commission, found := k.bridge.GetCommission(ctx, tx.Tx.EpochId, depositTokenInfo.TokenId)
+	commission, found := k.bridge.GetCommission(ctx, tx.Tx.EpochId, withdrawalToken.TokenId)
 	if !found {
-		return nil, errorsmod.Wrapf(bridgetypes.ErrCommissionNotFound, "commission not found for token %s", depositTokenInfo.TokenId)
+		return nil, errorsmod.Wrapf(bridgetypes.ErrCommissionNotFound, "commission not found for token %s", withdrawalToken.TokenId)
 	}
 
 	commissionAmount, ok := new(big.Int).SetString(commission.Amount, 10)
@@ -34,6 +36,9 @@ func (k Keeper) computeCommission(ctx sdk.Context, tx *types.SwapTransaction) (*
 	if !ok {
 		return nil, errorsmod.Wrapf(bridgetypes.ErrInvalidAmount, "invalid withdrawal amount: %s", tx.Tx.WithdrawalAmount)
 	}
+
+	// All commissions are mapped to bridgeless decimals (18)
+	commissionAmount = bridgekeeper.TransformAmount(withdrawalAmount, withdrawalToken.TokenId, 18)
 
 	commissionAmount.Sub(commissionAmount, withdrawalAmount)
 	if commissionAmount.Sign() < 0 {
