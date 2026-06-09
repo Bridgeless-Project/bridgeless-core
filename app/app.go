@@ -1106,7 +1106,8 @@ func NewBridge(
 				&bridgetypes.Party{Address: "bridge1uqsqt6xfhdgyx0sh3pwf4f2qje2u6v9jdw6y7n"},
 				&bridgetypes.Party{Address: "bridge14sdegrh8njknvv44tfqmc8w2fkyfph68zv42xu"})
 			app.BridgeKeeper.SetEpoch(ctx, &bridgetypes.Epoch{
-				Id: 0, Status: bridgetypes.EpochStatus_RUNNING,
+				Id:      0,
+				Status:  bridgetypes.EpochStatus_RUNNING,
 				Parties: parties,
 			})
 
@@ -1179,7 +1180,14 @@ func NewBridge(
 			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
 		},
 	)
-	
+
+	app.UpgradeKeeper.SetUpgradeHandler(
+		"v12.1.30-rc12",
+		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
+			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
+		},
+	)
+
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
 			tmos.Exit(err.Error())

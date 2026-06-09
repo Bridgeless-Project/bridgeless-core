@@ -1,0 +1,101 @@
+package v9
+
+import (
+	"errors"
+	"fmt"
+	"math/big"
+
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
+	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/store/prefix"
+	storetypes "github.com/cosmos/cosmos-sdk/store/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
+
+func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.BinaryCodec) error {
+	ctx.Logger().Info(fmt.Sprintf("Performing v12.1.30-rc12 %s module migrations", types.ModuleName))
+
+	var epochId uint32 = 0
+	commissions := getCommissions(ctx, storeKey, cdc, epochId)
+
+	trStore := prefix.NewStore(ctx.KVStore(storeKey), types.Prefix(types.StoreTransactionPrefix))
+	iterator := sdk.KVStorePrefixIterator(trStore, []byte{})
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var transaction types.Transaction
+		cdc.MustUnmarshal(iterator.Value(), &transaction)
+
+		token, found := getTokenInfo(ctx, storeKey, cdc, transaction.WithdrawalChainId, transaction.WithdrawalToken)
+		if !found {
+			return errors.New("token not found")
+		}
+
+		commsission, ok := commissions[token.TokenId]
+		if !ok {
+			commsission = types.Commission{
+				TokenId: token.TokenId,
+				Amount:  "0",
+			}
+		}
+
+		commissionAmount, ok := new(big.Int).SetString(commsission.Amount, 10)
+		if !ok {
+			return errors.New("invalid commission amount")
+		}
+
+		trComAmount, ok := new(big.Int).SetString(transaction.CommissionAmount, 10)
+		if !ok {
+			return errors.New("invalid commission amount")
+		}
+
+		commissionAmount = commissionAmount.Add(commissionAmount, trComAmount)
+		commsission.Amount = commissionAmount.String()
+
+		commissions[token.TokenId] = commsission
+	}
+
+	for _, commission := range commissions {
+		setCommission(ctx, storeKey, cdc, epochId, commission)
+	}
+	
+	return nil
+}
+
+func getCommissions(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.BinaryCodec, epochId uint32) map[uint64]types.Commission {
+	commissions := make(map[uint64]types.Commission)
+	cStore := prefix.NewStore(ctx.KVStore(storeKey), types.Prefix(types.StoreCommissionPrefix))
+	eStore := prefix.NewStore(cStore, types.KeyEpoch(epochId))
+
+	iterator := eStore.Iterator(nil, nil)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var commission types.Commission
+		cdc.MustUnmarshal(iterator.Value(), &commission)
+
+		commissions[commission.TokenId] = commission
+	}
+
+	return commissions
+}
+
+func getTokenInfo(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.BinaryCodec, chain, address string) (tokenInfo types.TokenInfo, found bool) {
+	tStore := prefix.NewStore(ctx.KVStore(storeKey), types.Prefix(types.StoreTokenInfoPrefix))
+	bz := tStore.Get(types.KeyTokenInfo(chain, address))
+	if bz == nil {
+		return
+	}
+
+	cdc.MustUnmarshal(bz, &tokenInfo)
+	found = true
+
+	return
+}
+
+func setCommission(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.BinaryCodec, epochId uint32, commission types.Commission) {
+	cStore := prefix.NewStore(ctx.KVStore(storeKey), types.Prefix(types.StoreCommissionPrefix))
+	eStore := prefix.NewStore(cStore, types.KeyEpoch(epochId))
+
+	eStore.Set(types.KeyEpochCommission(epochId, commission.TokenId), cdc.MustMarshal(&commission))
+}
