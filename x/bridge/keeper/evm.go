@@ -108,24 +108,25 @@ func (k Keeper) FeeDistribute(ctx sdk.Context, withdrawal types.SystemWithdrawal
 	}
 
 	results := make([]types.TxResult, 0)
-	for _, referralRewards := range withdrawal.ReferralRewards {
-		// returns the referralsRewardAmount with native decimals
-		referralsRewardAmount, txhash, address, err := k.distributeReferralReward(ctx, referralRewards, tokenAddress)
-		if err != nil {
-			return errorsmod.Wrap(err, "failed to distribute referral rewards")
-		}
 
-		results = append(results, types.TxResult{
-			TxHash:     txhash,
-			Address:    address,
-			ReferralId: referralRewards.ReferralId,
-		})
-
-		remaining.Sub(remaining, referralsRewardAmount) // total amount - referral rewards
-	}
-	if remaining.Sign() < 0 {
-		return errorsmod.Wrapf(types.ErrInvalidAmount, "referral rewards are negative: %s", remaining.String())
-	}
+	// TODO: integrate referral withdrawal
+	//for _, referralRewards := range withdrawal.ReferralRewards {
+	//	// returns the referralsRewardAmount with native decimals
+	//	_, txhash, address, err := k.distributeReferralReward(ctx, referralRewards, tokenAddress)
+	//	if err != nil {
+	//		return errorsmod.Wrap(err, "failed to distribute referral rewards")
+	//	}
+	//
+	//	results = append(results, types.TxResult{
+	//		TxHash:     txhash,
+	//		Address:    address,
+	//		ReferralId: referralRewards.ReferralId,
+	//	})
+	// remaining.Sub(remaining, referralsRewardAmount) // total amount - referral rewards
+	//}
+	//if remaining.Sign() < 0 {
+	//	return errorsmod.Wrapf(types.ErrInvalidAmount, "referral rewards are negative: %s", remaining.String())
+	//}
 
 	if remaining.Sign() == 0 {
 		return nil
