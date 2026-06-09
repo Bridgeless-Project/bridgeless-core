@@ -12,11 +12,8 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 )
 
+// computeCommission is responsible to reduce commission amount. This function gets commission from the store and subtracts with the withdrawal amount.
 func (k Keeper) computeCommission(ctx sdk.Context, tx *types.SwapTransaction) (*bridgetypes.Commission, error) {
-	if !tx.IsFeeDistribution {
-		return nil, nil
-	}
-
 	withdrawalToken, ok := k.bridge.GetTokenInfo(ctx, tx.Tx.WithdrawalChainId, tx.Tx.WithdrawalToken)
 	if !ok {
 		return nil, errorsmod.Wrap(bridgetypes.ErrTokenInfoNotFound, "withdrawal token not found")
@@ -37,15 +34,16 @@ func (k Keeper) computeCommission(ctx sdk.Context, tx *types.SwapTransaction) (*
 		return nil, errorsmod.Wrapf(bridgetypes.ErrInvalidAmount, "invalid withdrawal amount: %s", tx.Tx.WithdrawalAmount)
 	}
 
-	// All commissions are mapped to bridgeless decimals (18)
-	commissionAmount = bridgekeeper.TransformAmount(withdrawalAmount, withdrawalToken.TokenId, 18)
+	// convert stored commissions (18) to same decimals with withdrawalToken
+	commissionAmount = bridgekeeper.TransformAmount(commissionAmount, 18, withdrawalToken.Decimals)
 
 	commissionAmount.Sub(commissionAmount, withdrawalAmount)
 	if commissionAmount.Sign() < 0 {
 		return nil, errorsmod.Wrapf(bridgetypes.ErrInvalidCommission, "withdrawal amount %s exceeds commission amount %s", withdrawalAmount.String(), commission.Amount)
 	}
 
-	commission.Amount = commissionAmount.String()
+	// convert decimals back to bridgeless native (18)
+	commission.Amount = bridgekeeper.TransformAmount(commissionAmount, withdrawalToken.Decimals, 18).String()
 	return &commission, nil
 }
 

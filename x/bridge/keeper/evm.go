@@ -91,6 +91,8 @@ func (k Keeper) FeeDistribute(ctx sdk.Context, withdrawal types.SystemWithdrawal
 			return
 		}
 
+		// convert the commission decimals to 18 before store the commission
+		remaining = TransformAmount(remaining, tokenInfo.Decimals, types.DefaultChainDecimals)
 		k.SetCommission(ctx, withdrawal.EpochId, types.Commission{
 			TokenId: tokenInfo.TokenId,
 			Amount:  remaining.String(),
@@ -107,6 +109,7 @@ func (k Keeper) FeeDistribute(ctx sdk.Context, withdrawal types.SystemWithdrawal
 
 	results := make([]types.TxResult, 0)
 	for _, referralRewards := range withdrawal.ReferralRewards {
+		// returns the referralsRewardAmount with native decimals
 		referralsRewardAmount, txhash, address, err := k.distributeReferralReward(ctx, referralRewards, tokenAddress)
 		if err != nil {
 			return errorsmod.Wrap(err, "failed to distribute referral rewards")
@@ -149,6 +152,8 @@ func (k Keeper) FeeDistribute(ctx sdk.Context, withdrawal types.SystemWithdrawal
 			return errorsmod.Wrap(err, "failed to send tokens")
 		}
 
+		//  we should compute `remaining - share` to avoid double distribution
+		remaining.Sub(remaining, share)
 		results = append(results, types.TxResult{
 			TxHash:     txhash,
 			Address:    evmAddress.String(),
@@ -189,12 +194,25 @@ func (k Keeper) distributeReferralReward(ctx sdk.Context, rewards types.Referral
 		return nil, "", "", errors.New("invalid referral reward claim from store")
 	}
 
-	toClaim, ok := new(big.Int).SetString(rewards.ToClaim, 10)
+	claimedRewardsFromStore, ok := new(big.Int).SetString(rewardsFromStore.TotalClaimedAmount, 10)
 	if !ok {
-		return nil, "", "", errors.New("invalid referral reward claim")
+		return nil, "", "", errors.New("invalid referral reward claim from store")
 	}
 
-	if toClaimFromStore.Cmp(toClaim) == -1 {
+	toClaim, ok := new(big.Int).SetString(rewards.ToClaim, 10)
+	if !ok {
+		return nil, "", "", errors.New("invalid referral claimed rewards")
+	}
+
+	token, err := k.tokenOnBridgeless(ctx, rewards.TokenId)
+	if err != nil {
+		return nil, "", "", errorsmod.Wrap(err, "failed to get token on bridgeless")
+	}
+
+	// convert toClaim to 18 decimals to successfully sub from toClaimFromStore
+	toClaimDecimals18 := TransformAmount(toClaim, token.Decimals, types.DefaultChainDecimals)
+
+	if toClaimFromStore.Cmp(toClaimDecimals18) == -1 {
 		return nil, "", "", errors.New("not enough referral reward to claim")
 	}
 
@@ -213,12 +231,15 @@ func (k Keeper) distributeReferralReward(ctx sdk.Context, rewards types.Referral
 		return nil, "", "", errorsmod.Wrap(err, "failed to send tokens")
 	}
 
-	change := toClaimFromStore.Sub(toClaimFromStore, toClaim)
+	change := toClaimFromStore.Sub(toClaimFromStore, toClaimDecimals18)
+
+	//both amounts here with decimals 18
 	rewards.ToClaim = change.String()
-	rewards.TotalClaimedAmount = toClaim.String()
+	rewards.TotalClaimedAmount = claimedRewardsFromStore.Add(claimedRewardsFromStore, toClaimDecimals18).String()
 
 	k.InsertReferralRewards(ctx, referral.Id, rewards.TokenId, rewards)
 
+	// toClaim here has native decimals
 	return toClaim, txhash, evmAddress.String(), nil
 }
 
