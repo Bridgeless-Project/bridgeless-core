@@ -194,7 +194,7 @@ func (k Keeper) DeleteTx(ctx sdk.Context, depositTxHash string, depositTxIndex u
 
 	// covert the commissionAmount decimals to 18
 	commissionAmount = TransformAmount(commissionAmount, withdrawalToken.Decimals, types.DefaultChainDecimals)
-
+	// TODO handle commissions
 	rewards, err := types.ComputeCommissionAmount(commissionAmount, referral.CommissionRate)
 	if err != nil {
 		return errorsmod.Wrap(err, "failed to calculate referral rewards")
