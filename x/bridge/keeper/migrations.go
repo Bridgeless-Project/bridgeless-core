@@ -9,6 +9,7 @@ import (
 	v7 "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/migrations/v7"
 	v8 "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/migrations/v8"
 	v9 "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/migrations/v9"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -58,5 +59,11 @@ func (m Migrator) Migrate7to8(ctx sdk.Context) error {
 	return v8.MigrateStore(ctx, m.keeper.storeKey, m.keeper.cdc)
 }
 func (m Migrator) Migrate8to9(ctx sdk.Context) error {
+
+	key := []byte(types.ParamUniswapRouterAddress)
+	if !m.keeper.paramstore.Has(ctx, key) {
+		m.keeper.paramstore.Set(ctx, key, "")
+	}
+
 	return v9.MigrateStore(ctx, m.keeper.storeKey, m.keeper.cdc)
 }

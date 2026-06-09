@@ -1,7 +1,6 @@
 package v9
 
 import (
-	"errors"
 	"fmt"
 	"math/big"
 
@@ -15,6 +14,7 @@ import (
 func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.BinaryCodec) error {
 	ctx.Logger().Info(fmt.Sprintf("Performing v12.1.30-rc12 %s module migrations", types.ModuleName))
 
+	skipCounter := 0
 	var epochId uint32 = 0
 	commissions := getCommissions(ctx, storeKey, cdc, epochId)
 
@@ -28,7 +28,10 @@ func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 
 		token, found := getTokenInfo(ctx, storeKey, cdc, transaction.WithdrawalChainId, transaction.WithdrawalToken)
 		if !found {
-			return errors.New("token not found")
+			fmt.Println(fmt.Sprintf("Failed transaction %s %s %s", transaction.DepositTxHash, transaction.DepositChainId, transaction.DepositToken))
+			fmt.Println("Deposit block: ", transaction.DepositBlock)
+			skipCounter++
+			continue
 		}
 
 		commsission, ok := commissions[token.TokenId]
@@ -41,12 +44,14 @@ func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 
 		commissionAmount, ok := new(big.Int).SetString(commsission.Amount, 10)
 		if !ok {
-			return errors.New("invalid commission amount")
+			skipCounter++
+			continue
 		}
 
 		trComAmount, ok := new(big.Int).SetString(transaction.CommissionAmount, 10)
 		if !ok {
-			return errors.New("invalid commission amount")
+			skipCounter++
+			continue
 		}
 
 		commissionAmount = commissionAmount.Add(commissionAmount, trComAmount)
@@ -58,7 +63,8 @@ func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 	for _, commission := range commissions {
 		setCommission(ctx, storeKey, cdc, epochId, commission)
 	}
-	
+
+	fmt.Println("counter: ", skipCounter)
 	return nil
 }
 
