@@ -54,6 +54,9 @@ func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 			continue
 		}
 
+		// convert native decimals to 18
+		trComAmount = TransformAmount(trComAmount, token.Decimals, types.DefaultChainDecimals)
+
 		commissionAmount = commissionAmount.Add(commissionAmount, trComAmount)
 		commsission.Amount = commissionAmount.String()
 
@@ -104,4 +107,24 @@ func setCommission(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Bina
 	eStore := prefix.NewStore(cStore, types.KeyEpoch(epochId))
 
 	eStore.Set(types.KeyEpochCommission(epochId, commission.TokenId), cdc.MustMarshal(&commission))
+}
+
+func TransformAmount(amount *big.Int, currentDecimals uint64, targetDecimals uint64) *big.Int {
+	result, _ := new(big.Int).SetString(amount.String(), 10)
+
+	if currentDecimals == targetDecimals {
+		return result
+	}
+
+	if currentDecimals < targetDecimals {
+		for i := uint64(0); i < targetDecimals-currentDecimals; i++ {
+			result.Mul(result, new(big.Int).SetInt64(10))
+		}
+	} else {
+		for i := uint64(0); i < currentDecimals-targetDecimals; i++ {
+			result.Div(result, new(big.Int).SetInt64(10))
+		}
+	}
+
+	return result
 }
