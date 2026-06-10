@@ -8,6 +8,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/query"
 )
 
+// The commission amount decimals is mapped to brideless decimals (18)
+
 func (k Keeper) SetCommission(sdkCtx sdk.Context, epochId uint32, commission types.Commission) {
 	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreCommissionPrefix))
 	eStore := prefix.NewStore(cStore, types.KeyEpoch(epochId))

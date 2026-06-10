@@ -10,11 +10,11 @@ import (
 func (k Keeper) GetCommissionPrices(ctx sdk.Context, epochId uint32) ([]bridgetypes.CommissionDistributionInfo, error) {
 	commissionsInfo := make([]bridgetypes.CommissionDistributionInfo, 0)
 	for _, commission := range k.GetAllCommissions(ctx, epochId) {
-		amount, ok := sdk.NewIntFromString(commission.Amount)
+		comAmount, ok := sdk.NewIntFromString(commission.Amount)
 		if !ok {
 			continue
 		}
-		if amount.IsZero() {
+		if comAmount.IsZero() {
 			continue
 		}
 
@@ -23,7 +23,10 @@ func (k Keeper) GetCommissionPrices(ctx sdk.Context, epochId uint32) ([]bridgety
 			return nil, errors.Wrap(err, "failed to get token info for commission token")
 		}
 
-		amountOut, path, err := k.hooks.GetTokenPrice(ctx, info.Address, amount.BigInt())
+		// convert stored decimals (18) to native decimals
+		comAmountNativeDecimals := TransformAmount(comAmount.BigInt(), bridgetypes.DefaultChainDecimals, info.Decimals)
+
+		amountOut, path, err := k.hooks.GetTokenPrice(ctx, info.Address, comAmountNativeDecimals)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to get token price")
 		}
@@ -34,7 +37,7 @@ func (k Keeper) GetCommissionPrices(ctx sdk.Context, epochId uint32) ([]bridgety
 		}
 
 		commissionsInfo = append(commissionsInfo, bridgetypes.CommissionDistributionInfo{
-			AmountIn:  amount.String(),
+			AmountIn:  comAmountNativeDecimals.String(),
 			AmountOut: amountOut.String(),
 			Path:      pathStr,
 			TokenId:   int64(commission.TokenId),

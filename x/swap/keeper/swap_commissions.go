@@ -5,24 +5,23 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/contracts"
+	bridgekeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/keeper"
 	bridgetypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/swap/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
 )
 
+// computeCommission is responsible to reduce commission amount. This function gets commission from the store and subtracts with the withdrawal amount.
 func (k Keeper) computeCommission(ctx sdk.Context, tx *types.SwapTransaction) (*bridgetypes.Commission, error) {
-	if !tx.IsFeeDistribution {
-		return nil, nil
-	}
-	depositTokenInfo, found := k.bridge.GetTokenInfo(ctx, tx.Tx.DepositChainId, tx.Tx.DepositToken)
-	if !found {
-		return nil, errorsmod.Wrapf(bridgetypes.ErrTokenInfoNotFound, "token info not found for %s on chain %s", tx.Tx.WithdrawalToken, tx.Tx.WithdrawalChainId)
+	withdrawalToken, ok := k.bridge.GetTokenInfo(ctx, tx.Tx.WithdrawalChainId, tx.Tx.WithdrawalToken)
+	if !ok {
+		return nil, errorsmod.Wrap(bridgetypes.ErrTokenInfoNotFound, "withdrawal token not found")
 	}
 
-	commission, found := k.bridge.GetCommission(ctx, tx.Tx.EpochId, depositTokenInfo.TokenId)
+	commission, found := k.bridge.GetCommission(ctx, tx.Tx.EpochId, withdrawalToken.TokenId)
 	if !found {
-		return nil, errorsmod.Wrapf(bridgetypes.ErrCommissionNotFound, "commission not found for token %s", depositTokenInfo.TokenId)
+		return nil, errorsmod.Wrapf(bridgetypes.ErrCommissionNotFound, "commission not found for token %s", withdrawalToken.TokenId)
 	}
 
 	commissionAmount, ok := new(big.Int).SetString(commission.Amount, 10)
@@ -35,12 +34,16 @@ func (k Keeper) computeCommission(ctx sdk.Context, tx *types.SwapTransaction) (*
 		return nil, errorsmod.Wrapf(bridgetypes.ErrInvalidAmount, "invalid withdrawal amount: %s", tx.Tx.WithdrawalAmount)
 	}
 
+	// convert stored commissions (18) to same decimals with withdrawalToken
+	commissionAmount = bridgekeeper.TransformAmount(commissionAmount, bridgetypes.DefaultChainDecimals, withdrawalToken.Decimals)
+
 	commissionAmount.Sub(commissionAmount, withdrawalAmount)
 	if commissionAmount.Sign() < 0 {
 		return nil, errorsmod.Wrapf(bridgetypes.ErrInvalidCommission, "withdrawal amount %s exceeds commission amount %s", withdrawalAmount.String(), commission.Amount)
 	}
 
-	commission.Amount = commissionAmount.String()
+	// convert decimals back to bridgeless native (18)
+	commission.Amount = bridgekeeper.TransformAmount(commissionAmount, withdrawalToken.Decimals, bridgetypes.DefaultChainDecimals).String()
 	return &commission, nil
 }
 

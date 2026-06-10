@@ -57,6 +57,10 @@ func (k *Keeper) PartiesDistributeFee(ctx sdk.Context, epochId uint32, fee sdk.C
 		return types.ErrEpochNotFound
 	}
 
+	if len(epoch.Parties) <= 0 {
+		return types.ErrInvalidParty
+	}
+
 	tokensToSend := fee.Amount.QuoRaw(int64(len(epoch.Parties)))
 	for _, party := range epoch.Parties {
 		partyAddress, err := sdk.AccAddressFromBech32(party.Address)

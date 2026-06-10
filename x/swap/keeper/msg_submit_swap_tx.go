@@ -4,6 +4,7 @@ import (
 	"context"
 
 	errorsmod "cosmossdk.io/errors"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"
 	bridgetypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/swap/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -18,22 +19,6 @@ func (m msgServer) SubmitSwapTx(goCtx context.Context, msg *types.MsgSubmitSwapT
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	if !m.bridge.IsParty(ctx, msg.Creator) {
 		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "creator is not an authorized bridge party")
-	}
-	
-	var (
-		commission *bridgetypes.Commission
-		err        error
-	)
-
-	if msg.Tx.IsFeeDistribution {
-		commission, err = m.computeCommission(ctx, msg.Tx)
-		if err != nil {
-			return nil, errorsmod.Wrap(err, "failed to compute commission")
-		}
-	}
-
-	if _, found := m.GetSwap(ctx, msg.Tx.Tx.DepositTxHash, msg.Tx.Tx.DepositTxIndex, msg.Tx.Tx.DepositChainId); found {
-		return nil, errorsmod.Wrap(types.ErrAlreadyProcessed, "swap was already executed")
 	}
 
 	requestHash := m.SwapHash(msg).Hex()
@@ -54,28 +39,42 @@ func (m msgServer) SubmitSwapTx(goCtx context.Context, msg *types.MsgSubmitSwapT
 		return &types.MsgSubmitSwapTxResponse{}, nil
 	}
 
+	if _, found = m.GetSwap(ctx, msg.Tx.Tx.DepositTxHash, msg.Tx.Tx.DepositTxIndex, msg.Tx.Tx.DepositChainId); found {
+		return nil, errorsmod.Wrap(types.ErrAlreadyProcessed, "swap was already executed")
+	}
+
+	// swap tokens: WithdrawalAmount -> AmountOutSwap
 	swap, err := m.executeSwap(ctx, msg)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "failed to execute swap")
 	}
 
 	m.SetSwap(ctx, *swap)
+
+	// Fee distribution flow
 	if msg.Tx.IsFeeDistribution {
-		if commission == nil {
-			return nil, errorsmod.Wrap(sdkerrors.ErrInsufficientFee, "commission is nil")
+
+		// returns decimals 18
+		commission, err := m.computeCommission(ctx, msg.Tx)
+		if err != nil {
+			return nil, errorsmod.Wrap(err, "failed to compute commission")
 		}
 
-		m.bridge.SetCommission(ctx, msg.Tx.Tx.EpochId, *commission)
-
-		amount, ok := sdk.NewIntFromString(commission.Amount)
-		if !ok {
-			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "invalid commission amount: %s", commission.Amount)
+		// distribute amountOutMin between validators (NOT WithdrawalAmount)
+		amountOutMin, err := utils.ParseUintString(msg.Tx.SwapOutAmount)
+		if err != nil {
+			return nil, errorsmod.Wrap(err, "failed to parse amount_out_min")
 		}
 
-		err = m.bridge.PartiesDistributeFee(ctx, msg.Tx.Tx.EpochId, sdk.NewCoin(m.staking.BondDenom(ctx), amount))
+		err = m.bridge.PartiesDistributeFee(
+			ctx,
+			msg.Tx.Tx.EpochId,
+			sdk.NewCoin(m.staking.BondDenom(ctx), sdk.NewIntFromBigInt(amountOutMin)))
 		if err != nil {
 			return nil, errorsmod.Wrap(err, "failed to distribute fee among parties")
 		}
+
+		m.bridge.SetCommission(ctx, msg.Tx.Tx.EpochId, *commission)
 	}
 
 	return &types.MsgSubmitSwapTxResponse{}, nil
