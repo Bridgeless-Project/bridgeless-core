@@ -11,6 +11,8 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+// All commissions are mapped to bridgeless decimals (18)
+
 func (k Keeper) InsertReferralRewards(sdkCtx sdk.Context, referralId uint32, tokenId uint64, ReferralRewards types.ReferralRewards) {
 	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreReferralRewardsPrefix))
 	cStore.Set(types.KeyReferralRewards(referralId, tokenId), k.cdc.MustMarshal(&ReferralRewards))

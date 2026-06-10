@@ -29,7 +29,7 @@ func validateTransaction(tx *Transaction) error {
 		return errors.New(fmt.Sprintf("invalid withdrawal amount: %s", tx.WithdrawalAmount))
 	}
 
-	if _, set := big.NewFloat(0).SetString(tx.CommissionAmount); !set {
+	if _, set := big.NewInt(0).SetString(tx.CommissionAmount, 10); !set {
 		return errors.New(fmt.Sprintf("invalid commission amount: %s", tx.CommissionAmount))
 	}
 

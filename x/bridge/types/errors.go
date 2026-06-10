@@ -41,4 +41,5 @@ var (
 	ErrCommissionNotFound           = errorsmod.Register(ModuleName, 1130, "commission not found")
 	ErrInvalidCommission            = errorsmod.Register(ModuleName, 1131, "commission is invalid")
 	ErrInvalidAmount                = errorsmod.Register(ModuleName, 1132, "amount is invalid")
+	ErrInvalidParty                 = errorsmod.Register(ModuleName, 1133, "party is invalid")
 )
