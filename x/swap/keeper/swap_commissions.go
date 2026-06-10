@@ -35,7 +35,7 @@ func (k Keeper) computeCommission(ctx sdk.Context, tx *types.SwapTransaction) (*
 	}
 
 	// convert stored commissions (18) to same decimals with withdrawalToken
-	commissionAmount = bridgekeeper.TransformAmount(commissionAmount, 18, withdrawalToken.Decimals)
+	commissionAmount = bridgekeeper.TransformAmount(commissionAmount, bridgetypes.DefaultChainDecimals, withdrawalToken.Decimals)
 
 	commissionAmount.Sub(commissionAmount, withdrawalAmount)
 	if commissionAmount.Sign() < 0 {
@@ -43,7 +43,7 @@ func (k Keeper) computeCommission(ctx sdk.Context, tx *types.SwapTransaction) (*
 	}
 
 	// convert decimals back to bridgeless native (18)
-	commission.Amount = bridgekeeper.TransformAmount(commissionAmount, withdrawalToken.Decimals, 18).String()
+	commission.Amount = bridgekeeper.TransformAmount(commissionAmount, withdrawalToken.Decimals, bridgetypes.DefaultChainDecimals).String()
 	return &commission, nil
 }
 

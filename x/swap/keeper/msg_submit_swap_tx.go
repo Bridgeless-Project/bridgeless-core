@@ -21,10 +21,6 @@ func (m msgServer) SubmitSwapTx(goCtx context.Context, msg *types.MsgSubmitSwapT
 		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "creator is not an authorized bridge party")
 	}
 
-	if _, found := m.GetSwap(ctx, msg.Tx.Tx.DepositTxHash, msg.Tx.Tx.DepositTxIndex, msg.Tx.Tx.DepositChainId); found {
-		return nil, errorsmod.Wrap(types.ErrAlreadyProcessed, "swap was already executed")
-	}
-
 	requestHash := m.SwapHash(msg).Hex()
 	submissions, found := m.GetSwapSubmissions(ctx, requestHash)
 	if !found {
@@ -41,6 +37,10 @@ func (m msgServer) SubmitSwapTx(goCtx context.Context, msg *types.MsgSubmitSwapT
 	threshold := m.bridge.GetParams(ctx).TssThreshold
 	if len(submissions.Submitters) != int(threshold+1) {
 		return &types.MsgSubmitSwapTxResponse{}, nil
+	}
+
+	if _, found = m.GetSwap(ctx, msg.Tx.Tx.DepositTxHash, msg.Tx.Tx.DepositTxIndex, msg.Tx.Tx.DepositChainId); found {
+		return nil, errorsmod.Wrap(types.ErrAlreadyProcessed, "swap was already executed")
 	}
 
 	// swap tokens: WithdrawalAmount -> AmountOutSwap
