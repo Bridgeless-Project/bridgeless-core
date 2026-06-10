@@ -876,7 +876,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/bridge/commissions:
+  /cosmos/bridge/commissions/{epoch_id}:
     get:
       operationId: CoreBridgeGetCommissions
       responses:
@@ -1109,6 +1109,11 @@ paths:
                           "value": "1.212s"
                         }
       parameters:
+        - name: epoch_id
+          in: path
+          required: true
+          type: integer
+          format: int64
         - name: pagination.key
           description: |-
             key is a value returned in PageResponse.next_key to begin
@@ -1165,11 +1170,6 @@ paths:
           in: query
           required: false
           type: boolean
-        - name: epoch_id
-          in: query
-          required: false
-          type: integer
-          format: int64
       tags:
         - Query
   /cosmos/bridge/epoch/{epoch_id}:
