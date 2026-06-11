@@ -7,9 +7,9 @@ WORKDIR /go/src/github.com/Bridgeless-Project/bridgeless-core/v12
 ENV GO111MODULE="on"
 ENV CGO_ENABLED=1
 ENV GOOS="linux"
-ENV GOPRIVATE=github.com/*
-ENV GONOSUMDB=github.com/*
-ENV GONOPROXY=github.com/*
+ENV GOPRIVATE=github.com/Bridgeless-Project/*
+ENV GONOSUMDB=github.com/Bridgeless-Project/*
+ENV GOPROXY=https://proxy.golang.org,direct
 
 COPY ./go.mod ./go.sum ./
 # Read the CI_ACCESS_TOKEN from the .env file
