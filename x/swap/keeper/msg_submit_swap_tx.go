@@ -40,7 +40,7 @@ func (m msgServer) SubmitSwapTx(goCtx context.Context, msg *types.MsgSubmitSwapT
 	}
 
 	if _, found = m.GetSwap(ctx, msg.Tx.Tx.DepositTxHash, msg.Tx.Tx.DepositTxIndex, msg.Tx.Tx.DepositChainId); found {
-		return nil, errorsmod.Wrap(types.ErrAlreadyProcessed, "swap was already executed")
+		return nil, types.ErrAlreadyProcessed
 	}
 
 	// swap tokens: WithdrawalAmount -> AmountOutSwap
