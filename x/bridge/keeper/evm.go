@@ -40,7 +40,8 @@ func (k Keeper) PostTxProcessing(ctx sdk.Context, _ core.Message, receipt *ethty
 
 		event, err := contracts.BridgeContract.ABI.EventByID(evmLog.Topics[0])
 		if err != nil {
-			return errorsmod.Wrap(err, "failed to resolve bridge contract event")
+			k.Logger(ctx).Error(errorsmod.Wrap(err, "failed to resolve bridge contract event").Error())
+			continue
 		}
 
 		if event.Name != contractEventWithdrawn {
@@ -49,7 +50,7 @@ func (k Keeper) PostTxProcessing(ctx sdk.Context, _ core.Message, receipt *ethty
 
 		eventBody := contractstypes.BridgeWithdrawnERC20{}
 		if err = utils.UnpackLog(contracts.BridgeContract.ABI, &eventBody, event.Name, evmLog); err != nil {
-			k.Logger(ctx).Info("failed to unpack event body")
+			k.Logger(ctx).Error("failed to unpack event body")
 			continue
 		}
 
