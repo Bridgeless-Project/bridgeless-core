@@ -81,7 +81,7 @@ type EVMKeeper interface {
 		ctx sdk.Context,
 		sender string,
 		amount string,
-		recipient string,
+		recipient *common.Address,
 		txType uint8,
 		txIndex uint64,
 		response *evmtypes.MsgEthereumTxResponse,

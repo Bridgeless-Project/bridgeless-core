@@ -22,6 +22,7 @@ import (
 	"strconv"
 
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	"github.com/ethereum/go-ethereum/common"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	tmtypes "github.com/tendermint/tendermint/types"
 
@@ -91,7 +92,7 @@ func (k *Keeper) EthereumTx(goCtx context.Context, msg *types.MsgEthereumTx) (*t
 	err = k.BroadcastTxResponse(ctx,
 		sender,
 		tx.Value().String(),
-		tx.To().String(),
+		tx.To(),
 		tx.Type(),
 		txIndex,
 		response,
@@ -107,7 +108,7 @@ func (k *Keeper) BroadcastTxResponse(
 	ctx sdk.Context,
 	sender string,
 	amount string,
-	recipient string,
+	recipient *common.Address,
 	txType uint8,
 	txIndex uint64,
 	response *types.MsgEthereumTxResponse,
@@ -128,7 +129,9 @@ func (k *Keeper) BroadcastTxResponse(
 		attrs = append(attrs, sdk.NewAttribute(types.AttributeKeyTxHash, hash.String()))
 	}
 
-	attrs = append(attrs, sdk.NewAttribute(types.AttributeKeyRecipient, recipient))
+	if recipient != nil {
+		attrs = append(attrs, sdk.NewAttribute(types.AttributeKeyRecipient, recipient.Hex()))
+	}
 
 	if response.Failed() {
 		attrs = append(attrs, sdk.NewAttribute(types.AttributeKeyEthereumTxFailed, response.VmError))
