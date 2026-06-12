@@ -600,15 +600,6 @@ func NewBridge(
 		),
 	)
 
-	app.EvmKeeper = app.EvmKeeper.SetHooks(
-		evmkeeper.NewMultiEvmHooks(
-			app.Erc20Keeper.Hooks(),
-			app.RevenueKeeper.Hooks(),
-			app.ClaimsKeeper.Hooks(),
-			app.BridgeKeeper.Hooks(),
-		),
-	)
-
 	app.TransferKeeper = transferkeeper.NewKeeper(
 		appCodec, keys[ibctransfertypes.StoreKey], app.GetSubspace(ibctransfertypes.ModuleName),
 		app.ClaimsKeeper, // ICS4 Wrapper: claims IBC middleware
@@ -628,6 +619,15 @@ func NewBridge(
 	)
 
 	app.BridgeKeeper.SetHooks(app.SwapKeeper.Hooks())
+	app.EvmKeeper = app.EvmKeeper.SetHooks(
+		evmkeeper.NewMultiEvmHooks(
+			app.Erc20Keeper.Hooks(),
+			app.RevenueKeeper.Hooks(),
+			app.ClaimsKeeper.Hooks(),
+			app.BridgeKeeper.Hooks(),
+			app.SwapKeeper.Hooks(),
+		),
+	)
 
 	app.RecoveryKeeper = recoverykeeper.NewKeeper(
 		keys[recoverytypes.StoreKey],
