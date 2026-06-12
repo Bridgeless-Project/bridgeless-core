@@ -1202,6 +1202,39 @@ func NewBridge(
 		},
 	)
 
+	app.UpgradeKeeper.SetUpgradeHandler(
+		"v12.1.30-rc15",
+		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
+
+			bridgeParams := bridgetypes.Params{
+				ModuleAdmin: "bridge1ur9vkyhyzp6zdnfyd0y6vstu9mh9yprayvh3rc",
+				Parties: []*bridgetypes.Party{
+					{
+						Address: "bridge1mdnrum8gl4dm3mt96v4yvkkfa7tnpmztacnym3",
+					},
+					{
+						Address: "bridge1uqsqt6xfhdgyx0sh3pwf4f2qje2u6v9jdw6y7n",
+					},
+					{
+						Address: "bridge14sdegrh8njknvv44tfqmc8w2fkyfph68zv42xu",
+					},
+				},
+				TssThreshold: 0,
+				RelayerAccounts: []string{
+					"bridge1m2qc938kek3s8mrng6gvs2g4l324af539jhjqh",
+				},
+				Epoch:                0,
+				SupportingTime:       110,
+				UniswapRouterAddress: "0xc97CB5061FfB4BdeBC83F34209F06BBbBC54c7e3",
+				BridgeAddress:        "0xc97CB5061FfB4BdeBC83F34209F06BBbBC54c7e3",
+			}
+
+			app.BridgeKeeper.SetParams(ctx, bridgeParams)
+
+			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
+		},
+	)
+
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
 			tmos.Exit(err.Error())

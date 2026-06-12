@@ -31,6 +31,7 @@ const (
 	ParamEpochId              = "EpochId"
 	ParamSupportingTime       = "SupportingTime"
 	ParamUniswapRouterAddress = "UniswapRouterAddress"
+	ParamBridgeAddress        = "BridgeAddress"
 
 	// ---- Store Prefixes ------
 	StoreTokenPrefix                        = "token"
