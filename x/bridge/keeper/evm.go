@@ -25,16 +25,16 @@ const transferMethod = "transfer"
 // distributes the corresponding stored system withdrawal fees.
 func (k Keeper) PostTxProcessing(ctx sdk.Context, _ core.Message, receipt *ethtypes.Receipt) error {
 	if receipt == nil || len(receipt.Logs) == 0 {
+		k.Logger(ctx).Error("PostTxProcessing receipt is nil or empty")
 		return nil
 	}
-	bridgelessChain, ok := k.GetChain(ctx, utils.GetChainId(ctx))
-	if !ok {
-		return errors.New("chain not found")
-	}
 
-	contractAddress := common.HexToAddress(bridgelessChain.BridgeAddress)
+	// Getting this address from params preventing panic during EVM flow
+	params := k.GetParams(ctx)
+	contractAddress := common.HexToAddress(params.BridgeAddress)
 	for _, evmLog := range receipt.Logs {
 		if evmLog == nil || evmLog.Address != contractAddress || len(evmLog.Topics) == 0 {
+			k.Logger(ctx).Debug("skipping event with empty topics")
 			continue
 		}
 
@@ -45,6 +45,7 @@ func (k Keeper) PostTxProcessing(ctx sdk.Context, _ core.Message, receipt *ethty
 		}
 
 		if event.Name != contractEventWithdrawn {
+			k.Logger(ctx).Info("skipping event:", "got", event.Name, "want", contractEventWithdrawn)
 			continue
 		}
 
@@ -66,7 +67,7 @@ func (k Keeper) PostTxProcessing(ctx sdk.Context, _ core.Message, receipt *ethty
 		}
 
 		if len(withdrawal.Result) != 0 {
-			k.Logger(ctx).Debug("already have result for EVM withdrawal log")
+			k.Logger(ctx).Info("already have result for EVM withdrawal log")
 			continue
 		}
 
@@ -79,6 +80,7 @@ func (k Keeper) PostTxProcessing(ctx sdk.Context, _ core.Message, receipt *ethty
 }
 
 func (k Keeper) FeeDistribute(ctx sdk.Context, withdrawal types.SystemWithdrawal, tokenAddress common.Address) error {
+	k.Logger(ctx).Info("start fee distribution", "remaining", withdrawal.Amount)
 	remaining, ok := new(big.Int).SetString(withdrawal.Amount, 10)
 	if !ok {
 		return errorsmod.Wrapf(types.ErrInvalidAmount, "amount %s", withdrawal.Amount)
@@ -86,6 +88,7 @@ func (k Keeper) FeeDistribute(ctx sdk.Context, withdrawal types.SystemWithdrawal
 
 	// Update commission
 	defer func() {
+		k.Logger(ctx).Info("defer function", "remaining", remaining.String())
 		tokenInfo, found := k.GetTokenInfo(ctx, utils.GetChainId(ctx), tokenAddress.Hex())
 		if !found {
 			k.Logger(ctx).Error("token info not found")
@@ -130,11 +133,13 @@ func (k Keeper) FeeDistribute(ctx sdk.Context, withdrawal types.SystemWithdrawal
 	//}
 
 	if remaining.Sign() == 0 {
+		k.Logger(ctx).Info("skipping fee distribute: remaining is zero")
 		return nil
 	}
 
 	share := new(big.Int).Div(remaining, big.NewInt(int64(len(epoch.Parties))))
 	if share.Sign() == 0 {
+		k.Logger(ctx).Info("skipping fee distribute: share is zero")
 		return nil
 	}
 
@@ -161,9 +166,12 @@ func (k Keeper) FeeDistribute(ctx sdk.Context, withdrawal types.SystemWithdrawal
 			Address:    evmAddress.String(),
 			ReferralId: 0,
 		})
+
+		k.Logger(ctx).Info("fee distribute", "share", share.String(), "address", evmAddress.String())
 	}
 	withdrawal.Result = results
 
+	k.Logger(ctx).Info("saving results", "results", results)
 	k.SetSystemTransaction(
 		ctx,
 		withdrawal,

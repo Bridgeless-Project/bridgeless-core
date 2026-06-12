@@ -16,5 +16,8 @@ message Params {
   // supporting_time is the number of blocks after epoch start when the previous epoch should be marked as completed
   uint64 supporting_time = 6;
   string uniswap_router_address = 7;
+
+  // we cant grab `bridge_address` from the chains store, it can brake the EVM flow. it's better to use params
+  string bridge_address = 8;  //  the address of bridge contract on the chain
 }
 
