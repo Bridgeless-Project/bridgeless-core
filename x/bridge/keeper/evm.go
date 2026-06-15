@@ -85,23 +85,15 @@ func (k Keeper) FeeDistribute(ctx sdk.Context, withdrawal types.SystemWithdrawal
 	if !ok {
 		return errorsmod.Wrapf(types.ErrInvalidAmount, "amount %s", withdrawal.Amount)
 	}
+	if remaining.Sign() < 0 {
+		return errorsmod.Wrapf(types.ErrInvalidAmount, "negative remaining:  %s", remaining.String())
+	}
 
-	// Update commission
-	defer func() {
-		k.Logger(ctx).Info("defer function", "remaining", remaining.String())
-		tokenInfo, found := k.GetTokenInfo(ctx, utils.GetChainId(ctx), tokenAddress.Hex())
-		if !found {
-			k.Logger(ctx).Error("token info not found")
-			return
-		}
-
-		// convert the commission decimals to 18 before store the commission
-		remaining = TransformAmount(remaining, tokenInfo.Decimals, types.DefaultChainDecimals)
-		k.SetCommission(ctx, withdrawal.EpochId, types.Commission{
-			TokenId: tokenInfo.TokenId,
-			Amount:  remaining.String(),
-		})
-	}()
+	initialAmount := new(big.Int).Set(remaining)
+	tokenInfo, found := k.GetTokenInfo(ctx, utils.GetChainId(ctx), tokenAddress.Hex())
+	if !found {
+		return errorsmod.Wrap(types.ErrTokenInfoNotFound, "fee distribution token not found")
+	}
 
 	epoch, found := k.GetEpoch(ctx, withdrawal.EpochId)
 	if !found {
@@ -110,8 +102,6 @@ func (k Keeper) FeeDistribute(ctx sdk.Context, withdrawal types.SystemWithdrawal
 	if len(epoch.Parties) == 0 {
 		return errorsmod.Wrap(types.ErrInvalidPartiesList, "epoch has no parties")
 	}
-
-	results := make([]types.TxResult, 0)
 
 	// TODO: integrate referral withdrawal
 	//for _, referralRewards := range withdrawal.ReferralRewards {
@@ -143,33 +133,18 @@ func (k Keeper) FeeDistribute(ctx sdk.Context, withdrawal types.SystemWithdrawal
 		return nil
 	}
 
-	for _, party := range epoch.Parties {
-		partyAddress, err := sdk.AccAddressFromBech32(party.Address)
-		if err != nil {
-			return errorsmod.Wrapf(err, "invalid party address %s", party.Address)
-		}
-
-		evmAddress, err := utils.CosmosToEVM(partyAddress)
-		if err != nil {
-			return errorsmod.Wrap(err, "failed to convert address")
-		}
-
-		txhash, err := k.sendTokens(ctx, share, tokenAddress, evmAddress)
-		if err != nil {
-			return errorsmod.Wrap(err, "failed to send tokens")
-		}
-
-		//  we should compute `remaining - share` to avoid double distribution
-		remaining.Sub(remaining, share)
-		results = append(results, types.TxResult{
-			TxHash:     txhash,
-			Address:    evmAddress.String(),
-			ReferralId: 0,
-		})
-
-		k.Logger(ctx).Info("fee distribute", "share", share.String(), "address", evmAddress.String())
+	// if one of txs  will fail - all transaction will fail
+	results, err := k.distributeTokensBetweenParties(ctx, share, tokenAddress, epoch, remaining)
+	if err != nil {
+		k.Logger(ctx).Error("filed to distribute fees")
+		return errorsmod.Wrap(err, "failed to distribute fees")
 	}
+
 	withdrawal.Result = results
+	distributedAmount := new(big.Int).Sub(initialAmount, remaining)
+	if err := k.SubtractCommissionNative(ctx, withdrawal.EpochId, tokenInfo, distributedAmount); err != nil {
+		return errorsmod.Wrap(err, "failed to subtract distributed commission")
+	}
 
 	k.Logger(ctx).Info("saving results", "results", results)
 	k.SetSystemTransaction(
@@ -287,4 +262,43 @@ func (k Keeper) validateToken(ctx sdk.Context, tokenId uint64, tokenAddress comm
 	}
 
 	return nil
+}
+
+func (k Keeper) distributeTokensBetweenParties(
+	ctx sdk.Context,
+	share *big.Int,
+	tokenAddress common.Address,
+	epoch types.Epoch,
+	remaining *big.Int,
+) ([]types.TxResult, error) {
+	results := make([]types.TxResult, 0)
+
+	for _, party := range epoch.Parties {
+		partyAddress, err := sdk.AccAddressFromBech32(party.Address)
+		if err != nil {
+			return nil, errorsmod.Wrapf(err, "invalid party address %s", party.Address)
+		}
+
+		evmAddress, err := utils.CosmosToEVM(partyAddress)
+		if err != nil {
+			return nil, errorsmod.Wrap(err, "failed to convert address")
+		}
+
+		txhash, err := k.sendTokens(ctx, share, tokenAddress, evmAddress)
+		if err != nil {
+			return nil, errorsmod.Wrap(err, "failed to send tokens")
+		}
+
+		//  we should compute `remaining - share` to avoid double distribution
+		remaining.Sub(remaining, share)
+		results = append(results, types.TxResult{
+			TxHash:     txhash,
+			Address:    evmAddress.String(),
+			ReferralId: 0,
+		})
+
+		k.Logger(ctx).Info("fee distribute", "share", share.String(), "address", evmAddress.String())
+	}
+
+	return results, nil
 }

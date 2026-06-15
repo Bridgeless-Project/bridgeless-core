@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"math/big"
+
 	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
@@ -10,11 +12,109 @@ import (
 
 // The commission amount decimals is mapped to brideless decimals (18)
 
-func (k Keeper) SetCommission(sdkCtx sdk.Context, epochId uint32, commission types.Commission) {
+func (k Keeper) setCommission(sdkCtx sdk.Context, epochId uint32, commission types.Commission) {
 	cStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreCommissionPrefix))
 	eStore := prefix.NewStore(cStore, types.KeyEpoch(epochId))
 
 	eStore.Set(types.KeyEpochCommission(epochId, commission.TokenId), k.cdc.MustMarshal(&commission))
+}
+
+// SetCommissionNormalized stores a non-negative commission amount with 18 decimals.
+func (k Keeper) SetCommissionNormalized(ctx sdk.Context, epochId uint32, tokenId uint64, amount *big.Int) error {
+	if amount == nil || amount.Sign() < 0 {
+		return errorsmod.Wrap(types.ErrInvalidCommission, "amount must be non-negative")
+	}
+
+	k.setCommission(ctx, epochId, types.Commission{
+		TokenId: tokenId,
+		Amount:  amount.String(),
+	})
+	return nil
+}
+
+func (k Keeper) AddCommissionNormalized(ctx sdk.Context, epochId uint32, tokenId uint64, amount *big.Int) error {
+	if amount == nil || amount.Sign() < 0 {
+		return errorsmod.Wrap(types.ErrInvalidCommission, "amount must be non-negative")
+	}
+
+	total := new(big.Int).Set(amount)
+	if commission, found := k.GetCommission(ctx, epochId, tokenId); found {
+		current, ok := new(big.Int).SetString(commission.Amount, 10)
+		if !ok || current.Sign() < 0 {
+			return errorsmod.Wrapf(types.ErrInvalidCommission, "invalid stored amount %q", commission.Amount)
+		}
+		total.Add(total, current)
+	}
+
+	return k.SetCommissionNormalized(ctx, epochId, tokenId, total)
+}
+
+func (k Keeper) AddCommissionNative(ctx sdk.Context, epochId uint32, token types.TokenInfo, amount *big.Int) error {
+	if amount == nil || amount.Sign() < 0 {
+		return errorsmod.Wrap(types.ErrInvalidCommission, "native amount must be non-negative")
+	}
+
+	return k.AddCommissionNormalized(
+		ctx,
+		epochId,
+		token.TokenId,
+		TransformAmount(amount, token.Decimals, types.DefaultChainDecimals),
+	)
+}
+
+func (k Keeper) SubtractCommissionNative(ctx sdk.Context, epochId uint32, token types.TokenInfo, amount *big.Int) error {
+	if amount == nil || amount.Sign() < 0 {
+		return errorsmod.Wrap(types.ErrInvalidCommission, "native amount must be non-negative")
+	}
+
+	commission, found := k.GetCommission(ctx, epochId, token.TokenId)
+	if !found {
+		return errorsmod.Wrapf(types.ErrCommissionNotFound, "token %d", token.TokenId)
+	}
+
+	current, ok := new(big.Int).SetString(commission.Amount, 10)
+	if !ok || current.Sign() < 0 {
+		return errorsmod.Wrapf(types.ErrInvalidCommission, "invalid stored amount %q", commission.Amount)
+	}
+
+	deduction := TransformAmount(amount, token.Decimals, types.DefaultChainDecimals)
+	if current.Cmp(deduction) < 0 {
+		return errorsmod.Wrapf(
+			types.ErrInvalidCommission,
+			"native deduction %s exceeds stored commission %s",
+			amount.String(),
+			commission.Amount,
+		)
+	}
+
+	return k.SetCommissionNormalized(ctx, epochId, token.TokenId, current.Sub(current, deduction))
+}
+
+func (k Keeper) SubtractCommissionNormalized(ctx sdk.Context, epochId uint32, tokenId uint64, amount *big.Int) error {
+	if amount == nil || amount.Sign() < 0 {
+		return errorsmod.Wrap(types.ErrInvalidCommission, "native amount must be non-negative")
+	}
+
+	commission, found := k.GetCommission(ctx, epochId, tokenId)
+	if !found {
+		return errorsmod.Wrapf(types.ErrCommissionNotFound, "token %d", tokenId)
+	}
+
+	current, ok := new(big.Int).SetString(commission.Amount, 10)
+	if !ok || current.Sign() < 0 {
+		return errorsmod.Wrapf(types.ErrInvalidCommission, "invalid stored amount %q", commission.Amount)
+	}
+
+	if current.Cmp(amount) < 0 {
+		return errorsmod.Wrapf(
+			types.ErrInvalidCommission,
+			"native deduction %s exceeds stored commission %s",
+			amount.String(),
+			commission.Amount,
+		)
+	}
+
+	return k.SetCommissionNormalized(ctx, epochId, tokenId, current.Sub(current, amount))
 }
 
 func (k Keeper) GetCommission(sdkCtx sdk.Context, epochId uint32, tokenId uint64) (types.Commission, bool) {

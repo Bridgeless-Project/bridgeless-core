@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"math/big"
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"
@@ -54,12 +55,6 @@ func (m msgServer) SubmitSwapTx(goCtx context.Context, msg *types.MsgSubmitSwapT
 	// Fee distribution flow
 	if msg.Tx.IsFeeDistribution {
 
-		// returns decimals 18
-		commission, err := m.computeCommission(ctx, msg.Tx)
-		if err != nil {
-			return nil, errorsmod.Wrap(err, "failed to compute commission")
-		}
-
 		// distribute amountOutMin between validators (NOT WithdrawalAmount)
 		amountOutMin, err := utils.ParseUintString(msg.Tx.SwapOutAmount)
 		if err != nil {
@@ -74,7 +69,18 @@ func (m msgServer) SubmitSwapTx(goCtx context.Context, msg *types.MsgSubmitSwapT
 			return nil, errorsmod.Wrap(err, "failed to distribute fee among parties")
 		}
 
-		m.bridge.SetCommission(ctx, msg.Tx.Tx.EpochId, *commission)
+		withdrawalToken, found := m.bridge.GetTokenInfo(ctx, msg.Tx.Tx.WithdrawalChainId, msg.Tx.Tx.WithdrawalToken)
+		if !found {
+			return nil, errorsmod.Wrap(bridgetypes.ErrTokenInfoNotFound, "withdrawal token not found")
+		}
+		withdrawalAmount, ok := new(big.Int).SetString(msg.Tx.Tx.WithdrawalAmount, 10)
+		if !ok || withdrawalAmount.Sign() < 0 {
+			return nil, errorsmod.Wrapf(bridgetypes.ErrInvalidAmount, "invalid withdrawal amount %q", msg.Tx.Tx.WithdrawalAmount)
+		}
+
+		if err = m.bridge.SubtractCommissionNative(ctx, msg.Tx.Tx.EpochId, withdrawalToken, withdrawalAmount); err != nil {
+			return nil, errorsmod.Wrap(err, "failed to subtract fee-distribution commission")
+		}
 	}
 
 	return &types.MsgSubmitSwapTxResponse{}, nil

@@ -95,8 +95,8 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 		return errorsmod.Wrap(types.ErrTokenInfoNotFound, "withdrawal token not found")
 	}
 
-	// Transform commission decimals to bridgeless decimals (18)
-	commissionAmount = TransformAmount(commissionAmount, withdrawalToken.Decimals, types.DefaultChainDecimals)
+	// Transform commission decimals to bridgeless decimals (18).
+	commissionAmount18 := TransformAmount(commissionAmount, withdrawalToken.Decimals, types.DefaultChainDecimals)
 
 	if !types.IsDefaultReferralId(transaction.ReferralId) {
 		referral, ok := k.GetReferral(ctx, transaction.ReferralId)
@@ -104,12 +104,12 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 			return errorsmod.Wrap(types.ErrReferralNotFound, "referral ID not found")
 		}
 
-		txReferralRewards, err := types.ComputeCommissionAmount(commissionAmount, referral.CommissionRate)
+		txReferralRewards, err := types.ComputeCommissionAmount(commissionAmount18, referral.CommissionRate)
 		if err != nil {
 			return errorsmod.Wrap(err, "failed to calculate referral rewards")
 		}
 
-		commissionAmount.Sub(commissionAmount, txReferralRewards)
+		commissionAmount18.Sub(commissionAmount18, txReferralRewards)
 
 		referralRewards := types.ReferralRewards{
 			ReferralId:         transaction.ReferralId,
@@ -123,20 +123,9 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 		}
 	}
 
-	existingCommission, found := k.GetCommission(ctx, transaction.EpochId, withdrawalToken.TokenId)
-	if found {
-		previousCommissionAmount, ok := new(big.Int).SetString(existingCommission.Amount, 10)
-		if !ok {
-			return errorsmod.Wrap(types.ErrInvalidDataType, "failed to parse existing commission amount")
-		}
-
-		commissionAmount.Add(previousCommissionAmount, commissionAmount)
+	if err := k.AddCommissionNormalized(ctx, transaction.EpochId, withdrawalToken.TokenId, commissionAmount18); err != nil {
+		return errorsmod.Wrap(err, "failed to add transaction commission")
 	}
-
-	k.SetCommission(ctx, transaction.EpochId, types.Commission{
-		TokenId: withdrawalToken.TokenId,
-		Amount:  commissionAmount.String(),
-	})
 
 	// we do not need to store tx for epoch 0
 	if transaction.EpochId == 0 {
