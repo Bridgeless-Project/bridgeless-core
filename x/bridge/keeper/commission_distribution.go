@@ -12,7 +12,7 @@ func (k Keeper) GetCommissionPrices(ctx sdk.Context, epochId uint32) ([]bridgety
 	for _, commission := range k.GetAllCommissions(ctx, epochId) {
 		comAmount, ok := sdk.NewIntFromString(commission.Amount)
 		if !ok {
-			continue
+			return nil, errors.Wrapf(bridgetypes.ErrInvalidCommission, "invalid stored amount %q", commission.Amount)
 		}
 		if comAmount.IsZero() {
 			continue
@@ -25,6 +25,14 @@ func (k Keeper) GetCommissionPrices(ctx sdk.Context, epochId uint32) ([]bridgety
 
 		// convert stored decimals (18) to native decimals
 		comAmountNativeDecimals := TransformAmount(comAmount.BigInt(), bridgetypes.DefaultChainDecimals, info.Decimals)
+		if comAmountNativeDecimals.Sign() == 0 {
+			return nil, errors.Wrapf(
+				bridgetypes.ErrInvalidCommission,
+				"token %d commission %s is below one native unit",
+				commission.TokenId,
+				commission.Amount,
+			)
+		}
 
 		amountOut, path, err := k.hooks.GetTokenPrice(ctx, info.Address, comAmountNativeDecimals)
 		if err != nil {

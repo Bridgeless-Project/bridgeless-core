@@ -1,6 +1,8 @@
 package types
 
 import (
+	"math/big"
+
 	bridgetypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -26,11 +28,11 @@ type BridgeKeeper interface {
 	IsParty(ctx sdk.Context, sender string) bool
 	GetChain(ctx sdk.Context, id string) (bridgetypes.Chain, bool)
 	GetTokenInfo(ctx sdk.Context, chain, address string) (bridgetypes.TokenInfo, bool)
-	GetDstToken(sdkCtx sdk.Context, srcAddr, srcChain, dscChain string) (info bridgetypes.TokenInfo, found bool)
+	GetDstToken(ctx sdk.Context, srcAddr, srcChain, dscChain string) (info bridgetypes.TokenInfo, found bool)
 
-	SetCommission(ctx sdk.Context, epochId uint32, commission bridgetypes.Commission)
+	SubtractCommissionNative(ctx sdk.Context, epochId uint32, token bridgetypes.TokenInfo, amount *big.Int) error
 	GetCommission(ctx sdk.Context, epochId uint32, tokenId uint64) (bridgetypes.Commission, bool)
-
+	SubtractCommissionNormalized(ctx sdk.Context, epochId uint32, tokenId uint64, amount *big.Int) error
 	PartiesDistributeFee(ctx sdk.Context, epochId uint32, fee sdk.Coin) error
 }
 

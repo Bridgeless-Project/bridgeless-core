@@ -17,13 +17,8 @@ func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 	skipCounter := 0
 	var epochId uint32 = 0
 
-	// remove commissions
-	commissions := getCommissions(ctx, storeKey, cdc, epochId)
-	for _, commission := range commissions {
-		removeCommission(ctx, storeKey, epochId, commission.TokenId)
-	}
-
-	commissions = getCommissions(ctx, storeKey, cdc, epochId)
+	oldCommissions := getCommissions(ctx, storeKey, cdc, epochId)
+	commissions := make(map[uint64]types.Commission)
 
 	trStore := prefix.NewStore(ctx.KVStore(storeKey), types.Prefix(types.StoreTransactionPrefix))
 	iterator := sdk.KVStorePrefixIterator(trStore, []byte{})
@@ -55,8 +50,16 @@ func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 			continue
 		}
 
-		trComAmount, ok := new(big.Int).SetString(transaction.CommissionAmount, 10)
-		if !ok {
+		trComAmount := big.NewInt(0)
+		if transaction.CommissionAmount != "" {
+			ok = false
+			trComAmount, ok = new(big.Int).SetString(transaction.CommissionAmount, 10)
+			if !ok {
+				skipCounter++
+				continue
+			}
+		}
+		if trComAmount.Sign() < 0 {
 			skipCounter++
 			continue
 		}
@@ -68,6 +71,16 @@ func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 		commsission.Amount = commissionAmount.String()
 
 		commissions[token.TokenId] = commsission
+	}
+
+	if len(commissions) == 0 && len(oldCommissions) > 0 {
+		ctx.Logger().Info("skipping commission rewrite because no commissions were reconstructed")
+		fmt.Println("counter: ", skipCounter)
+		return nil
+	}
+
+	for _, commission := range oldCommissions {
+		removeCommission(ctx, storeKey, epochId, commission.TokenId)
 	}
 
 	for _, commission := range commissions {

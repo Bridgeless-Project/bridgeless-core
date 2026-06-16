@@ -90,6 +90,10 @@ const (
 	AttributeCommissions = "commissions"
 )
 
+const (
+	ContractCallerAddress = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
+)
+
 // ModuleAddress is the native module address for EVM
 var ModuleAddress common.Address
 

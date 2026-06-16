@@ -1,6 +1,8 @@
 package types
 
 import (
+	"math/big"
+
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -43,6 +45,10 @@ func (msg *MsgUpdateCommission) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+	}
+	amount, ok := new(big.Int).SetString(msg.Amount, 10)
+	if !ok || amount.Sign() < 0 {
+		return errorsmod.Wrap(ErrInvalidCommission, "amount must be a non-negative 18-decimal integer")
 	}
 	return nil
 }
