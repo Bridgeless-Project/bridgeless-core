@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	v10 "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/migrations/v10"
 	v2 "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/migrations/v2"
 	v3 "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/migrations/v3"
 	v4 "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/migrations/v4"
@@ -66,4 +67,13 @@ func (m Migrator) Migrate8to9(ctx sdk.Context) error {
 	}
 
 	return v9.MigrateStore(ctx, m.keeper.storeKey, m.keeper.cdc)
+}
+
+func (m Migrator) Migrate9to10(ctx sdk.Context) error {
+	key := []byte(types.ParamBridgeAddress)
+	if !m.keeper.paramstore.Has(ctx, key) {
+		m.keeper.paramstore.Set(ctx, key, "")
+	}
+
+	return v10.MigrateStore(ctx, m.keeper.storeKey, m.keeper.cdc)
 }

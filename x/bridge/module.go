@@ -23,7 +23,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 )
 
-const consensusVersion = 9
+const consensusVersion = 10
 
 var (
 	_ module.AppModule      = AppModule{}
@@ -152,6 +152,9 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 	}
 
 	if err := cfg.RegisterMigration(types.ModuleName, 8, am.migrator.Migrate8to9); err != nil {
+		panic(err)
+	}
+	if err := cfg.RegisterMigration(types.ModuleName, 9, am.migrator.Migrate9to10); err != nil {
 		panic(err)
 	}
 
