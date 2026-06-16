@@ -31,6 +31,7 @@ const (
 	ParamEpochId              = "EpochId"
 	ParamSupportingTime       = "SupportingTime"
 	ParamUniswapRouterAddress = "UniswapRouterAddress"
+	ParamBridgeAddress        = "BridgeAddress"
 
 	// ---- Store Prefixes ------
 	StoreTokenPrefix                        = "token"
@@ -87,6 +88,10 @@ const (
 	AttributeEpochSignatureAddress = "epoch_signature_address"
 
 	AttributeCommissions = "commissions"
+)
+
+const (
+	ContractCallerAddress = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
 )
 
 // ModuleAddress is the native module address for EVM

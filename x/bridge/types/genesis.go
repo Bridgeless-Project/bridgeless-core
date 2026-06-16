@@ -1,6 +1,9 @@
 package types
 
 import (
+	"fmt"
+	"math/big"
+
 	errorsmod "cosmossdk.io/errors"
 	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 )
@@ -17,6 +20,7 @@ func DefaultGenesis() *GenesisState {
 		Tokens:       []Token{},
 		Transactions: []Transaction{},
 		Epochs:       []Epoch{},
+		Commissions:  []GenesisCommission{},
 	}
 }
 
@@ -87,6 +91,20 @@ func (gs GenesisState) Validate() error {
 
 		if err := validateEpoch(&epoch); err != nil {
 			return errorsmod.Wrapf(err, "invalid epoch %s", epoch.Id)
+		}
+	}
+
+	commissions := make(map[string]struct{})
+	for _, entry := range gs.Commissions {
+		key := fmt.Sprintf("%d/%d", entry.EpochId, entry.Commission.TokenId)
+		if _, ok := commissions[key]; ok {
+			return errorsmod.Wrapf(bridgeTypes.ErrDuplicatedValue, "duplicate commission: %s", key)
+		}
+		commissions[key] = struct{}{}
+
+		amount, ok := new(big.Int).SetString(entry.Commission.Amount, 10)
+		if !ok || amount.Sign() < 0 {
+			return errorsmod.Wrapf(ErrInvalidCommission, "invalid commission amount %q for %s", entry.Commission.Amount, key)
 		}
 	}
 

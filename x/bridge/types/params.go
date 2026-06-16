@@ -27,6 +27,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair([]byte(ParamEpochId), &p.Epoch, validateEpochId),
 		paramtypes.NewParamSetPair([]byte(ParamSupportingTime), &p.SupportingTime, validateSupportingTime),
 		paramtypes.NewParamSetPair([]byte(ParamUniswapRouterAddress), &p.UniswapRouterAddress, validateOptionalEVMAddress),
+		paramtypes.NewParamSetPair([]byte(ParamBridgeAddress), &p.BridgeAddress, validateOptionalEVMAddress),
 	}
 }
 

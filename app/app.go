@@ -459,13 +459,6 @@ func NewBridge(
 	app.StakingKeeper = stakingkeeper.NewKeeper(
 		appCodec, keys[stakingtypes.StoreKey], app.AccountKeeper, app.BankKeeper, app.GetSubspace(stakingtypes.ModuleName),
 	)
-	app.BridgeKeeper = bridgekeeper.NewKeeper(
-		appCodec, keys[bridgetypes.StoreKey],
-		keys[bridgetypes.StoreKey],
-		app.GetSubspace(bridgetypes.ModuleName),
-		app.BankKeeper,
-		app.Erc20Keeper,
-	)
 
 	app.AccumulatorKeeper = accumulatorkeeper.NewKeeper(
 		appCodec,
@@ -588,6 +581,14 @@ func NewBridge(
 		app.AccountKeeper, app.BankKeeper, app.EvmKeeper, app.StakingKeeper, app.ClaimsKeeper,
 	)
 
+	app.BridgeKeeper = bridgekeeper.NewKeeper(
+		appCodec, keys[bridgetypes.StoreKey],
+		keys[bridgetypes.StoreKey],
+		app.GetSubspace(bridgetypes.ModuleName),
+		app.BankKeeper,
+		app.Erc20Keeper,
+	)
+	
 	app.RevenueKeeper = revenuekeeper.NewKeeper(
 		keys[revenuetypes.StoreKey], appCodec, authtypes.NewModuleAddress(govtypes.ModuleName),
 		app.BankKeeper, app.EvmKeeper,
