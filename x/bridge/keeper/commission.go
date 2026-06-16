@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"encoding/binary"
 	"math/big"
 
 	errorsmod "cosmossdk.io/errors"
@@ -171,4 +172,28 @@ func (k Keeper) GetAllCommissions(sdkCtx sdk.Context, epochId uint32) (commissio
 	}
 
 	return
+}
+
+func (k Keeper) GetAllGenesisCommissions(ctx sdk.Context) (commissions []types.GenesisCommission) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreCommissionPrefix))
+	iterator := store.Iterator(nil, nil)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+
+		// uint32 is reserved for epoch
+		// it follows from the key ("epochId/tokenId")
+		if len(iterator.Key()) < 4 {
+			panic("invalid commission store key")
+		}
+
+		var commission types.Commission
+		k.cdc.MustUnmarshal(iterator.Value(), &commission)
+		commissions = append(commissions, types.GenesisCommission{
+			EpochId:    binary.LittleEndian.Uint32(iterator.Key()[:4]),
+			Commission: commission,
+		})
+	}
+
+	return commissions
 }

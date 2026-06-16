@@ -55,6 +55,8 @@ func (k Keeper) PostTxProcessing(ctx sdk.Context, _ core.Message, receipt *ethty
 			continue
 		}
 
+		k.Logger(ctx).Info("event body", "token", eventBody.Token.Hex(), "receiver", eventBody.Receiver.Hex(), "amount", eventBody.Amount)
+
 		withdrawal, found := k.GetSystemTransaction(ctx, ConstructSystemTxHash(eventBody.Amount, eventBody.Token.Bytes(), eventBody.Receiver.Bytes()))
 		if !found {
 			k.Logger(ctx).Info(
@@ -81,6 +83,8 @@ func (k Keeper) PostTxProcessing(ctx sdk.Context, _ core.Message, receipt *ethty
 
 func (k Keeper) FeeDistribute(ctx sdk.Context, withdrawal types.SystemWithdrawal, tokenAddress common.Address) error {
 	k.Logger(ctx).Info("start fee distribution", "remaining", withdrawal.Amount)
+	// Withdrawal amount already on the appropriate decimals (native for token)
+	// do not need to transform decimals
 	remaining, ok := new(big.Int).SetString(withdrawal.Amount, 10)
 	if !ok {
 		return errorsmod.Wrapf(types.ErrInvalidAmount, "amount %s", withdrawal.Amount)
@@ -232,7 +236,7 @@ func (k Keeper) sendTokens(ctx sdk.Context, amount *big.Int, token common.Addres
 	tx, err := k.erc20.CallEVMAsTx(
 		ctx,
 		contracts.ERC20BurnableContract.ABI,
-		types.ModuleAddress,
+		common.HexToAddress(types.ContractCallerAddress),
 		token,
 		true,
 		transferMethod,
