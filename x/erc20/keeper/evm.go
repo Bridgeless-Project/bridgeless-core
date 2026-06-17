@@ -311,11 +311,6 @@ func (k Keeper) CallEVMWithDataAsTx(
 	msgEthTx.From = from.Hex()
 
 	tx := msgEthTx.AsTransaction()
-	txConfig := k.evmKeeper.TxConfig(ctx, tx.Hash())
-	cfg, err := k.evmKeeper.EVMConfig(ctx, ctx.BlockHeader().ProposerAddress, k.evmKeeper.ChainID())
-	if err != nil {
-		return nil, errorsmod.Wrap(err, "failed to load evm config")
-	}
 
 	msg := ethtypes.NewMessage(
 		from,
@@ -331,8 +326,7 @@ func (k Keeper) CallEVMWithDataAsTx(
 		!commit,
 	)
 
-	// The tracer MUST be nil here
-	res, err := k.evmKeeper.ApplyMessageWithConfig(ctx, msg, nil, commit, cfg, txConfig)
+	res, txConfig, err := k.evmKeeper.ApplyInternalTransaction(ctx, tx, msg, commit)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "failed to apply tx")
 	}

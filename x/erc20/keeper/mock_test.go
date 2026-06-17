@@ -11,6 +11,7 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core"
+	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/vm"
 	"github.com/stretchr/testify/mock"
 )
@@ -67,6 +68,20 @@ func (m *MockEVMKeeper) ApplyMessage(_ sdk.Context, _ core.Message, _ vm.EVMLogg
 		return nil, args.Error(1)
 	}
 	return args.Get(0).(*evm.MsgEthereumTxResponse), args.Error(1)
+}
+
+func (m *MockEVMKeeper) ApplyInternalTransaction(
+	_ sdk.Context,
+	_ *ethtypes.Transaction,
+	_ core.Message,
+	_ bool,
+) (*evm.MsgEthereumTxResponse, statedb.TxConfig, error) {
+	args := m.Called(mock.Anything, mock.Anything, mock.Anything, mock.Anything)
+
+	if args.Get(0) == nil {
+		return nil, statedb.TxConfig{}, args.Error(2)
+	}
+	return args.Get(0).(*evm.MsgEthereumTxResponse), args.Get(1).(statedb.TxConfig), args.Error(2)
 }
 
 func (m *MockEVMKeeper) ApplyMessageWithConfig(

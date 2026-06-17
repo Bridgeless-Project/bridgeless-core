@@ -31,6 +31,19 @@ func (dh FailureHook) PostTxProcessing(_ sdk.Context, _ core.Message, _ *ethtype
 	return errors.New("post tx processing failed")
 }
 
+type TransientRecordHook struct {
+	keeper *keeper.Keeper
+
+	TxIndex uint64
+	LogSize uint64
+}
+
+func (h *TransientRecordHook) PostTxProcessing(ctx sdk.Context, _ core.Message, _ *ethtypes.Receipt) error {
+	h.TxIndex = h.keeper.GetTxIndexTransient(ctx)
+	h.LogSize = h.keeper.GetLogSizeTransient(ctx)
+	return nil
+}
+
 func (suite *KeeperTestSuite) TestEvmHooks() {
 	testCases := []struct {
 		msg       string
@@ -87,4 +100,30 @@ func (suite *KeeperTestSuite) TestEvmHooks() {
 
 		tc.expFunc(hook, result)
 	}
+}
+
+func (suite *KeeperTestSuite) TestApplyTransactionReservesTransientMetadataBeforeHooks() {
+	suite.SetupTest()
+	suite.app.EvmKeeper = suite.app.EvmKeeper.CleanHooks()
+
+	hook := &TransientRecordHook{keeper: suite.app.EvmKeeper}
+	suite.app.EvmKeeper.SetHooks(keeper.NewMultiEvmHooks(hook))
+
+	to := common.Address{}
+	nonce := suite.app.EvmKeeper.GetNonce(suite.ctx, suite.address)
+	tx, err := newSignedEthTx(&ethtypes.AccessListTx{
+		GasPrice: big.NewInt(1),
+		Gas:      21_000,
+		To:       &to,
+		Value:    big.NewInt(0),
+		Data:     []byte{},
+	}, nonce, sdk.AccAddress(suite.address.Bytes()), suite.signer, suite.ethSigner)
+	suite.Require().NoError(err)
+
+	res, err := suite.app.EvmKeeper.ApplyTransaction(suite.ctx, tx)
+	suite.Require().NoError(err)
+	suite.Require().False(res.Failed())
+	suite.Require().Equal(uint64(1), hook.TxIndex)
+	suite.Require().Equal(uint64(0), hook.LogSize)
+	suite.Require().Equal(uint64(1), suite.app.EvmKeeper.GetTxIndexTransient(suite.ctx))
 }

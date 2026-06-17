@@ -27,6 +27,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core"
+	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/vm"
 
 	claimstypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/types"
@@ -70,6 +71,12 @@ type EVMKeeper interface {
 	TxConfig(ctx sdk.Context, txHash common.Hash) statedb.TxConfig
 	EstimateGas(c context.Context, req *evmtypes.EthCallRequest) (*evmtypes.EstimateGasResponse, error)
 	ApplyMessage(ctx sdk.Context, msg core.Message, tracer vm.EVMLogger, commit bool) (*evmtypes.MsgEthereumTxResponse, error)
+	ApplyInternalTransaction(
+		ctx sdk.Context,
+		tx *ethtypes.Transaction,
+		msg core.Message,
+		commit bool,
+	) (*evmtypes.MsgEthereumTxResponse, statedb.TxConfig, error)
 	ApplyMessageWithConfig(
 		ctx sdk.Context,
 		msg core.Message,
