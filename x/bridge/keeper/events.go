@@ -73,7 +73,7 @@ func emitSubmitEvent(sdkCtx sdk.Context, transaction types.Transaction) {
 }
 
 func emitSystemSubmitEvent(sdkCtx sdk.Context, transaction types.SystemWithdrawal) {
-	sdkCtx.EventManager().EmitEvent(sdk.NewEvent(types.EventType_DEPOSIT_SUBMITTED.String(),
+	sdkCtx.EventManager().EmitEvent(sdk.NewEvent(types.EventType_SYSTEM_TRANSACTION_SUBMITTED.String(),
 		sdk.NewAttribute(types.AttributeKeyDepositTxHash, transaction.TxHash),
 		sdk.NewAttribute(types.AttributeKeyDepositNonce, big.NewInt(int64(transaction.TxIndex)).String()),
 		sdk.NewAttribute(types.AttributeKeyWithdrawalAmount, transaction.Amount),
