@@ -46,7 +46,7 @@ func CmdSetCommission() *cobra.Command {
 				return errors.Wrap(types.ErrInvalidDataType, "token-id must be a valid integer")
 			}
 
-			epochId, ok := big.NewInt(0).SetString(args[0], 10)
+			epochId, ok := big.NewInt(0).SetString(args[1], 10)
 			if !ok {
 				return errors.Wrap(types.ErrInvalidDataType, "epoch-id must be a valid integer")
 			}
@@ -83,7 +83,7 @@ func CmdUpdateCommission() *cobra.Command {
 				return errors.Wrap(types.ErrInvalidDataType, "token-id must be a valid integer")
 			}
 
-			epochId, ok := big.NewInt(0).SetString(args[0], 10)
+			epochId, ok := big.NewInt(0).SetString(args[1], 10)
 			if !ok {
 				return errors.Wrap(types.ErrInvalidDataType, "epoch-id must be a valid integer")
 			}
@@ -91,7 +91,7 @@ func CmdUpdateCommission() *cobra.Command {
 				clientCtx.GetFromAddress().String(),
 				tokenId.Uint64(),
 				uint32(epochId.Uint64()),
-				args[1],
+				args[2],
 			)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
@@ -119,7 +119,7 @@ func CmdRemoveCommission() *cobra.Command {
 				return errors.Wrap(types.ErrInvalidDataType, "token-id must be a valid integer")
 			}
 
-			epochId, ok := big.NewInt(0).SetString(args[0], 10)
+			epochId, ok := big.NewInt(0).SetString(args[1], 10)
 			if !ok {
 				return errors.Wrap(types.ErrInvalidDataType, "epoch-id must be a valid integer")
 			}

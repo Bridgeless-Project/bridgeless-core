@@ -131,6 +131,7 @@ func (k Keeper) FeeDistribute(ctx sdk.Context, withdrawal types.SystemWithdrawal
 		return nil
 	}
 
+	// TODO: rollback the tx state if share is processed
 	share := new(big.Int).Div(remaining, big.NewInt(int64(len(epoch.Parties))))
 	if share.Sign() == 0 {
 		k.Logger(ctx).Info("skipping fee distribute: share is zero")

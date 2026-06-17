@@ -157,49 +157,49 @@ func (k Keeper) DeleteTx(ctx sdk.Context, depositTxHash string, depositTxIndex u
 		k.RemoveTransactionSubmissions(ctx, txSubmissions.Hash)
 	}
 
-	// Minus referral rewards
-	// if referral ID is default no need to minus rewards, just emit event and return
-	if types.IsDefaultReferralId(transaction.ReferralId) {
-		emitRemoveTransactionEvent(ctx, transaction)
-		return nil
-	}
-
-	// If referral ID is not default minus rewards
-	referral, ok := k.GetReferral(ctx, transaction.ReferralId)
-	if !ok {
-		return errorsmod.Wrap(types.ErrReferralNotFound, "referral ID not found")
-	}
-
 	withdrawalToken, ok := k.GetTokenInfo(ctx, transaction.WithdrawalChainId, transaction.WithdrawalToken)
 	if !ok {
 		return errorsmod.Wrap(types.ErrTokenInfoNotFound, "token info not found for deposit withdrawalToken")
 	}
 
-	// Rewards for referral are taken from CommissionAmount; decimals 18
+	// CommissionAmount is submitted in withdrawal token native decimals.
 	commissionAmount, ok := big.NewInt(0).SetString(transaction.CommissionAmount, 10)
 	if !ok {
 		return errorsmod.Wrap(types.ErrInvalidDataType, "invalid withdrawal amount")
 	}
 
-	// covert the commissionAmount decimals to 18
+	// Convert the commission amount to normalized 18-decimal accounting units.
 	commissionAmount = TransformAmount(commissionAmount, withdrawalToken.Decimals, types.DefaultChainDecimals)
-	// TODO handle commissions
-	rewards, err := types.ComputeCommissionAmount(commissionAmount, referral.CommissionRate)
-	if err != nil {
-		return errorsmod.Wrap(err, "failed to calculate referral rewards")
+
+	if !types.IsDefaultReferralId(transaction.ReferralId) {
+		referral, ok := k.GetReferral(ctx, transaction.ReferralId)
+		if !ok {
+			return errorsmod.Wrap(types.ErrReferralNotFound, "referral ID not found")
+		}
+
+		rewards, err := types.ComputeCommissionAmount(commissionAmount, referral.CommissionRate)
+		if err != nil {
+			return errorsmod.Wrap(err, "failed to calculate referral rewards")
+		}
+
+		commissionAmount.Sub(commissionAmount, rewards)
+
+		// Convert rewards to negative value to subtract them from referral balances.
+		referralRewards := types.ReferralRewards{
+			ReferralId:         transaction.ReferralId,
+			TokenId:            withdrawalToken.TokenId,
+			ToClaim:            sdk.NewIntFromBigInt(rewards).Neg().String(),
+			TotalClaimedAmount: sdk.NewInt(0).String(), // not used when adding referral rewards and should be 0
+		}
+
+		err = k.AddReferralRewards(ctx, transaction.ReferralId, withdrawalToken.TokenId, referralRewards)
+		if err != nil {
+			return errorsmod.Wrap(err, "failed to minus referral rewards")
+		}
 	}
 
-	// convert rewards to negative value to minus it
-	referralRewards := types.ReferralRewards{
-		ReferralId:         transaction.ReferralId,
-		TokenId:            withdrawalToken.TokenId,
-		ToClaim:            sdk.NewIntFromBigInt(rewards).Neg().String(),
-		TotalClaimedAmount: sdk.NewInt(0).String(), // not used when adding referral rewards and should be 0
-	}
-
-	err = k.AddReferralRewards(ctx, transaction.ReferralId, withdrawalToken.TokenId, referralRewards)
-	if err != nil {
-		return errorsmod.Wrap(err, "failed to minus referral rewards")
+	if err := k.SubtractCommissionNormalized(ctx, transaction.EpochId, withdrawalToken.TokenId, commissionAmount); err != nil {
+		return errorsmod.Wrap(err, "failed to subtract transaction commission")
 	}
 
 	if transaction.EpochId != 0 {

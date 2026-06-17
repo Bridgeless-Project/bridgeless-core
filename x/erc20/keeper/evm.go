@@ -260,9 +260,12 @@ func (k Keeper) CallEVMWithData(
 		return nil, errorsmod.Wrap(evmtypes.ErrVMExecution, res.VmError)
 	}
 
-	err = k.evmKeeper.BroadcastTxResponse(ctx, from.String(), amount.String(), contract, ethtypes.AccessListTxType, nonce, res)
-	if err != nil {
-		return nil, errorsmod.Wrap(err, "failed to broadcast tx")
+	// To prevent  phantom message the module broadcast event only if commission changes
+	if commit {
+		err = k.evmKeeper.BroadcastTxResponse(ctx, from.String(), amount.String(), contract, ethtypes.AccessListTxType, nonce, res)
+		if err != nil {
+			return nil, errorsmod.Wrap(err, "failed to broadcast tx")
+		}
 	}
 
 	return res, nil

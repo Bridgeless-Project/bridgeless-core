@@ -111,8 +111,8 @@ func (m msgServer) RemoveEpochPubKey(goCtx context.Context, msg *types.MsgRemove
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	if !m.IsParty(ctx, msg.Creator) {
-		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "submitter isn`t an authorized party")
+	if msg.Creator != m.Keeper.GetParams(ctx).ModuleAdmin {
+		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "only module admin can remove pubkey")
 	}
 
 	pubkey, found := m.Keeper.GetEpochPubkey(ctx, msg.EpochId)
