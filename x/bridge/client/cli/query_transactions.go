@@ -116,7 +116,7 @@ func CmdQuerySystemWithdrawals() *cobra.Command {
 
 func CmdQuerySystemWithdrawalById() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "system-withdrawal [tx_hash] [tx_index]",
+		Use:   "system-withdrawal [tx_hash]",
 		Short: "Query bridge system withdrawal by its id",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -136,8 +136,7 @@ func CmdQuerySystemWithdrawalById() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 			res, err := queryClient.SystemWithdrawalById(cmd.Context(), &types.QuerySystemWithdrawalByIdRequest{
-				TxHash:  args[0],
-				TxIndex: index.Uint64(),
+				TxHash: args[0],
 			})
 			if err != nil {
 				return err

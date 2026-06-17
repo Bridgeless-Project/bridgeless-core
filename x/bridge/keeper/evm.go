@@ -25,7 +25,7 @@ const transferMethod = "transfer"
 // distributes the corresponding stored system withdrawal fees.
 func (k Keeper) PostTxProcessing(ctx sdk.Context, _ core.Message, receipt *ethtypes.Receipt) error {
 	if receipt == nil || len(receipt.Logs) == 0 {
-		k.Logger(ctx).Error("PostTxProcessing receipt is nil or empty")
+		k.Logger(ctx).Info("skipping bridge EVM hook: receipt is nil or has no logs")
 		return nil
 	}
 

@@ -187,6 +187,18 @@ func (k Keeper) CallEVMAsTx(
 	method string,
 	args ...interface{},
 ) (*evmtypes.MsgEthereumTxResponse, error) {
+
+	// manually increment the nonce
+	// do it only for transaction with commit flag
+	if commit {
+		acc := k.accountKeeper.GetAccount(ctx, from.Bytes())
+		err := acc.SetSequence(acc.GetSequence() + 1)
+		if err != nil {
+			return nil, errorsmod.Wrapf(err, "failed to set sequence to %d", acc.GetSequence()+1)
+		}
+		k.accountKeeper.SetAccount(ctx, acc)
+	}
+
 	data, err := abi.Pack(method, args...)
 	if err != nil {
 		return nil, errorsmod.Wrap(
@@ -260,14 +272,6 @@ func (k Keeper) CallEVMWithData(
 		return nil, errorsmod.Wrap(evmtypes.ErrVMExecution, res.VmError)
 	}
 
-	// To prevent  phantom message the module broadcast event only if commission changes
-	if commit {
-		err = k.evmKeeper.BroadcastTxResponse(ctx, from.String(), amount.String(), contract, ethtypes.AccessListTxType, nonce, res)
-		if err != nil {
-			return nil, errorsmod.Wrap(err, "failed to broadcast tx")
-		}
-	}
-
 	return res, nil
 }
 
@@ -335,6 +339,11 @@ func (k Keeper) CallEVMWithDataAsTx(
 
 	if res.Failed() {
 		return nil, errorsmod.Wrap(evmtypes.ErrVMExecution, res.VmError)
+	}
+
+	// To prevent  phantom message the module broadcast event only if commission changes
+	if !commit {
+		return res, nil
 	}
 
 	if err = k.evmKeeper.BroadcastTxResponse(
