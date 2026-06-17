@@ -32,9 +32,9 @@ func TxCommissionCmd() *cobra.Command {
 
 func CmdSetCommission() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "set-commission [token-id] [amount]",
+		Use:   "set-commission [token-id] [epoch-id] [amount]",
 		Short: "Set a commission",
-		Args:  cobra.ExactArgs(2),
+		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -46,10 +46,16 @@ func CmdSetCommission() *cobra.Command {
 				return errors.Wrap(types.ErrInvalidDataType, "token-id must be a valid integer")
 			}
 
+			epochId, ok := big.NewInt(0).SetString(args[0], 10)
+			if !ok {
+				return errors.Wrap(types.ErrInvalidDataType, "epoch-id must be a valid integer")
+			}
+
 			msg := types.NewMsgSetCommission(
 				clientCtx.GetFromAddress().String(),
 				tokenId.Uint64(),
-				args[1],
+				uint32(epochId.Uint64()),
+				args[2],
 			)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
@@ -63,9 +69,9 @@ func CmdSetCommission() *cobra.Command {
 
 func CmdUpdateCommission() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-commission [token-id] [amount]",
+		Use:   "update-commission [token-id] [epoch-id] [amount]",
 		Short: "Update a commission",
-		Args:  cobra.ExactArgs(2),
+		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -77,9 +83,14 @@ func CmdUpdateCommission() *cobra.Command {
 				return errors.Wrap(types.ErrInvalidDataType, "token-id must be a valid integer")
 			}
 
+			epochId, ok := big.NewInt(0).SetString(args[0], 10)
+			if !ok {
+				return errors.Wrap(types.ErrInvalidDataType, "epoch-id must be a valid integer")
+			}
 			msg := types.NewMsgUpdateCommission(
 				clientCtx.GetFromAddress().String(),
 				tokenId.Uint64(),
+				uint32(epochId.Uint64()),
 				args[1],
 			)
 
@@ -94,9 +105,9 @@ func CmdUpdateCommission() *cobra.Command {
 
 func CmdRemoveCommission() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "remove-commission [token-id]",
+		Use:   "remove-commission [token-id] [epoch-id]",
 		Short: "Remove a commission",
-		Args:  cobra.ExactArgs(1),
+		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -108,9 +119,15 @@ func CmdRemoveCommission() *cobra.Command {
 				return errors.Wrap(types.ErrInvalidDataType, "token-id must be a valid integer")
 			}
 
+			epochId, ok := big.NewInt(0).SetString(args[0], 10)
+			if !ok {
+				return errors.Wrap(types.ErrInvalidDataType, "epoch-id must be a valid integer")
+			}
+
 			msg := types.NewMsgRemoveCommission(
 				clientCtx.GetFromAddress().String(),
 				tokenId.Uint64(),
+				uint32(epochId.Uint64()),
 			)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)

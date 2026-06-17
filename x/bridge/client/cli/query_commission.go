@@ -13,9 +13,9 @@ import (
 
 func CmdQueryGetCommissionByToken() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "commission [token-id]",
-		Short: "shows the commission by tokenId",
-		Args:  cobra.ExactArgs(1),
+		Use:   "commission [token-id] [epoch-id]",
+		Short: "shows the commission by tokenId and epochId",
+		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 
@@ -24,8 +24,17 @@ func CmdQueryGetCommissionByToken() *cobra.Command {
 				return errors.Wrap(types.ErrInvalidDataType, "token-id must be a valid integer")
 			}
 
+			epochId, ok := big.NewInt(0).SetString(args[1], 10)
+			if !ok {
+				return errors.Wrap(types.ErrInvalidDataType, "epoch-id must be a valid integer")
+			}
+
 			queryClient := types.NewQueryClient(clientCtx)
-			res, err := queryClient.GetCommissionByToken(context.Background(), &types.QueryGetCommissionByToken{TokenId: tokenId.Uint64()})
+			res, err := queryClient.GetCommissionByToken(context.Background(), &types.QueryGetCommissionByToken{
+				TokenId: tokenId.Uint64(),
+				EpochId: uint32(epochId.Uint64()),
+			})
+
 			if err != nil {
 				return err
 			}

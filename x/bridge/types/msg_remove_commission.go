@@ -10,10 +10,11 @@ const TypeMsgRemoveCommission = "remove_commission"
 
 var _ sdk.Msg = &MsgRemoveCommission{}
 
-func NewMsgRemoveCommission(creator string, tokenId uint64) *MsgRemoveCommission {
+func NewMsgRemoveCommission(creator string, tokenId uint64, epochId uint32) *MsgRemoveCommission {
 	return &MsgRemoveCommission{
 		Creator: creator,
 		TokenId: tokenId,
+		Epoch:   epochId,
 	}
 }
 
@@ -43,5 +44,6 @@ func (msg *MsgRemoveCommission) ValidateBasic() error {
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
+
 	return nil
 }

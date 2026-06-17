@@ -39,7 +39,7 @@ service Query {
 
   // SystemWithdrawalById queries a system withdrawal by ID.
   rpc SystemWithdrawalById(QuerySystemWithdrawalByIdRequest) returns (QuerySystemWithdrawalByIdResponse) {
-    option (google.api.http).get = "/cosmos/bridge/system-withdrawals/{tx_hash}/{tx_index}";
+    option (google.api.http).get = "/cosmos/bridge/system-withdrawals/{tx_hash}";
   }
 
   // Token by id queries a token by id.
@@ -178,7 +178,6 @@ message QueryTransactionsResponse {
 // QuerySystemWithdrawalByIdRequest is request type for the Query/SystemWithdrawalById RPC method.
 message QuerySystemWithdrawalByIdRequest {
   string tx_hash = 1;
-  uint64 tx_index = 2;
 }
 
 // QuerySystemWithdrawalByIdResponse is response type for the Query/SystemWithdrawalById RPC method.

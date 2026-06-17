@@ -36,6 +36,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair([]byte(ParamWrappedBridgeKey), &p.WrappedBridge, validateEVMAddress),
 		paramtypes.NewParamSetPair([]byte(ParamSwapperAddressKey), &p.SwapperAddress, validateEVMAddress),
 		paramtypes.NewParamSetPair([]byte(ParamSwapperCallerAddressKey), &p.SwapperCallerAddress, validateEVMAddress),
+		paramtypes.NewParamSetPair([]byte(ParamUniswapRouterAddressKey), &p.UniswapRouterAddress, validateEVMAddress),
 	}
 }
 
@@ -53,7 +54,9 @@ func (p Params) Validate() error {
 	if err := validateEVMAddress(p.SwapperCallerAddress); err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid swapper caller address (%s)", err)
 	}
-
+	if err := validateEVMAddress(p.UniswapRouterAddress); err != nil {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid swapper caller address (%s)", err)
+	}
 	return nil
 }
 
@@ -84,7 +87,7 @@ func validateEVMAddress(i interface{}) error {
 	}
 
 	if !common.IsHexAddress(addr) {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid swapper address: %s", addr)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid EVM address: %s", addr)
 	}
 
 	return nil

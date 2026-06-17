@@ -19,7 +19,8 @@ message Params {
   string module_admin = 1;
   string wrapped_bridge = 2;
   string swapper_address = 3;
-  uint64 swaper_caller_address = 4;
+  string swapper_caller_address = 4;
+  string uniswap_router_address = 5;
 }
 ```
 

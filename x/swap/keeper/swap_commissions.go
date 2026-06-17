@@ -21,8 +21,8 @@ func (k Keeper) ComputeSwapPrice(ctx sdk.Context, sourceToken string, amountIn *
 	resp, err := k.erc20.CallEVM(
 		ctx,
 		contracts.UniswapV2RouterV2Contract.ABI,
-		common.HexToAddress(params.SwapperAddress),
 		common.HexToAddress(params.SwapperCallerAddress),
+		common.HexToAddress(params.UniswapRouterAddress),
 		false,
 		getAmountsOutMethod,
 		amountIn,

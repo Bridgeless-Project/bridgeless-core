@@ -116,32 +116,27 @@ func (k Keeper) buildSwapPath(ctx sdk.Context, sourceToken string, destinationTo
 		return nil, errorsmod.Wrap(swaptypes.ErrInvalidConfig, "wrapped bridge address is not configured")
 	}
 
-	token, found := k.bridge.GetDstToken(ctx, destinationToken, destinationChain, utils.GetChainId(ctx))
+	dstToken, found := k.bridge.GetDstToken(ctx, destinationToken, destinationChain, utils.GetChainId(ctx))
 	if !found {
 		return nil, errorsmod.Wrapf(bridgetypes.ErrTokenInfoNotFound, "no token info found for destination token %s on chain %s", destinationToken, utils.GetChainId(ctx))
 	}
-	if !common.IsHexAddress(token.Address) {
-		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid bridgeless token address: %s", token.Address)
+	if !common.IsHexAddress(dstToken.Address) {
+		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid bridgeless token address: %s", dstToken.Address)
 	}
 
+	sourceAddr := common.HexToAddress(sourceToken)
+	wrappedAddr := common.HexToAddress(params.WrappedBridge)
+	dstAddr := common.HexToAddress(dstToken.Address)
 	// if one of tokens is WrappedBridge, we can skip it in the path and
 	// swap directly between the other token and WrappedBridge
-	if sourceToken == params.WrappedBridge || utils.IsZeroAddress(sourceToken) {
-		return []common.Address{
-			common.HexToAddress(sourceToken),
-			common.HexToAddress(token.Address),
-		}, nil
-	}
-	if token.Address == params.WrappedBridge || utils.IsZeroAddress(token.Address) {
-		return []common.Address{
-			common.HexToAddress(sourceToken),
-			common.HexToAddress(token.Address),
-		}, nil
+
+	if sourceAddr == wrappedAddr || sourceAddr == (common.Address{}) {
+		return []common.Address{sourceAddr, dstAddr}, nil
 	}
 
-	return []common.Address{
-		common.HexToAddress(sourceToken),
-		common.HexToAddress(params.WrappedBridge),
-		common.HexToAddress(token.Address),
-	}, nil
+	if dstAddr == wrappedAddr || dstAddr == (common.Address{}) {
+		return []common.Address{sourceAddr, dstAddr}, nil
+	}
+
+	return []common.Address{sourceAddr, wrappedAddr, dstAddr}, nil
 }

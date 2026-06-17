@@ -12,11 +12,12 @@ const TypeMsgUpdateCommission = "update_commission"
 
 var _ sdk.Msg = &MsgUpdateCommission{}
 
-func NewMsgUpdateCommission(creator string, tokenId uint64, amount string) *MsgUpdateCommission {
+func NewMsgUpdateCommission(creator string, tokenId uint64, epochId uint32, amount string) *MsgUpdateCommission {
 	return &MsgUpdateCommission{
 		Creator: creator,
 		TokenId: tokenId,
 		Amount:  amount,
+		Epoch:   epochId,
 	}
 }
 
@@ -46,6 +47,7 @@ func (msg *MsgUpdateCommission) ValidateBasic() error {
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
+
 	amount, ok := new(big.Int).SetString(msg.Amount, 10)
 	if !ok || amount.Sign() < 0 {
 		return errorsmod.Wrap(ErrInvalidCommission, "amount must be a non-negative 18-decimal integer")

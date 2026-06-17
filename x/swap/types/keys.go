@@ -21,6 +21,7 @@ const (
 	ParamWrappedBridgeKey        = "WrappedBridge"
 	ParamSwapperAddressKey       = "SwapperAddress"
 	ParamSwapperCallerAddressKey = "SwapperCallerAddress"
+	ParamUniswapRouterAddressKey = "UniswapRouterAddress"
 
 	StoreSwapPrefix           = "swap"
 	StoreSwapSubmissionPrefix = "swap_submission"

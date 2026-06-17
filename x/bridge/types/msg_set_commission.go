@@ -12,11 +12,12 @@ const TypeMsgSetCommission = "set_commission"
 
 var _ sdk.Msg = &MsgSetCommission{}
 
-func NewMsgSetCommission(creator string, tokenId uint64, amount string) *MsgSetCommission {
+func NewMsgSetCommission(creator string, tokenId uint64, epochId uint32, amount string) *MsgSetCommission {
 	return &MsgSetCommission{
 		Creator: creator,
 		TokenId: tokenId,
 		Amount:  amount,
+		Epoch:   epochId,
 	}
 }
 
@@ -50,5 +51,6 @@ func (msg *MsgSetCommission) ValidateBasic() error {
 	if !ok || amount.Sign() < 0 {
 		return errorsmod.Wrap(ErrInvalidCommission, "amount must be a non-negative 18-decimal integer")
 	}
+
 	return nil
 }

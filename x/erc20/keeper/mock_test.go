@@ -89,7 +89,7 @@ func (m *MockEVMKeeper) BroadcastTxResponse(
 	_ sdk.Context,
 	_ string,
 	_ string,
-	_ string,
+	_ *common.Address,
 	_ uint8,
 	_ uint64,
 	_ *evm.MsgEthereumTxResponse,

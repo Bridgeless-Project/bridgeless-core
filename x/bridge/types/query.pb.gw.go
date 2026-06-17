@@ -243,17 +243,6 @@ func request_Query_SystemWithdrawalById_0(ctx context.Context, marshaler runtime
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "tx_hash", err)
 	}
 
-	val, ok = pathParams["tx_index"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "tx_index")
-	}
-
-	protoReq.TxIndex, err = runtime.Uint64(val)
-
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "tx_index", err)
-	}
-
 	msg, err := client.SystemWithdrawalById(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
@@ -279,17 +268,6 @@ func local_request_Query_SystemWithdrawalById_0(ctx context.Context, marshaler r
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "tx_hash", err)
-	}
-
-	val, ok = pathParams["tx_index"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "tx_index")
-	}
-
-	protoReq.TxIndex, err = runtime.Uint64(val)
-
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "tx_index", err)
 	}
 
 	msg, err := server.SystemWithdrawalById(ctx, &protoReq)
@@ -2954,7 +2932,7 @@ var (
 
 	pattern_Query_SystemWithdrawals_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "system-withdrawals"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_SystemWithdrawalById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4}, []string{"cosmos", "bridge", "system-withdrawals", "tx_hash", "tx_index"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_SystemWithdrawalById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"cosmos", "bridge", "system-withdrawals", "tx_hash"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_Query_GetTokenById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"cosmos", "bridge", "tokens", "id"}, "", runtime.AssumeColonVerbOpt(true)))
 

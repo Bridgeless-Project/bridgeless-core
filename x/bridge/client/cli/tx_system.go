@@ -43,7 +43,7 @@ func CmdProcessSystemWithdrawal() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "process-system-withdrawal [from_key_or_address] [path-to-system-withdrawals-json]",
 		Short: "Process system withdrawals from a JSON file",
-		Args:  cobra.ExactArgs(3),
+		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cmd.Flags().Set(flags.FlagFrom, args[0])
 			clientCtx, err := client.GetClientTxContext(cmd)
