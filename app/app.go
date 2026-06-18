@@ -25,6 +25,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"time"
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/docs"
@@ -587,7 +588,7 @@ func NewBridge(
 		app.BankKeeper,
 		app.Erc20Keeper,
 	)
-	
+
 	app.RevenueKeeper = revenuekeeper.NewKeeper(
 		keys[revenuetypes.StoreKey], appCodec, authtypes.NewModuleAddress(govtypes.ModuleName),
 		app.BankKeeper, app.EvmKeeper,
@@ -1018,6 +1019,77 @@ func NewBridge(
 	app.UpgradeKeeper.SetUpgradeHandler(
 		"v12.1.29",
 		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
+			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
+		},
+	)
+
+	// Add swap module
+	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
+	if err != nil {
+		panic(fmt.Errorf("failed to read upgrade info from disk: %w", err))
+	}
+	if upgradeInfo.Name == "v12.1.30" && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storetypes.StoreUpgrades{
+			Added: []string{swaptypes.ModuleName},
+		}))
+	}
+	app.UpgradeKeeper.SetUpgradeHandler(
+		"v12.1.30",
+		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
+			swapParams := swaptypes.Params{
+				ModuleAdmin:          "bridge1ur9vkyhyzp6zdnfyd0y6vstu9mh9yprayvh3rc",
+				WrappedBridge:        "0x2c6E046dF6679dbb90bA6833eC0E4A2E84dAE4c1",
+				SwapperAddress:       "0xe923D1D29fddDa05663968D7A6807ef7667D087d",
+				SwapperCallerAddress: "0xa87044815A445E5C632c51793bd1065C35DC405d",
+				UniswapRouterAddress: "0xa87044815A445E5C632c51793bd1065C35DC405d",
+				// these addresses are not deployed yet and will be replaced after update
+			}
+			app.SwapKeeper.SetParams(ctx, swapParams)
+			fromVM[swaptypes.ModuleName] = swap.AppModule{}.ConsensusVersion()
+
+			votingParams := app.GovKeeper.GetVotingParams(ctx)
+			//set one day to voting time
+			votingParams.VotingPeriod = time.Duration(24) * time.Hour
+			app.GovKeeper.SetVotingParams(ctx, votingParams)
+
+			// bridge params
+			// set epoch 0 to the store
+			parties := make([]*bridgetypes.Party, 0)
+			parties = append(parties,
+				&bridgetypes.Party{Address: "bridge1t8xw56axgs4cpu53st4de2u7umy7mqqkaauylx"},
+				&bridgetypes.Party{Address: "bridge1cwqe2f7a5kr4epjre4v7jj53e2l4mjqme50pxg"},
+				&bridgetypes.Party{Address: "bridge1539gmf5xtmrs8wnxccvl02jfcu39s0l50ktu2e"})
+			app.BridgeKeeper.SetEpoch(ctx, &bridgetypes.Epoch{
+				Id:      0,
+				Status:  bridgetypes.EpochStatus_RUNNING,
+				Parties: parties,
+			})
+
+			//reuse params
+			bridgeParams := bridgetypes.Params{
+				ModuleAdmin: "bridge1rc6ydh4gaxegdzyhjx9eyxlmnzrf22w249x3z768gvymyu3zr73qgj927w",
+				Parties: []*bridgetypes.Party{
+					{
+						Address: "bridge1t8xw56axgs4cpu53st4de2u7umy7mqqkaauylx",
+					},
+					{
+						Address: "bridge1cwqe2f7a5kr4epjre4v7jj53e2l4mjqme50pxg",
+					},
+					{
+						Address: "bridge1539gmf5xtmrs8wnxccvl02jfcu39s0l50ktu2e",
+					},
+				},
+				TssThreshold: 2,
+				RelayerAccounts: []string{
+					"bridge15tzhpy6nz6vq5c3rhrzac2zc2sq67r4lj4077n",
+				},
+				Epoch:                0,
+				SupportingTime:       110,
+				UniswapRouterAddress: "0xeab63f2b55885557391b008160d59b36afd5146b", // mock address for now
+				BridgeAddress:        "0xeab63f2b55885557391b008160d59b36afd5146b",
+			}
+			app.BridgeKeeper.SetParams(ctx, bridgeParams)
+
 			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
 		},
 	)
