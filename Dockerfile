@@ -8,8 +8,8 @@ ENV GO111MODULE="on"
 ENV CGO_ENABLED=1
 ENV GOOS="linux"
 ENV GOPRIVATE=github.com/*
-ENV GONOSUMDB=github.com/*
 ENV GONOPROXY=github.com/*
+ENV GONOSUMDB=github.com/*
 
 COPY ./go.mod ./go.sum ./
 # Read the CI_ACCESS_TOKEN from the .env file
