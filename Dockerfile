@@ -15,8 +15,7 @@ COPY ./go.mod ./go.sum ./
 # Read the CI_ACCESS_TOKEN from the .env file
 ARG CI_ACCESS_TOKEN
 RUN git config --global url."https://olegfomenkodev:${CI_ACCESS_TOKEN}@github.com/".insteadOf "https://github.com/"
-RUN go clean -modcache && \
-    go mod download \
+RUN go mod download 
 
 COPY . .
 
