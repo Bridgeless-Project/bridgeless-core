@@ -107,6 +107,21 @@ func (k Keeper) FeeDistribute(ctx sdk.Context, withdrawal types.SystemWithdrawal
 		return errorsmod.Wrap(types.ErrInvalidPartiesList, "epoch has no parties")
 	}
 
+	// validate that TSS do not try to transfer more tokens that can
+	commission, ok := k.GetCommission(ctx, withdrawal.EpochId, tokenInfo.TokenId)
+	if !ok {
+		return errorsmod.Wrapf(types.ErrInvalidCommission, "failed to get commission from store: token %s,  epoch %d", tokenInfo.TokenId, withdrawal.EpochId)
+	}
+
+	commissionAmount, ok := big.NewInt(0).SetString(commission.Amount, 10)
+	if !ok {
+		return errorsmod.Wrap(types.ErrInvalidCommission, "failed to decode commission amounts to big int")
+	}
+	// if  commissionAmount is less than remaining we return the error
+	if commissionAmount.Cmp(remaining) < 0 {
+		return errorsmod.Wrapf(types.ErrInvalidCommission, "commission %s < %s", commissionAmount.String(), remaining.String())
+	}
+
 	// TODO: integrate referral withdrawal
 	//for _, referralRewards := range withdrawal.ReferralRewards {
 	//	// returns the referralsRewardAmount with native decimals
@@ -245,7 +260,7 @@ func (k Keeper) sendTokens(ctx sdk.Context, amount *big.Int, token common.Addres
 		amount,
 	)
 	if err != nil {
-		return "", errorsmod.Wrapf(err, "failed to call erc20 burn")
+		return "", errorsmod.Wrapf(err, "failed to call erc20")
 	}
 	return tx.Hash, nil
 }
