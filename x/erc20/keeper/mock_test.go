@@ -2,6 +2,7 @@ package keeper_test
 
 import (
 	"context"
+	"math/big"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/statedb"
@@ -10,6 +11,7 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core"
+	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/vm"
 	"github.com/stretchr/testify/mock"
 )
@@ -25,12 +27,30 @@ func (m *MockEVMKeeper) GetParams(_ sdk.Context) evm.Params {
 	return args.Get(0).(evm.Params)
 }
 
+func (m *MockEVMKeeper) ChainID() *big.Int {
+	args := m.Called()
+	return args.Get(0).(*big.Int)
+}
+
 func (m *MockEVMKeeper) GetAccountWithoutBalance(_ sdk.Context, _ common.Address) *statedb.Account {
 	args := m.Called(mock.Anything, mock.Anything)
 	if args.Get(0) == nil {
 		return nil
 	}
 	return args.Get(0).(*statedb.Account)
+}
+
+func (m *MockEVMKeeper) EVMConfig(_ sdk.Context, _ sdk.ConsAddress, _ *big.Int) (*statedb.EVMConfig, error) {
+	args := m.Called(mock.Anything, mock.Anything, mock.Anything)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*statedb.EVMConfig), args.Error(1)
+}
+
+func (m *MockEVMKeeper) TxConfig(_ sdk.Context, _ common.Hash) statedb.TxConfig {
+	args := m.Called(mock.Anything, mock.Anything)
+	return args.Get(0).(statedb.TxConfig)
 }
 
 func (m *MockEVMKeeper) EstimateGas(_ context.Context, _ *evm.EthCallRequest) (*evm.EstimateGasResponse, error) {
@@ -48,6 +68,49 @@ func (m *MockEVMKeeper) ApplyMessage(_ sdk.Context, _ core.Message, _ vm.EVMLogg
 		return nil, args.Error(1)
 	}
 	return args.Get(0).(*evm.MsgEthereumTxResponse), args.Error(1)
+}
+
+func (m *MockEVMKeeper) ApplyInternalTransaction(
+	_ sdk.Context,
+	_ *ethtypes.Transaction,
+	_ core.Message,
+	_ bool,
+) (*evm.MsgEthereumTxResponse, statedb.TxConfig, error) {
+	args := m.Called(mock.Anything, mock.Anything, mock.Anything, mock.Anything)
+
+	if args.Get(0) == nil {
+		return nil, statedb.TxConfig{}, args.Error(2)
+	}
+	return args.Get(0).(*evm.MsgEthereumTxResponse), args.Get(1).(statedb.TxConfig), args.Error(2)
+}
+
+func (m *MockEVMKeeper) ApplyMessageWithConfig(
+	_ sdk.Context,
+	_ core.Message,
+	_ vm.EVMLogger,
+	_ bool,
+	_ *statedb.EVMConfig,
+	_ statedb.TxConfig,
+) (*evm.MsgEthereumTxResponse, error) {
+	args := m.Called(mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything)
+
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*evm.MsgEthereumTxResponse), args.Error(1)
+}
+
+func (m *MockEVMKeeper) BroadcastTxResponse(
+	_ sdk.Context,
+	_ string,
+	_ string,
+	_ *common.Address,
+	_ uint8,
+	_ uint64,
+	_ *evm.MsgEthereumTxResponse,
+) error {
+	args := m.Called(mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything)
+	return args.Error(0)
 }
 
 var _ types.BankKeeper = &MockBankKeeper{}

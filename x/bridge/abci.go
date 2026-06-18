@@ -34,14 +34,10 @@ func finishMigrationEpoch(ctx sdk.Context, k keeper.Keeper, params types.Params)
 	epoch.EndBlock = uint64(ctx.BlockHeight()) + params.SupportingTime
 	k.SetEpoch(ctx, &epoch)
 
-	params = types.Params{
-		ModuleAdmin:     params.ModuleAdmin,
-		Epoch:           nextEpoch.Id,
-		TssThreshold:    nextEpoch.TssThreshold,
-		Parties:         nextEpoch.Parties,
-		RelayerAccounts: params.RelayerAccounts,
-		SupportingTime:  params.SupportingTime,
-	}
+	params.Epoch = nextEpoch.Id
+	params.TssThreshold = nextEpoch.TssThreshold
+	params.Parties = nextEpoch.Parties
+
 	k.SetParams(ctx, params)
 
 	if err := broadcastEpochUpdatedEvent(ctx, k, nextEpoch.Id, true); err != nil {

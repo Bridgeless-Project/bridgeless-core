@@ -7,6 +7,7 @@ import (
 	"cosmossdk.io/math"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
@@ -1133,6 +1134,27 @@ func (suite *BackendTestSuite) TestGetEthBlockFromTendermint() {
 
 func (suite *BackendTestSuite) TestEthMsgsFromTendermintBlock() {
 	msgEthereumTx, bz := suite.buildEthereumTx()
+	internalFrom := common.HexToAddress("0x1111111111111111111111111111111111111111")
+	internalTo := common.HexToAddress("0x2222222222222222222222222222222222222222")
+	internalData := []byte{0x12, 0x34}
+	internalAccessList := ethtypes.AccessList{}
+	internalMsg := evmtypes.NewTx(&evmtypes.EvmTxArgs{
+		Nonce:    7,
+		GasLimit: 21000,
+		Input:    internalData,
+		GasPrice: big.NewInt(0),
+		ChainID:  big.NewInt(9000),
+		Amount:   big.NewInt(0),
+		To:       &internalTo,
+		Accesses: &internalAccessList,
+	})
+	internalMsg.From = internalFrom.Hex()
+	internalMsg.Hash = internalMsg.AsTransaction().Hash().Hex()
+	builder := suite.backend.clientCtx.TxConfig.NewTxBuilder()
+	bankMsg := banktypes.NewMsgSend(suite.acc, suite.acc, sdk.NewCoins())
+	suite.Require().NoError(builder.SetMsgs(bankMsg))
+	bankTxBz, err := suite.backend.clientCtx.TxConfig.TxEncoder()(builder.GetTx())
+	suite.Require().NoError(err)
 
 	testCases := []struct {
 		name     string
@@ -1183,6 +1205,35 @@ func (suite *BackendTestSuite) TestEthMsgsFromTendermintBlock() {
 				},
 			},
 			[]*evmtypes.MsgEthereumTx{msgEthereumTx},
+		},
+		{
+			"internal tx event included in non-ethereum cosmos tx",
+			&tmrpctypes.ResultBlock{
+				Block: tmtypes.MakeBlock(1, []tmtypes.Tx{bankTxBz}, nil, nil),
+			},
+			&tmrpctypes.ResultBlockResults{
+				TxsResults: []*types.ResponseDeliverTx{
+					{
+						Code: 0,
+						Events: []types.Event{
+							{Type: evmtypes.EventTypeInternalEthereumTx, Attributes: []types.EventAttribute{
+								{Key: []byte(evmtypes.AttributeKeyEthereumTxHash), Value: []byte(internalMsg.Hash)},
+								{Key: []byte(evmtypes.AttributeKeyEthereumTxFrom), Value: []byte(internalFrom.Hex())},
+								{Key: []byte(evmtypes.AttributeKeyRecipient), Value: []byte(internalTo.Hex())},
+								{Key: []byte(evmtypes.AttributeKeyEthereumTxInput), Value: []byte(hexutil.Encode(internalData))},
+								{Key: []byte(evmtypes.AttributeKeyTxNonce), Value: []byte("7")},
+								{Key: []byte(evmtypes.AttributeKeyTxGasLimit), Value: []byte("21000")},
+								{Key: []byte(evmtypes.AttributeKeyTxGasPrice), Value: []byte("0")},
+								{Key: []byte(evmtypes.AttributeKeyTxAmount), Value: []byte("0")},
+								{Key: []byte(evmtypes.AttributeKeyTxChainID), Value: []byte("9000")},
+								{Key: []byte(evmtypes.AttributeKeyTxType), Value: []byte("1")},
+								{Key: []byte(evmtypes.AttributeKeyTxIndex), Value: []byte("0")},
+							}},
+						},
+					},
+				},
+			},
+			[]*evmtypes.MsgEthereumTx{internalMsg},
 		},
 	}
 	for _, tc := range testCases {

@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 const (
@@ -21,21 +24,26 @@ const (
 	MemStoreKey = "mem_bridge"
 
 	// ----- Param Keys -----
-	ParamModuleAdminKey   = "ModuleAdmin"
-	ParamModulePartiesKey = "Parties"
-	ParamTssThresholdKey  = "TssThreshold"
-	ParamRelayerAccounts  = "RelayerAccounts"
-	ParamEpochId          = "EpochId"
-	ParamSupportingTime   = "SupportingTime"
+	ParamModuleAdminKey       = "ModuleAdmin"
+	ParamModulePartiesKey     = "Parties"
+	ParamTssThresholdKey      = "TssThreshold"
+	ParamRelayerAccounts      = "RelayerAccounts"
+	ParamEpochId              = "EpochId"
+	ParamSupportingTime       = "SupportingTime"
+	ParamUniswapRouterAddress = "UniswapRouterAddress"
+	ParamBridgeAddress        = "BridgeAddress"
 
 	// ---- Store Prefixes ------
-	StoreTokenPrefix                         = "token"
-	StoreTokenInfoPrefix                     = "token-info"
-	StoreTokenPairsPrefix                    = "token-pairs"
-	StoreChainPrefix                         = "chain"
-	StoreChainTypePrefix                     = "chain_type"
-	StoreTransactionPrefix                   = "transaction"
-	StoreTransactionSubmissionsPrefix        = "transaction-submissions"
+	StoreTokenPrefix                        = "token"
+	StoreTokenInfoPrefix                    = "token-info"
+	StoreTokenPairsPrefix                   = "token-pairs"
+	StoreChainPrefix                        = "chain"
+	StoreChainTypePrefix                    = "chain_type"
+	StoreTransactionPrefix                  = "transaction"
+	StoreTransactionSubmissionsPrefix       = "transaction-submissions"
+	StoreSystemTransactionSubmissionsPrefix = "system-transaction-submissions"
+	StoreSystemTransactionPrefix            = "system-transaction"
+
 	StoreReferralPrefix                      = "referral"
 	StoreReferralRewardsPrefix               = "referral_rewards"
 	StoreStopListTransactionsPrefix          = "stop_list_transactions"
@@ -45,6 +53,7 @@ const (
 	StoreEpochTransactionPrefix              = "epoch_transaction"
 	StoreEpochPubkeyPrefix                   = "epoch_pubkey"
 	StoreEpochPubkeySubmissionPrefix         = "epoch_pubkey_submission"
+	StoreCommissionPrefix                    = "commission"
 
 	// Attributes keys for bridge events
 	AttributeKeyDepositTxHash     = "deposit_tx_hash"
@@ -77,7 +86,20 @@ const (
 	AttributeEpochChainType        = "epoch_chain_type"
 	AttributeChainId               = "chain_id"
 	AttributeEpochSignatureAddress = "epoch_signature_address"
+
+	AttributeCommissions = "commissions"
 )
+
+const (
+	ContractCallerAddress = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
+)
+
+// ModuleAddress is the native module address for EVM
+var ModuleAddress common.Address
+
+func init() {
+	ModuleAddress = common.BytesToAddress(authtypes.NewModuleAddress(ModuleName).Bytes())
+}
 
 func Prefix(p string) []byte {
 	return []byte(p + "/")
@@ -136,11 +158,11 @@ func KeyEpochChainSignature(chainType ChainType, epochId uint32) []byte {
 }
 
 func KeyEpochChainSignatureSubmission(epochId uint32, hash string) []byte {
-	return []byte(fmt.Sprintf("%d/%d/%s", epochId, hash))
+	return []byte(fmt.Sprintf("%d/%s", epochId, hash))
 }
 
 func KeyEpochTransaction(epochId uint32, txNonce uint64, txHash string) []byte {
-	return []byte(fmt.Sprintf("%s/%s/%s/%d", txHash, txNonce, epochId))
+	return []byte(fmt.Sprintf("%s/%d/%d", txHash, txNonce, epochId))
 }
 
 func KeyEpochPubkey(epochId uint32) []byte {
@@ -151,4 +173,8 @@ func KeyEpochPubkey(epochId uint32) []byte {
 
 func KeyEpochPubkeySubmission(epochId uint32, pubkeyHash string) []byte {
 	return []byte(fmt.Sprintf("%d/%s", epochId, pubkeyHash))
+}
+
+func KeyEpochCommission(epochId uint32, tokenId uint64) []byte {
+	return []byte(fmt.Sprintf("%d/%d", epochId, tokenId))
 }

@@ -18,10 +18,15 @@ package utils
 
 import (
 	"fmt"
+	"math/big"
 	"strings"
 
 	ibctransfertypes "github.com/cosmos/ibc-go/v6/modules/apps/transfer/types"
+	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
+	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/crypto"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/ethsecp256k1"
 
@@ -181,4 +186,74 @@ func ComputeIBCDenom(
 	denom string,
 ) string {
 	return ComputeIBCDenomTrace(portID, channelID, denom).IBCDenom()
+}
+
+func ParseUintString(value string) (*big.Int, error) {
+	parsed, ok := new(big.Int).SetString(value, 10)
+	if !ok {
+		return nil, errorsmod.Wrapf(errortypes.ErrInvalidRequest, "invalid big int: %s", value)
+	}
+
+	if parsed.Sign() < 0 {
+		return nil, errorsmod.Wrapf(errortypes.ErrInvalidRequest, "big int cannot be negative: %s", value)
+	}
+
+	return parsed, nil
+}
+
+func IsZeroAddress(address string) bool {
+	return common.HexToAddress(address) == (common.Address{})
+}
+
+func GetChainId(ctx sdk.Context) string {
+	// the chian-id returns something like cosmos_1234-1
+	prefixAndChain := strings.Split(ctx.ChainID(), "_") // split to [cosmos, 1234-1]
+	if len(prefixAndChain) != 2 {
+		return ctx.ChainID()
+	}
+
+	evmChainIDWithSuffix := strings.Split(prefixAndChain[1], "-") // split to [1234, 1]
+	if len(evmChainIDWithSuffix) != 2 {
+		return prefixAndChain[1]
+	}
+
+	return evmChainIDWithSuffix[0]
+}
+
+func TxHashToBytes32(txHash string) [32]byte {
+	var res [32]byte
+	hashBytes, err := hexutil.Decode(txHash)
+	if err != nil || len(hashBytes) != 32 {
+		bytes := crypto.Keccak256(([]byte)(txHash))
+		copy(res[:], bytes)
+		return res
+	}
+
+	copy(res[:], hashBytes)
+	return res
+}
+
+// UnpackLog copy-pasted from logic in generated s-c bindings.
+func UnpackLog(contractAbi abi.ABI, out interface{}, event string, log *ethtypes.Log) error {
+	if log.Topics[0] != contractAbi.Events[event].ID {
+		return fmt.Errorf("event signature mismatch")
+	}
+
+	if len(log.Data) > 0 {
+		if err := contractAbi.UnpackIntoInterface(out, event, log.Data); err != nil {
+			return err
+		}
+	}
+	var indexed abi.Arguments
+	for _, arg := range contractAbi.Events[event].Inputs {
+		if arg.Indexed {
+			indexed = append(indexed, arg)
+		}
+	}
+	return abi.ParseTopics(out, indexed, log.Topics[1:])
+}
+
+// CosmosToEVM converts a Cosmos Bech32 address string to an EVM common.Address
+func CosmosToEVM(address sdk.AccAddress) (common.Address, error) {
+	return common.BytesToAddress(address.Bytes()), nil
 }

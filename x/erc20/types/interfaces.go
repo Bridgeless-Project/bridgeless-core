@@ -18,15 +18,16 @@ package types
 
 import (
 	"context"
-
-	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	"math/big"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core"
+	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/vm"
 
 	claimstypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/types"
@@ -39,6 +40,7 @@ type AccountKeeper interface {
 	GetModuleAddress(moduleName string) sdk.AccAddress
 	GetSequence(sdk.Context, sdk.AccAddress) (uint64, error)
 	GetAccount(sdk.Context, sdk.AccAddress) authtypes.AccountI
+	SetAccount(ctx sdk.Context, acc authtypes.AccountI)
 }
 
 // BankKeeper defines the expected interface needed to retrieve account balances.
@@ -62,10 +64,36 @@ type StakingKeeper interface {
 
 // EVMKeeper defines the expected EVM keeper interface used on erc20
 type EVMKeeper interface {
+	ChainID() *big.Int
 	GetParams(ctx sdk.Context) evmtypes.Params
 	GetAccountWithoutBalance(ctx sdk.Context, addr common.Address) *statedb.Account
+	EVMConfig(ctx sdk.Context, proposerAddress sdk.ConsAddress, chainID *big.Int) (*statedb.EVMConfig, error)
+	TxConfig(ctx sdk.Context, txHash common.Hash) statedb.TxConfig
 	EstimateGas(c context.Context, req *evmtypes.EthCallRequest) (*evmtypes.EstimateGasResponse, error)
 	ApplyMessage(ctx sdk.Context, msg core.Message, tracer vm.EVMLogger, commit bool) (*evmtypes.MsgEthereumTxResponse, error)
+	ApplyInternalTransaction(
+		ctx sdk.Context,
+		tx *ethtypes.Transaction,
+		msg core.Message,
+		commit bool,
+	) (*evmtypes.MsgEthereumTxResponse, statedb.TxConfig, error)
+	ApplyMessageWithConfig(
+		ctx sdk.Context,
+		msg core.Message,
+		tracer vm.EVMLogger,
+		commit bool,
+		cfg *statedb.EVMConfig,
+		txConfig statedb.TxConfig,
+	) (*evmtypes.MsgEthereumTxResponse, error)
+	BroadcastTxResponse(
+		ctx sdk.Context,
+		sender string,
+		amount string,
+		recipient *common.Address,
+		txType uint8,
+		txIndex uint64,
+		response *evmtypes.MsgEthereumTxResponse,
+	) error
 }
 
 // StakingKeeper defines the expected interface needed to retrieve the staking denom.

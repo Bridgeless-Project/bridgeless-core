@@ -468,6 +468,8 @@ func (s *StateDB) Commit() error {
 			if obj.code != nil && obj.dirtyCode {
 				s.keeper.SetCode(s.ctx, obj.CodeHash(), obj.code)
 			}
+			// During the trusted contract call (internal module transaction) this method updated only contract address.
+			// The sender address still unupdated, after a few contract calls nonce is still zero
 			if err := s.keeper.SetAccount(s.ctx, obj.Address(), obj.account); err != nil {
 				return errorsmod.Wrap(err, "failed to set account")
 			}

@@ -196,6 +196,13 @@ func (p *ParsedTxs) updateTx(eventIndex int, attrs []abci.EventAttribute) error 
 	if err := fillTxAttributes(&tx, attrs); err != nil {
 		return err
 	}
+
+	// Internal EVM transactions can emit the full ethereum_tx event without a
+	// matching format-2 short event, so grow the slice before updating by index.
+	for len(p.Txs) <= eventIndex {
+		p.Txs = append(p.Txs, NewParsedTx(len(p.Txs)))
+	}
+
 	if tx.Hash != p.Txs[eventIndex].Hash {
 		// if hash is different, index the new one too
 		p.TxHashes[tx.Hash] = eventIndex

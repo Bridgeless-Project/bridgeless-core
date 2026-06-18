@@ -95,6 +95,11 @@ func (k Keeper) SetEpochPubkey(sdkCtx sdk.Context, epochId uint32, pubkey string
 	tStore.Set(types.KeyEpochPubkey(epochId), []byte(pubkey))
 }
 
+func (k Keeper) RemoveEpochPubkey(sdkCtx sdk.Context, epochId uint32) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochPubkeyPrefix))
+	tStore.Delete(types.KeyEpochPubkey(epochId))
+}
+
 func (k Keeper) GetEpochPubkey(sdkCtx sdk.Context, epochId uint32) (pubkey string, found bool) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochPubkeyPrefix))
 
@@ -110,6 +115,12 @@ func (k Keeper) SetEpochPubkeySubmission(sdkCtx sdk.Context, epochId uint32, pub
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochPubkeySubmissionPrefix))
 	eStore := prefix.NewStore(tStore, types.KeyEpoch(epochId))
 	eStore.Set(types.KeyEpochPubkeySubmission(epochId, pubkeyHash), k.cdc.MustMarshal(&submission))
+}
+
+func (k Keeper) RemoveEpochPubkeySubmission(sdkCtx sdk.Context, epochId uint32, pubkeyHash string) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochPubkeySubmissionPrefix))
+	eStore := prefix.NewStore(tStore, types.KeyEpoch(epochId))
+	eStore.Delete(types.KeyEpochPubkeySubmission(epochId, pubkeyHash))
 }
 
 func (k Keeper) GetEpochPubkeySubmission(sdkCtx sdk.Context, epochId uint32, pubkeyHash string) (submission types.Submissions, found bool) {

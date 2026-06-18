@@ -51,7 +51,6 @@ func (m msgServer) StartEpoch(goCtx context.Context, msg *types.MsgStartEpoch) (
 	if err != nil {
 		return nil, errorsmod.Wrapf(types.ErrPackEvent, "failed to marshal TSS info: %v", err)
 	}
-
 	emitStartEpochEvent(ctx, msg.EpochId, string(tssInfo), msg.TssThreshold, msg.StartTime)
 
 	return new(types.MsgStartEpochResponse), nil
@@ -104,6 +103,31 @@ func (m msgServer) SetEpochPubKey(goCtx context.Context, msg *types.MsgSetEpochP
 	}
 
 	return new(types.MsgSetEpochPubKeyResponse), nil
+}
+
+func (m msgServer) RemoveEpochPubKey(goCtx context.Context, msg *types.MsgRemoveEpochPubKey) (*types.MsgRemoveEpochPubKeyResponse, error) {
+	if msg == nil {
+		return nil, errorsmod.Wrap(types.ErrInvalidDataType, "message cannot be nil")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	if msg.Creator != m.Keeper.GetParams(ctx).ModuleAdmin {
+		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "only module admin can remove pubkey")
+	}
+
+	pubkey, found := m.Keeper.GetEpochPubkey(ctx, msg.EpochId)
+	if !found {
+		return nil, errorsmod.Wrap(types.ErrEpochNotFound, "epoch pubkey not found")
+	}
+
+	_, found = m.Keeper.GetEpochPubkeySubmission(ctx, msg.EpochId, pubkey)
+	if !found {
+		return nil, errorsmod.Wrap(types.ErrEpochNotFound, "epoch pubkey submission not found")
+	}
+
+	m.Keeper.RemoveEpochPubkeySubmission(ctx, msg.EpochId, pubkey)
+	m.Keeper.RemoveEpochPubkey(ctx, msg.EpochId)
+	return &types.MsgRemoveEpochPubKeyResponse{}, nil
 }
 
 func (m msgServer) SetEpochSignature(goCtx context.Context, msg *types.MsgSetEpochSignature) (*types.MsgSetEpochSignatureResponse, error) {
