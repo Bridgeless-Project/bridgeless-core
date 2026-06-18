@@ -20,7 +20,7 @@ enum ChainType {
 
 message Chain {
   string id = 1;
-  ChainType type =2;
+  ChainType type = 2;
   // bridge_address is the address of the bridge contract on the chain
   string bridge_address = 3;
   // operator is the address of the operator of the bridge contract

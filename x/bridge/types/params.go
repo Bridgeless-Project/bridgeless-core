@@ -5,6 +5,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 var (
@@ -23,6 +24,10 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair([]byte(ParamModulePartiesKey), &p.Parties, validateModuleParties),
 		paramtypes.NewParamSetPair([]byte(ParamTssThresholdKey), &p.TssThreshold, validateTssThreshold),
 		paramtypes.NewParamSetPair([]byte(ParamRelayerAccounts), &p.RelayerAccounts, validateRelayerAccounts),
+		paramtypes.NewParamSetPair([]byte(ParamEpochId), &p.Epoch, validateEpochId),
+		paramtypes.NewParamSetPair([]byte(ParamSupportingTime), &p.SupportingTime, validateSupportingTime),
+		paramtypes.NewParamSetPair([]byte(ParamUniswapRouterAddress), &p.UniswapRouterAddress, validateOptionalEVMAddress),
+		paramtypes.NewParamSetPair([]byte(ParamBridgeAddress), &p.BridgeAddress, validateOptionalEVMAddress),
 	}
 }
 
@@ -65,6 +70,7 @@ func validateModuleAdmin(i interface{}) error {
 
 	return nil
 }
+
 func validateModuleParties(i interface{}) error {
 	parties, ok := i.([]*Party)
 	if !ok {
@@ -101,6 +107,41 @@ func validateRelayerAccounts(i interface{}) error {
 		if err != nil {
 			return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid relayer account address: %s", err.Error())
 		}
+	}
+
+	return nil
+}
+
+func validateEpochId(i interface{}) error {
+	_, ok := i.(uint32)
+	if !ok {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
+	}
+
+	return nil
+}
+
+func validateSupportingTime(i interface{}) error {
+	_, ok := i.(uint64)
+	if !ok {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
+	}
+
+	return nil
+}
+
+func validateOptionalEVMAddress(i interface{}) error {
+	address, ok := i.(string)
+	if !ok {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid parameter type: %T", i)
+	}
+
+	if address == "" {
+		return nil
+	}
+
+	if !common.IsHexAddress(address) {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid EVM address: %s", address)
 	}
 
 	return nil

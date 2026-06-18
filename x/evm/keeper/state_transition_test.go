@@ -663,6 +663,34 @@ func (suite *KeeperTestSuite) TestApplyMessageWithConfig() {
 	}
 }
 
+func (suite *KeeperTestSuite) TestApplyInternalTransactionUpdatesTransientMetadata() {
+	suite.SetupTest()
+
+	to := common.Address{}
+	nonce := suite.app.EvmKeeper.GetNonce(suite.ctx, suite.address)
+	tx, err := newSignedEthTx(&ethtypes.AccessListTx{
+		GasPrice: big.NewInt(1),
+		Gas:      21_000,
+		To:       &to,
+		Value:    big.NewInt(0),
+		Data:     []byte{},
+	}, nonce, sdk.AccAddress(suite.address.Bytes()), suite.signer, suite.ethSigner)
+	suite.Require().NoError(err)
+
+	keeperParams := suite.app.EvmKeeper.GetParams(suite.ctx)
+	chainCfg := keeperParams.ChainConfig.EthereumConfig(suite.app.EvmKeeper.ChainID())
+	signer := ethtypes.MakeSigner(chainCfg, big.NewInt(suite.ctx.BlockHeight()))
+	msg, err := tx.AsMessage(signer, nil)
+	suite.Require().NoError(err)
+
+	res, txConfig, err := suite.app.EvmKeeper.ApplyInternalTransaction(suite.ctx, tx, msg, true)
+	suite.Require().NoError(err)
+	suite.Require().False(res.Failed())
+	suite.Require().Equal(tx.Hash().Hex(), res.Hash)
+	suite.Require().Equal(uint(0), txConfig.TxIndex)
+	suite.Require().Equal(uint64(1), suite.app.EvmKeeper.GetTxIndexTransient(suite.ctx))
+}
+
 func (suite *KeeperTestSuite) createContractGethMsg(nonce uint64, signer ethtypes.Signer, cfg *params.ChainConfig, gasPrice *big.Int) (core.Message, error) {
 	ethMsg, err := suite.createContractMsgTx(nonce, signer, gasPrice)
 	if err != nil {

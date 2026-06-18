@@ -147,8 +147,8 @@ func (k Keeper) GetHashFn(ctx sdk.Context) vm.GetHashFunc {
 // For relevant discussion see: https://github.com/cosmos/cosmos-sdk/discussions/9072
 func (k *Keeper) ApplyTransaction(ctx sdk.Context, tx *ethtypes.Transaction) (*types.MsgEthereumTxResponse, error) {
 	var (
-		bloom        *big.Int
 		bloomReceipt ethtypes.Bloom
+		hookFailed   bool
 	)
 
 	cfg, err := k.EVMConfig(ctx, sdk.ConsAddress(ctx.BlockHeader().ProposerAddress), k.eip155ChainID)
@@ -185,7 +185,7 @@ func (k *Keeper) ApplyTransaction(ctx sdk.Context, tx *ethtypes.Transaction) (*t
 
 	// Compute block bloom filter
 	if len(logs) > 0 {
-		bloom = k.GetBlockBloomTransient(ctx)
+		bloom := k.GetBlockBloomTransient(ctx)
 		bloom.Or(bloom, big.NewInt(0).SetBytes(ethtypes.LogsBloom(logs)))
 		bloomReceipt = ethtypes.BytesToBloom(bloom.Bytes())
 	}
@@ -220,9 +220,15 @@ func (k *Keeper) ApplyTransaction(ctx sdk.Context, tx *ethtypes.Transaction) (*t
 
 	if !res.Failed() {
 		receipt.Status = ethtypes.ReceiptStatusSuccessful
+
+		// Reserve the outer transaction metadata before hooks run so any
+		// internal EVM transactions created by hooks receive the next indexes.
+		k.updateTxTransientMetadata(tmpCtx, txConfig, receipt.Logs)
+
 		// Only call hooks if tx executed successfully.
 		if err = k.PostTxProcessing(tmpCtx, msg, receipt); err != nil {
 			// If hooks return error, revert the whole tx.
+			hookFailed = true
 			res.VmError = types.ErrPostTxProcessing.Error()
 			k.Logger(ctx).Error("tx post processing failed", "error", err)
 
@@ -234,6 +240,8 @@ func (k *Keeper) ApplyTransaction(ctx sdk.Context, tx *ethtypes.Transaction) (*t
 			// Since the post-processing can alter the log, we need to update the result
 			res.Logs = types.NewLogsFromEth(receipt.Logs)
 		}
+	} else {
+		k.updateTxTransientMetadata(ctx, txConfig, receipt.Logs)
 	}
 
 	// refund gas in order to match the Ethereum gas consumption instead of the default SDK one.
@@ -241,13 +249,9 @@ func (k *Keeper) ApplyTransaction(ctx sdk.Context, tx *ethtypes.Transaction) (*t
 		return nil, errorsmod.Wrapf(err, "failed to refund gas leftover gas to sender %s", msg.From())
 	}
 
-	if len(receipt.Logs) > 0 {
-		// Update transient block bloom filter
-		k.SetBlockBloomTransient(ctx, receipt.Bloom.Big())
-		k.SetLogSizeTransient(ctx, uint64(txConfig.LogIndex)+uint64(len(receipt.Logs)))
+	if hookFailed {
+		k.updateTxTransientMetadata(ctx, txConfig, nil)
 	}
-
-	k.SetTxIndexTransient(ctx, uint64(txConfig.TxIndex)+1)
 
 	totalGasUsed, err := k.AddTransientGasUsed(ctx, res.GasUsed)
 	if err != nil {
@@ -257,6 +261,44 @@ func (k *Keeper) ApplyTransaction(ctx sdk.Context, tx *ethtypes.Transaction) (*t
 	// reset the gas meter for current cosmos transaction
 	k.ResetGasMeterAndConsumeGas(ctx, totalGasUsed)
 	return res, nil
+}
+
+// ApplyInternalTransaction executes a trusted internal EVM transaction and keeps
+// the transient Ethereum tx/log/bloom indexes in sync with the generated
+// transaction metadata.
+func (k *Keeper) ApplyInternalTransaction(
+	ctx sdk.Context,
+	tx *ethtypes.Transaction,
+	msg core.Message,
+	commit bool,
+) (*types.MsgEthereumTxResponse, statedb.TxConfig, error) {
+	cfg, err := k.EVMConfig(ctx, sdk.ConsAddress(ctx.BlockHeader().ProposerAddress), k.eip155ChainID)
+	if err != nil {
+		return nil, statedb.TxConfig{}, errorsmod.Wrap(err, "failed to load evm config")
+	}
+
+	txConfig := k.TxConfig(ctx, tx.Hash())
+	res, err := k.ApplyMessageWithConfig(ctx, msg, nil, commit, cfg, txConfig)
+	if err != nil {
+		return nil, statedb.TxConfig{}, errorsmod.Wrap(err, "failed to apply ethereum core message")
+	}
+
+	if commit && !res.Failed() {
+		k.updateTxTransientMetadata(ctx, txConfig, types.LogsToEthereum(res.Logs))
+	}
+
+	return res, txConfig, nil
+}
+
+func (k *Keeper) updateTxTransientMetadata(ctx sdk.Context, txConfig statedb.TxConfig, logs []*ethtypes.Log) {
+	if len(logs) > 0 {
+		bloom := k.GetBlockBloomTransient(ctx)
+		bloom.Or(bloom, big.NewInt(0).SetBytes(ethtypes.LogsBloom(logs)))
+		k.SetBlockBloomTransient(ctx, bloom)
+		k.SetLogSizeTransient(ctx, uint64(txConfig.LogIndex)+uint64(len(logs)))
+	}
+
+	k.SetTxIndexTransient(ctx, uint64(txConfig.TxIndex)+1)
 }
 
 // ApplyMessage calls ApplyMessageWithConfig with an empty TxConfig.

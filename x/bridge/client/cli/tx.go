@@ -39,6 +39,10 @@ func GetTxCmd() *cobra.Command {
 		TxReferralCmd(),
 		TxReferralRewardsCmd(),
 		TxStopListCmd(),
+		TxEpochsCmd(),
+		TxCommissionCmd(),
+		CmdDistributeFees(),
+		CmdProcessSystemWithdrawal(),
 	)
 	// this line is used by starport scaffolding # 1
 

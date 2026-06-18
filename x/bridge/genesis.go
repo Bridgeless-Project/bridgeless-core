@@ -15,6 +15,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	k.SetParams(ctx, genState.Params)
 	for _, chain := range genState.Chains {
 		k.SetChain(ctx, chain)
+		k.SetChainByType(ctx, chain)
 	}
 	for _, token := range genState.Tokens {
 		k.SetToken(ctx, token)
@@ -25,6 +26,13 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	}
 	for _, tx := range genState.Transactions {
 		k.SetTransaction(ctx, tx)
+		if tx.EpochId != 0 {
+			k.SetEpochTransaction(ctx, tx.EpochId, types.TransactionIdentifier{
+				DepositTxHash:  tx.DepositTxHash,
+				DepositTxIndex: tx.DepositTxIndex,
+				DepositChainId: tx.DepositChainId,
+			})
+		}
 	}
 
 	for _, txSubmissions := range genState.TransactionsSubmissions {
@@ -37,6 +45,21 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 
 	for _, referralRewards := range genState.ReferralsRewards {
 		k.InsertReferralRewards(ctx, referralRewards.ReferralId, referralRewards.TokenId, referralRewards)
+	}
+
+	for _, epoch := range genState.Epochs {
+		k.SetEpoch(ctx, &epoch)
+	}
+
+	// commissions MUST be normalized here
+	for _, entry := range genState.Commissions {
+		amount, ok := sdk.NewIntFromString(entry.Commission.Amount)
+		if !ok {
+			panic(errorsmod.Wrapf(types.ErrInvalidCommission, "invalid genesis commission amount %q", entry.Commission.Amount))
+		}
+		if err := k.SetCommissionNormalized(ctx, entry.EpochId, entry.Commission.TokenId, amount.BigInt()); err != nil {
+			panic(errorsmod.Wrap(err, "failed to initialize genesis commission"))
+		}
 	}
 
 	if err := genState.Validate(); err != nil {
@@ -68,6 +91,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 
 	referrals := k.GetAllReferrals(ctx)
 	referralsRewards := k.GetAllReferralRewards(ctx)
+	commissions := k.GetAllGenesisCommissions(ctx)
 
 	return &types.GenesisState{
 		Params:                  k.GetParams(ctx),
@@ -77,5 +101,6 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 		TransactionsSubmissions: txsWithSubmissions,
 		Referrals:               referrals,
 		ReferralsRewards:        referralsRewards,
+		Commissions:             commissions,
 	}
 }

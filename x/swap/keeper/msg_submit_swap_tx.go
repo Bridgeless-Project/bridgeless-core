@@ -1,0 +1,87 @@
+package keeper
+
+import (
+	"context"
+	"math/big"
+
+	errorsmod "cosmossdk.io/errors"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/utils"
+	bridgetypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/swap/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+)
+
+func (m msgServer) SubmitSwapTx(goCtx context.Context, msg *types.MsgSubmitSwapTx) (*types.MsgSubmitSwapTxResponse, error) {
+	if msg == nil {
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "message cannot be nil")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	if !m.bridge.IsParty(ctx, msg.Creator) {
+		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "creator is not an authorized bridge party")
+	}
+
+	requestHash := m.SwapHash(msg).Hex()
+	submissions, found := m.GetSwapSubmissions(ctx, requestHash)
+	if !found {
+		submissions = bridgetypes.Submissions{Hash: requestHash}
+	}
+
+	if hasSubmitter(submissions.Submitters, msg.Creator) {
+		return nil, errorsmod.Wrap(types.ErrAlreadySubmitted, "swap has already been submitted by this creator")
+	}
+
+	submissions.Submitters = append(submissions.Submitters, msg.Creator)
+	m.SetSwapSubmissions(ctx, &submissions)
+
+	threshold := m.bridge.GetParams(ctx).TssThreshold
+	if len(submissions.Submitters) != int(threshold+1) {
+		return &types.MsgSubmitSwapTxResponse{}, nil
+	}
+
+	if _, found = m.GetSwap(ctx, msg.Tx.Tx.DepositTxHash, msg.Tx.Tx.DepositTxIndex, msg.Tx.Tx.DepositChainId); found {
+		return nil, types.ErrAlreadyProcessed
+	}
+
+	// swap tokens: WithdrawalAmount -> AmountOutSwap
+	swap, err := m.executeSwap(ctx, msg)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "failed to execute swap")
+	}
+
+	m.SetSwap(ctx, *swap)
+
+	// Fee distribution flow
+	if msg.Tx.IsFeeDistribution {
+
+		// distribute amountOutMin between validators (NOT WithdrawalAmount)
+		amountOutMin, err := utils.ParseUintString(msg.Tx.SwapOutAmount)
+		if err != nil {
+			return nil, errorsmod.Wrap(err, "failed to parse amount_out_min")
+		}
+
+		err = m.bridge.PartiesDistributeFee(
+			ctx,
+			msg.Tx.Tx.EpochId,
+			sdk.NewCoin(m.staking.BondDenom(ctx), sdk.NewIntFromBigInt(amountOutMin)))
+		if err != nil {
+			return nil, errorsmod.Wrap(err, "failed to distribute fee among parties")
+		}
+
+		withdrawalToken, found := m.bridge.GetTokenInfo(ctx, msg.Tx.Tx.WithdrawalChainId, msg.Tx.Tx.WithdrawalToken)
+		if !found {
+			return nil, errorsmod.Wrap(bridgetypes.ErrTokenInfoNotFound, "withdrawal token not found")
+		}
+		withdrawalAmount, ok := new(big.Int).SetString(msg.Tx.Tx.WithdrawalAmount, 10)
+		if !ok || withdrawalAmount.Sign() < 0 {
+			return nil, errorsmod.Wrapf(bridgetypes.ErrInvalidAmount, "invalid withdrawal amount %q", msg.Tx.Tx.WithdrawalAmount)
+		}
+
+		if err = m.bridge.SubtractCommissionNative(ctx, msg.Tx.Tx.EpochId, withdrawalToken, withdrawalAmount); err != nil {
+			return nil, errorsmod.Wrap(err, "failed to subtract fee-distribution commission")
+		}
+	}
+
+	return &types.MsgSubmitSwapTxResponse{}, nil
+}

@@ -17,14 +17,22 @@ package types
 
 // Evm module events
 const (
-	EventTypeEthereumTx = TypeMsgEthereumTx
-	EventTypeBlockBloom = "block_bloom"
-	EventTypeTxLog      = "tx_log"
+	EventTypeEthereumTx         = TypeMsgEthereumTx
+	EventTypeInternalEthereumTx = "internal_ethereum_tx"
+	EventTypeBlockBloom         = "block_bloom"
+	EventTypeTxLog              = "tx_log"
 
 	AttributeKeyContractAddress = "contract"
 	AttributeKeyRecipient       = "recipient"
 	AttributeKeyTxHash          = "txHash"
 	AttributeKeyEthereumTxHash  = "ethereumTxHash"
+	AttributeKeyEthereumTxFrom  = "ethereumTxFrom"
+	AttributeKeyEthereumTxInput = "ethereumTxInput"
+	AttributeKeyTxNonce         = "txNonce"
+	AttributeKeyTxGasLimit      = "txGasLimit"
+	AttributeKeyTxGasPrice      = "txGasPrice"
+	AttributeKeyTxAmount        = "txAmount"
+	AttributeKeyTxChainID       = "txChainId"
 	AttributeKeyTxIndex         = "txIndex"
 	AttributeKeyTxGasUsed       = "txGasUsed"
 	AttributeKeyTxType          = "txType"

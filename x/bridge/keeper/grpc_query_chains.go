@@ -37,3 +37,16 @@ func (k queryServer) GetChains(goctx context.Context, req *types.QueryGetChains)
 
 	return &types.QueryGetChainsResponse{Chains: chains, Pagination: page}, nil
 }
+
+func (k queryServer) GetChainsByType(ctx context.Context, req *types.QueryGetChainsByType) (*types.QueryGetChainsByTypeResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	chains, page, err := k.GetChainsByTypeWithPagination(sdk.UnwrapSDKContext(ctx), req.ChainType, req.Pagination)
+	if err != nil {
+		return nil, types.ErrChainNotFound
+	}
+
+	return &types.QueryGetChainsByTypeResponse{Chains: chains, Pagination: page}, nil
+}

@@ -63,7 +63,7 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 	threshold := k.GetParams(ctx).TssThreshold
 	txSubmissions, found := k.GetTransactionSubmissions(ctx, k.TxHash(transaction).String())
 	if !found {
-		txSubmissions.TxHash = k.TxHash(transaction).String()
+		txSubmissions.Hash = k.TxHash(transaction).String()
 	}
 
 	// If tx has been submitted before with the same address new submission is rejected
@@ -84,42 +84,59 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 	k.SetTransaction(ctx, *transaction)
 	emitSubmitEvent(ctx, *transaction)
 
-	if types.IsDefaultReferralId(transaction.ReferralId) {
-		return nil
-	}
-
-	referral, ok := k.GetReferral(ctx, transaction.ReferralId)
-	if !ok {
-		return errorsmod.Wrap(types.ErrReferralNotFound, "referral ID not found")
-	}
-
-	token, ok := k.GetTokenInfo(ctx, transaction.DepositChainId, transaction.DepositToken)
-	if !ok {
-		return errorsmod.Wrap(types.ErrTokenInfoNotFound, "token info not found for deposit token")
-	}
-
 	// Rewards for referral are taken from CommissionAmount
 	commissionAmount, ok := big.NewInt(0).SetString(transaction.CommissionAmount, 10)
 	if !ok {
 		return errorsmod.Wrap(types.ErrInvalidDataType, "invalid withdrawal amount")
 	}
 
-	rewards, err := types.GetCommissionAmount(commissionAmount, referral.CommissionRate)
-	if err != nil {
-		return errorsmod.Wrap(err, "failed to calculate referral rewards")
+	withdrawalToken, ok := k.GetTokenInfo(ctx, transaction.WithdrawalChainId, transaction.WithdrawalToken)
+	if !ok {
+		return errorsmod.Wrap(types.ErrTokenInfoNotFound, "withdrawal token not found")
 	}
 
-	referralRewards := types.ReferralRewards{
-		ReferralId:         transaction.ReferralId,
-		TokenId:            token.TokenId,
-		ToClaim:            sdk.NewIntFromBigInt(rewards).String(),
-		TotalClaimedAmount: sdk.NewInt(0).String(), // not used when adding referral rewards and should be 0
+	// Transform commission decimals to bridgeless decimals (18).
+	commissionAmount18 := TransformAmount(commissionAmount, withdrawalToken.Decimals, types.DefaultChainDecimals)
+
+	if !types.IsDefaultReferralId(transaction.ReferralId) {
+		referral, ok := k.GetReferral(ctx, transaction.ReferralId)
+		if !ok {
+			return errorsmod.Wrap(types.ErrReferralNotFound, "referral ID not found")
+		}
+
+		txReferralRewards, err := types.ComputeCommissionAmount(commissionAmount18, referral.CommissionRate)
+		if err != nil {
+			return errorsmod.Wrap(err, "failed to calculate referral rewards")
+		}
+
+		commissionAmount18.Sub(commissionAmount18, txReferralRewards)
+
+		referralRewards := types.ReferralRewards{
+			ReferralId:         transaction.ReferralId,
+			TokenId:            withdrawalToken.TokenId,
+			ToClaim:            sdk.NewIntFromBigInt(txReferralRewards).String(),
+			TotalClaimedAmount: sdk.NewInt(0).String(),
+		}
+
+		if err = k.AddReferralRewards(ctx, transaction.ReferralId, withdrawalToken.TokenId, referralRewards); err != nil {
+			return errorsmod.Wrap(err, "failed to add referral rewards")
+		}
 	}
 
-	err = k.AddReferralRewards(ctx, transaction.ReferralId, token.TokenId, referralRewards)
-	if err != nil {
-		return errorsmod.Wrap(err, "failed to add referral rewards")
+	if err := k.AddCommissionNormalized(ctx, transaction.EpochId, withdrawalToken.TokenId, commissionAmount18); err != nil {
+		return errorsmod.Wrap(err, "failed to add transaction commission")
 	}
+
+	// we do not need to store tx for epoch 0
+	if transaction.EpochId == 0 {
+		return nil
+	}
+
+	k.SetEpochTransaction(ctx, transaction.EpochId, types.TransactionIdentifier{
+		DepositTxHash:  transaction.DepositTxHash,
+		DepositTxIndex: transaction.DepositTxIndex,
+		DepositChainId: transaction.DepositChainId,
+	})
 
 	return nil
 }
@@ -137,49 +154,60 @@ func (k Keeper) DeleteTx(ctx sdk.Context, depositTxHash string, depositTxIndex u
 	// Delete tx submissions
 	txSubmissions, found := k.GetTransactionSubmissions(ctx, k.TxHash(&transaction).String())
 	if found {
-		k.RemoveTransactionSubmissions(ctx, txSubmissions.TxHash)
+		k.RemoveTransactionSubmissions(ctx, txSubmissions.Hash)
 	}
 
-	// Minus referral rewards
-	// if referral ID is default no need to minus rewards, just emit event and return
-	if types.IsDefaultReferralId(transaction.ReferralId) {
-		emitRemoveTransactionEvent(ctx, transaction)
-		return nil
-	}
-
-	// If referral ID is not default minus rewards
-	referral, ok := k.GetReferral(ctx, transaction.ReferralId)
+	withdrawalToken, ok := k.GetTokenInfo(ctx, transaction.WithdrawalChainId, transaction.WithdrawalToken)
 	if !ok {
-		return errorsmod.Wrap(types.ErrReferralNotFound, "referral ID not found")
+		return errorsmod.Wrap(types.ErrTokenInfoNotFound, "token info not found for deposit withdrawalToken")
 	}
 
-	token, ok := k.GetTokenInfo(ctx, transaction.DepositChainId, transaction.DepositToken)
-	if !ok {
-		return errorsmod.Wrap(types.ErrTokenInfoNotFound, "token info not found for deposit token")
-	}
-
-	// Rewards for referral are taken from CommissionAmount
+	// CommissionAmount is submitted in withdrawal token native decimals.
 	commissionAmount, ok := big.NewInt(0).SetString(transaction.CommissionAmount, 10)
 	if !ok {
 		return errorsmod.Wrap(types.ErrInvalidDataType, "invalid withdrawal amount")
 	}
 
-	rewards, err := types.GetCommissionAmount(commissionAmount, referral.CommissionRate)
-	if err != nil {
-		return errorsmod.Wrap(err, "failed to calculate referral rewards")
+	// Convert the commission amount to normalized 18-decimal accounting units.
+	commissionAmount = TransformAmount(commissionAmount, withdrawalToken.Decimals, types.DefaultChainDecimals)
+
+	if !types.IsDefaultReferralId(transaction.ReferralId) {
+		referral, ok := k.GetReferral(ctx, transaction.ReferralId)
+		if !ok {
+			return errorsmod.Wrap(types.ErrReferralNotFound, "referral ID not found")
+		}
+
+		rewards, err := types.ComputeCommissionAmount(commissionAmount, referral.CommissionRate)
+		if err != nil {
+			return errorsmod.Wrap(err, "failed to calculate referral rewards")
+		}
+
+		commissionAmount.Sub(commissionAmount, rewards)
+
+		// Convert rewards to negative value to subtract them from referral balances.
+		referralRewards := types.ReferralRewards{
+			ReferralId:         transaction.ReferralId,
+			TokenId:            withdrawalToken.TokenId,
+			ToClaim:            sdk.NewIntFromBigInt(rewards).Neg().String(),
+			TotalClaimedAmount: sdk.NewInt(0).String(), // not used when adding referral rewards and should be 0
+		}
+
+		err = k.AddReferralRewards(ctx, transaction.ReferralId, withdrawalToken.TokenId, referralRewards)
+		if err != nil {
+			return errorsmod.Wrap(err, "failed to minus referral rewards")
+		}
 	}
 
-	// convert rewards to negative value to minus it
-	referralRewards := types.ReferralRewards{
-		ReferralId:         transaction.ReferralId,
-		TokenId:            token.TokenId,
-		ToClaim:            sdk.NewIntFromBigInt(rewards).Neg().String(),
-		TotalClaimedAmount: sdk.NewInt(0).String(), // not used when adding referral rewards and should be 0
+	if err := k.SubtractCommissionNormalized(ctx, transaction.EpochId, withdrawalToken.TokenId, commissionAmount); err != nil {
+		return errorsmod.Wrap(err, "failed to subtract transaction commission")
 	}
 
-	err = k.AddReferralRewards(ctx, transaction.ReferralId, token.TokenId, referralRewards)
-	if err != nil {
-		return errorsmod.Wrap(err, "failed to minus referral rewards")
+	if transaction.EpochId != 0 {
+		k.RemoveEpochTransaction(ctx, transaction.EpochId, types.TransactionIdentifier{
+			DepositTxHash:  transaction.DepositTxHash,
+			DepositTxIndex: transaction.DepositTxIndex,
+			DepositChainId: transaction.DepositChainId,
+		})
 	}
 
 	emitRemoveTransactionEvent(ctx, transaction)
@@ -235,4 +263,81 @@ func isSubmitter(submitters []string, submitter string) bool {
 	}
 
 	return false
+}
+
+// ----------------------SYSTEM TRANSACTIONS----------------------
+
+func (k Keeper) SystemWithdrawal(ctx sdk.Context, withdrawal *types.SystemWithdrawal, submitter string) error {
+	// Check whether tx has enough submissions to be added to core
+	txSubmissions, found := k.GetSystemTransactionSubmissions(ctx, k.TxHash(withdrawal).String())
+	if !found {
+		txSubmissions.Hash = k.TxHash(withdrawal).String()
+	}
+
+	// If tx has been submitted before with the same address new submission is rejected
+	if isSubmitter(txSubmissions.Submitters, submitter) {
+		return errorsmod.Wrap(types.ErrTranscationAlreadySubmitted,
+			"transaction has been already submitted by this address")
+	}
+
+	txSubmissions.Submitters = append(txSubmissions.Submitters, submitter)
+	k.SetSystemTransactionSubmissions(ctx, &txSubmissions)
+
+	// If tx has not been submitted yet or has not enough submissions (less than tss threshold param)
+	// it is not set to core
+	if len(txSubmissions.Submitters) != int(k.GetParams(ctx).TssThreshold+1) {
+		return nil
+	}
+
+	k.SetSystemTransaction(ctx, *withdrawal)
+	emitSystemSubmitEvent(ctx, *withdrawal)
+
+	return nil
+}
+
+func (k Keeper) SetSystemTransaction(sdkCtx sdk.Context, withdrawal types.SystemWithdrawal) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreSystemTransactionPrefix))
+	tStore.Set(types.KeyTransaction(withdrawal.TxHash), k.cdc.MustMarshal(&withdrawal))
+}
+
+func (k Keeper) GetSystemTransaction(sdkCtx sdk.Context, id string) (types.SystemWithdrawal, bool) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreSystemTransactionPrefix))
+
+	var transaction types.SystemWithdrawal
+	bz := tStore.Get(types.KeyTransaction(id))
+	if bz == nil {
+		return transaction, false
+	}
+
+	k.cdc.MustUnmarshal(bz, &transaction)
+	return transaction, true
+}
+
+func (k Keeper) RemoveSystemTransaction(sdkCtx sdk.Context, id string) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreSystemTransactionPrefix))
+	tStore.Delete(types.KeyTransaction(id))
+}
+
+func (k Keeper) GetPaginatedSystemTransactions(
+	sdkCtx sdk.Context, pagination *query.PageRequest,
+) (
+	[]types.SystemWithdrawal, *query.PageResponse, error,
+) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreSystemTransactionPrefix))
+
+	var systemTransactions []types.SystemWithdrawal
+	pageRes, err := query.Paginate(tStore, pagination, func(key []byte, value []byte) error {
+		var transaction types.SystemWithdrawal
+		if err := k.cdc.Unmarshal(value, &transaction); err != nil {
+			return err
+		}
+		systemTransactions = append(systemTransactions, transaction)
+		return nil
+	})
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return systemTransactions, pageRes, nil
 }

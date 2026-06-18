@@ -1,0 +1,68 @@
+package keeper
+
+import (
+	"context"
+	"math/big"
+
+	errorsmod "cosmossdk.io/errors"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
+
+func (m msgServer) SetCommission(goCtx context.Context, msg *types.MsgSetCommission) (*types.MsgSetCommissionResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if msg.Creator != m.GetParams(ctx).ModuleAdmin {
+		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "msg sender is not module admin")
+	}
+
+	amount, ok := new(big.Int).SetString(msg.Amount, 10)
+	if !ok || amount.Sign() < 0 {
+		return nil, errorsmod.Wrap(types.ErrInvalidCommission, "amount must be a non-negative 18-decimal integer")
+	}
+	if err := m.Keeper.SetCommissionNormalized(ctx, msg.Epoch, msg.TokenId, amount); err != nil {
+		return nil, err
+	}
+
+	return &types.MsgSetCommissionResponse{}, nil
+}
+
+func (m msgServer) UpdateCommission(goCtx context.Context, msg *types.MsgUpdateCommission) (*types.MsgUpdateCommissionResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if msg.Creator != m.GetParams(ctx).ModuleAdmin {
+		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "msg sender is not module admin")
+	}
+
+	commission, found := m.Keeper.GetCommission(ctx, msg.Epoch, msg.TokenId)
+	if !found {
+		return nil, errorsmod.Wrap(types.ErrCommissionNotFound, "commission with this TokenID is not found")
+	}
+
+	amount, ok := new(big.Int).SetString(msg.Amount, 10)
+	if !ok || amount.Sign() < 0 {
+		return nil, errorsmod.Wrap(types.ErrInvalidCommission, "amount must be a non-negative 18-decimal integer")
+	}
+	if err := m.Keeper.SetCommissionNormalized(ctx, msg.Epoch, commission.TokenId, amount); err != nil {
+		return nil, err
+	}
+
+	return &types.MsgUpdateCommissionResponse{}, nil
+}
+
+func (m msgServer) RemoveCommission(goCtx context.Context, msg *types.MsgRemoveCommission) (*types.MsgRemoveCommissionResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if msg.Creator != m.GetParams(ctx).ModuleAdmin {
+		return nil, errorsmod.Wrap(types.ErrPermissionDenied, "msg sender is not module admin")
+	}
+
+	commission, found := m.Keeper.GetCommission(ctx, msg.Epoch, msg.TokenId)
+	if !found {
+		return nil, errorsmod.Wrap(types.ErrCommissionNotFound, "commission with this TokenID is not found")
+	}
+
+	m.Keeper.RemoveCommission(ctx, msg.Epoch, commission.TokenId)
+
+	return &types.MsgRemoveCommissionResponse{}, nil
+}

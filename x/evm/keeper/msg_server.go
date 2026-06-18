@@ -22,7 +22,7 @@ import (
 	"strconv"
 
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
-
+	"github.com/ethereum/go-ethereum/common"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	tmtypes "github.com/tendermint/tendermint/types"
 
@@ -89,8 +89,32 @@ func (k *Keeper) EthereumTx(goCtx context.Context, msg *types.MsgEthereumTx) (*t
 		}
 	}()
 
+	err = k.BroadcastTxResponse(ctx,
+		sender,
+		tx.Value().String(),
+		tx.To(),
+		tx.Type(),
+		txIndex,
+		response,
+	)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "failed to broadcast tx")
+	}
+
+	return response, nil
+}
+
+func (k *Keeper) BroadcastTxResponse(
+	ctx sdk.Context,
+	sender string,
+	amount string,
+	recipient *common.Address,
+	txType uint8,
+	txIndex uint64,
+	response *types.MsgEthereumTxResponse,
+) error {
 	attrs := []sdk.Attribute{
-		sdk.NewAttribute(sdk.AttributeKeyAmount, tx.Value().String()),
+		sdk.NewAttribute(sdk.AttributeKeyAmount, amount),
 		// add event for ethereum transaction hash format
 		sdk.NewAttribute(types.AttributeKeyEthereumTxHash, response.Hash),
 		// add event for index of valid ethereum tx
@@ -105,8 +129,8 @@ func (k *Keeper) EthereumTx(goCtx context.Context, msg *types.MsgEthereumTx) (*t
 		attrs = append(attrs, sdk.NewAttribute(types.AttributeKeyTxHash, hash.String()))
 	}
 
-	if to := tx.To(); to != nil {
-		attrs = append(attrs, sdk.NewAttribute(types.AttributeKeyRecipient, to.Hex()))
+	if recipient != nil {
+		attrs = append(attrs, sdk.NewAttribute(types.AttributeKeyRecipient, recipient.Hex()))
 	}
 
 	if response.Failed() {
@@ -117,7 +141,7 @@ func (k *Keeper) EthereumTx(goCtx context.Context, msg *types.MsgEthereumTx) (*t
 	for i, log := range response.Logs {
 		value, err := json.Marshal(log)
 		if err != nil {
-			return nil, errorsmod.Wrap(err, "failed to encode log")
+			return errorsmod.Wrap(err, "failed to encode log")
 		}
 		txLogAttrs[i] = sdk.NewAttribute(types.AttributeKeyTxLog, string(value))
 	}
@@ -136,11 +160,11 @@ func (k *Keeper) EthereumTx(goCtx context.Context, msg *types.MsgEthereumTx) (*t
 			sdk.EventTypeMessage,
 			sdk.NewAttribute(sdk.AttributeKeyModule, types.AttributeValueCategory),
 			sdk.NewAttribute(sdk.AttributeKeySender, sender),
-			sdk.NewAttribute(types.AttributeKeyTxType, fmt.Sprintf("%d", tx.Type())),
+			sdk.NewAttribute(types.AttributeKeyTxType, fmt.Sprintf("%d", txType)),
 		),
 	})
 
-	return response, nil
+	return nil
 }
 
 // UpdateParams implements the gRPC MsgServer interface. When an UpdateParams

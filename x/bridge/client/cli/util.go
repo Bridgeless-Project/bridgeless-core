@@ -32,6 +32,18 @@ func parseTx(path string) (*types.Transaction, error) {
 	return tx, nil
 }
 
+func parseSystemWithdrawals(path string) ([]types.SystemWithdrawal, error) {
+	var withdrawals []types.SystemWithdrawal
+	contents, err := os.ReadFile(path)
+	if err != nil {
+		return nil, errors.Wrap(err, "error reading file")
+	}
+	if err = json.Unmarshal(contents, &withdrawals); err != nil {
+		return nil, errors.Wrap(err, "failed to unmarshal system withdrawals")
+	}
+	return withdrawals, nil
+}
+
 func parseInsertToken(path string) (*types.Token, error) {
 	return readFromJSON[types.Token](path)
 }
@@ -51,4 +63,30 @@ func readFromJSON[T any](path string) (*T, error) {
 	}
 
 	return &result, nil
+}
+
+// StartEpochInput represents the JSON input structure for starting an epoch
+type StartEpochInput struct {
+	EpochID      uint32          `json:"epoch_id"`
+	TSSInfo      []types.TSSInfo `json:"tss_info"`
+	TSSThreshold uint32          `json:"tss_threshold"`
+	StartTime    int64           `json:"start_time"`
+}
+
+// parseStartEpochInput parses the start epoch input from a JSON file
+func parseStartEpochInput(path string) (*StartEpochInput, error) {
+	return readFromJSON[StartEpochInput](path)
+}
+
+// parseEpochChainSignatures parses the epoch chain signatures from a JSON file
+func parseEpochChainSignatures(path string) ([]types.EpochChainSignatures, error) {
+	var signatures []types.EpochChainSignatures
+	contents, err := os.ReadFile(path)
+	if err != nil {
+		return nil, errors.Wrap(err, "error reading file")
+	}
+	if err = json.Unmarshal(contents, &signatures); err != nil {
+		return nil, errors.Wrap(err, "failed to unmarshal epoch chain signatures")
+	}
+	return signatures, nil
 }

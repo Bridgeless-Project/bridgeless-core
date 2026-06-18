@@ -61,7 +61,7 @@ $ %s tx multisig votes vote bridge1... 1 0
 			}
 
 			opt := types.VoteOption_NO
-			if vote_option == 0 {
+			if vote_option == 1 {
 				opt = types.VoteOption_YES
 			}
 
