@@ -31,9 +31,7 @@ jobs:
         run: |
           buildah build \
             -f Dockerfile \
-            --layers \
-            --cache-from $CACHE_REPO \
-            --cache-to $CACHE_REPO \
+            --no-cache \
             -t $IMAGE \
             --build-arg CI_ACCESS_TOKEN=$CI_ACCESS_TOKEN \
             .
