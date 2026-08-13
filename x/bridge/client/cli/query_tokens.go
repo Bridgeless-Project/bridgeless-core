@@ -4,7 +4,6 @@ import (
 	"context"
 	"strconv"
 
-	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -21,7 +20,7 @@ func CmdQueryTokenById() *cobra.Command {
 
 			tokenId, err := strconv.ParseUint(args[0], 10, 64)
 			if err != nil {
-				return errorsmod.Wrap(err, "invalid token id")
+				return err
 			}
 
 			queryClient := types.NewQueryClient(clientCtx)
@@ -87,12 +86,12 @@ func CmdQueryTokenPair() *cobra.Command {
 
 			srcChain, err := strconv.ParseUint(args[0], 10, 32)
 			if err != nil {
-				return errorsmod.Wrap(err, "invalid source chain id")
+				return err
 			}
 
 			dstChain, err := strconv.ParseUint(args[2], 10, 32)
 			if err != nil {
-				return errorsmod.Wrap(err, "invalid destination chain id")
+				return err
 			}
 
 			req := &types.QueryGetTokenPair{
@@ -129,7 +128,7 @@ func CmdQueryTokenInfo() *cobra.Command {
 
 			chain, err := strconv.ParseUint(args[0], 10, 32)
 			if err != nil {
-				return errorsmod.Wrap(err, "invalid chain id")
+				return err
 			}
 
 			req := &types.QueryGetTokenInfo{
