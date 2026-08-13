@@ -10,7 +10,7 @@ const TypeRemoveTokenInfo = "remove_token_info"
 
 var _ sdk.Msg = &MsgRemoveTokenInfo{}
 
-func NewMsgRemoveTokenInfo(creator string, tokenId uint64, chainId string) *MsgRemoveTokenInfo {
+func NewMsgRemoveTokenInfo(creator string, tokenId uint64, chainId uint32) *MsgRemoveTokenInfo {
 	return &MsgRemoveTokenInfo{
 		Creator: creator,
 		TokenId: tokenId,
@@ -50,7 +50,7 @@ func (msg *MsgRemoveTokenInfo) ValidateBasic() error {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidType, "token id cannot be zero")
 	}
 
-	if len(msg.ChainId) == 0 {
+	if msg.ChainId == 0 {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidChainID, "chain id cannot be empty")
 	}
 

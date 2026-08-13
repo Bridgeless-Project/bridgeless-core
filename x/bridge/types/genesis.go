@@ -38,16 +38,16 @@ func (gs GenesisState) Validate() error {
 		}
 	}
 
-	chains := make(map[string]struct{})
+	chains := make(map[uint32]struct{})
 	for _, chain := range gs.Chains {
 		if _, ok := chains[chain.Id]; ok {
-			return errorsmod.Wrapf(bridgeTypes.ErrDuplicatedValue, "duplicate chain id: %s", chain.Id)
+			return errorsmod.Wrapf(bridgeTypes.ErrDuplicatedValue, "duplicate chain id: %d", chain.Id)
 		} else {
 			chains[chain.Id] = struct{}{}
 		}
 
 		if err := validateChain(&chain); err != nil {
-			return errorsmod.Wrapf(err, "invalid chain %s", chain.Id)
+			return errorsmod.Wrapf(err, "invalid chain %d", chain.Id)
 		}
 	}
 
@@ -84,13 +84,13 @@ func (gs GenesisState) Validate() error {
 	epochs := make(map[uint32]struct{})
 	for _, epoch := range gs.Epochs {
 		if _, ok := epochs[epoch.Id]; ok {
-			return errorsmod.Wrapf(bridgeTypes.ErrDuplicatedValue, "duplicate chain id: %s", epoch)
+			return errorsmod.Wrapf(bridgeTypes.ErrDuplicatedValue, "duplicate epoch id: %d", epoch.Id)
 		} else {
 			epochs[epoch.Id] = struct{}{}
 		}
 
 		if err := validateEpoch(&epoch); err != nil {
-			return errorsmod.Wrapf(err, "invalid epoch %s", epoch.Id)
+			return errorsmod.Wrapf(err, "invalid epoch %d", epoch.Id)
 		}
 	}
 

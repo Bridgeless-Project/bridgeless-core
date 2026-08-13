@@ -62,7 +62,7 @@ func (msg *MsgSetEpochSignature) ValidateBasic() error {
 	}
 
 	for _, address := range msg.Addresses {
-		if address.ChainId == "" {
+		if address.ChainId == 0 {
 			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "address must contain chain ID")
 		}
 		if address.Address == "" {

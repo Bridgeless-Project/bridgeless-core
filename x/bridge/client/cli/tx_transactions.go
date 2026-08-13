@@ -102,9 +102,12 @@ func CmdRemoveTx() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			depostChainId := args[3]
+			depositChainId, err := strconv.ParseUint(args[3], 10, 32)
+			if err != nil {
+				return err
+			}
 
-			msg := types.NewMsgRemoveTransaction(clientCtx.GetFromAddress().String(), depostChainId, depositHash, depositIndex)
+			msg := types.NewMsgRemoveTransaction(clientCtx.GetFromAddress().String(), uint32(depositChainId), depositHash, depositIndex)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},

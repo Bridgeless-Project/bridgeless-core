@@ -50,7 +50,7 @@ message QueryAllSwapsResponse {
 message QueryGetSwapById {
   string tx_hash = 1;
   uint64 tx_nonce = 2;
-  string chain_id = 3;
+  uint32 chain_id = 3;
 }
 
 message QueryGetSwapByIdResponse {

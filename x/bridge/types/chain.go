@@ -1,7 +1,6 @@
 package types
 
 import (
-	"math/big"
 	"strings"
 
 	errorsmod "cosmossdk.io/errors"
@@ -27,8 +26,8 @@ func validateChain(chain *Chain) error {
 
 	switch chain.Type {
 	case ChainType_EVM:
-		if _, set := big.NewInt(0).SetString(chain.Id, 10); !set {
-			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid chain id: %s", chain.Id)
+		if chain.Id == 0 {
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "chain id is not set")
 		}
 		if !common.IsHexAddress(chain.BridgeAddress) {
 			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid bridge address: %s", chain.BridgeAddress)

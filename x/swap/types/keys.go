@@ -31,10 +31,10 @@ func Prefix(p string) []byte {
 	return []byte(p + "/")
 }
 
-func KeySwap(txHash string, txNonce uint64, chainID string) []byte {
+func KeySwap(txHash string, txNonce uint64, chainID uint32) []byte {
 	return []byte(KeySwapString(txHash, txNonce, chainID))
 }
 
-func KeySwapString(txHash string, txNonce uint64, chainID string) string {
-	return fmt.Sprintf("%s/%d/%s", txHash, txNonce, chainID)
+func KeySwapString(txHash string, txNonce uint64, chainID uint32) string {
+	return fmt.Sprintf("%s/%d/%d", txHash, txNonce, chainID)
 }

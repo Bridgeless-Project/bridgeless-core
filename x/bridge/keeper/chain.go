@@ -14,7 +14,7 @@ func (k Keeper) SetChain(ctx sdk.Context, chain types.Chain) {
 	cStore.Set(types.KeyChain(chain.Id), k.cdc.MustMarshal(&chain))
 }
 
-func (k Keeper) GetChain(ctx sdk.Context, id string) (chain types.Chain, found bool) {
+func (k Keeper) GetChain(ctx sdk.Context, id uint32) (chain types.Chain, found bool) {
 	cStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreChainPrefix))
 	bz := cStore.Get(types.KeyChain(id))
 	if bz == nil {
@@ -61,7 +61,7 @@ func (k Keeper) GetAllChains(ctx sdk.Context) (chains []types.Chain) {
 	return
 }
 
-func (k Keeper) RemoveChain(ctx sdk.Context, id string) {
+func (k Keeper) RemoveChain(ctx sdk.Context, id uint32) {
 	cStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreChainPrefix))
 	cStore.Delete(types.KeyChain(id))
 }
@@ -112,7 +112,7 @@ func (k Keeper) GetChainsByTypeWithPagination(ctx sdk.Context, chainType types.C
 	return chains, pageRes, nil
 }
 
-func (k Keeper) RemoveChainTypeNetwork(ctx sdk.Context, chainType types.ChainType, chainId string) {
+func (k Keeper) RemoveChainTypeNetwork(ctx sdk.Context, chainType types.ChainType, chainId uint32) {
 	cStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreChainTypePrefix))
 	chainTypeStore := prefix.NewStore(cStore, types.KeyChainType(chainType))
 	chainTypeStore.Delete(types.KeyChain(chainId))

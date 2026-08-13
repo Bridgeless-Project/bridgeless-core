@@ -10,7 +10,7 @@ const TypeRemoveTxStopList = "remove_tx_from_stop_list"
 
 var _ sdk.Msg = &MsgRemoveTxFromStopList{}
 
-func NewMsgRemoveTxFromStopList(creator string, nonce uint64, txHash, chainId string) *MsgRemoveTxFromStopList {
+func NewMsgRemoveTxFromStopList(creator string, nonce uint64, chainId uint32, txHash string) *MsgRemoveTxFromStopList {
 	return &MsgRemoveTxFromStopList{
 		ChainId: chainId,
 		TxHash:  txHash,

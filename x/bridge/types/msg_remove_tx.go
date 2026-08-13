@@ -10,7 +10,7 @@ const TypeMsgRemoveTransaction = "remove_transaction"
 
 var _ sdk.Msg = &MsgRemoveTransaction{}
 
-func NewMsgRemoveTransaction(submitter string, depositChainId, depositTxHash string, depositTxIndex uint64) *MsgRemoveTransaction {
+func NewMsgRemoveTransaction(submitter string, depositChainId uint32, depositTxHash string, depositTxIndex uint64) *MsgRemoveTransaction {
 	return &MsgRemoveTransaction{
 		Creator:        submitter,
 		DepositChainId: depositChainId,
@@ -47,7 +47,7 @@ func (msg *MsgRemoveTransaction) ValidateBasic() error {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid submitter address: %s", err)
 	}
 
-	if len(msg.DepositChainId) == 0 {
+	if msg.DepositChainId == 0 {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "deposit chain id and withdrawal id cannot be empty")
 	}
 

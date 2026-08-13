@@ -32,7 +32,7 @@ func (k Keeper) GetToken(sdkCtx sdk.Context, id uint64) (token types.Token, foun
 	return
 }
 
-func (k Keeper) GetTokenInfo(sdkCtx sdk.Context, chain, address string) (tokenInfo types.TokenInfo, found bool) {
+func (k Keeper) GetTokenInfo(sdkCtx sdk.Context, chain uint32, address string) (tokenInfo types.TokenInfo, found bool) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreTokenInfoPrefix))
 	bz := tStore.Get(types.KeyTokenInfo(chain, address))
 	if bz == nil {
@@ -68,7 +68,7 @@ func (k Keeper) RemoveToken(sdkCtx sdk.Context, id uint64) {
 	tStore.Delete(types.KeyToken(id))
 }
 
-func (k Keeper) RemoveTokenInfo(sdkCtx sdk.Context, chain, addr string) {
+func (k Keeper) RemoveTokenInfo(sdkCtx sdk.Context, chain uint32, addr string) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreTokenInfoPrefix))
 	tStore.Delete(types.KeyTokenInfo(chain, addr))
 }

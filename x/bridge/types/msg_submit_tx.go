@@ -52,7 +52,7 @@ func (msg *MsgSubmitTransactions) ValidateBasic() error {
 	}
 
 	for _, tx := range msg.Transactions {
-		if len(tx.DepositChainId) == 0 || len(tx.WithdrawalChainId) == 0 {
+		if tx.DepositChainId == 0 || tx.WithdrawalChainId == 0 {
 			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "deposit chain id and withdrawal id cannot be empty")
 		}
 		if tx.WithdrawalChainId == tx.DepositChainId {

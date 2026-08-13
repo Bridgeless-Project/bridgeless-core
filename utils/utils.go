@@ -18,6 +18,7 @@ package utils
 
 import (
 	"fmt"
+	"math"
 	"math/big"
 	"strings"
 
@@ -29,6 +30,7 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/ethsecp256k1"
+	"github.com/Bridgeless-Project/bridgeless-core/v12/types"
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
@@ -205,19 +207,17 @@ func IsZeroAddress(address string) bool {
 	return common.HexToAddress(address) == (common.Address{})
 }
 
-func GetChainId(ctx sdk.Context) string {
-	// the chian-id returns something like cosmos_1234-1
-	prefixAndChain := strings.Split(ctx.ChainID(), "_") // split to [cosmos, 1234-1]
-	if len(prefixAndChain) != 2 {
-		return ctx.ChainID()
+func GetChainId(ctx sdk.Context) uint32 {
+	chainId, err := types.ParseChainID(ctx.ChainID())
+	if err != nil || !chainId.IsUint64() {
+		return 0
 	}
 
-	evmChainIDWithSuffix := strings.Split(prefixAndChain[1], "-") // split to [1234, 1]
-	if len(evmChainIDWithSuffix) != 2 {
-		return prefixAndChain[1]
+	if chainId.Uint64() > math.MaxUint32 {
+		return 0
 	}
 
-	return evmChainIDWithSuffix[0]
+	return uint32(chainId.Uint64())
 }
 
 func TxHashToBytes32(txHash string) [32]byte {

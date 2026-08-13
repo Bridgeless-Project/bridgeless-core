@@ -125,7 +125,7 @@ func request_Query_GetSwapById_0(ctx context.Context, marshaler runtime.Marshale
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "chain_id")
 	}
 
-	protoReq.ChainId, err = runtime.String(val)
+	protoReq.ChainId, err = runtime.Uint32(val)
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "chain_id", err)
@@ -174,7 +174,7 @@ func local_request_Query_GetSwapById_0(ctx context.Context, marshaler runtime.Ma
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "chain_id")
 	}
 
-	protoReq.ChainId, err = runtime.String(val)
+	protoReq.ChainId, err = runtime.Uint32(val)
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "chain_id", err)
@@ -365,11 +365,11 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "swap", "params"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "swap", "params"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_AllSwaps_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "swap", "swaps"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_AllSwaps_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "swap", "swaps"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetSwapById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"cosmos", "swap", "swaps", "tx_hash", "tx_nonce", "chain_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetSwapById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"cosmos", "swap", "swaps", "tx_hash", "tx_nonce", "chain_id"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (

@@ -73,9 +73,12 @@ func CmdRemoveTxFromSL() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			depostChainId := args[1]
+			depositChainId, err := strconv.ParseUint(args[1], 10, 32)
+			if err != nil {
+				return err
+			}
 
-			msg := types.NewMsgRemoveTxFromStopList(clientCtx.GetFromAddress().String(), depositIndex, depositHash, depostChainId)
+			msg := types.NewMsgRemoveTxFromStopList(clientCtx.GetFromAddress().String(), depositIndex, uint32(depositChainId), depositHash)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},

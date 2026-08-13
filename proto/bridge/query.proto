@@ -146,7 +146,7 @@ message QueryParamsRequest {}
 // QueryTransactionByIdRequest is request type for the Query/TransactionById RPC method.
 message QueryTransactionByIdRequest {
   // id defines the unique transaction identifier.
-  string chain_id = 1;
+  uint32 chain_id = 1;
   string tx_hash = 2;
   uint64 tx_nonce = 3;
 }
@@ -222,13 +222,13 @@ message QueryGetChainsResponse {
 }
 
 message QueryGetTokenPair {
-  string src_chain = 1;
+  uint32 src_chain = 1;
   string src_address = 2;
-  string dst_chain = 3;
+  uint32 dst_chain = 3;
 }
 
 message QueryGetTokenInfo {
-  string chain = 1;
+  uint32 chain = 1;
   string address = 2;
 }
 
@@ -241,7 +241,7 @@ message QueryGetTokenPairResponse {
 }
 
 message QueryGetChainById {
-  string id = 1;
+  uint32 id = 1;
 }
 
 message QueryGetChainByIdResponse {
@@ -320,7 +320,7 @@ message QueryGetReferralRewardsByIdResponse {
 // this line is used by starport scaffolding # 3
 
 message QueryGetStopListTxById {
-  string chain_id = 1;
+  uint32 chain_id = 1;
   string tx_hash = 2;
   uint64 tx_nonce = 3;
 }

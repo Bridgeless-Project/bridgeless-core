@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"strconv"
+
 	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/contracts"
 	contractstypes "github.com/Bridgeless-Project/bridgeless-core/v12/contracts/types"
@@ -86,6 +88,17 @@ func (k Keeper) PostTxProcessing(ctx sdk.Context, _ core.Message, receipt *ethty
 			continue
 		}
 
+		destinationChainId, err := strconv.ParseUint(eventBody.DestinationDepositParams.Network, 10, 32)
+		if err != nil {
+			k.Logger(ctx).Error(
+				"skipping SwappedAndRouted event with non-numeric destination network",
+				"tx_hash", evmLog.TxHash.Hex(),
+				"log_index", evmLog.Index,
+				"network", eventBody.DestinationDepositParams.Network,
+			)
+			continue
+		}
+
 		txHash := evmLog.TxHash.Hex()
 		txIndex := uint64(evmLog.Index)
 		chainID := utils.GetChainId(ctx)
@@ -110,7 +123,7 @@ func (k Keeper) PostTxProcessing(ctx sdk.Context, _ core.Message, receipt *ethty
 				DepositAmount:     eventBody.SwapParams.AmountIn.String(),
 				Depositor:         eventBody.Sender.Hex(),
 				Receiver:          swapperAddress,
-				WithdrawalChainId: eventBody.DestinationDepositParams.Network,
+				WithdrawalChainId: uint32(destinationChainId),
 				WithdrawalTxHash:  txHash, // set same tx hash
 				WithdrawalToken:   finalToken.Hex(),
 				IsWrapped:         eventBody.DestinationDepositParams.IsWrapped,
@@ -120,7 +133,7 @@ func (k Keeper) PostTxProcessing(ctx sdk.Context, _ core.Message, receipt *ethty
 			},
 			FinalReceiver:      eventBody.DestinationDepositParams.Receiver,
 			FinalToken:         finalToken.Hex(),
-			FinalChainId:       eventBody.DestinationDepositParams.Network,
+			FinalChainId:       uint32(destinationChainId),
 			SwapDeadline:       eventBody.SwapParams.SwapDeadline.Uint64(),
 			SwapOutAmount:      eventBody.SwapParams.MinDestinationAmount.String(),
 			FinalDepositTxHash: txHash, // set same tx hash

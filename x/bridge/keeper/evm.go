@@ -110,7 +110,7 @@ func (k Keeper) FeeDistribute(ctx sdk.Context, withdrawal types.SystemWithdrawal
 	// validate that TSS do not try to transfer more tokens that can
 	commission, ok := k.GetCommission(ctx, withdrawal.EpochId, tokenInfo.TokenId)
 	if !ok {
-		return errorsmod.Wrapf(types.ErrInvalidCommission, "failed to get commission from store: token %s,  epoch %d", tokenInfo.TokenId, withdrawal.EpochId)
+		return errorsmod.Wrapf(types.ErrInvalidCommission, "failed to get commission from store: token %d, epoch %d", tokenInfo.TokenId, withdrawal.EpochId)
 	}
 
 	commissionAmount, ok := big.NewInt(0).SetString(commission.Amount, 10)

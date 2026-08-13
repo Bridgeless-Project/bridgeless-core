@@ -18,9 +18,14 @@ func CmdQueryChainById() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 
+			chainId, err := strconv.ParseUint(args[0], 10, 32)
+			if err != nil {
+				return err
+			}
+
 			queryClient := types.NewQueryClient(clientCtx)
 			req := &types.QueryGetChainById{
-				Id: args[0],
+				Id: uint32(chainId),
 			}
 			res, err := queryClient.GetChainById(context.Background(), req)
 			if err != nil {

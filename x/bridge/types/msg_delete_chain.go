@@ -10,7 +10,7 @@ const TypeMsgDeleteChain = "delete_chain"
 
 var _ sdk.Msg = &MsgDeleteChain{}
 
-func NewMsgDeleteChain(creator string, chainId string) *MsgDeleteChain {
+func NewMsgDeleteChain(creator string, chainId uint32) *MsgDeleteChain {
 	return &MsgDeleteChain{
 		Creator: creator,
 		ChainId: chainId,
@@ -45,7 +45,7 @@ func (msg *MsgDeleteChain) ValidateBasic() error {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address: %s", err)
 	}
 
-	if len(msg.ChainId) == 0 {
+	if msg.ChainId == 0 {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "chain id cannot be empty")
 	}
 

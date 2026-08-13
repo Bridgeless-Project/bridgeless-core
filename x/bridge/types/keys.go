@@ -105,24 +105,28 @@ func Prefix(p string) []byte {
 	return []byte(p + "/")
 }
 
-func TokenPairPrefix(srcChain, srcAddr string) []byte {
-	return []byte(fmt.Sprintf("%s/%s/", srcChain, strings.ToLower(srcAddr)))
+func TokenPairPrefix(srcChain uint32, srcAddr string) []byte {
+	return []byte(fmt.Sprintf("%d/%s/", srcChain, strings.ToLower(srcAddr)))
 }
 
 func KeyToken(id uint64) []byte {
 	return []byte(strconv.FormatInt(int64(id), 10))
 }
 
-func KeyTokenPair(dstChain string) []byte {
-	return []byte(dstChain)
+func KeyTokenPair(dstChain uint32) []byte {
+	bytes := make([]byte, 4)
+	binary.LittleEndian.PutUint32(bytes, dstChain)
+	return bytes
 }
 
-func KeyTokenInfo(chain, addr string) []byte {
-	return []byte(fmt.Sprintf("%s/%s", chain, strings.ToLower(addr)))
+func KeyTokenInfo(chain uint32, addr string) []byte {
+	return []byte(fmt.Sprintf("%d/%s", chain, strings.ToLower(addr)))
 }
 
-func KeyChain(chain string) []byte {
-	return []byte(chain)
+func KeyChain(chain uint32) []byte {
+	bytes := make([]byte, 4)
+	binary.LittleEndian.PutUint32(bytes, chain)
+	return bytes
 }
 
 func KeyChainType(chainType ChainType) []byte {

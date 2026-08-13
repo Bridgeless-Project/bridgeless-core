@@ -1,6 +1,8 @@
 package cli
 
 import (
+	"strconv"
+
 	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/cosmos/cosmos-sdk/client"
@@ -70,9 +72,14 @@ func CmdRemoveChain() *cobra.Command {
 				return err
 			}
 
+			chainId, err := strconv.ParseUint(args[1], 10, 32)
+			if err != nil {
+				return err
+			}
+
 			msg := types.NewMsgDeleteChain(
 				clientCtx.GetFromAddress().String(),
-				args[1],
+				uint32(chainId),
 			)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)

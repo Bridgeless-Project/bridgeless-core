@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"math/big"
+	"strconv"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types"
 	"github.com/cosmos/cosmos-sdk/client"
@@ -63,9 +64,14 @@ func CmdQueryTransactionById() *cobra.Command {
 				return errors.New(fmt.Sprintf("negative nonce: %s", args[2]))
 			}
 
+			chainId, err := strconv.ParseUint(args[0], 10, 32)
+			if err != nil {
+				return errors.New(fmt.Sprintf("invalid chain id: %s", args[0]))
+			}
+
 			queryClient := types.NewQueryClient(clientCtx)
 			res, err := queryClient.TransactionById(cmd.Context(), &types.QueryTransactionByIdRequest{
-				ChainId: args[0],
+				ChainId: uint32(chainId),
 				TxHash:  args[1],
 				TxNonce: nonce.Uint64(),
 			})

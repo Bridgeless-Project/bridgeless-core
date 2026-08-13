@@ -14,7 +14,7 @@ func (k Keeper) SetSwap(ctx sdk.Context, swap types.SwapTransaction) {
 	sStore.Set(types.KeySwap(swap.Tx.DepositTxHash, swap.Tx.DepositTxIndex, swap.Tx.DepositChainId), k.cdc.MustMarshal(&swap))
 }
 
-func (k Keeper) GetSwap(ctx sdk.Context, txHash string, txNonce uint64, chainID string) (swap types.SwapTransaction, found bool) {
+func (k Keeper) GetSwap(ctx sdk.Context, txHash string, txNonce uint64, chainID uint32) (swap types.SwapTransaction, found bool) {
 	sStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.Prefix(types.StoreSwapPrefix))
 	bz := sStore.Get(types.KeySwap(txHash, txNonce, chainID))
 	if bz == nil {

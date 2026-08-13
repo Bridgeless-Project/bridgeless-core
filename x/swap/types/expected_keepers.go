@@ -26,9 +26,9 @@ type BankKeeper interface {
 type BridgeKeeper interface {
 	GetParams(ctx sdk.Context) bridgetypes.Params
 	IsParty(ctx sdk.Context, sender string) bool
-	GetChain(ctx sdk.Context, id string) (bridgetypes.Chain, bool)
-	GetTokenInfo(ctx sdk.Context, chain, address string) (bridgetypes.TokenInfo, bool)
-	GetDstToken(ctx sdk.Context, srcAddr, srcChain, dscChain string) (info bridgetypes.TokenInfo, found bool)
+	GetChain(ctx sdk.Context, id uint32) (bridgetypes.Chain, bool)
+	GetTokenInfo(ctx sdk.Context, chain uint32, address string) (bridgetypes.TokenInfo, bool)
+	GetDstToken(ctx sdk.Context, srcAddr string, srcChain, dscChain uint32) (info bridgetypes.TokenInfo, found bool)
 
 	SubtractCommissionNative(ctx sdk.Context, epochId uint32, token bridgetypes.TokenInfo, amount *big.Int) error
 	GetCommission(ctx sdk.Context, epochId uint32, tokenId uint64) (bridgetypes.Commission, bool)

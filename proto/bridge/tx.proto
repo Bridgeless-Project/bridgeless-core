@@ -71,7 +71,7 @@ message MsgSubmitTransactions {
 message MsgRemoveTransaction{
   string creator = 1;
 
-  string deposit_chain_id = 2;
+  uint32 deposit_chain_id = 2;
   string deposit_tx_hash = 3;
   uint64 deposit_tx_index = 4;
 }
@@ -125,7 +125,7 @@ message MsgInsertChainResponse {}
 
 message MsgDeleteChain {
   string creator = 1;
-  string chain_id = 2;
+  uint32 chain_id = 2;
 }
 
 message MsgDeleteChainResponse {}
@@ -142,7 +142,7 @@ message MsgAddTokenInfoResponse {}
 message MsgRemoveTokenInfo {
   string creator = 1;
   uint64 token_id = 2;
-  string chain_id = 3;
+  uint32 chain_id = 3;
 }
 
 message MsgRemoveTokenInfoResponse {}
@@ -201,7 +201,7 @@ message MsgAddTxToStopList {
 message MsgAddTxToStopListResponse {}
 
 message MsgRemoveTxFromStopList {
-  string chain_id = 1;
+  uint32 chain_id = 1;
   string tx_hash = 2;
   uint64 tx_nonce = 3;
   string creator = 4;

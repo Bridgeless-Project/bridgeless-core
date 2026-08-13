@@ -178,7 +178,7 @@ func (m msgServer) SetEpochSignature(goCtx context.Context, msg *types.MsgSetEpo
 	for _, chainAddress := range msg.Addresses {
 		chain, found := m.Keeper.GetChain(ctx, chainAddress.ChainId)
 		if !found {
-			return nil, errorsmod.Wrapf(types.ErrChainNotFound, "chain %s not found", chainAddress.ChainId)
+			return nil, errorsmod.Wrapf(types.ErrChainNotFound, "chain %d not found", chainAddress.ChainId)
 		}
 		chain.BridgeAddress = chainAddress.Address
 		m.Keeper.SetChain(ctx, chain)

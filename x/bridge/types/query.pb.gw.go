@@ -103,7 +103,7 @@ func request_Query_TransactionById_0(ctx context.Context, marshaler runtime.Mars
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "chain_id")
 	}
 
-	protoReq.ChainId, err = runtime.String(val)
+	protoReq.ChainId, err = runtime.Uint32(val)
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "chain_id", err)
@@ -152,7 +152,7 @@ func local_request_Query_TransactionById_0(ctx context.Context, marshaler runtim
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "chain_id")
 	}
 
-	protoReq.ChainId, err = runtime.String(val)
+	protoReq.ChainId, err = runtime.Uint32(val)
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "chain_id", err)
@@ -529,7 +529,7 @@ func request_Query_GetTokenPair_0(ctx context.Context, marshaler runtime.Marshal
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "src_chain")
 	}
 
-	protoReq.SrcChain, err = runtime.String(val)
+	protoReq.SrcChain, err = runtime.Uint32(val)
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "src_chain", err)
@@ -551,7 +551,7 @@ func request_Query_GetTokenPair_0(ctx context.Context, marshaler runtime.Marshal
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "dst_chain")
 	}
 
-	protoReq.DstChain, err = runtime.String(val)
+	protoReq.DstChain, err = runtime.Uint32(val)
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "dst_chain", err)
@@ -578,7 +578,7 @@ func local_request_Query_GetTokenPair_0(ctx context.Context, marshaler runtime.M
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "src_chain")
 	}
 
-	protoReq.SrcChain, err = runtime.String(val)
+	protoReq.SrcChain, err = runtime.Uint32(val)
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "src_chain", err)
@@ -600,7 +600,7 @@ func local_request_Query_GetTokenPair_0(ctx context.Context, marshaler runtime.M
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "dst_chain")
 	}
 
-	protoReq.DstChain, err = runtime.String(val)
+	protoReq.DstChain, err = runtime.Uint32(val)
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "dst_chain", err)
@@ -627,7 +627,7 @@ func request_Query_GetTokenInfo_0(ctx context.Context, marshaler runtime.Marshal
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "chain")
 	}
 
-	protoReq.Chain, err = runtime.String(val)
+	protoReq.Chain, err = runtime.Uint32(val)
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "chain", err)
@@ -665,7 +665,7 @@ func local_request_Query_GetTokenInfo_0(ctx context.Context, marshaler runtime.M
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "chain")
 	}
 
-	protoReq.Chain, err = runtime.String(val)
+	protoReq.Chain, err = runtime.Uint32(val)
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "chain", err)
@@ -703,7 +703,7 @@ func request_Query_GetChainById_0(ctx context.Context, marshaler runtime.Marshal
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.Id, err = runtime.String(val)
+	protoReq.Id, err = runtime.Uint32(val)
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
@@ -730,7 +730,7 @@ func local_request_Query_GetChainById_0(ctx context.Context, marshaler runtime.M
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.Id, err = runtime.String(val)
+	protoReq.Id, err = runtime.Uint32(val)
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
@@ -1211,7 +1211,7 @@ func request_Query_GetStopListTxsById_0(ctx context.Context, marshaler runtime.M
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "chain_id")
 	}
 
-	protoReq.ChainId, err = runtime.String(val)
+	protoReq.ChainId, err = runtime.Uint32(val)
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "chain_id", err)
@@ -1260,7 +1260,7 @@ func local_request_Query_GetStopListTxsById_0(ctx context.Context, marshaler run
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "chain_id")
 	}
 
-	protoReq.ChainId, err = runtime.String(val)
+	protoReq.ChainId, err = runtime.Uint32(val)
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "chain_id", err)
@@ -2924,61 +2924,61 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "params"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "params"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_Transactions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "transactions"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_Transactions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "transactions"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_TransactionById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"cosmos", "bridge", "transactions", "chain_id", "tx_hash", "tx_nonce"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_TransactionById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"cosmos", "bridge", "transactions", "chain_id", "tx_hash", "tx_nonce"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_SystemWithdrawals_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "system-withdrawals"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_SystemWithdrawals_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "system-withdrawals"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_SystemWithdrawalById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"cosmos", "bridge", "system-withdrawals", "tx_hash"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_SystemWithdrawalById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"cosmos", "bridge", "system-withdrawals", "tx_hash"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetTokenById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"cosmos", "bridge", "tokens", "id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetTokenById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"cosmos", "bridge", "tokens", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetTokens_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "tokens"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetTokens_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "tokens"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetCommissionByToken_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"cosmos", "bridge", "tokens", "commissions", "token_id", "epoch_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetCommissionByToken_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"cosmos", "bridge", "tokens", "commissions", "token_id", "epoch_id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetCommissions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"cosmos", "bridge", "commissions", "epoch_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetCommissions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"cosmos", "bridge", "commissions", "epoch_id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetTokenPair_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"cosmos", "bridge", "token-pair", "src_chain", "src_address", "dst_chain"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetTokenPair_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"cosmos", "bridge", "token-pair", "src_chain", "src_address", "dst_chain"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetTokenInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4}, []string{"cosmos", "bridge", "token-info", "chain", "address"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetTokenInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4}, []string{"cosmos", "bridge", "token-info", "chain", "address"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetChainById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"cosmos", "bridge", "chains", "id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetChainById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"cosmos", "bridge", "chains", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetChains_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "chains"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetChains_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "chains"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetTxsSubmissions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "txs_submissions"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetTxsSubmissions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "txs_submissions"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetTxSubmissionsByHash_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"cosmos", "bridge", "txs_submissions", "tx_hash"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetTxSubmissionsByHash_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"cosmos", "bridge", "txs_submissions", "tx_hash"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetSystemTxsSubmissions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "system_txs_submissions"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetSystemTxsSubmissions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "system_txs_submissions"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetSystemTxSubmissionsByHash_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"cosmos", "bridge", "system_txs_submissions", "tx_hash"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetSystemTxSubmissionsByHash_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"cosmos", "bridge", "system_txs_submissions", "tx_hash"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetReferralById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"cosmos", "bridge", "referrals", "referral_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetReferralById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"cosmos", "bridge", "referrals", "referral_id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetReferrals_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "referrals"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetReferrals_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "referrals"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetReferralRewardsByToken_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"cosmos", "bridge", "referrals", "rewards", "referral_id", "token_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetReferralRewardsByToken_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"cosmos", "bridge", "referrals", "rewards", "referral_id", "token_id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetReferralsRewardsById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"cosmos", "bridge", "referrals", "rewards", "referral_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetReferralsRewardsById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"cosmos", "bridge", "referrals", "rewards", "referral_id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetStopListTxsById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"cosmos", "bridge", "stoplist", "chain_id", "tx_hash", "tx_nonce"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetStopListTxsById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"cosmos", "bridge", "stoplist", "chain_id", "tx_hash", "tx_nonce"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetStopListTxs_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "stoplist"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetStopListTxs_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"cosmos", "bridge", "stoplist"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetEpochTransactions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"cosmos", "bridge", "epoch", "epoch_id", "transaction"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetEpochTransactions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"cosmos", "bridge", "epoch", "epoch_id", "transaction"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetEpochById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"cosmos", "bridge", "epoch", "epoch_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetEpochById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"cosmos", "bridge", "epoch", "epoch_id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetChainsByType_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"cosmos", "bridge", "chains", "type", "chain_type"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetChainsByType_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"cosmos", "bridge", "chains", "type", "chain_type"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetEpochPubKey_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"cosmos", "bridge", "epoch", "epoch_id", "pubkey"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetEpochPubKey_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"cosmos", "bridge", "epoch", "epoch_id", "pubkey"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetEpochSignature_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"cosmos", "bridge", "epoch", "epoch_id", "signature", "chain_type"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetEpochSignature_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"cosmos", "bridge", "epoch", "epoch_id", "signature", "chain_type"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (

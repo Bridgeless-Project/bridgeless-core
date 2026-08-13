@@ -141,7 +141,7 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 	return nil
 }
 
-func (k Keeper) DeleteTx(ctx sdk.Context, depositTxHash string, depositTxIndex uint64, depositChainId string) error {
+func (k Keeper) DeleteTx(ctx sdk.Context, depositTxHash string, depositTxIndex uint64, depositChainId uint32) error {
 	txId := types.TransactionId(&types.Transaction{DepositTxHash: depositTxHash, DepositTxIndex: depositTxIndex, DepositChainId: depositChainId})
 	transaction, ok := k.GetTransaction(ctx, txId)
 	if !ok {

@@ -58,7 +58,7 @@ message EpochChainSignatures {
 
 message EpochBridgeAddress {
   uint32 epoch_id =1;
-  string chain_id =2;
+  uint32 chain_id =2;
   string address = 3;
 }
 

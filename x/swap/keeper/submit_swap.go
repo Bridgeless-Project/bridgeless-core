@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"math/big"
+	"strconv"
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/contracts"
@@ -30,13 +31,13 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 
 	// its already bridgeless networks
 	if _, found := k.bridge.GetChain(ctx, msg.Tx.Tx.WithdrawalChainId); !found {
-		return nil, errorsmod.Wrapf(bridgetypes.ErrChainNotFound, "withdrawal chain not found: %s", msg.Tx.Tx.WithdrawalChainId)
+		return nil, errorsmod.Wrapf(bridgetypes.ErrChainNotFound, "withdrawal chain not found: %d", msg.Tx.Tx.WithdrawalChainId)
 	}
 
 	//WithdrawalToken is the representation of deposited by user token
 	finalDestinationTokenInfo, found := k.bridge.GetTokenInfo(ctx, msg.Tx.FinalChainId, msg.Tx.FinalToken)
 	if !found {
-		return nil, errorsmod.Wrapf(bridgetypes.ErrTokenInfoNotFound, "token info not found for %s on chain %s", msg.Tx.FinalToken, msg.Tx.FinalChainId)
+		return nil, errorsmod.Wrapf(bridgetypes.ErrTokenInfoNotFound, "token info not found for %s on chain %d", msg.Tx.FinalToken, msg.Tx.FinalChainId)
 	}
 
 	// prepare the swap params
@@ -86,13 +87,13 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 		},
 		swaptypes.SwapperDepositParams{
 			Receiver:   msg.Tx.FinalReceiver,
-			Network:    msg.Tx.FinalChainId,
+			Network:    strconv.FormatUint(uint64(msg.Tx.FinalChainId), 10),
 			IsWrapped:  finalDestinationTokenInfo.IsWrapped,
 			ReferralId: uint16(msg.Tx.Tx.ReferralId),
 		},
 		swaptypes.SwapperDepositParams{
 			Receiver:   msg.Tx.Tx.Depositor,
-			Network:    msg.Tx.Tx.DepositChainId,
+			Network:    strconv.FormatUint(uint64(msg.Tx.Tx.DepositChainId), 10),
 			IsWrapped:  msg.Tx.Tx.IsWrapped,
 			ReferralId: uint16(msg.Tx.Tx.ReferralId),
 		},
@@ -107,7 +108,7 @@ func (k Keeper) executeSwap(ctx sdk.Context, msg *swaptypes.MsgSubmitSwapTx) (*s
 	return msg.Tx, nil
 }
 
-func (k Keeper) buildSwapPath(ctx sdk.Context, sourceToken string, destinationToken string, destinationChain string) ([]common.Address, error) {
+func (k Keeper) buildSwapPath(ctx sdk.Context, sourceToken string, destinationToken string, destinationChain uint32) ([]common.Address, error) {
 	params := k.GetParams(ctx)
 	if !common.IsHexAddress(sourceToken) {
 		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid source token address: %s", sourceToken)
@@ -118,7 +119,7 @@ func (k Keeper) buildSwapPath(ctx sdk.Context, sourceToken string, destinationTo
 
 	dstToken, found := k.bridge.GetDstToken(ctx, destinationToken, destinationChain, utils.GetChainId(ctx))
 	if !found {
-		return nil, errorsmod.Wrapf(bridgetypes.ErrTokenInfoNotFound, "no token info found for destination token %s on chain %s", destinationToken, utils.GetChainId(ctx))
+		return nil, errorsmod.Wrapf(bridgetypes.ErrTokenInfoNotFound, "no token info found for destination token %s on chain %d", destinationToken, utils.GetChainId(ctx))
 	}
 	if !common.IsHexAddress(dstToken.Address) {
 		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid bridgeless token address: %s", dstToken.Address)

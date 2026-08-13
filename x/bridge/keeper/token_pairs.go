@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func (k Keeper) GetDstToken(sdkCtx sdk.Context, srcAddr, srcChain, dscChain string) (info types.TokenInfo, found bool) {
+func (k Keeper) GetDstToken(sdkCtx sdk.Context, srcAddr string, srcChain, dscChain uint32) (info types.TokenInfo, found bool) {
 	pStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreTokenPairsPrefix))
 	srcBranchStore := prefix.NewStore(pStore, types.TokenPairPrefix(srcChain, srcAddr))
 

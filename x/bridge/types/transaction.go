@@ -13,7 +13,7 @@ import (
 )
 
 func TransactionId(tx *Transaction) string {
-	return fmt.Sprintf("%s/%v/%s", tx.DepositTxHash, tx.DepositTxIndex, tx.DepositChainId)
+	return fmt.Sprintf("%s/%v/%d", tx.DepositTxHash, tx.DepositTxIndex, tx.DepositChainId)
 }
 
 func validateTransaction(tx *Transaction) error {
@@ -33,7 +33,7 @@ func validateTransaction(tx *Transaction) error {
 		return errors.New(fmt.Sprintf("invalid commission amount: %s", tx.CommissionAmount))
 	}
 
-	if len(tx.DepositChainId) == 0 || len(tx.WithdrawalChainId) == 0 {
+	if tx.DepositChainId == 0 || tx.WithdrawalChainId == 0 {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "deposit chain id and withdrawal id cannot be empty")
 	}
 	if tx.WithdrawalChainId == tx.DepositChainId {

@@ -175,9 +175,14 @@ func CmdRemoveTokenInfo() *cobra.Command {
 				return err
 			}
 
+			chainId, err := strconv.ParseUint(args[2], 10, 32)
+			if err != nil {
+				return err
+			}
+
 			msg := types.NewMsgRemoveTokenInfo(
 				clientCtx.GetFromAddress().String(),
-				id, args[2],
+				id, uint32(chainId),
 			)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
