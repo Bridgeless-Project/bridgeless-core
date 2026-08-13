@@ -75,6 +75,7 @@ func (gs GenesisState) Validate() error {
 		if _, ok := txsSubmissions[txSubmissions.Hash]; ok {
 			return errorsmod.Wrapf(bridgeTypes.ErrDuplicatedValue, "duplicate tx hash: %v", txSubmissions.Hash)
 		}
+		txsSubmissions[txSubmissions.Hash] = struct{}{}
 
 		if err := validateTransactionSubmissions(&txSubmissions); err != nil {
 			return errorsmod.Wrapf(err, "invalid tx submissions %v", txSubmissions.Hash)

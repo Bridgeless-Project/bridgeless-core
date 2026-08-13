@@ -92,18 +92,18 @@ func (k Keeper) GetEpochChainSignaturesSubmission(sdkCtx sdk.Context, epochId ui
 // ------------------- Epoch Pubkey ------------------
 func (k Keeper) SetEpochPubkey(sdkCtx sdk.Context, epochId uint32, pubkey string) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochPubkeyPrefix))
-	tStore.Set(types.KeyEpochPubkey(epochId), []byte(pubkey))
+	tStore.Set(types.KeyEpoch(epochId), []byte(pubkey))
 }
 
 func (k Keeper) RemoveEpochPubkey(sdkCtx sdk.Context, epochId uint32) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochPubkeyPrefix))
-	tStore.Delete(types.KeyEpochPubkey(epochId))
+	tStore.Delete(types.KeyEpoch(epochId))
 }
 
 func (k Keeper) GetEpochPubkey(sdkCtx sdk.Context, epochId uint32) (pubkey string, found bool) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreEpochPubkeyPrefix))
 
-	bz := tStore.Get(types.KeyEpochPubkey(epochId))
+	bz := tStore.Get(types.KeyEpoch(epochId))
 	if bz == nil {
 		return "", false
 	}

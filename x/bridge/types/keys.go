@@ -169,12 +169,6 @@ func KeyEpochTransaction(epochId uint32, txNonce uint64, txHash string) []byte {
 	return []byte(fmt.Sprintf("%s/%d/%d", txHash, txNonce, epochId))
 }
 
-func KeyEpochPubkey(epochId uint32) []byte {
-	bytes := make([]byte, 4)
-	binary.LittleEndian.PutUint32(bytes, epochId)
-	return bytes
-}
-
 func KeyEpochPubkeySubmission(epochId uint32, pubkeyHash string) []byte {
 	return []byte(fmt.Sprintf("%d/%s", epochId, pubkeyHash))
 }
