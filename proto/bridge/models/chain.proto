@@ -16,6 +16,7 @@ enum ChainType {
   ZANO = 4;
   TON = 5;
   SOLANA = 6;
+  LIQUID = 7;
 }
 
 message Chain {

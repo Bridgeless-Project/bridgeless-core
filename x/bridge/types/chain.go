@@ -42,6 +42,7 @@ func validateChain(chain *Chain) error {
 	case ChainType_ZANO:
 	case ChainType_TON:
 	case ChainType_SOLANA:
+	case ChainType_LIQUID:
 	default:
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidType, "invalid chain type: %s", chain.Type)
 	}
