@@ -15,12 +15,13 @@ const DefaultIndex uint64 = 1
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		// this line is used by starport scaffolding # genesis/types/default
-		Params:       DefaultParams(),
-		Chains:       []Chain{},
-		Tokens:       []Token{},
-		Transactions: []Transaction{},
-		Epochs:       []Epoch{},
-		Commissions:  []GenesisCommission{},
+		Params:             DefaultParams(),
+		Chains:             []Chain{},
+		Tokens:             []Token{},
+		Transactions:       []Transaction{},
+		Epochs:             []Epoch{},
+		Commissions:        []GenesisCommission{},
+		TokensInfoMetadata: []GenesisTokenInfoMetadata{},
 	}
 }
 
@@ -68,6 +69,19 @@ func (gs GenesisState) Validate() error {
 				return errorsmod.Wrapf(err, "invalid token info for token %v", token.Id)
 			}
 		}
+	}
+
+	tokensInfoMetadata := make(map[string]struct{})
+	for _, metadata := range gs.TokensInfoMetadata {
+		if err := validateGenesisTokenInfoMetadata(&metadata); err != nil {
+			return errorsmod.Wrap(err, "invalid token info metadata")
+		}
+
+		key := string(KeyTokenInfoMetadata(metadata.ChainId, metadata.Address))
+		if _, ok := tokensInfoMetadata[key]; ok {
+			return errorsmod.Wrapf(bridgeTypes.ErrDuplicatedValue, "duplicate token info metadata: %s", key)
+		}
+		tokensInfoMetadata[key] = struct{}{}
 	}
 
 	txsSubmissions := make(map[string]struct{})

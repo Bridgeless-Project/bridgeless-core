@@ -6,6 +6,7 @@ import "cosmos/base/query/v1beta1/pagination.proto";
 import "bridge/params.proto";
 import "bridge/models/transaction.proto";
 import "bridge/models/token.proto";
+import "bridge/models/metadata.proto";
 import "bridge/models/chain.proto";
 import "bridge/models/epoch.proto";
 import "bridge/models/referrals.proto";
@@ -68,6 +69,11 @@ service Query {
   // TokenInfo queries an according token info by chain and address.
   rpc GetTokenInfo(QueryGetTokenInfo) returns (QueryGetTokenInfoResponse) {
     option (google.api.http).get = "/cosmos/bridge/token-info/{chain}/{address}";
+  }
+
+  // TokenInfoMetadata queries the metadata of an according token info by chain and address.
+  rpc GetTokenInfoMetadata(QueryGetTokenInfoMetadata) returns (QueryGetTokenInfoMetadataResponse) {
+    option (google.api.http).get = "/cosmos/bridge/token-info-metadata/{chain}/{address}";
   }
 
   rpc GetChainById(QueryGetChainById) returns (QueryGetChainByIdResponse) {
@@ -234,6 +240,15 @@ message QueryGetTokenInfo {
 
 message QueryGetTokenInfoResponse {
   TokenInfo info = 1 [(gogoproto.nullable) = false];;
+}
+
+message QueryGetTokenInfoMetadata {
+  string chain = 1;
+  string address = 2;
+}
+
+message QueryGetTokenInfoMetadataResponse {
+  TokenInfoMetadata metadata = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryGetTokenPairResponse {

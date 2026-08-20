@@ -19,6 +19,16 @@ func (k Keeper) SetTokenInfo(sdkCtx sdk.Context, tokenInfo types.TokenInfo) {
 	tStore.Set(types.KeyTokenInfo(tokenInfo.ChainId, tokenInfo.Address), k.cdc.MustMarshal(&tokenInfo))
 }
 
+func (k Keeper) SetTokenInfoMetadata(sdkCtx sdk.Context, chain, addr string, metadata types.TokenInfoMetadata) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreTokenInfoMetadataPrefix))
+	entry := types.GenesisTokenInfoMetadata{
+		ChainId:  chain,
+		Address:  addr,
+		Metadata: metadata,
+	}
+	tStore.Set(types.KeyTokenInfoMetadata(chain, addr), k.cdc.MustMarshal(&entry))
+}
+
 func (k Keeper) GetToken(sdkCtx sdk.Context, id uint64) (token types.Token, found bool) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreTokenPrefix))
 	bz := tStore.Get(types.KeyToken(id))
@@ -41,6 +51,33 @@ func (k Keeper) GetTokenInfo(sdkCtx sdk.Context, chain, address string) (tokenIn
 
 	k.cdc.MustUnmarshal(bz, &tokenInfo)
 	found = true
+
+	return
+}
+
+func (k Keeper) GetTokenInfoMetadata(sdkCtx sdk.Context, chain, address string) (metadata types.TokenInfoMetadata, found bool) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreTokenInfoMetadataPrefix))
+	bz := tStore.Get(types.KeyTokenInfoMetadata(chain, address))
+	if bz == nil {
+		return
+	}
+
+	var entry types.GenesisTokenInfoMetadata
+	k.cdc.MustUnmarshal(bz, &entry)
+
+	return entry.Metadata, true
+}
+
+func (k Keeper) GetAllTokenInfoMetadata(sdkCtx sdk.Context) (metadata []types.GenesisTokenInfoMetadata) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreTokenInfoMetadataPrefix))
+	iterator := tStore.Iterator(nil, nil)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var entry types.GenesisTokenInfoMetadata
+		k.cdc.MustUnmarshal(iterator.Value(), &entry)
+		metadata = append(metadata, entry)
+	}
 
 	return
 }
@@ -71,4 +108,9 @@ func (k Keeper) RemoveToken(sdkCtx sdk.Context, id uint64) {
 func (k Keeper) RemoveTokenInfo(sdkCtx sdk.Context, chain, addr string) {
 	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreTokenInfoPrefix))
 	tStore.Delete(types.KeyTokenInfo(chain, addr))
+}
+
+func (k Keeper) RemoveTokenInfoMetadata(sdkCtx sdk.Context, chain, addr string) {
+	tStore := prefix.NewStore(sdkCtx.KVStore(k.storeKey), types.Prefix(types.StoreTokenInfoMetadataPrefix))
+	tStore.Delete(types.KeyTokenInfoMetadata(chain, addr))
 }

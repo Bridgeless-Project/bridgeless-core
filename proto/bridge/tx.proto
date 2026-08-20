@@ -6,6 +6,7 @@ package core.bridge;
 import "cosmos/msg/v1/msg.proto";
 import "bridge/models/transaction.proto";
 import "bridge/models/token.proto";
+import "bridge/models/metadata.proto";
 import "bridge/models/chain.proto";
 import "bridge/models/party.proto";
 import "bridge/models/referrals.proto";
@@ -33,6 +34,7 @@ service Msg {
 
     rpc AddTokenInfo(MsgAddTokenInfo) returns (MsgAddTokenInfoResponse);
     rpc RemoveTokenInfo(MsgRemoveTokenInfo) returns (MsgRemoveTokenInfoResponse);
+    rpc SetTokenInfoMetadata(MsgSetTokenInfoMetadata) returns (MsgSetTokenInfoMetadataResponse);
 
     rpc SetParties(MsgSetParties) returns (MsgSetPartiesResponse);
     rpc SetTssThreshold(MsgSetTssThreshold) returns (MsgSetTssThresholdResponse);
@@ -146,6 +148,15 @@ message MsgRemoveTokenInfo {
 }
 
 message MsgRemoveTokenInfoResponse {}
+
+message MsgSetTokenInfoMetadata {
+  string creator = 1;
+  string chain_id = 2;
+  string address = 3;
+  TokenInfoMetadata metadata = 4 [(gogoproto.nullable) = false];
+}
+
+message MsgSetTokenInfoMetadataResponse {}
 
 // Signers list
 

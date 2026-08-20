@@ -50,3 +50,17 @@ func (k queryServer) GetTokenInfo(goctx context.Context, req *types.QueryGetToke
 
 	return &types.QueryGetTokenInfoResponse{Info: tokenInfo}, nil
 }
+
+func (k queryServer) GetTokenInfoMetadata(goctx context.Context, req *types.QueryGetTokenInfoMetadata) (*types.QueryGetTokenInfoMetadataResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goctx)
+	metadata, found := k.Keeper.GetTokenInfoMetadata(ctx, req.Chain, req.Address)
+	if !found {
+		return nil, types.ErrTokenInfoMetadataNotFound
+	}
+
+	return &types.QueryGetTokenInfoMetadataResponse{Metadata: metadata}, nil
+}

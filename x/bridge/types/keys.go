@@ -36,6 +36,7 @@ const (
 	// ---- Store Prefixes ------
 	StoreTokenPrefix                        = "token"
 	StoreTokenInfoPrefix                    = "token-info"
+	StoreTokenInfoMetadataPrefix            = "token-info-metadata"
 	StoreTokenPairsPrefix                   = "token-pairs"
 	StoreChainPrefix                        = "chain"
 	StoreChainTypePrefix                    = "chain_type"
@@ -118,6 +119,10 @@ func KeyTokenPair(dstChain string) []byte {
 }
 
 func KeyTokenInfo(chain, addr string) []byte {
+	return []byte(fmt.Sprintf("%s/%s", chain, strings.ToLower(addr)))
+}
+
+func KeyTokenInfoMetadata(chain, addr string) []byte {
 	return []byte(fmt.Sprintf("%s/%s", chain, strings.ToLower(addr)))
 }
 

@@ -42,4 +42,5 @@ var (
 	ErrInvalidCommission            = errorsmod.Register(ModuleName, 1131, "commission is invalid")
 	ErrInvalidAmount                = errorsmod.Register(ModuleName, 1132, "amount is invalid")
 	ErrInvalidParty                 = errorsmod.Register(ModuleName, 1133, "party is invalid")
+	ErrTokenInfoMetadataNotFound    = errorsmod.Register(ModuleName, 1134, "token info metadata not found")
 )
