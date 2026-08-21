@@ -37,20 +37,6 @@ func validateTokenMetadata(metadata *TokenMetadata) error {
 	return nil
 }
 
-func validateGenesisTokenInfoMetadata(metadata *GenesisTokenInfoMetadata) error {
-	if metadata == nil {
-		return errors.New("token info metadata is nil")
-	}
-	if metadata.ChainId == "" {
-		return errors.New("chain id cannot be empty")
-	}
-	if metadata.Address == "" {
-		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "token address is empty")
-	}
-
-	return nil
-}
-
 func validateTokenInfo(info *TokenInfo, chainType *ChainType) error {
 	if info == nil {
 		return errors.New("info is nil")
@@ -100,6 +86,7 @@ func validateTokenInfo(info *TokenInfo, chainType *ChainType) error {
 	case ChainType_TON:
 	case ChainType_SOLANA:
 	case ChainType_OTHER:
+	case ChainType_LIQUID:
 	default:
 		return errors.New(fmt.Sprintf("invalid chain type: %v", *chainType))
 	}

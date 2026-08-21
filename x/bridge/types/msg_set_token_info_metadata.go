@@ -10,11 +10,9 @@ const TypeMsgSetTokenInfoMetadata = "set_token_info_metadata"
 
 var _ sdk.Msg = &MsgSetTokenInfoMetadata{}
 
-func NewMsgSetTokenInfoMetadata(creator, chain, address string, metadata TokenInfoMetadata) *MsgSetTokenInfoMetadata {
+func NewMsgSetTokenInfoMetadata(creator string, metadata TokenInfoMetadata) *MsgSetTokenInfoMetadata {
 	return &MsgSetTokenInfoMetadata{
 		Creator:  creator,
-		ChainId:  chain,
-		Address:  address,
 		Metadata: metadata,
 	}
 }
@@ -47,12 +45,8 @@ func (msg *MsgSetTokenInfoMetadata) ValidateBasic() error {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address: %s", err)
 	}
 
-	if msg.ChainId == "" {
-		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "chain id cannot be empty")
-	}
-
-	if msg.Address == "" {
-		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "token address is empty")
+	if err = validateTokenInfoMetadata(&msg.Metadata); err != nil {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	return nil

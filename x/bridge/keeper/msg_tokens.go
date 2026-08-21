@@ -63,7 +63,7 @@ func (m msgServer) DeleteToken(goCtx context.Context, msg *types.MsgDeleteToken)
 	m.RemoveToken(ctx, msg.TokenId)
 	for _, info := range token.Info {
 		m.Keeper.RemoveTokenInfo(ctx, info.ChainId, info.Address)
-		m.RemoveTokenInfoMetadata(ctx, info.ChainId, info.Address)
+		m.Keeper.RemoveTokenInfoMetadata(ctx, info.ChainId, info.Address)
 		m.RemoveTokenPairs(ctx, info, token.Info...)
 	}
 

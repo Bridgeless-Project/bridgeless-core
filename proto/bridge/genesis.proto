@@ -25,17 +25,11 @@ message GenesisState {
   repeated ReferralRewards referralsRewards = 7 [(gogoproto.nullable) = false];
   repeated Epoch epochs = 8 [(gogoproto.nullable) = false];
   repeated GenesisCommission commissions = 9 [(gogoproto.nullable) = false];
-  repeated GenesisTokenInfoMetadata tokens_info_metadata = 10 [(gogoproto.nullable) = false];
+  repeated TokenInfoMetadata tokens_info_metadata = 10 [(gogoproto.nullable) = false];
   // this line is used by starport scaffolding # genesis/proto/state
 }
 
 message GenesisCommission {
   uint32 epoch_id = 1;
   Commission commission = 2 [(gogoproto.nullable) = false];
-}
-
-message GenesisTokenInfoMetadata {
-  string chain_id = 1;
-  string address = 2;
-  TokenInfoMetadata metadata = 3 [(gogoproto.nullable) = false];
 }

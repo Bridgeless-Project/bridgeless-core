@@ -21,7 +21,7 @@ func DefaultGenesis() *GenesisState {
 		Transactions:       []Transaction{},
 		Epochs:             []Epoch{},
 		Commissions:        []GenesisCommission{},
-		TokensInfoMetadata: []GenesisTokenInfoMetadata{},
+		TokensInfoMetadata: []TokenInfoMetadata{},
 	}
 }
 
@@ -73,15 +73,16 @@ func (gs GenesisState) Validate() error {
 
 	tokensInfoMetadata := make(map[string]struct{})
 	for _, metadata := range gs.TokensInfoMetadata {
-		if err := validateGenesisTokenInfoMetadata(&metadata); err != nil {
-			return errorsmod.Wrap(err, "invalid token info metadata")
-		}
-
 		key := string(KeyTokenInfoMetadata(metadata.ChainId, metadata.Address))
 		if _, ok := tokensInfoMetadata[key]; ok {
 			return errorsmod.Wrapf(bridgeTypes.ErrDuplicatedValue, "duplicate token info metadata: %s", key)
+		} else {
+			tokensInfoMetadata[key] = struct{}{}
 		}
-		tokensInfoMetadata[key] = struct{}{}
+
+		if err := validateTokenInfoMetadata(&metadata); err != nil {
+			return errorsmod.Wrapf(err, "invalid token info metadata %s", key)
+		}
 	}
 
 	txsSubmissions := make(map[string]struct{})

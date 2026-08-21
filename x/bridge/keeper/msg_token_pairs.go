@@ -63,6 +63,7 @@ func (m msgServer) RemoveTokenInfo(goCtx context.Context, msg *types.MsgRemoveTo
 
 	old := token.Info[idx]
 	m.Keeper.RemoveTokenInfo(ctx, old.ChainId, old.Address)
+	m.Keeper.RemoveTokenInfoMetadata(ctx, old.ChainId, old.Address)
 	m.RemoveTokenPairs(ctx, old, token.Info...) // mapping src chain -> dest chain
 	for _, info := range token.Info {
 		m.RemoveTokenPairs(ctx, info, old) // reverse mapping dest chain -> src chain

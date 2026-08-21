@@ -64,3 +64,17 @@ func (k queryServer) GetTokenInfoMetadata(goctx context.Context, req *types.Quer
 
 	return &types.QueryGetTokenInfoMetadataResponse{Metadata: metadata}, nil
 }
+
+func (k queryServer) GetTokensInfoMetadata(goctx context.Context, req *types.QueryGetTokensInfoMetadata) (*types.QueryGetTokensInfoMetadataResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goctx)
+	metadata, page, err := k.GetTokensInfoMetadataWithPagination(ctx, req.Pagination)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryGetTokensInfoMetadataResponse{TokensInfoMetadata: metadata, Pagination: page}, nil
+}

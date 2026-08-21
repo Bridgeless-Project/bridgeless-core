@@ -24,8 +24,8 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 			k.SetTokenPairs(ctx, info, token.Info...)
 		}
 	}
-	for _, tokenMetaData := range genState.TokensInfoMetadata {
-		k.SetTokenInfoMetadata(ctx, tokenMetaData.ChainId, tokenMetaData.Address, tokenMetaData.Metadata)
+	for _, metadata := range genState.TokensInfoMetadata {
+		k.SetTokenInfoMetadata(ctx, metadata)
 	}
 	for _, tx := range genState.Transactions {
 		k.SetTransaction(ctx, tx)
@@ -95,7 +95,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	referrals := k.GetAllReferrals(ctx)
 	referralsRewards := k.GetAllReferralRewards(ctx)
 	commissions := k.GetAllGenesisCommissions(ctx)
-	tokenInfoMetaData := k.GetAllTokenInfoMetadata(ctx)
+	tokensInfoMetadata := k.GetAllTokenInfoMetadata(ctx)
 
 	return &types.GenesisState{
 		Params:                  k.GetParams(ctx),
@@ -106,6 +106,6 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 		Referrals:               referrals,
 		ReferralsRewards:        referralsRewards,
 		Commissions:             commissions,
-		TokensInfoMetadata:      tokenInfoMetaData,
+		TokensInfoMetadata:      tokensInfoMetadata,
 	}
 }

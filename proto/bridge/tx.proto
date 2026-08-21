@@ -34,7 +34,9 @@ service Msg {
 
     rpc AddTokenInfo(MsgAddTokenInfo) returns (MsgAddTokenInfoResponse);
     rpc RemoveTokenInfo(MsgRemoveTokenInfo) returns (MsgRemoveTokenInfoResponse);
+    
     rpc SetTokenInfoMetadata(MsgSetTokenInfoMetadata) returns (MsgSetTokenInfoMetadataResponse);
+    rpc RemoveTokenInfoMetadata(MsgRemoveTokenInfoMetadata) returns (MsgRemoveTokenInfoMetadataResponse);
 
     rpc SetParties(MsgSetParties) returns (MsgSetPartiesResponse);
     rpc SetTssThreshold(MsgSetTssThreshold) returns (MsgSetTssThresholdResponse);
@@ -151,12 +153,18 @@ message MsgRemoveTokenInfoResponse {}
 
 message MsgSetTokenInfoMetadata {
   string creator = 1;
-  string chain_id = 2;
-  string address = 3;
-  TokenInfoMetadata metadata = 4 [(gogoproto.nullable) = false];
+  TokenInfoMetadata metadata = 2 [(gogoproto.nullable) = false];
 }
 
 message MsgSetTokenInfoMetadataResponse {}
+
+message MsgRemoveTokenInfoMetadata {
+  string creator = 1;
+  string chain_id = 2;
+  string address = 3;
+}
+
+message MsgRemoveTokenInfoMetadataResponse {}
 
 // Signers list
 

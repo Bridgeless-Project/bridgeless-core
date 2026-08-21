@@ -4,6 +4,8 @@ package core.bridge;
 option go_package = "github.com/Bridgeless-Project/bridgeless-core/v12/x/bridge/types";
 
 message TokenInfoMetadata {
-  string reissuance = 1;
-  string entropy = 2;
+  string chain_id = 1;
+  string address = 2;
+  string reissuance = 3;
+  string entropy = 4;
 }

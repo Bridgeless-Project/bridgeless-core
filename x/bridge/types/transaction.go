@@ -143,6 +143,7 @@ func ValidateChainTransaction(tx *Transaction, chainType ChainType) error {
 	case ChainType_BITCOIN:
 	case ChainType_COSMOS:
 	case ChainType_SOLANA:
+	case ChainType_LIQUID:
 	case ChainType_OTHER:
 	}
 
