@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	cosmossdk.io/errors v1.0.0-beta.7
 	cosmossdk.io/math v1.0.0-rc.0
-	github.com/Zano-Execution-Layer/go-ethereum v1.10.26
+	github.com/Zano-Execution-Layer/go-ethereum v1.10.26-0.20260907095722-df2f49ac8412
 	github.com/armon/go-metrics v0.4.1
 	github.com/btcsuite/btcd v0.22.2
 	github.com/btcsuite/btcutil v1.0.3-0.20201208143702-a53e38424cce
