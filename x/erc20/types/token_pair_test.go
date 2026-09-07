@@ -6,7 +6,7 @@ import (
 
 	utiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
 	"github.com/stretchr/testify/suite"
 	"github.com/tendermint/tendermint/crypto/tmhash"
 )

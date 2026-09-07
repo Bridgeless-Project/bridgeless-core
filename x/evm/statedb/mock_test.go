@@ -7,8 +7,8 @@ import (
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/statedb"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/crypto"
 )
 
 var (

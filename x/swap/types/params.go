@@ -5,7 +5,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
 )
 
 var _ paramtypes.ParamSet = (*Params)(nil)

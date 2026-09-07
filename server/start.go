@@ -48,7 +48,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/server/rosetta"
 	crgserver "github.com/cosmos/cosmos-sdk/server/rosetta/lib/server"
 
-	ethmetricsexp "github.com/ethereum/go-ethereum/metrics/exp"
+	ethmetricsexp "github.com/Zano-Execution-Layer/go-ethereum/metrics/exp"
 
 	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/client"

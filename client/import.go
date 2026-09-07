@@ -24,7 +24,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/input"
 	"github.com/cosmos/cosmos-sdk/crypto"
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/hd"
 )

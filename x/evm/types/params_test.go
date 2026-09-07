@@ -3,7 +3,7 @@ package types
 import (
 	"testing"
 
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/Zano-Execution-Layer/go-ethereum/params"
 
 	"github.com/stretchr/testify/require"
 )

@@ -12,7 +12,7 @@ import (
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/server/config"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/testutil/network"
-	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/Zano-Execution-Layer/go-ethereum/ethclient"
 
 	evmosnetwork "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/network"
 )

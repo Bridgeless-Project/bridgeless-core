@@ -12,7 +12,7 @@ import (
 	"github.com/Bridgeless-Project/bridgeless-core/v12/testutil"
 	utiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
 
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 )

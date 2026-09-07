@@ -27,7 +27,7 @@ import (
 	transfertypes "github.com/cosmos/ibc-go/v6/modules/apps/transfer/types"
 	channeltypes "github.com/cosmos/ibc-go/v6/modules/core/04-channel/types"
 	"github.com/cosmos/ibc-go/v6/modules/core/exported"
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/ibc"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"

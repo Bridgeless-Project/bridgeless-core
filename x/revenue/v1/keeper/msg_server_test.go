@@ -8,8 +8,8 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/crypto"
 
 	utiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/statedb"

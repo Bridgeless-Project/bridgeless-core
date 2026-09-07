@@ -5,7 +5,7 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
@@ -15,7 +15,7 @@ import (
 	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
 
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )

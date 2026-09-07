@@ -32,11 +32,11 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/pkg/errors"
 
-	"github.com/ethereum/go-ethereum/common"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/eth/filters"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
+	"github.com/Zano-Execution-Layer/go-ethereum/eth/filters"
+	"github.com/Zano-Execution-Layer/go-ethereum/params"
+	"github.com/Zano-Execution-Layer/go-ethereum/rpc"
 
 	"github.com/tendermint/tendermint/libs/log"
 	rpcclient "github.com/tendermint/tendermint/rpc/jsonrpc/client"
@@ -695,7 +695,7 @@ func (api *pubSubAPI) subscribeSyncing(_ *wsConn, _ rpc.ID) (pubsub.UnsubscribeF
 	return nil, errors.New("syncing subscription is not implemented")
 }
 
-// copy from github.com/ethereum/go-ethereum/rpc/json.go
+// copy from github.com/Zano-Execution-Layer/go-ethereum/rpc/json.go
 // isBatch returns true when the first non-whitespace characters is '['
 func isBatch(raw []byte) bool {
 	for _, c := range raw {

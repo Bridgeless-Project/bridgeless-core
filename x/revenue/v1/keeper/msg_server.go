@@ -24,8 +24,8 @@ import (
 	errortypes "github.com/cosmos/cosmos-sdk/types/errors"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/crypto"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1/types"
 )

@@ -24,7 +24,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/Zano-Execution-Layer/go-ethereum/params"
 )
 
 var _ types.LegacyParams = &Params{}

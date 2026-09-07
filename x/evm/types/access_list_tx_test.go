@@ -4,7 +4,7 @@ import (
 	"math/big"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
 )
 
 func (suite *TxDataTestSuite) TestAccessListTxCopy() {

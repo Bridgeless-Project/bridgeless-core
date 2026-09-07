@@ -8,8 +8,8 @@ import (
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/statedb"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/params"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
+	"github.com/Zano-Execution-Layer/go-ethereum/params"
 )
 
 func (suite *KeeperTestSuite) TestEthereumTx() {

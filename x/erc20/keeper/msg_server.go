@@ -26,7 +26,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	errortypes "github.com/cosmos/cosmos-sdk/types/errors"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/contracts"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"

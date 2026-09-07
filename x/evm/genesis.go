@@ -24,8 +24,8 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/crypto"
 	abci "github.com/tendermint/tendermint/abci/types"
 
 	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"

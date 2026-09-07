@@ -32,8 +32,8 @@ import (
 	"time"
 
 	"cosmossdk.io/math"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/ethclient"
 	"github.com/spf13/cobra"
 	tmcfg "github.com/tendermint/tendermint/config"
 	tmflags "github.com/tendermint/tendermint/libs/cli/flags"

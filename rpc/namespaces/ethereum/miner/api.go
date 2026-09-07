@@ -19,8 +19,8 @@ import (
 	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/backend"
 	"github.com/cosmos/cosmos-sdk/server"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common/hexutil"
 
 	"github.com/tendermint/tendermint/libs/log"
 )

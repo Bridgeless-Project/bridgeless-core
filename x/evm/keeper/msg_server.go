@@ -22,7 +22,7 @@ import (
 	"strconv"
 
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	tmtypes "github.com/tendermint/tendermint/types"
 

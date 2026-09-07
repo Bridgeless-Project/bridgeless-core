@@ -11,7 +11,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/mock"
 
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/keeper"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/erc20/types"

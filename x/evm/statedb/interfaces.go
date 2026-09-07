@@ -17,8 +17,8 @@ package statedb
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/vm"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/core/vm"
 )
 
 // ExtStateDB defines an extension to the interface provided by the go-ethereum

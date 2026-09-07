@@ -22,7 +22,7 @@ import (
 	bridgeTypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 
 	errorsmod "cosmossdk.io/errors"
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
 )
 
 // Storage represents the account Storage map as a slice of single key value

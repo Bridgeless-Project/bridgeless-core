@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/encoding"

@@ -16,8 +16,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	ibcgotesting "github.com/cosmos/ibc-go/v6/testing"
-	"github.com/ethereum/go-ethereum/common"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
 	"github.com/stretchr/testify/suite"
 )
 

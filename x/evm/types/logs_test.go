@@ -8,7 +8,7 @@ import (
 	utiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
 )
 
 func TestTransactionLogsValidate(t *testing.T) {

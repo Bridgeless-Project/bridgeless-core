@@ -7,9 +7,9 @@ import (
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/keeper"
 	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/ethereum/go-ethereum/common"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	ethparams "github.com/ethereum/go-ethereum/params"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
+	ethparams "github.com/Zano-Execution-Layer/go-ethereum/params"
 )
 
 func (suite *KeeperTestSuite) TestCheckSenderBalance() {

@@ -20,10 +20,10 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/tx"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/core"
+	"github.com/Zano-Execution-Layer/go-ethereum/core/vm"
+	"github.com/Zano-Execution-Layer/go-ethereum/params"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/statedb"
 	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"

@@ -4,7 +4,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	ethparams "github.com/ethereum/go-ethereum/params"
+	ethparams "github.com/Zano-Execution-Layer/go-ethereum/params"
 )
 
 func (suite *KeeperTestSuite) TestQueryParams() {

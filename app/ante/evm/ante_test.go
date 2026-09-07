@@ -17,8 +17,8 @@ import (
 
 	utiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
 	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
-	"github.com/ethereum/go-ethereum/core/types"
-	ethparams "github.com/ethereum/go-ethereum/params"
+	"github.com/Zano-Execution-Layer/go-ethereum/core/types"
+	ethparams "github.com/Zano-Execution-Layer/go-ethereum/params"
 )
 
 func (suite *AnteTestSuite) TestAnteHandler() {

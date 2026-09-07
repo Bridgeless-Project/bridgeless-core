@@ -32,9 +32,9 @@ import (
 	authante "github.com/cosmos/cosmos-sdk/x/auth/ante"
 	"github.com/cosmos/cosmos-sdk/x/auth/migrations/legacytx"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
-	ethcrypto "github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/crypto/secp256k1"
-	"github.com/ethereum/go-ethereum/signer/core/apitypes"
+	ethcrypto "github.com/Zano-Execution-Layer/go-ethereum/crypto"
+	"github.com/Zano-Execution-Layer/go-ethereum/crypto/secp256k1"
+	"github.com/Zano-Execution-Layer/go-ethereum/signer/core/apitypes"
 
 	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 )

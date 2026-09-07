@@ -15,7 +15,7 @@ import (
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/statedb"
 	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
 )
 
 func (suite *AnteTestSuite) TestNewEthAccountVerificationDecorator() {

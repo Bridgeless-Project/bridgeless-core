@@ -30,10 +30,10 @@ import (
 	rpcclient "github.com/tendermint/tendermint/rpc/jsonrpc/client"
 	tmtypes "github.com/tendermint/tendermint/types"
 
-	"github.com/ethereum/go-ethereum/common"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/eth/filters"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
+	"github.com/Zano-Execution-Layer/go-ethereum/eth/filters"
+	"github.com/Zano-Execution-Layer/go-ethereum/rpc"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 

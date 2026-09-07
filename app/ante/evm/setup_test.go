@@ -21,7 +21,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/testutil/testdata"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/Zano-Execution-Layer/go-ethereum/core/types"
 )
 
 type AnteTestSuite struct {

@@ -27,7 +27,7 @@ import (
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
 )
 
 var _ statedb.Keeper = &Keeper{}

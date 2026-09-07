@@ -18,8 +18,8 @@ package web3
 import (
 	"github.com/Bridgeless-Project/bridgeless-core/v12/version"
 
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/Zano-Execution-Layer/go-ethereum/common/hexutil"
+	"github.com/Zano-Execution-Layer/go-ethereum/crypto"
 )
 
 // PublicAPI is the web3_ prefixed set of APIs in the Web3 JSON-RPC spec.

@@ -25,10 +25,10 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/core"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
+	"github.com/Zano-Execution-Layer/go-ethereum/core/vm"
 
 	claimstypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/claims/types"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/statedb"

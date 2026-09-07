@@ -207,6 +207,8 @@ github.com/Azure/go-ansiterm v0.0.0-20210617225240-d185dfc1b5a1 h1:UQHMgLO+TxOEl
 github.com/Azure/go-ansiterm v0.0.0-20210617225240-d185dfc1b5a1/go.mod h1:xomTg63KZ2rFqZQzSB4Vz2SUXa1BpHTVz9L5PTmPC4E=
 github.com/Bridgeless-Project/cosmos-sdk v0.46.41-rc3 h1:V1tO7tBAoioMOtLcwo7xN7SvurW7CbGKINYTz+2F0RA=
 github.com/Bridgeless-Project/cosmos-sdk v0.46.41-rc3/go.mod h1:pvejatQ+YJNN+UpBCpz87bEOtT/bZPazzuqgQw8nn6M=
+github.com/Bridgeless-Project/go-ethereum v1.10.26-new-geth h1:5SVCe8rwE29soELiqM2PCQgoYz+l4SxC/7FGT5rqgXk=
+github.com/Bridgeless-Project/go-ethereum v1.10.26-new-geth/go.mod h1:dJaQFKb5Ib2N1bP7pwNWK2zAIEf7c7+zUSRGe6D7lFw=
 github.com/Bridgeless-Project/ibc-go/v6 v6.1.15 h1:N9Wj3d1aht7UIPcwz0hs4kTFo8GV/lOWS7Js8CM2q5I=
 github.com/Bridgeless-Project/ibc-go/v6 v6.1.15/go.mod h1:aZD34GwyqtEsgQKYNzUpqfgOpP/ck1STF5GOwxUa4Oo=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=

@@ -22,8 +22,8 @@ import (
 	sdkmath "cosmossdk.io/math"
 	errortypes "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/ethereum/go-ethereum/common"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/types"
 )

@@ -7,7 +7,7 @@ import (
 	"github.com/Bridgeless-Project/bridgeless-core/v12/contracts"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/swap/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
 )
 
 // retuns the amount of pair SourceToken -> BridgeToken

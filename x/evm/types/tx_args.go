@@ -22,16 +22,16 @@ import (
 
 	sdkmath "cosmossdk.io/math"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/common/math"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common/hexutil"
+	"github.com/Zano-Execution-Layer/go-ethereum/common/math"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
 )
 
 // TransactionArgs represents the arguments to construct a new transaction
 // or a message call using JSON-RPC.
 // Duplicate struct definition since geth struct is in internal package
-// Ref: https://github.com/ethereum/go-ethereum/blob/release/1.10.4/internal/ethapi/transaction_args.go#L36
+// Ref: https://github.com/Zano-Execution-Layer/go-ethereum/blob/release/1.10.4/internal/ethapi/transaction_args.go#L36
 type TransactionArgs struct {
 	From                 *common.Address `json:"from"`
 	To                   *common.Address `json:"to"`
@@ -44,7 +44,7 @@ type TransactionArgs struct {
 
 	// We accept "data" and "input" for backwards-compatibility reasons.
 	// "input" is the newer name and should be preferred by clients.
-	// Issue detail: https://github.com/ethereum/go-ethereum/issues/15628
+	// Issue detail: https://github.com/Zano-Execution-Layer/go-ethereum/issues/15628
 	Data  *hexutil.Bytes `json:"data"`
 	Input *hexutil.Bytes `json:"input"`
 

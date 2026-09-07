@@ -25,7 +25,7 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 
-	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/Zano-Execution-Layer/go-ethereum/accounts/abi"
 )
 
 // HexString is a byte array that serializes to hex

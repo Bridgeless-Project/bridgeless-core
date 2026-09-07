@@ -25,8 +25,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
 	"github.com/cosmos/cosmos-sdk/x/auth/migrations/legacytx"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/signer/core/apitypes"
+	"github.com/Zano-Execution-Layer/go-ethereum/crypto"
+	"github.com/Zano-Execution-Layer/go-ethereum/signer/core/apitypes"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/app"
 	cryptocodec "github.com/Bridgeless-Project/bridgeless-core/v12/crypto/codec"

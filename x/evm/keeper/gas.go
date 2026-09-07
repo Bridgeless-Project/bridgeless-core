@@ -18,8 +18,8 @@ package keeper
 import (
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/Zano-Execution-Layer/go-ethereum/core"
+	"github.com/Zano-Execution-Layer/go-ethereum/params"
 
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"

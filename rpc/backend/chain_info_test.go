@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	ethrpc "github.com/ethereum/go-ethereum/rpc"
+	"github.com/Zano-Execution-Layer/go-ethereum/common/hexutil"
+	ethrpc "github.com/Zano-Execution-Layer/go-ethereum/rpc"
 
 	"google.golang.org/grpc/metadata"
 

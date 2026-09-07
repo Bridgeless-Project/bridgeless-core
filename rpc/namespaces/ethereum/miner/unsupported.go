@@ -18,7 +18,7 @@ package miner
 import (
 	"errors"
 
-	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/Zano-Execution-Layer/go-ethereum/common/hexutil"
 )
 
 // GetHashrate returns the current hashrate for local CPU miner and remote miner.

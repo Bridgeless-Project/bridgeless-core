@@ -10,8 +10,8 @@ import (
 	swaptypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/swap/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common/hexutil"
 )
 
 const (

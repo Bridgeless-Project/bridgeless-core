@@ -28,10 +28,10 @@ import (
 	"github.com/tendermint/tendermint/libs/log"
 	tmrpctypes "github.com/tendermint/tendermint/rpc/core/types"
 
-	"github.com/ethereum/go-ethereum/common"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/eth/filters"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
+	"github.com/Zano-Execution-Layer/go-ethereum/crypto"
+	"github.com/Zano-Execution-Layer/go-ethereum/eth/filters"
 )
 
 // BloomIV represents the bit indexes and value inside the bloom filter that belong
@@ -255,7 +255,7 @@ func createBloomFilters(filters [][][]byte, logger log.Logger) [][]BloomIV {
 }
 
 // calcBloomIVs returns BloomIV for the given data,
-// revised from https://github.com/ethereum/go-ethereum/blob/401354976bb44f0ad4455ca1e0b5c0dc31d9a5f5/core/types/bloom9.go#L139
+// revised from https://github.com/Zano-Execution-Layer/go-ethereum/blob/401354976bb44f0ad4455ca1e0b5c0dc31d9a5f5/core/types/bloom9.go#L139
 func calcBloomIVs(data []byte) (BloomIV, error) {
 	hashbuf := make([]byte, 6)
 	biv := BloomIV{}

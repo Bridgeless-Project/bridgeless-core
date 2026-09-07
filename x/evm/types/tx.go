@@ -19,10 +19,10 @@ import (
 	"math"
 	"math/big"
 
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/vm"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/core/vm"
 )
 
 // EvmTxArgs encapsulates all possible params to create all EVM txs types.

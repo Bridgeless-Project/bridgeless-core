@@ -18,8 +18,8 @@ package filters
 import (
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
 )
 
 // FilterLogs creates a slice of logs matching the given criteria.
@@ -72,7 +72,7 @@ func includes(addresses []common.Address, a common.Address) bool {
 	return false
 }
 
-// https://github.com/ethereum/go-ethereum/blob/v1.10.14/eth/filters/filter.go#L321
+// https://github.com/Zano-Execution-Layer/go-ethereum/blob/v1.10.14/eth/filters/filter.go#L321
 func bloomFilter(bloom ethtypes.Bloom, addresses []common.Address, topics [][]common.Hash) bool {
 	if len(addresses) > 0 {
 		var included bool

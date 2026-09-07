@@ -5,7 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
 
 	utiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/revenue/v1/types"

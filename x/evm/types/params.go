@@ -22,8 +22,8 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/Zano-Execution-Layer/go-ethereum/core/vm"
+	"github.com/Zano-Execution-Layer/go-ethereum/params"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -45,7 +45,7 @@ var (
 // EVM interpreter. These EIPs are applied in order and can override the
 // instruction sets from the latest hard fork enabled by the ChainConfig. For
 // more info check:
-// https://github.com/ethereum/go-ethereum/blob/master/core/vm/interpreter.go#L97
+// https://github.com/Zano-Execution-Layer/go-ethereum/blob/master/core/vm/interpreter.go#L97
 var AvailableExtraEIPs = []int64{1344, 1884, 2200, 2929, 3198, 3529}
 
 // NewParams creates a new Params instance

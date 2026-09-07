@@ -185,8 +185,8 @@ import (
 	transferkeeper "github.com/Bridgeless-Project/bridgeless-core/v12/x/ibc/transfer/keeper"
 
 	// Force-load the tracer engines to trigger registration due to Go-Ethereum v1.10.15 changes
-	_ "github.com/ethereum/go-ethereum/eth/tracers/js"
-	_ "github.com/ethereum/go-ethereum/eth/tracers/native"
+	_ "github.com/Zano-Execution-Layer/go-ethereum/eth/tracers/js"
+	_ "github.com/Zano-Execution-Layer/go-ethereum/eth/tracers/native"
 )
 
 func init() {
@@ -588,7 +588,7 @@ func NewBridge(
 		app.BankKeeper,
 		app.Erc20Keeper,
 	)
-	
+
 	app.RevenueKeeper = revenuekeeper.NewKeeper(
 		keys[revenuetypes.StoreKey], appCodec, authtypes.NewModuleAddress(govtypes.ModuleName),
 		app.BankKeeper, app.EvmKeeper,

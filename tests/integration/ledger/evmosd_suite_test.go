@@ -15,7 +15,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/types"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/simapp/params"
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
 	"github.com/spf13/cobra"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/app"

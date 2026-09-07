@@ -3,8 +3,8 @@ package keeper
 import (
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/Zano-Execution-Layer/go-ethereum/common/hexutil"
+	"github.com/Zano-Execution-Layer/go-ethereum/crypto"
 )
 
 func ConstructSystemTxHash(amount *big.Int, tokenAddress, receiver []byte) string {

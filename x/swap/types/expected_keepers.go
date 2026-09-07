@@ -7,8 +7,8 @@ import (
 	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/ethereum/go-ethereum/accounts/abi"
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/accounts/abi"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
 )
 
 // AccountKeeper defines the expected account keeper used for simulations (noalias)

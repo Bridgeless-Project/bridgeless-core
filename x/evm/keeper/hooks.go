@@ -19,8 +19,8 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/ethereum/go-ethereum/core"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/Zano-Execution-Layer/go-ethereum/core"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
 )
 
 var _ types.EvmHooks = MultiEvmHooks{}

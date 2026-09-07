@@ -19,7 +19,7 @@ package types
 import (
 	"context"
 
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 

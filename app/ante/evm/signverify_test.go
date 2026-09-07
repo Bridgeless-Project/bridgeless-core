@@ -8,7 +8,7 @@ import (
 	testutiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
 	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
 )
 
 func (suite *AnteTestSuite) TestEthSigVerificationDecorator() {

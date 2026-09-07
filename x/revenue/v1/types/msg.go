@@ -21,7 +21,7 @@ import (
 	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	errortypes "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
 )
 
 var (

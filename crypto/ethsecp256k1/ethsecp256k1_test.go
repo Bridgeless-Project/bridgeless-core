@@ -8,8 +8,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/codec"
 
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/crypto/secp256k1"
+	"github.com/Zano-Execution-Layer/go-ethereum/crypto"
+	"github.com/Zano-Execution-Layer/go-ethereum/crypto/secp256k1"
 
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 )

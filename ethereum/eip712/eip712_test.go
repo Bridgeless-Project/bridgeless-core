@@ -10,8 +10,8 @@ import (
 	"github.com/Bridgeless-Project/bridgeless-core/v12/ethereum/eip712"
 	"github.com/cosmos/cosmos-sdk/client"
 	chainparams "github.com/cosmos/cosmos-sdk/simapp/params"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/signer/core/apitypes"
+	"github.com/Zano-Execution-Layer/go-ethereum/crypto"
+	"github.com/Zano-Execution-Layer/go-ethereum/signer/core/apitypes"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 

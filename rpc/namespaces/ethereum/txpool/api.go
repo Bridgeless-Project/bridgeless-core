@@ -18,7 +18,7 @@ package txpool
 import (
 	"github.com/tendermint/tendermint/libs/log"
 
-	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/Zano-Execution-Layer/go-ethereum/common/hexutil"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/types"
 )

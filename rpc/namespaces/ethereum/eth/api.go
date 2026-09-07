@@ -18,15 +18,15 @@ package eth
 import (
 	"context"
 
-	"github.com/ethereum/go-ethereum/signer/core/apitypes"
+	"github.com/Zano-Execution-Layer/go-ethereum/signer/core/apitypes"
 
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/Zano-Execution-Layer/go-ethereum/rpc"
 
 	"github.com/tendermint/tendermint/libs/log"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common/hexutil"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/backend"
 

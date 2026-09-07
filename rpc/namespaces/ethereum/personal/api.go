@@ -33,10 +33,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/ethereum/go-ethereum/accounts"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/Zano-Execution-Layer/go-ethereum/accounts"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common/hexutil"
+	"github.com/Zano-Execution-Layer/go-ethereum/crypto"
 
 	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 )
@@ -143,7 +143,7 @@ func (api *PrivateAccountAPI) SendTransaction(_ context.Context, args evmtypes.T
 //
 // The key used to calculate the signature is decrypted with the given password.
 //
-// https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal_sign
+// https://github.com/Zano-Execution-Layer/go-ethereum/wiki/Management-APIs#personal_sign
 func (api *PrivateAccountAPI) Sign(_ context.Context, data hexutil.Bytes, addr common.Address, _ string) (hexutil.Bytes, error) {
 	api.logger.Debug("personal_sign", "data", data, "address", addr.String())
 	return api.backend.Sign(addr, data)
@@ -158,7 +158,7 @@ func (api *PrivateAccountAPI) Sign(_ context.Context, data hexutil.Bytes, addr c
 // Note, the signature must conform to the secp256k1 curve R, S and V values, where
 // the V value must be 27 or 28 for legacy reasons.
 //
-// https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal_ecRecove
+// https://github.com/Zano-Execution-Layer/go-ethereum/wiki/Management-APIs#personal_ecRecove
 func (api *PrivateAccountAPI) EcRecover(_ context.Context, data, sig hexutil.Bytes) (common.Address, error) {
 	api.logger.Debug("personal_ecRecover", "data", data, "sig", sig)
 
@@ -184,7 +184,7 @@ func (api *PrivateAccountAPI) EcRecover(_ context.Context, data, sig hexutil.Byt
 func (api *PrivateAccountAPI) Unpair(_ context.Context, url, pin string) error {
 	api.logger.Debug("personal_unpair", "url", url, "pin", pin)
 	api.logger.Info("personal_unpair for smartcard wallet not supported")
-	// TODO: Smartcard wallet not supported yet, refer to: https://github.com/ethereum/go-ethereum/blob/master/accounts/scwallet/README.md
+	// TODO: Smartcard wallet not supported yet, refer to: https://github.com/Zano-Execution-Layer/go-ethereum/blob/master/accounts/scwallet/README.md
 	return fmt.Errorf("smartcard wallet not supported yet")
 }
 
@@ -192,7 +192,7 @@ func (api *PrivateAccountAPI) Unpair(_ context.Context, url, pin string) error {
 func (api *PrivateAccountAPI) InitializeWallet(_ context.Context, url string) (string, error) {
 	api.logger.Debug("personal_initializeWallet", "url", url)
 	api.logger.Info("personal_initializeWallet for smartcard wallet not supported")
-	// TODO: Smartcard wallet not supported yet, refer to: https://github.com/ethereum/go-ethereum/blob/master/accounts/scwallet/README.md
+	// TODO: Smartcard wallet not supported yet, refer to: https://github.com/Zano-Execution-Layer/go-ethereum/blob/master/accounts/scwallet/README.md
 	return "", fmt.Errorf("smartcard wallet not supported yet")
 }
 

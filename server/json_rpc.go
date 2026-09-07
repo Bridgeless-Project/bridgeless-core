@@ -26,8 +26,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/server/types"
-	ethlog "github.com/ethereum/go-ethereum/log"
-	ethrpc "github.com/ethereum/go-ethereum/rpc"
+	ethlog "github.com/Zano-Execution-Layer/go-ethereum/log"
+	ethrpc "github.com/Zano-Execution-Layer/go-ethereum/rpc"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/server/config"
 	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"

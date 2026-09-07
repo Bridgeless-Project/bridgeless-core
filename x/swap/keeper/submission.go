@@ -5,8 +5,8 @@ import (
 	swaptypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/swap/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/crypto"
 )
 
 func (k Keeper) SetSwapSubmissions(ctx sdk.Context, submissions *bridgetypes.Submissions) {

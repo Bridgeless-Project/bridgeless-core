@@ -5,8 +5,8 @@ import (
 
 	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/ethereum/go-ethereum/accounts/abi"
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/accounts/abi"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
 )
 
 // BankKeeper defines the expected interface needed to retrieve account balances.

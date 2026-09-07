@@ -5,6 +5,7 @@ go 1.25.0
 require (
 	cosmossdk.io/errors v1.0.0-beta.7
 	cosmossdk.io/math v1.0.0-rc.0
+	github.com/Zano-Execution-Layer/go-ethereum v1.10.26
 	github.com/armon/go-metrics v0.4.1
 	github.com/btcsuite/btcd v0.22.2
 	github.com/btcsuite/btcutil v1.0.3-0.20201208143702-a53e38424cce
@@ -14,7 +15,6 @@ require (
 	github.com/cosmos/gogoproto v1.5.0
 	github.com/cosmos/ibc-go/v6 v6.1.1
 	github.com/davecgh/go-spew v1.1.1
-	github.com/ethereum/go-ethereum v1.10.26
 	github.com/gogo/protobuf v1.3.3
 	github.com/golang/protobuf v1.5.4
 	github.com/gorilla/mux v1.8.0
@@ -97,6 +97,7 @@ require (
 	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/dvsekhvalnov/jose2go v1.5.0 // indirect
 	github.com/edsrzf/mmap-go v1.0.0 // indirect
+	github.com/ethereum/go-ethereum v1.10.17 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/gballet/go-libpcsclite v0.0.0-20190607065134-2772fd86a8ff // indirect
@@ -229,11 +230,14 @@ replace (
 	// use cosmos fork of keyring
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.2.0
 
+	// use Bridgeless geth fork (its go.mod declares the Zano-Execution-Layer module path)
+	github.com/Zano-Execution-Layer/go-ethereum => github.com/Bridgeless-Project/go-ethereum v1.10.26-new-geth
+
 	github.com/coinbase/rosetta-sdk-go => github.com/coinbase/mesh-sdk-go v0.7.9
 	github.com/cosmos/cosmos-sdk => github.com/Bridgeless-Project/cosmos-sdk v0.46.41-rc3
 	github.com/cosmos/ibc-go/v6 => github.com/Bridgeless-Project/ibc-go/v6 v6.1.15
 
-	// use Evmos geth fork
+	// use Evmos geth fork for transitive deps (e.g. rosetta-sdk-go); the app itself imports the Bridgeless fork via the Zano-Execution-Layer replace above
 	github.com/ethereum/go-ethereum => github.com/evmos/go-ethereum v1.10.26
 
 	// Security Advisory https://github.com/advisories/GHSA-h395-qcrw-5vmq

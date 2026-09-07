@@ -3,7 +3,7 @@ package evm_test
 import (
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/ethsecp256k1"
 	evmostypes "github.com/Bridgeless-Project/bridgeless-core/v12/types"

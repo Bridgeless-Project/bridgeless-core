@@ -23,8 +23,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/input"
 	"github.com/cosmos/cosmos-sdk/crypto"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	ethcrypto "github.com/ethereum/go-ethereum/crypto"
+	"github.com/Zano-Execution-Layer/go-ethereum/common/hexutil"
+	ethcrypto "github.com/Zano-Execution-Layer/go-ethereum/crypto"
 	"github.com/spf13/cobra"
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/crypto/ethsecp256k1"

@@ -37,10 +37,10 @@ import (
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/rpc/backend"
 	rpctypes "github.com/Bridgeless-Project/bridgeless-core/v12/rpc/types"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/consensus/ethash"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	"github.com/Zano-Execution-Layer/go-ethereum/common/hexutil"
+	"github.com/Zano-Execution-Layer/go-ethereum/consensus/ethash"
+	"github.com/Zano-Execution-Layer/go-ethereum/rlp"
 	"github.com/tendermint/tendermint/libs/log"
 )
 

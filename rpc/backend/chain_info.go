@@ -27,10 +27,10 @@ import (
 	evmtypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
 	feemarkettypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/Zano-Execution-Layer/go-ethereum/common/hexutil"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
+	"github.com/Zano-Execution-Layer/go-ethereum/params"
+	"github.com/Zano-Execution-Layer/go-ethereum/rpc"
 	tmrpctypes "github.com/tendermint/tendermint/rpc/core/types"
 )
 
@@ -158,8 +158,8 @@ func (b *Backend) GetCoinbase() (sdk.AccAddress, error) {
 // FeeHistory returns data relevant for fee estimation based on the specified range of blocks.
 func (b *Backend) FeeHistory(
 	userBlockCount rpc.DecimalOrHex, // number blocks to fetch, maximum is 100
-	lastBlock rpc.BlockNumber, // the block to start search , to oldest
-	rewardPercentiles []float64, // percentiles to fetch reward
+	lastBlock rpc.BlockNumber,       // the block to start search , to oldest
+	rewardPercentiles []float64,     // percentiles to fetch reward
 ) (*rpctypes.FeeHistoryResult, error) {
 	blockEnd := int64(lastBlock) //#nosec G701 -- checked for int overflow already
 

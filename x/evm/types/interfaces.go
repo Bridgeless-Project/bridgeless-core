@@ -25,8 +25,8 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	feemarkettypes "github.com/Bridgeless-Project/bridgeless-core/v12/x/feemarket/types"
-	"github.com/ethereum/go-ethereum/core"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/Zano-Execution-Layer/go-ethereum/core"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
 )
 
 // AccountKeeper defines the expected account keeper interface

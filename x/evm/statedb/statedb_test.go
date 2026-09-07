@@ -6,19 +6,19 @@ import (
 
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/statedb"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/ethereum/go-ethereum/common"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
+	"github.com/Zano-Execution-Layer/go-ethereum/core/vm"
+	"github.com/Zano-Execution-Layer/go-ethereum/crypto"
 	"github.com/stretchr/testify/suite"
 )
 
 var (
-	address  = common.BigToAddress(big.NewInt(101))
-	address2 = common.BigToAddress(big.NewInt(102))
-	address3                = common.BigToAddress(big.NewInt(103))
-	blockHash                = common.BigToHash(big.NewInt(9999))
-	emptyTxConfig                = statedb.NewEmptyTxConfig(blockHash)
+	address       = common.BigToAddress(big.NewInt(101))
+	address2      = common.BigToAddress(big.NewInt(102))
+	address3      = common.BigToAddress(big.NewInt(103))
+	blockHash     = common.BigToHash(big.NewInt(9999))
+	emptyTxConfig = statedb.NewEmptyTxConfig(blockHash)
 )
 
 type StateDBTestSuite struct {

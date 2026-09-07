@@ -16,10 +16,10 @@ import (
 	utiltx "github.com/Bridgeless-Project/bridgeless-core/v12/testutil/tx"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/statedb"
 	"github.com/Bridgeless-Project/bridgeless-core/v12/x/evm/types"
-	"github.com/ethereum/go-ethereum/common"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/Zano-Execution-Layer/go-ethereum/common"
+	ethtypes "github.com/Zano-Execution-Layer/go-ethereum/core/types"
+	"github.com/Zano-Execution-Layer/go-ethereum/core/vm"
+	"github.com/Zano-Execution-Layer/go-ethereum/crypto"
 )
 
 func (suite *KeeperTestSuite) TestCreateAccount() {
