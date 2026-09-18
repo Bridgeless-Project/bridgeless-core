@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"math/big"
+	"strings"
 
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
@@ -13,7 +14,7 @@ import (
 )
 
 func TransactionId(tx *Transaction) string {
-	return fmt.Sprintf("%s/%v/%s", tx.DepositTxHash, tx.DepositTxIndex, tx.DepositChainId)
+	return fmt.Sprintf("%s/%v/%s", strings.ToLower(tx.DepositTxHash), tx.DepositTxIndex, tx.DepositChainId)
 }
 
 func validateTransaction(tx *Transaction) error {
