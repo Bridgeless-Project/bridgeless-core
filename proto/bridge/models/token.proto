@@ -16,6 +16,8 @@ message TokenInfo {
   bool is_wrapped = 5;
   string min_withdrawal_amount = 6;
   string commission_rate = 7;
+  // max_withdrawal_amount is the upper withdrawal limit, zero means no limit
+  string max_withdrawal_amount = 8;
 }
 
 message TokenMetadata {
