@@ -318,7 +318,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/bridge/chains/type/{chain_type}:
+  '/cosmos/bridge/chains/type/{chain_type}':
     get:
       operationId: CoreBridgeGetChainsByType
       responses:
@@ -644,7 +644,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/bridge/chains/{id}:
+  '/cosmos/bridge/chains/{id}':
     get:
       operationId: CoreBridgeGetChainById
       responses:
@@ -876,7 +876,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/bridge/commissions/{epoch_id}:
+  '/cosmos/bridge/commissions/{epoch_id}':
     get:
       operationId: CoreBridgeGetCommissions
       responses:
@@ -1172,7 +1172,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/bridge/epoch/{epoch_id}:
+  '/cosmos/bridge/epoch/{epoch_id}':
     get:
       operationId: CoreBridgeGetEpochById
       responses:
@@ -1427,7 +1427,7 @@ paths:
           format: int64
       tags:
         - Query
-  /cosmos/bridge/epoch/{epoch_id}/pubkey:
+  '/cosmos/bridge/epoch/{epoch_id}/pubkey':
     get:
       operationId: CoreBridgeGetEpochPubKey
       responses:
@@ -1631,7 +1631,7 @@ paths:
           format: int64
       tags:
         - Query
-  /cosmos/bridge/epoch/{epoch_id}/signature/{chain_type}:
+  '/cosmos/bridge/epoch/{epoch_id}/signature/{chain_type}':
     get:
       operationId: CoreBridgeGetEpochSignature
       responses:
@@ -1924,7 +1924,7 @@ paths:
             - SOLANA
       tags:
         - Query
-  /cosmos/bridge/epoch/{epoch_id}/transaction:
+  '/cosmos/bridge/epoch/{epoch_id}/transaction':
     get:
       operationId: CoreBridgeGetEpochTransactions
       responses:
@@ -2753,7 +2753,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/bridge/referrals/rewards/{referral_id}:
+  '/cosmos/bridge/referrals/rewards/{referral_id}':
     get:
       operationId: CoreBridgeGetReferralsRewardsById
       responses:
@@ -3054,7 +3054,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/bridge/referrals/rewards/{referral_id}/{token_id}:
+  '/cosmos/bridge/referrals/rewards/{referral_id}/{token_id}':
     get:
       operationId: CoreBridgeGetReferralRewardsByToken
       responses:
@@ -3274,7 +3274,7 @@ paths:
           format: uint64
       tags:
         - Query
-  /cosmos/bridge/referrals/{referral_id}:
+  '/cosmos/bridge/referrals/{referral_id}':
     get:
       operationId: CoreBridgeGetReferralById
       responses:
@@ -3815,7 +3815,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/bridge/stoplist/{chain_id}/{tx_hash}/{tx_nonce}:
+  '/cosmos/bridge/stoplist/{chain_id}/{tx_hash}/{tx_nonce}':
     get:
       operationId: CoreBridgeGetStopListTxsById
       responses:
@@ -4408,7 +4408,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/bridge/system-withdrawals/{tx_hash}:
+  '/cosmos/bridge/system-withdrawals/{tx_hash}':
     get:
       summary: SystemWithdrawalById queries a system withdrawal by ID.
       operationId: CoreBridgeSystemWithdrawalById
@@ -4956,7 +4956,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/bridge/system_txs_submissions/{tx_hash}:
+  '/cosmos/bridge/system_txs_submissions/{tx_hash}':
     get:
       operationId: CoreBridgeGetSystemTxSubmissionsByHash
       responses:
@@ -5166,7 +5166,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/bridge/token-info/{chain}/{address}:
+  '/cosmos/bridge/token-info/{chain}/{address}':
     get:
       summary: TokenInfo queries an according token info by chain and address.
       operationId: CoreBridgeGetTokenInfo
@@ -5195,6 +5195,11 @@ paths:
                     type: string
                   commission_rate:
                     type: string
+                  max_withdrawal_amount:
+                    type: string
+                    title: >-
+                      max_withdrawal_amount is the upper withdrawal limit, zero
+                      means no limit
         default:
           description: An unexpected error response.
           schema:
@@ -5391,7 +5396,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/bridge/token-pair/{src_chain}/{src_address}/{dst_chain}:
+  '/cosmos/bridge/token-pair/{src_chain}/{src_address}/{dst_chain}':
     get:
       summary: >-
         TokenPair queries an according token pair by src_chain, src_address and
@@ -5422,6 +5427,11 @@ paths:
                     type: string
                   commission_rate:
                     type: string
+                  max_withdrawal_amount:
+                    type: string
+                    title: >-
+                      max_withdrawal_amount is the upper withdrawal limit, zero
+                      means no limit
         default:
           description: An unexpected error response.
           schema:
@@ -5672,6 +5682,11 @@ paths:
                             type: string
                           commission_rate:
                             type: string
+                          max_withdrawal_amount:
+                            type: string
+                            title: >-
+                              max_withdrawal_amount is the upper withdrawal
+                              limit, zero means no limit
                       title: info is the token information on different chains
               pagination:
                 type: object
@@ -5945,7 +5960,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/bridge/tokens/commissions/{token_id}/{epoch_id}:
+  '/cosmos/bridge/tokens/commissions/{token_id}/{epoch_id}':
     get:
       operationId: CoreBridgeGetCommissionByToken
       responses:
@@ -6160,7 +6175,7 @@ paths:
           format: int64
       tags:
         - Query
-  /cosmos/bridge/tokens/{id}:
+  '/cosmos/bridge/tokens/{id}':
     get:
       summary: Token by id queries a token by id.
       operationId: CoreBridgeGetTokenById
@@ -6208,6 +6223,11 @@ paths:
                           type: string
                         commission_rate:
                           type: string
+                        max_withdrawal_amount:
+                          type: string
+                          title: >-
+                            max_withdrawal_amount is the upper withdrawal limit,
+                            zero means no limit
                     title: info is the token information on different chains
         default:
           description: An unexpected error response.
@@ -6735,7 +6755,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/bridge/transactions/{chain_id}/{tx_hash}/{tx_nonce}:
+  '/cosmos/bridge/transactions/{chain_id}/{tx_hash}/{tx_nonce}':
     get:
       summary: TransactionById queries a transaction by ID.
       operationId: CoreBridgeTransactionById
@@ -7287,7 +7307,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/bridge/txs_submissions/{tx_hash}:
+  '/cosmos/bridge/txs_submissions/{tx_hash}':
     get:
       operationId: CoreBridgeGetTxSubmissionsByHash
       responses:
@@ -7792,7 +7812,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/multisig/group/{account}:
+  '/cosmos/multisig/group/{account}':
     get:
       operationId: CoreMultisigGroup
       responses:
@@ -8744,7 +8764,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/multisig/proposal/{proposalId}:
+  '/cosmos/multisig/proposal/{proposalId}':
     get:
       operationId: CoreMultisigProposal
       responses:
@@ -9491,7 +9511,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/multisig/vote/{proposalId}:
+  '/cosmos/multisig/vote/{proposalId}':
     get:
       summary: VotesByProposal queries a vote by proposal.
       operationId: CoreMultisigVotesByProposal
@@ -9802,7 +9822,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/multisig/vote/{proposalId}/{voter}:
+  '/cosmos/multisig/vote/{proposalId}/{voter}':
     get:
       operationId: CoreMultisigVote
       responses:
@@ -10324,10 +10344,10 @@ paths:
                     swap_deadline:
                       type: string
                       format: uint64
-                      title: timestamp until when the swap is valid, provided by
+                      title: 'timestamp until when the swap is valid, provided by'
                     swap_out_amount:
                       type: string
-                      title: minimum acceptable output amount, provided by backend
+                      title: 'minimum acceptable output amount, provided by backend'
                     final_deposit_tx_hash:
                       type: string
                       title: do not used on the submit endpoint
@@ -10608,7 +10628,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/swap/swaps/{tx_hash}/{tx_nonce}/{chain_id}:
+  '/cosmos/swap/swaps/{tx_hash}/{tx_nonce}/{chain_id}':
     get:
       operationId: CoreSwapGetSwapById
       responses:
@@ -10682,10 +10702,10 @@ paths:
                   swap_deadline:
                     type: string
                     format: uint64
-                    title: timestamp until when the swap is valid, provided by
+                    title: 'timestamp until when the swap is valid, provided by'
                   swap_out_amount:
                     type: string
-                    title: minimum acceptable output amount, provided by backend
+                    title: 'minimum acceptable output amount, provided by backend'
                   final_deposit_tx_hash:
                     type: string
                     title: do not used on the submit endpoint
@@ -11213,7 +11233,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/accumulator/admins/{address}:
+  '/cosmos/accumulator/admins/{address}':
     get:
       summary: Parameters queries the admin and its vesting params
       operationId: CosmosAccumulatorGetAdminByAddress
@@ -12111,7 +12131,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/auth/v1beta1/accounts/{address}:
+  '/cosmos/auth/v1beta1/accounts/{address}':
     get:
       summary: Account returns account details based on address.
       operationId: CosmosAuthV1Beta1Account
@@ -12379,7 +12399,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/auth/v1beta1/address_by_id/{id}:
+  '/cosmos/auth/v1beta1/address_by_id/{id}':
     get:
       summary: AccountAddressByID returns account address based on account number.
       description: 'Since: cosmos-sdk 0.46.2'
@@ -12799,7 +12819,7 @@ paths:
                         }
       tags:
         - Query
-  /cosmos/auth/v1beta1/bech32/{address_bytes}:
+  '/cosmos/auth/v1beta1/bech32/{address_bytes}':
     get:
       summary: AddressBytesToString converts Account Address bytes to string
       description: 'Since: cosmos-sdk 0.46'
@@ -13011,7 +13031,7 @@ paths:
           format: byte
       tags:
         - Query
-  /cosmos/auth/v1beta1/bech32/{address_string}:
+  '/cosmos/auth/v1beta1/bech32/{address_string}':
     get:
       summary: AddressStringToBytes converts Address string to bytes
       description: 'Since: cosmos-sdk 0.46'
@@ -13602,7 +13622,7 @@ paths:
                         }
       tags:
         - Query
-  /cosmos/auth/v1beta1/module_accounts/{name}:
+  '/cosmos/auth/v1beta1/module_accounts/{name}':
     get:
       summary: ModuleAccountByName returns the module account info by module name
       operationId: CosmosAuthV1Beta1ModuleAccountByName
@@ -14197,7 +14217,7 @@ paths:
         - Query
   /cosmos/authz/v1beta1/grants:
     get:
-      summary: Returns list of `Authorization`, granted to the grantee by the granter.
+      summary: 'Returns list of `Authorization`, granted to the grantee by the granter.'
       operationId: CosmosAuthzV1Beta1Grants
       responses:
         '200':
@@ -14683,7 +14703,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/authz/v1beta1/grants/grantee/{grantee}:
+  '/cosmos/authz/v1beta1/grants/grantee/{grantee}':
     get:
       summary: GranteeGrants returns a list of `GrantAuthorization` by grantee.
       description: 'Since: cosmos-sdk 0.46'
@@ -15157,9 +15177,9 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/authz/v1beta1/grants/granter/{granter}:
+  '/cosmos/authz/v1beta1/grants/granter/{granter}':
     get:
-      summary: GranterGrants returns list of `GrantAuthorization`, granted by granter.
+      summary: 'GranterGrants returns list of `GrantAuthorization`, granted by granter.'
       description: 'Since: cosmos-sdk 0.46'
       operationId: CosmosAuthzV1Beta1GranterGrants
       responses:
@@ -15631,7 +15651,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/bank/v1beta1/balances/{address}:
+  '/cosmos/bank/v1beta1/balances/{address}':
     get:
       summary: AllBalances queries the balance of all coins for a single account.
       operationId: CosmosBankV1Beta1AllBalances
@@ -15765,7 +15785,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/bank/v1beta1/balances/{address}/by_denom:
+  '/cosmos/bank/v1beta1/balances/{address}/by_denom':
     get:
       summary: Balance queries the balance of a single coin for a single account.
       operationId: CosmosBankV1Beta1Balance
@@ -15817,7 +15837,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/bank/v1beta1/denom_owners/{denom}:
+  '/cosmos/bank/v1beta1/denom_owners/{denom}':
     get:
       summary: >-
         DenomOwners queries for all account addresses that own a particular
@@ -16179,7 +16199,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/bank/v1beta1/denoms_metadata/{denom}:
+  '/cosmos/bank/v1beta1/denoms_metadata/{denom}':
     get:
       summary: DenomsMetadata queries the client metadata of a given coin denomination.
       operationId: CosmosBankV1Beta1DenomMetadata
@@ -16362,7 +16382,7 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
-  /cosmos/bank/v1beta1/spendable_balances/{address}:
+  '/cosmos/bank/v1beta1/spendable_balances/{address}':
     get:
       summary: |-
         SpendableBalances queries the spenable balance of all coins for a single
@@ -17431,7 +17451,7 @@ paths:
                                                       - BLOCK_ID_FLAG_COMMIT
                                                       - BLOCK_ID_FLAG_NIL
                                                     default: BLOCK_ID_FLAG_UNKNOWN
-                                                    title: >-
+                                                    description: >-
                                                       BlockIdFlag indicates which BlcokID the
                                                       signature is for
                                                   validator_address:
@@ -17584,7 +17604,7 @@ paths:
                                 - BLOCK_ID_FLAG_COMMIT
                                 - BLOCK_ID_FLAG_NIL
                               default: BLOCK_ID_FLAG_UNKNOWN
-                              title: >-
+                              description: >-
                                 BlockIdFlag indicates which BlcokID the
                                 signature is for
                             validator_address:
@@ -18004,7 +18024,7 @@ paths:
                                                       - BLOCK_ID_FLAG_COMMIT
                                                       - BLOCK_ID_FLAG_NIL
                                                     default: BLOCK_ID_FLAG_UNKNOWN
-                                                    title: >-
+                                                    description: >-
                                                       BlockIdFlag indicates which BlcokID the
                                                       signature is for
                                                   validator_address:
@@ -18157,7 +18177,7 @@ paths:
                                 - BLOCK_ID_FLAG_COMMIT
                                 - BLOCK_ID_FLAG_NIL
                               default: BLOCK_ID_FLAG_UNKNOWN
-                              title: >-
+                              description: >-
                                 BlockIdFlag indicates which BlcokID the
                                 signature is for
                             validator_address:
@@ -18372,7 +18392,7 @@ paths:
                         }
       tags:
         - Service
-  /cosmos/base/tendermint/v1beta1/blocks/{height}:
+  '/cosmos/base/tendermint/v1beta1/blocks/{height}':
     get:
       summary: GetBlockByHeight queries block for given height.
       operationId: CosmosBaseTendermintV1Beta1GetBlockByHeight
@@ -18792,7 +18812,7 @@ paths:
                                                       - BLOCK_ID_FLAG_COMMIT
                                                       - BLOCK_ID_FLAG_NIL
                                                     default: BLOCK_ID_FLAG_UNKNOWN
-                                                    title: >-
+                                                    description: >-
                                                       BlockIdFlag indicates which BlcokID the
                                                       signature is for
                                                   validator_address:
@@ -18945,7 +18965,7 @@ paths:
                                 - BLOCK_ID_FLAG_COMMIT
                                 - BLOCK_ID_FLAG_NIL
                               default: BLOCK_ID_FLAG_UNKNOWN
-                              title: >-
+                              description: >-
                                 BlockIdFlag indicates which BlcokID the
                                 signature is for
                             validator_address:
@@ -19365,7 +19385,7 @@ paths:
                                                       - BLOCK_ID_FLAG_COMMIT
                                                       - BLOCK_ID_FLAG_NIL
                                                     default: BLOCK_ID_FLAG_UNKNOWN
-                                                    title: >-
+                                                    description: >-
                                                       BlockIdFlag indicates which BlcokID the
                                                       signature is for
                                                   validator_address:
@@ -19518,7 +19538,7 @@ paths:
                                 - BLOCK_ID_FLAG_COMMIT
                                 - BLOCK_ID_FLAG_NIL
                               default: BLOCK_ID_FLAG_UNKNOWN
-                              title: >-
+                              description: >-
                                 BlockIdFlag indicates which BlcokID the
                                 signature is for
                             validator_address:
@@ -20680,7 +20700,7 @@ paths:
           type: boolean
       tags:
         - Service
-  /cosmos/base/tendermint/v1beta1/validatorsets/{height}:
+  '/cosmos/base/tendermint/v1beta1/validatorsets/{height}':
     get:
       summary: GetValidatorSetByHeight queries validator-set at a given height.
       operationId: CosmosBaseTendermintV1Beta1GetValidatorSetByHeight
@@ -21207,7 +21227,7 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
-  /cosmos/distribution/v1beta1/delegators/{delegator_address}/rewards:
+  '/cosmos/distribution/v1beta1/delegators/{delegator_address}/rewards':
     get:
       summary: |-
         DelegationTotalRewards queries the total rewards accrued by a each
@@ -21296,7 +21316,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/distribution/v1beta1/delegators/{delegator_address}/rewards/{validator_address}:
+  '/cosmos/distribution/v1beta1/delegators/{delegator_address}/rewards/{validator_address}':
     get:
       summary: DelegationRewards queries the total rewards accrued by a delegation.
       operationId: CosmosDistributionV1Beta1DelegationRewards
@@ -21359,7 +21379,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/distribution/v1beta1/delegators/{delegator_address}/validators:
+  '/cosmos/distribution/v1beta1/delegators/{delegator_address}/validators':
     get:
       summary: DelegatorValidators queries the validators of a delegator.
       operationId: CosmosDistributionV1Beta1DelegatorValidators
@@ -21405,7 +21425,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/distribution/v1beta1/delegators/{delegator_address}/withdraw_address:
+  '/cosmos/distribution/v1beta1/delegators/{delegator_address}/withdraw_address':
     get:
       summary: DelegatorWithdrawAddress queries withdraw address of a delegator.
       operationId: CosmosDistributionV1Beta1DelegatorWithdrawAddress
@@ -21494,7 +21514,7 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
-  /cosmos/distribution/v1beta1/validators/{validator_address}:
+  '/cosmos/distribution/v1beta1/validators/{validator_address}':
     get:
       summary: >-
         ValidatorDistributionInfo queries validator commision and
@@ -21576,7 +21596,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/distribution/v1beta1/validators/{validator_address}/commission:
+  '/cosmos/distribution/v1beta1/validators/{validator_address}/commission':
     get:
       summary: ValidatorCommission queries accumulated commission for a validator.
       operationId: CosmosDistributionV1Beta1ValidatorCommission
@@ -21637,7 +21657,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/distribution/v1beta1/validators/{validator_address}/outstanding_rewards:
+  '/cosmos/distribution/v1beta1/validators/{validator_address}/outstanding_rewards':
     get:
       summary: ValidatorOutstandingRewards queries rewards of a validator address.
       operationId: CosmosDistributionV1Beta1ValidatorOutstandingRewards
@@ -21705,7 +21725,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/distribution/v1beta1/validators/{validator_address}/slashes:
+  '/cosmos/distribution/v1beta1/validators/{validator_address}/slashes':
     get:
       summary: ValidatorSlashes queries slash events of a validator.
       operationId: CosmosDistributionV1Beta1ValidatorSlashes
@@ -22310,7 +22330,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/evidence/v1beta1/evidence/{evidence_hash}:
+  '/cosmos/evidence/v1beta1/evidence/{evidence_hash}':
     get:
       summary: Evidence queries evidence based on evidence hash.
       operationId: CosmosEvidenceV1Beta1Evidence
@@ -22579,7 +22599,7 @@ paths:
           format: byte
       tags:
         - Query
-  /cosmos/feegrant/v1beta1/allowance/{granter}/{grantee}:
+  '/cosmos/feegrant/v1beta1/allowance/{granter}/{grantee}':
     get:
       summary: Allowance returns fee granted to the grantee by the granter.
       operationId: CosmosFeegrantV1Beta1Allowance
@@ -22876,7 +22896,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/feegrant/v1beta1/allowances/{grantee}:
+  '/cosmos/feegrant/v1beta1/allowances/{grantee}':
     get:
       summary: Allowances returns all the grants for address.
       operationId: CosmosFeegrantV1Beta1Allowances
@@ -23240,7 +23260,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/feegrant/v1beta1/issued/{granter}:
+  '/cosmos/feegrant/v1beta1/issued/{granter}':
     get:
       summary: AllowancesByGranter returns all the grants given by an address
       description: 'Since: cosmos-sdk 0.46'
@@ -23608,7 +23628,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/gov/v1/params/{params_type}:
+  '/cosmos/gov/v1/params/{params_type}':
     get:
       summary: Params queries all parameters of the gov module.
       operationId: CosmosGovV1Params
@@ -24467,7 +24487,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/gov/v1/proposals/{proposal_id}:
+  '/cosmos/gov/v1/proposals/{proposal_id}':
     get:
       summary: Proposal queries proposal details based on ProposalID.
       operationId: CosmosGovV1Proposal
@@ -24944,7 +24964,7 @@ paths:
           format: uint64
       tags:
         - Query
-  /cosmos/gov/v1/proposals/{proposal_id}/deposits:
+  '/cosmos/gov/v1/proposals/{proposal_id}/deposits':
     get:
       summary: Deposits queries all deposits of a single proposal.
       operationId: CosmosGovV1Deposits
@@ -25259,7 +25279,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/gov/v1/proposals/{proposal_id}/deposits/{depositor}:
+  '/cosmos/gov/v1/proposals/{proposal_id}/deposits/{depositor}':
     get:
       summary: >-
         Deposit queries single deposit information based proposalID,
@@ -25499,7 +25519,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/gov/v1/proposals/{proposal_id}/tally:
+  '/cosmos/gov/v1/proposals/{proposal_id}/tally':
     get:
       summary: TallyResult queries the tally of a proposal vote.
       operationId: CosmosGovV1TallyResult
@@ -25721,7 +25741,7 @@ paths:
           format: uint64
       tags:
         - Query
-  /cosmos/gov/v1/proposals/{proposal_id}/votes:
+  '/cosmos/gov/v1/proposals/{proposal_id}/votes':
     get:
       summary: Votes queries votes of a given proposal.
       operationId: CosmosGovV1Votes
@@ -26052,9 +26072,9 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/gov/v1/proposals/{proposal_id}/votes/{voter}:
+  '/cosmos/gov/v1/proposals/{proposal_id}/votes/{voter}':
     get:
-      summary: Vote queries voted information based on proposalID, voterAddr.
+      summary: 'Vote queries voted information based on proposalID, voterAddr.'
       operationId: CosmosGovV1Vote
       responses:
         '200':
@@ -26306,7 +26326,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/gov/v1beta1/params/{params_type}:
+  '/cosmos/gov/v1beta1/params/{params_type}':
     get:
       summary: Params queries all parameters of the gov module.
       operationId: CosmosGovV1Beta1Params
@@ -27158,7 +27178,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/gov/v1beta1/proposals/{proposal_id}:
+  '/cosmos/gov/v1beta1/proposals/{proposal_id}':
     get:
       summary: Proposal queries proposal details based on ProposalID.
       operationId: CosmosGovV1Beta1Proposal
@@ -27623,7 +27643,7 @@ paths:
           format: uint64
       tags:
         - Query
-  /cosmos/gov/v1beta1/proposals/{proposal_id}/deposits:
+  '/cosmos/gov/v1beta1/proposals/{proposal_id}/deposits':
     get:
       summary: Deposits queries all deposits of a single proposal.
       operationId: CosmosGovV1Beta1Deposits
@@ -27938,7 +27958,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/gov/v1beta1/proposals/{proposal_id}/deposits/{depositor}:
+  '/cosmos/gov/v1beta1/proposals/{proposal_id}/deposits/{depositor}':
     get:
       summary: >-
         Deposit queries single deposit information based proposalID,
@@ -28178,7 +28198,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/gov/v1beta1/proposals/{proposal_id}/tally:
+  '/cosmos/gov/v1beta1/proposals/{proposal_id}/tally':
     get:
       summary: TallyResult queries the tally of a proposal vote.
       operationId: CosmosGovV1Beta1TallyResult
@@ -28397,7 +28417,7 @@ paths:
           format: uint64
       tags:
         - Query
-  /cosmos/gov/v1beta1/proposals/{proposal_id}/votes:
+  '/cosmos/gov/v1beta1/proposals/{proposal_id}/votes':
     get:
       summary: Votes queries votes of a given proposal.
       operationId: CosmosGovV1Beta1Votes
@@ -28745,9 +28765,9 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/gov/v1beta1/proposals/{proposal_id}/votes/{voter}:
+  '/cosmos/gov/v1beta1/proposals/{proposal_id}/votes/{voter}':
     get:
-      summary: Vote queries voted information based on proposalID, voterAddr.
+      summary: 'Vote queries voted information based on proposalID, voterAddr.'
       operationId: CosmosGovV1Beta1Vote
       responses:
         '200':
@@ -29084,7 +29104,7 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
-  /cosmos/nft/nft/{address}:
+  '/cosmos/nft/nft/{address}':
     get:
       operationId: CosmosNftGetNFTByAddress
       responses:
@@ -30002,7 +30022,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/nft/owners/{owner}/nfts:
+  '/cosmos/nft/owners/{owner}/nfts':
     get:
       operationId: CosmosNftGetAllNFTsByOwner
       responses:
@@ -30935,7 +30955,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/slashing/v1beta1/signing_infos/{cons_address}:
+  '/cosmos/slashing/v1beta1/signing_infos/{cons_address}':
     get:
       summary: SigningInfo queries the signing info of given cons address
       operationId: CosmosSlashingV1Beta1SigningInfo
@@ -31029,7 +31049,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/staking/v1beta1/delegations/{delegator_addr}:
+  '/cosmos/staking/v1beta1/delegations/{delegator_addr}':
     get:
       summary: >-
         DelegatorDelegations queries all delegations of a given delegator
@@ -31372,7 +31392,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/staking/v1beta1/delegators/{delegator_addr}/redelegations:
+  '/cosmos/staking/v1beta1/delegators/{delegator_addr}/redelegations':
     get:
       summary: Redelegations queries redelegations of given address.
       operationId: CosmosStakingV1Beta1Redelegations
@@ -31781,7 +31801,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/staking/v1beta1/delegators/{delegator_addr}/unbonding_delegations:
+  '/cosmos/staking/v1beta1/delegators/{delegator_addr}/unbonding_delegations':
     get:
       summary: >-
         DelegatorUnbondingDelegations queries all unbonding delegations of a
@@ -32122,7 +32142,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/staking/v1beta1/delegators/{delegator_addr}/validators:
+  '/cosmos/staking/v1beta1/delegators/{delegator_addr}/validators':
     get:
       summary: |-
         DelegatorValidators queries all validators info for given delegator
@@ -32609,7 +32629,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/staking/v1beta1/delegators/{delegator_addr}/validators/{validator_addr}:
+  '/cosmos/staking/v1beta1/delegators/{delegator_addr}/validators/{validator_addr}':
     get:
       summary: |-
         DelegatorValidator queries validator info for given delegator validator
@@ -33000,7 +33020,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/staking/v1beta1/historical_info/{height}:
+  '/cosmos/staking/v1beta1/historical_info/{height}':
     get:
       summary: HistoricalInfo queries the historical info for given height.
       operationId: CosmosStakingV1Beta1HistoricalInfo
@@ -34429,7 +34449,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/staking/v1beta1/validators/{validator_addr}:
+  '/cosmos/staking/v1beta1/validators/{validator_addr}':
     get:
       summary: Validator queries validator info for given validator address.
       operationId: CosmosStakingV1Beta1Validator
@@ -34813,7 +34833,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/staking/v1beta1/validators/{validator_addr}/delegations:
+  '/cosmos/staking/v1beta1/validators/{validator_addr}/delegations':
     get:
       summary: ValidatorDelegations queries delegate info for given validator.
       operationId: CosmosStakingV1Beta1ValidatorDelegations
@@ -35151,7 +35171,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /cosmos/staking/v1beta1/validators/{validator_addr}/delegations/{delegator_addr}:
+  '/cosmos/staking/v1beta1/validators/{validator_addr}/delegations/{delegator_addr}':
     get:
       summary: Delegation queries delegate info for given validator delegator pair.
       operationId: CosmosStakingV1Beta1Delegation
@@ -35414,7 +35434,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/staking/v1beta1/validators/{validator_addr}/delegations/{delegator_addr}/unbonding_delegation:
+  '/cosmos/staking/v1beta1/validators/{validator_addr}/delegations/{delegator_addr}/unbonding_delegation':
     get:
       summary: |-
         UnbondingDelegation queries unbonding info for given validator delegator
@@ -35675,7 +35695,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/staking/v1beta1/validators/{validator_addr}/unbonding_delegations:
+  '/cosmos/staking/v1beta1/validators/{validator_addr}/unbonding_delegations':
     get:
       summary: >-
         ValidatorUnbondingDelegations queries unbonding delegations of a
@@ -36801,7 +36821,7 @@ paths:
                     description: Response code.
                   data:
                     type: string
-                    description: Result bytes, if any.
+                    description: 'Result bytes, if any.'
                   raw_log:
                     type: string
                     description: >-
@@ -37218,7 +37238,7 @@ paths:
               RPC method.
       tags:
         - Service
-  /cosmos/tx/v1beta1/txs/block/{height}:
+  '/cosmos/tx/v1beta1/txs/block/{height}':
     get:
       summary: GetBlockWithTxs fetches a block with decoded txs.
       description: 'Since: cosmos-sdk 0.45.2'
@@ -37478,7 +37498,7 @@ paths:
           type: boolean
       tags:
         - Service
-  /cosmos/tx/v1beta1/txs/{hash}:
+  '/cosmos/tx/v1beta1/txs/{hash}':
     get:
       summary: GetTx fetches a tx by hash.
       operationId: CosmosTxV1Beta1GetTx
@@ -37674,13 +37694,13 @@ paths:
                         }
       parameters:
         - name: hash
-          description: hash is the tx hash to query, encoded as a hex string.
+          description: 'hash is the tx hash to query, encoded as a hex string.'
           in: path
           required: true
           type: string
       tags:
         - Service
-  /cosmos/upgrade/v1beta1/applied_plan/{name}:
+  '/cosmos/upgrade/v1beta1/applied_plan/{name}':
     get:
       summary: AppliedPlan queries a previously applied upgrade plan by its name.
       operationId: CosmosUpgradeV1Beta1AppliedPlan
@@ -38649,7 +38669,7 @@ paths:
           type: string
       tags:
         - Query
-  /cosmos/upgrade/v1beta1/upgraded_consensus_state/{last_height}:
+  '/cosmos/upgrade/v1beta1/upgraded_consensus_state/{last_height}':
     get:
       summary: >-
         UpgradedConsensusState queries the consensus state that will serve
@@ -38875,7 +38895,7 @@ paths:
           format: int64
       tags:
         - Query
-  /evmos/evm/v1/account/{address}:
+  '/evmos/evm/v1/account/{address}':
     get:
       summary: Account queries an Ethereum account.
       operationId: EthermintEvmV1Account
@@ -39091,7 +39111,7 @@ paths:
           type: string
       tags:
         - Query
-  /evmos/evm/v1/balances/{address}:
+  '/evmos/evm/v1/balances/{address}':
     get:
       summary: |-
         Balance queries the balance of a the EVM denomination for a single
@@ -39507,7 +39527,7 @@ paths:
                         }
       tags:
         - Query
-  /evmos/evm/v1/codes/{address}:
+  '/evmos/evm/v1/codes/{address}':
     get:
       summary: Code queries the balance of all coins for a single account.
       operationId: EthermintEvmV1Code
@@ -39717,7 +39737,7 @@ paths:
           type: string
       tags:
         - Query
-  /evmos/evm/v1/cosmos_account/{address}:
+  '/evmos/evm/v1/cosmos_account/{address}':
     get:
       summary: CosmosAccount queries an Ethereum account's Cosmos Address.
       operationId: EthermintEvmV1CosmosAccount
@@ -41204,7 +41224,7 @@ paths:
                         }
       tags:
         - Query
-  /evmos/evm/v1/storage/{address}/{key}:
+  '/evmos/evm/v1/storage/{address}/{key}':
     get:
       summary: Storage queries the balance of all coins for a single account.
       operationId: EthermintEvmV1Storage
@@ -41661,13 +41681,13 @@ paths:
           required: false
           type: boolean
         - name: trace_config.limit
-          description: limit defines the maximum length of output, but zero means unlimited
+          description: 'limit defines the maximum length of output, but zero means unlimited'
           in: query
           required: false
           type: integer
           format: int32
         - name: trace_config.overrides.homestead_block
-          description: homestead_block switch (nil no fork, 0 = already homestead)
+          description: 'homestead_block switch (nil no fork, 0 = already homestead)'
           in: query
           required: false
           type: string
@@ -41782,12 +41802,12 @@ paths:
           required: false
           type: string
         - name: trace_config.overrides.shanghai_block
-          description: shanghai_block switch block (nil = no fork, 0 = already on shanghai)
+          description: 'shanghai_block switch block (nil = no fork, 0 = already on shanghai)'
           in: query
           required: false
           type: string
         - name: trace_config.overrides.cancun_block
-          description: cancun_block switch block (nil = no fork, 0 = already on cancun)
+          description: 'cancun_block switch block (nil = no fork, 0 = already on cancun)'
           in: query
           required: false
           type: string
@@ -42158,13 +42178,13 @@ paths:
           required: false
           type: boolean
         - name: trace_config.limit
-          description: limit defines the maximum length of output, but zero means unlimited
+          description: 'limit defines the maximum length of output, but zero means unlimited'
           in: query
           required: false
           type: integer
           format: int32
         - name: trace_config.overrides.homestead_block
-          description: homestead_block switch (nil no fork, 0 = already homestead)
+          description: 'homestead_block switch (nil no fork, 0 = already homestead)'
           in: query
           required: false
           type: string
@@ -42279,12 +42299,12 @@ paths:
           required: false
           type: string
         - name: trace_config.overrides.shanghai_block
-          description: shanghai_block switch block (nil = no fork, 0 = already on shanghai)
+          description: 'shanghai_block switch block (nil = no fork, 0 = already on shanghai)'
           in: query
           required: false
           type: string
         - name: trace_config.overrides.cancun_block
-          description: cancun_block switch block (nil = no fork, 0 = already on cancun)
+          description: 'cancun_block switch block (nil = no fork, 0 = already on cancun)'
           in: query
           required: false
           type: string
@@ -42336,7 +42356,7 @@ paths:
           format: int64
       tags:
         - Query
-  /evmos/evm/v1/validator_account/{cons_address}:
+  '/evmos/evm/v1/validator_account/{cons_address}':
     get:
       summary: >-
         ValidatorAccount queries an Ethereum account's from a validator
@@ -42843,7 +42863,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /evmos/claims/v1/claims_records/{address}:
+  '/evmos/claims/v1/claims_records/{address}':
     get:
       summary: ClaimsRecord returns the claims record for a given address
       operationId: EvmosClaimsV1ClaimsRecord
@@ -43252,7 +43272,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /evmos/erc20/v1/token_pairs/{token}:
+  '/evmos/erc20/v1/token_pairs/{token}':
     get:
       summary: TokenPair retrieves a registered token pair
       operationId: EvmosErc20V1TokenPair
@@ -43488,7 +43508,7 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
-  /evmos/vesting/v1/balances/{address}:
+  '/evmos/vesting/v1/balances/{address}':
     get:
       summary: >-
         Balances retrieves the unvested, vested and locked tokens for a vesting
@@ -44642,7 +44662,7 @@ paths:
           type: string
       tags:
         - Msg
-  /ibc/apps/interchain_accounts/controller/v1/owners/{owner}/connections/{connection_id}:
+  '/ibc/apps/interchain_accounts/controller/v1/owners/{owner}/connections/{connection_id}':
     get:
       summary: >-
         InterchainAccount returns the interchain account address for a given
@@ -45506,7 +45526,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}:
+  '/ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}':
     get:
       summary: Channel queries an IBC Channel.
       operationId: IbcCoreChannelV1Channel
@@ -45829,7 +45849,7 @@ paths:
           type: string
       tags:
         - Query
-  /ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/client_state:
+  '/ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/client_state':
     get:
       summary: >-
         ChannelClientState queries for the client state for the channel
@@ -46263,7 +46283,7 @@ paths:
           type: string
       tags:
         - Query
-  /ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/consensus_state/revision/{revision_number}/height/{revision_height}:
+  '/ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/consensus_state/revision/{revision_number}/height/{revision_height}':
     get:
       summary: |-
         ChannelConsensusState queries for the consensus state for the channel
@@ -46694,7 +46714,7 @@ paths:
           format: uint64
       tags:
         - Query
-  /ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/next_sequence:
+  '/ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/next_sequence':
     get:
       summary: >-
         NextSequenceReceive returns the next receive sequence for a given
@@ -46944,7 +46964,7 @@ paths:
           type: string
       tags:
         - Query
-  /ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/packet_acknowledgements:
+  '/ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/packet_acknowledgements':
     get:
       summary: >-
         PacketAcknowledgements returns all the packet acknowledgements
@@ -47311,7 +47331,7 @@ paths:
           collectionFormat: multi
       tags:
         - Query
-  /ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/packet_acks/{sequence}:
+  '/ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/packet_acks/{sequence}':
     get:
       summary: PacketAcknowledgement queries a stored packet acknowledgement hash.
       operationId: IbcCoreChannelV1PacketAcknowledgement
@@ -47569,7 +47589,7 @@ paths:
           format: uint64
       tags:
         - Query
-  /ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/packet_commitments:
+  '/ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/packet_commitments':
     get:
       summary: |-
         PacketCommitments returns all the packet commitments hashes associated
@@ -47925,7 +47945,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/packet_commitments/{packet_ack_sequences}/unreceived_acks:
+  '/ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/packet_commitments/{packet_ack_sequences}/unreceived_acks':
     get:
       summary: >-
         UnreceivedAcks returns all the unreceived IBC acknowledgements
@@ -48185,7 +48205,7 @@ paths:
           minItems: 1
       tags:
         - Query
-  /ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/packet_commitments/{packet_commitment_sequences}/unreceived_packets:
+  '/ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/packet_commitments/{packet_commitment_sequences}/unreceived_packets':
     get:
       summary: >-
         UnreceivedPackets returns all the unreceived IBC packets associated with
@@ -48445,7 +48465,7 @@ paths:
           minItems: 1
       tags:
         - Query
-  /ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/packet_commitments/{sequence}:
+  '/ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/packet_commitments/{sequence}':
     get:
       summary: PacketCommitment queries a stored packet commitment hash.
       operationId: IbcCoreChannelV1PacketCommitment
@@ -48704,7 +48724,7 @@ paths:
           format: uint64
       tags:
         - Query
-  /ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/packet_receipts/{sequence}:
+  '/ibc/core/channel/v1/channels/{channel_id}/ports/{port_id}/packet_receipts/{sequence}':
     get:
       summary: >-
         PacketReceipt queries if a given packet sequence has been received on
@@ -48966,7 +48986,7 @@ paths:
           format: uint64
       tags:
         - Query
-  /ibc/core/channel/v1/connections/{connection}/channels:
+  '/ibc/core/channel/v1/connections/{connection}/channels':
     get:
       summary: |-
         ConnectionChannels queries all the channels associated with a connection
@@ -49846,7 +49866,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /ibc/core/client/v1/client_states/{client_id}:
+  '/ibc/core/client/v1/client_states/{client_id}':
     get:
       summary: ClientState queries an IBC light client.
       operationId: IbcCoreClientV1ClientState
@@ -50260,7 +50280,7 @@ paths:
           type: string
       tags:
         - Query
-  /ibc/core/client/v1/client_status/{client_id}:
+  '/ibc/core/client/v1/client_status/{client_id}':
     get:
       summary: Status queries the status of an IBC client.
       operationId: IbcCoreClientV1ClientStatus
@@ -50470,7 +50490,7 @@ paths:
           type: string
       tags:
         - Query
-  /ibc/core/client/v1/consensus_states/{client_id}:
+  '/ibc/core/client/v1/consensus_states/{client_id}':
     get:
       summary: |-
         ConsensusStates queries all the consensus state associated with a given
@@ -50979,7 +50999,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /ibc/core/client/v1/consensus_states/{client_id}/heights:
+  '/ibc/core/client/v1/consensus_states/{client_id}/heights':
     get:
       summary: >-
         ConsensusStateHeights queries the height of every consensus states
@@ -51310,7 +51330,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /ibc/core/client/v1/consensus_states/{client_id}/revision/{revision_number}/height/{revision_height}:
+  '/ibc/core/client/v1/consensus_states/{client_id}/revision/{revision_number}/height/{revision_height}':
     get:
       summary: >-
         ConsensusState queries a consensus state associated with a client state
@@ -52701,7 +52721,7 @@ paths:
                         }
       tags:
         - Query
-  /ibc/core/connection/v1/client_connections/{client_id}:
+  '/ibc/core/connection/v1/client_connections/{client_id}':
     get:
       summary: |-
         ClientConnections queries the connection paths associated with a client
@@ -53351,7 +53371,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /ibc/core/connection/v1/connections/{connection_id}:
+  '/ibc/core/connection/v1/connections/{connection_id}':
     get:
       summary: Connection queries an IBC connection end.
       operationId: IbcCoreConnectionV1Connection
@@ -53688,7 +53708,7 @@ paths:
           type: string
       tags:
         - Query
-  /ibc/core/connection/v1/connections/{connection_id}/client_state:
+  '/ibc/core/connection/v1/connections/{connection_id}/client_state':
     get:
       summary: |-
         ConnectionClientState queries the client state associated with the
@@ -54115,7 +54135,7 @@ paths:
           type: string
       tags:
         - Query
-  /ibc/core/connection/v1/connections/{connection_id}/consensus_state/revision/{revision_number}/height/{revision_height}:
+  '/ibc/core/connection/v1/connections/{connection_id}/consensus_state/revision/{revision_number}/height/{revision_height}':
     get:
       summary: |-
         ConnectionConsensusState queries the consensus state associated with the
@@ -55753,6 +55773,11 @@ definitions:
                   type: string
                 commission_rate:
                   type: string
+                max_withdrawal_amount:
+                  type: string
+                  title: >-
+                    max_withdrawal_amount is the upper withdrawal limit, zero
+                    means no limit
             title: info is the token information on different chains
   core.bridge.QueryGetTokenInfoResponse:
     type: object
@@ -55776,6 +55801,11 @@ definitions:
             type: string
           commission_rate:
             type: string
+          max_withdrawal_amount:
+            type: string
+            title: >-
+              max_withdrawal_amount is the upper withdrawal limit, zero means no
+              limit
   core.bridge.QueryGetTokenPairResponse:
     type: object
     properties:
@@ -55798,6 +55828,11 @@ definitions:
             type: string
           commission_rate:
             type: string
+          max_withdrawal_amount:
+            type: string
+            title: >-
+              max_withdrawal_amount is the upper withdrawal limit, zero means no
+              limit
   core.bridge.QueryGetTokensResponse:
     type: object
     properties:
@@ -55841,6 +55876,11 @@ definitions:
                     type: string
                   commission_rate:
                     type: string
+                  max_withdrawal_amount:
+                    type: string
+                    title: >-
+                      max_withdrawal_amount is the upper withdrawal limit, zero
+                      means no limit
               title: info is the token information on different chains
       pagination:
         type: object
@@ -56368,6 +56408,11 @@ definitions:
               type: string
             commission_rate:
               type: string
+            max_withdrawal_amount:
+              type: string
+              title: >-
+                max_withdrawal_amount is the upper withdrawal limit, zero means
+                no limit
         title: info is the token information on different chains
   core.bridge.TokenInfo:
     type: object
@@ -56388,6 +56433,11 @@ definitions:
         type: string
       commission_rate:
         type: string
+      max_withdrawal_amount:
+        type: string
+        title: >-
+          max_withdrawal_amount is the upper withdrawal limit, zero means no
+          limit
   core.bridge.TokenMetadata:
     type: object
     properties:
@@ -57962,16 +58012,16 @@ definitions:
             swap_deadline:
               type: string
               format: uint64
-              title: timestamp until when the swap is valid, provided by
+              title: 'timestamp until when the swap is valid, provided by'
             swap_out_amount:
               type: string
-              title: minimum acceptable output amount, provided by backend
+              title: 'minimum acceptable output amount, provided by backend'
             final_deposit_tx_hash:
               type: string
               title: do not used on the submit endpoint
             is_fee_distribution:
               type: boolean
-              title: if true, we need to update the fee store on the bridge module
+              title: 'if true, we need to update the fee store on the bridge module'
       pagination:
         type: object
         properties:
@@ -58066,16 +58116,16 @@ definitions:
           swap_deadline:
             type: string
             format: uint64
-            title: timestamp until when the swap is valid, provided by
+            title: 'timestamp until when the swap is valid, provided by'
           swap_out_amount:
             type: string
-            title: minimum acceptable output amount, provided by backend
+            title: 'minimum acceptable output amount, provided by backend'
           final_deposit_tx_hash:
             type: string
             title: do not used on the submit endpoint
           is_fee_distribution:
             type: boolean
-            title: if true, we need to update the fee store on the bridge module
+            title: 'if true, we need to update the fee store on the bridge module'
   core.swap.QueryParamsResponse:
     type: object
     properties:
@@ -58161,16 +58211,16 @@ definitions:
       swap_deadline:
         type: string
         format: uint64
-        title: timestamp until when the swap is valid, provided by
+        title: 'timestamp until when the swap is valid, provided by'
       swap_out_amount:
         type: string
-        title: minimum acceptable output amount, provided by backend
+        title: 'minimum acceptable output amount, provided by backend'
       final_deposit_tx_hash:
         type: string
         title: do not used on the submit endpoint
       is_fee_distribution:
         type: boolean
-        title: if true, we need to update the fee store on the bridge module
+        title: 'if true, we need to update the fee store on the bridge module'
   cosmos.accumulator.Admin:
     type: object
     properties:
@@ -58202,10 +58252,6 @@ definitions:
         format: int64
       denom:
         type: string
-  cosmos.accumulator.MsgAddAdminResponse:
-    type: object
-  cosmos.accumulator.MsgBurnTokensResponse:
-    type: object
   cosmos.accumulator.Params:
     type: object
     properties:
@@ -59352,21 +59398,6 @@ definitions:
       and granter.
 
       It is used in genesis.proto and query.proto
-  cosmos.authz.v1beta1.MsgExecResponse:
-    type: object
-    properties:
-      results:
-        type: array
-        items:
-          type: string
-          format: byte
-    description: MsgExecResponse defines the Msg/MsgExecResponse response type.
-  cosmos.authz.v1beta1.MsgGrantResponse:
-    type: object
-    description: MsgGrantResponse defines the Msg/MsgGrant response type.
-  cosmos.authz.v1beta1.MsgRevokeResponse:
-    type: object
-    description: MsgRevokeResponse defines the Msg/MsgRevokeResponse response type.
   cosmos.authz.v1beta1.QueryGranteeGrantsResponse:
     type: object
     properties:
@@ -60047,26 +60078,6 @@ definitions:
     description: |-
       DenomUnit represents a struct that describes a given
       denomination unit of the basic token.
-  cosmos.bank.v1beta1.Input:
-    type: object
-    properties:
-      address:
-        type: string
-      coins:
-        type: array
-        items:
-          type: object
-          properties:
-            denom:
-              type: string
-            amount:
-              type: string
-          description: |-
-            Coin defines a token with a denomination and an amount.
-
-            NOTE: The amount field is an Int which implements the custom method
-            signatures required by gogoproto.
-    description: Input models transaction input.
   cosmos.bank.v1beta1.Metadata:
     type: object
     properties:
@@ -60151,32 +60162,6 @@ definitions:
     description: |-
       Metadata represents a struct that describes
       a basic token.
-  cosmos.bank.v1beta1.MsgMultiSendResponse:
-    type: object
-    description: MsgMultiSendResponse defines the Msg/MultiSend response type.
-  cosmos.bank.v1beta1.MsgSendResponse:
-    type: object
-    description: MsgSendResponse defines the Msg/Send response type.
-  cosmos.bank.v1beta1.Output:
-    type: object
-    properties:
-      address:
-        type: string
-      coins:
-        type: array
-        items:
-          type: object
-          properties:
-            denom:
-              type: string
-            amount:
-              type: string
-          description: |-
-            Coin defines a token with a denomination and an amount.
-
-            NOTE: The amount field is an Int which implements the custom method
-            signatures required by gogoproto.
-    description: Output models transaction outputs.
   cosmos.bank.v1beta1.Params:
     type: object
     properties:
@@ -61120,7 +61105,7 @@ definitions:
                                           - BLOCK_ID_FLAG_COMMIT
                                           - BLOCK_ID_FLAG_NIL
                                         default: BLOCK_ID_FLAG_UNKNOWN
-                                        title: >-
+                                        description: >-
                                           BlockIdFlag indicates which BlcokID the
                                           signature is for
                                       validator_address:
@@ -61271,7 +61256,7 @@ definitions:
                     - BLOCK_ID_FLAG_COMMIT
                     - BLOCK_ID_FLAG_NIL
                   default: BLOCK_ID_FLAG_UNKNOWN
-                  title: BlockIdFlag indicates which BlcokID the signature is for
+                  description: BlockIdFlag indicates which BlcokID the signature is for
                 validator_address:
                   type: string
                   format: byte
@@ -61696,7 +61681,7 @@ definitions:
                                               - BLOCK_ID_FLAG_COMMIT
                                               - BLOCK_ID_FLAG_NIL
                                             default: BLOCK_ID_FLAG_UNKNOWN
-                                            title: >-
+                                            description: >-
                                               BlockIdFlag indicates which BlcokID the
                                               signature is for
                                           validator_address:
@@ -61847,7 +61832,7 @@ definitions:
                         - BLOCK_ID_FLAG_COMMIT
                         - BLOCK_ID_FLAG_NIL
                       default: BLOCK_ID_FLAG_UNKNOWN
-                      title: BlockIdFlag indicates which BlcokID the signature is for
+                      description: BlockIdFlag indicates which BlcokID the signature is for
                     validator_address:
                       type: string
                       format: byte
@@ -62258,7 +62243,7 @@ definitions:
                                               - BLOCK_ID_FLAG_COMMIT
                                               - BLOCK_ID_FLAG_NIL
                                             default: BLOCK_ID_FLAG_UNKNOWN
-                                            title: >-
+                                            description: >-
                                               BlockIdFlag indicates which BlcokID the
                                               signature is for
                                           validator_address:
@@ -62409,7 +62394,7 @@ definitions:
                         - BLOCK_ID_FLAG_COMMIT
                         - BLOCK_ID_FLAG_NIL
                       default: BLOCK_ID_FLAG_UNKNOWN
-                      title: BlockIdFlag indicates which BlcokID the signature is for
+                      description: BlockIdFlag indicates which BlcokID the signature is for
                     validator_address:
                       type: string
                       format: byte
@@ -62839,7 +62824,7 @@ definitions:
                                               - BLOCK_ID_FLAG_COMMIT
                                               - BLOCK_ID_FLAG_NIL
                                             default: BLOCK_ID_FLAG_UNKNOWN
-                                            title: >-
+                                            description: >-
                                               BlockIdFlag indicates which BlcokID the
                                               signature is for
                                           validator_address:
@@ -62990,7 +62975,7 @@ definitions:
                         - BLOCK_ID_FLAG_COMMIT
                         - BLOCK_ID_FLAG_NIL
                       default: BLOCK_ID_FLAG_UNKNOWN
-                      title: BlockIdFlag indicates which BlcokID the signature is for
+                      description: BlockIdFlag indicates which BlcokID the signature is for
                     validator_address:
                       type: string
                       format: byte
@@ -63401,7 +63386,7 @@ definitions:
                                               - BLOCK_ID_FLAG_COMMIT
                                               - BLOCK_ID_FLAG_NIL
                                             default: BLOCK_ID_FLAG_UNKNOWN
-                                            title: >-
+                                            description: >-
                                               BlockIdFlag indicates which BlcokID the
                                               signature is for
                                           validator_address:
@@ -63552,7 +63537,7 @@ definitions:
                         - BLOCK_ID_FLAG_COMMIT
                         - BLOCK_ID_FLAG_NIL
                       default: BLOCK_ID_FLAG_UNKNOWN
-                      title: BlockIdFlag indicates which BlcokID the signature is for
+                      description: BlockIdFlag indicates which BlcokID the signature is for
                     validator_address:
                       type: string
                       format: byte
@@ -64890,7 +64875,7 @@ definitions:
                                           - BLOCK_ID_FLAG_COMMIT
                                           - BLOCK_ID_FLAG_NIL
                                         default: BLOCK_ID_FLAG_UNKNOWN
-                                        title: >-
+                                        description: >-
                                           BlockIdFlag indicates which BlcokID the
                                           signature is for
                                       validator_address:
@@ -65041,7 +65026,7 @@ definitions:
                     - BLOCK_ID_FLAG_COMMIT
                     - BLOCK_ID_FLAG_NIL
                   default: BLOCK_ID_FLAG_UNKNOWN
-                  title: BlockIdFlag indicates which BlcokID the signature is for
+                  description: BlockIdFlag indicates which BlcokID the signature is for
                 validator_address:
                   type: string
                   format: byte
@@ -65080,7 +65065,7 @@ definitions:
       - BLOCK_ID_FLAG_COMMIT
       - BLOCK_ID_FLAG_NIL
     default: BLOCK_ID_FLAG_UNKNOWN
-    title: BlockIdFlag indicates which BlcokID the signature is for
+    description: BlockIdFlag indicates which BlcokID the signature is for
   tendermint.types.Commit:
     type: object
     properties:
@@ -65120,7 +65105,7 @@ definitions:
                 - BLOCK_ID_FLAG_COMMIT
                 - BLOCK_ID_FLAG_NIL
               default: BLOCK_ID_FLAG_UNKNOWN
-              title: BlockIdFlag indicates which BlcokID the signature is for
+              description: BlockIdFlag indicates which BlcokID the signature is for
             validator_address:
               type: string
               format: byte
@@ -65145,7 +65130,7 @@ definitions:
           - BLOCK_ID_FLAG_COMMIT
           - BLOCK_ID_FLAG_NIL
         default: BLOCK_ID_FLAG_UNKNOWN
-        title: BlockIdFlag indicates which BlcokID the signature is for
+        description: BlockIdFlag indicates which BlcokID the signature is for
       validator_address:
         type: string
         format: byte
@@ -65569,7 +65554,7 @@ definitions:
                                 - BLOCK_ID_FLAG_COMMIT
                                 - BLOCK_ID_FLAG_NIL
                               default: BLOCK_ID_FLAG_UNKNOWN
-                              title: >-
+                              description: >-
                                 BlockIdFlag indicates which BlcokID the
                                 signature is for
                             validator_address:
@@ -65954,7 +65939,7 @@ definitions:
                                       - BLOCK_ID_FLAG_COMMIT
                                       - BLOCK_ID_FLAG_NIL
                                     default: BLOCK_ID_FLAG_UNKNOWN
-                                    title: >-
+                                    description: >-
                                       BlockIdFlag indicates which BlcokID the
                                       signature is for
                                   validator_address:
@@ -66283,7 +66268,7 @@ definitions:
                         - BLOCK_ID_FLAG_COMMIT
                         - BLOCK_ID_FLAG_NIL
                       default: BLOCK_ID_FLAG_UNKNOWN
-                      title: BlockIdFlag indicates which BlcokID the signature is for
+                      description: BlockIdFlag indicates which BlcokID the signature is for
                     validator_address:
                       type: string
                       format: byte
@@ -66485,7 +66470,7 @@ definitions:
                             - BLOCK_ID_FLAG_COMMIT
                             - BLOCK_ID_FLAG_NIL
                           default: BLOCK_ID_FLAG_UNKNOWN
-                          title: >-
+                          description: >-
                             BlockIdFlag indicates which BlcokID the signature is
                             for
                         validator_address:
@@ -66731,7 +66716,7 @@ definitions:
                     - BLOCK_ID_FLAG_COMMIT
                     - BLOCK_ID_FLAG_NIL
                   default: BLOCK_ID_FLAG_UNKNOWN
-                  title: BlockIdFlag indicates which BlcokID the signature is for
+                  description: BlockIdFlag indicates which BlcokID the signature is for
                 validator_address:
                   type: string
                   format: byte
@@ -66904,9 +66889,6 @@ definitions:
       application's
 
       state transition machine.
-  cosmos.crisis.v1beta1.MsgVerifyInvariantResponse:
-    type: object
-    description: MsgVerifyInvariantResponse defines the Msg/VerifyInvariant response type.
   cosmos.base.v1beta1.DecCoin:
     type: object
     properties:
@@ -66941,58 +66923,6 @@ definitions:
     description: |-
       DelegationDelegatorReward represents the properties
       of a delegator's delegation reward.
-  cosmos.distribution.v1beta1.MsgFundCommunityPoolResponse:
-    type: object
-    description: >-
-      MsgFundCommunityPoolResponse defines the Msg/FundCommunityPool response
-      type.
-  cosmos.distribution.v1beta1.MsgSetWithdrawAddressResponse:
-    type: object
-    description: >-
-      MsgSetWithdrawAddressResponse defines the Msg/SetWithdrawAddress response
-      type.
-  cosmos.distribution.v1beta1.MsgWithdrawDelegatorRewardResponse:
-    type: object
-    properties:
-      amount:
-        type: array
-        items:
-          type: object
-          properties:
-            denom:
-              type: string
-            amount:
-              type: string
-          description: |-
-            Coin defines a token with a denomination and an amount.
-
-            NOTE: The amount field is an Int which implements the custom method
-            signatures required by gogoproto.
-        title: 'Since: cosmos-sdk 0.46'
-    description: >-
-      MsgWithdrawDelegatorRewardResponse defines the Msg/WithdrawDelegatorReward
-      response type.
-  cosmos.distribution.v1beta1.MsgWithdrawValidatorCommissionResponse:
-    type: object
-    properties:
-      amount:
-        type: array
-        items:
-          type: object
-          properties:
-            denom:
-              type: string
-            amount:
-              type: string
-          description: |-
-            Coin defines a token with a denomination and an amount.
-
-            NOTE: The amount field is an Int which implements the custom method
-            signatures required by gogoproto.
-        title: 'Since: cosmos-sdk 0.46'
-    description: >-
-      MsgWithdrawValidatorCommissionResponse defines the
-      Msg/WithdrawValidatorCommission response type.
   cosmos.distribution.v1beta1.Params:
     type: object
     properties:
@@ -67332,14 +67262,6 @@ definitions:
       Height is implicit within the store key.
       This is needed to calculate appropriate amount of staking tokens
       for delegations which are withdrawn after a slash has occurred.
-  cosmos.evidence.v1beta1.MsgSubmitEvidenceResponse:
-    type: object
-    properties:
-      hash:
-        type: string
-        format: byte
-        description: hash defines the hash of the evidence.
-    description: MsgSubmitEvidenceResponse defines the Msg/SubmitEvidence response type.
   cosmos.evidence.v1beta1.QueryAllEvidenceResponse:
     type: object
     properties:
@@ -67607,7 +67529,7 @@ definitions:
           grantee is the address of the user being granted an allowance of
           another user's funds.
       allowance:
-        description: allowance can be any of basic, periodic, allowed fee allowance.
+        description: 'allowance can be any of basic, periodic, allowed fee allowance.'
         type: object
         properties:
           '@type':
@@ -67664,16 +67586,6 @@ definitions:
               used with implementation specific semantics.
         additionalProperties: {}
     title: Grant is stored in the KVStore to record a grant with full context
-  cosmos.feegrant.v1beta1.MsgGrantAllowanceResponse:
-    type: object
-    description: >-
-      MsgGrantAllowanceResponse defines the Msg/GrantAllowanceResponse response
-      type.
-  cosmos.feegrant.v1beta1.MsgRevokeAllowanceResponse:
-    type: object
-    description: >-
-      MsgRevokeAllowanceResponse defines the Msg/RevokeAllowanceResponse
-      response type.
   cosmos.feegrant.v1beta1.QueryAllowanceResponse:
     type: object
     properties:
@@ -67692,7 +67604,7 @@ definitions:
               grantee is the address of the user being granted an allowance of
               another user's funds.
           allowance:
-            description: allowance can be any of basic, periodic, allowed fee allowance.
+            description: 'allowance can be any of basic, periodic, allowed fee allowance.'
             type: object
             properties:
               '@type':
@@ -67774,7 +67686,7 @@ definitions:
                 grantee is the address of the user being granted an allowance of
                 another user's funds.
             allowance:
-              description: allowance can be any of basic, periodic, allowed fee allowance.
+              description: 'allowance can be any of basic, periodic, allowed fee allowance.'
               type: object
               properties:
                 '@type':
@@ -67881,7 +67793,7 @@ definitions:
                 grantee is the address of the user being granted an allowance of
                 another user's funds.
             allowance:
-              description: allowance can be any of basic, periodic, allowed fee allowance.
+              description: 'allowance can be any of basic, periodic, allowed fee allowance.'
               type: object
               properties:
                 '@type':
@@ -68016,27 +67928,6 @@ definitions:
           value: 2
            months.
     description: DepositParams defines the params for deposits on governance proposals.
-  cosmos.gov.v1.MsgDepositResponse:
-    type: object
-    description: MsgDepositResponse defines the Msg/Deposit response type.
-  cosmos.gov.v1.MsgExecLegacyContentResponse:
-    type: object
-    description: >-
-      MsgExecLegacyContentResponse defines the Msg/ExecLegacyContent response
-      type.
-  cosmos.gov.v1.MsgSubmitProposalResponse:
-    type: object
-    properties:
-      proposal_id:
-        type: string
-        format: uint64
-    description: MsgSubmitProposalResponse defines the Msg/SubmitProposal response type.
-  cosmos.gov.v1.MsgVoteResponse:
-    type: object
-    description: MsgVoteResponse defines the Msg/Vote response type.
-  cosmos.gov.v1.MsgVoteWeightedResponse:
-    type: object
-    description: MsgVoteWeightedResponse defines the Msg/VoteWeighted response type.
   cosmos.gov.v1.Proposal:
     type: object
     properties:
@@ -69301,25 +69192,6 @@ definitions:
           value: 2
            months.
     description: DepositParams defines the params for deposits on governance proposals.
-  cosmos.gov.v1beta1.MsgDepositResponse:
-    type: object
-    description: MsgDepositResponse defines the Msg/Deposit response type.
-  cosmos.gov.v1beta1.MsgSubmitProposalResponse:
-    type: object
-    properties:
-      proposal_id:
-        type: string
-        format: uint64
-    description: MsgSubmitProposalResponse defines the Msg/SubmitProposal response type.
-  cosmos.gov.v1beta1.MsgVoteResponse:
-    type: object
-    description: MsgVoteResponse defines the Msg/Vote response type.
-  cosmos.gov.v1beta1.MsgVoteWeightedResponse:
-    type: object
-    description: |-
-      MsgVoteWeightedResponse defines the Msg/VoteWeighted response type.
-
-      Since: cosmos-sdk 0.43
   cosmos.gov.v1beta1.Proposal:
     type: object
     properties:
@@ -71156,9 +71028,6 @@ definitions:
       the subspace.
 
       Since: cosmos-sdk 0.46
-  cosmos.slashing.v1beta1.MsgUnjailResponse:
-    type: object
-    title: MsgUnjailResponse defines the Msg/Unjail response type
   cosmos.slashing.v1beta1.Params:
     type: object
     properties:
@@ -71412,7 +71281,7 @@ definitions:
         properties:
           rate:
             type: string
-            description: rate is the commission rate charged to delegators, as a fraction.
+            description: 'rate is the commission rate charged to delegators, as a fraction.'
           max_rate:
             type: string
             description: >-
@@ -71433,7 +71302,7 @@ definitions:
     properties:
       rate:
         type: string
-        description: rate is the commission rate charged to delegators, as a fraction.
+        description: 'rate is the commission rate charged to delegators, as a fraction.'
       max_rate:
         type: string
         description: >-
@@ -71824,33 +71693,6 @@ definitions:
       recent HistoricalInfo
 
       (`n` is set by the staking module's `historical_entries` parameter).
-  cosmos.staking.v1beta1.MsgBeginRedelegateResponse:
-    type: object
-    properties:
-      completion_time:
-        type: string
-        format: date-time
-    description: MsgBeginRedelegateResponse defines the Msg/BeginRedelegate response type.
-  cosmos.staking.v1beta1.MsgCancelUnbondingDelegationResponse:
-    type: object
-    description: 'Since: cosmos-sdk 0.46'
-    title: MsgCancelUnbondingDelegationResponse
-  cosmos.staking.v1beta1.MsgCreateValidatorResponse:
-    type: object
-    description: MsgCreateValidatorResponse defines the Msg/CreateValidator response type.
-  cosmos.staking.v1beta1.MsgDelegateResponse:
-    type: object
-    description: MsgDelegateResponse defines the Msg/Delegate response type.
-  cosmos.staking.v1beta1.MsgEditValidatorResponse:
-    type: object
-    description: MsgEditValidatorResponse defines the Msg/EditValidator response type.
-  cosmos.staking.v1beta1.MsgUndelegateResponse:
-    type: object
-    properties:
-      completion_time:
-        type: string
-        format: date-time
-    description: MsgUndelegateResponse defines the Msg/Undelegate response type.
   cosmos.staking.v1beta1.Params:
     type: object
     properties:
@@ -74349,7 +74191,7 @@ definitions:
         description: Response code.
       data:
         type: string
-        description: Result bytes, if any.
+        description: 'Result bytes, if any.'
       raw_log:
         type: string
         description: |-
@@ -74778,7 +74620,7 @@ definitions:
             description: Response code.
           data:
             type: string
-            description: Result bytes, if any.
+            description: 'Result bytes, if any.'
           raw_log:
             type: string
             description: |-
@@ -75428,7 +75270,7 @@ definitions:
                                               - BLOCK_ID_FLAG_COMMIT
                                               - BLOCK_ID_FLAG_NIL
                                             default: BLOCK_ID_FLAG_UNKNOWN
-                                            title: >-
+                                            description: >-
                                               BlockIdFlag indicates which BlcokID the
                                               signature is for
                                           validator_address:
@@ -75579,7 +75421,7 @@ definitions:
                         - BLOCK_ID_FLAG_COMMIT
                         - BLOCK_ID_FLAG_NIL
                       default: BLOCK_ID_FLAG_UNKNOWN
-                      title: BlockIdFlag indicates which BlcokID the signature is for
+                      description: BlockIdFlag indicates which BlcokID the signature is for
                     validator_address:
                       type: string
                       format: byte
@@ -75644,7 +75486,7 @@ definitions:
             description: Response code.
           data:
             type: string
-            description: Result bytes, if any.
+            description: 'Result bytes, if any.'
           raw_log:
             type: string
             description: |-
@@ -75855,7 +75697,7 @@ definitions:
               description: Response code.
             data:
               type: string
-              description: Result bytes, if any.
+              description: 'Result bytes, if any.'
             raw_log:
               type: string
               description: |-
@@ -77791,7 +77633,7 @@ definitions:
             index:
               type: boolean
               title: nondeterministic
-          description: EventAttribute is a single key-value pair, associated with an event.
+          description: 'EventAttribute is a single key-value pair, associated with an event.'
     description: >-
       Event allows application developers to attach additional information to
 
@@ -77811,7 +77653,7 @@ definitions:
       index:
         type: boolean
         title: nondeterministic
-    description: EventAttribute is a single key-value pair, associated with an event.
+    description: 'EventAttribute is a single key-value pair, associated with an event.'
   cosmos.upgrade.v1beta1.ModuleVersion:
     type: object
     properties:
@@ -77826,18 +77668,6 @@ definitions:
       ModuleVersion specifies a module and its consensus version.
 
       Since: cosmos-sdk 0.43
-  cosmos.upgrade.v1beta1.MsgCancelUpgradeResponse:
-    type: object
-    description: |-
-      MsgCancelUpgradeResponse is the Msg/CancelUpgrade response type.
-
-      Since: cosmos-sdk 0.46
-  cosmos.upgrade.v1beta1.MsgSoftwareUpgradeResponse:
-    type: object
-    description: |-
-      MsgSoftwareUpgradeResponse is the Msg/SoftwareUpgrade response type.
-
-      Since: cosmos-sdk 0.46
   cosmos.upgrade.v1beta1.Plan:
     type: object
     properties:
@@ -78132,57 +77962,12 @@ definitions:
       Query/UpgradedConsensusState
 
       RPC method.
-  cosmos.vesting.v1beta1.MsgCreatePeriodicVestingAccountResponse:
-    type: object
-    description: >-
-      MsgCreateVestingAccountResponse defines the
-      Msg/CreatePeriodicVestingAccount
-
-      response type.
-
-
-      Since: cosmos-sdk 0.46
-  cosmos.vesting.v1beta1.MsgCreatePermanentLockedAccountResponse:
-    type: object
-    description: >-
-      MsgCreatePermanentLockedAccountResponse defines the
-      Msg/CreatePermanentLockedAccount response type.
-
-
-      Since: cosmos-sdk 0.46
-  cosmos.vesting.v1beta1.MsgCreateVestingAccountResponse:
-    type: object
-    description: >-
-      MsgCreateVestingAccountResponse defines the Msg/CreateVestingAccount
-      response type.
-  cosmos.vesting.v1beta1.Period:
-    type: object
-    properties:
-      length:
-        type: string
-        format: int64
-        description: Period duration in seconds.
-      amount:
-        type: array
-        items:
-          type: object
-          properties:
-            denom:
-              type: string
-            amount:
-              type: string
-          description: |-
-            Coin defines a token with a denomination and an amount.
-
-            NOTE: The amount field is an Int which implements the custom method
-            signatures required by gogoproto.
-    description: Period defines a length of time and amount of coins that will vest.
   ethermint.evm.v1.ChainConfig:
     type: object
     properties:
       homestead_block:
         type: string
-        title: homestead_block switch (nil no fork, 0 = already homestead)
+        title: 'homestead_block switch (nil no fork, 0 = already homestead)'
       dao_fork_block:
         type: string
         title: >-
@@ -78261,10 +78046,10 @@ definitions:
           splitter
       shanghai_block:
         type: string
-        title: shanghai_block switch block (nil = no fork, 0 = already on shanghai)
+        title: 'shanghai_block switch block (nil = no fork, 0 = already on shanghai)'
       cancun_block:
         type: string
-        title: cancun_block switch block (nil = no fork, 0 = already on cancun)
+        title: 'cancun_block switch block (nil = no fork, 0 = already on cancun)'
     description: >-
       ChainConfig defines the Ethereum ChainConfig parameters using *sdk.Int
       values
@@ -78292,7 +78077,7 @@ definitions:
       data:
         type: string
         format: byte
-        title: data which is supplied by the contract, usually ABI-encoded
+        title: 'data which is supplied by the contract, usually ABI-encoded'
       block_number:
         type: string
         format: uint64
@@ -78539,7 +78324,7 @@ definitions:
             data:
               type: string
               format: byte
-              title: data which is supplied by the contract, usually ABI-encoded
+              title: 'data which is supplied by the contract, usually ABI-encoded'
             block_number:
               type: string
               format: uint64
@@ -78601,11 +78386,6 @@ definitions:
         format: uint64
         title: gas_used specifies how much gas was consumed by the transaction
     description: MsgEthereumTxResponse defines the Msg/EthereumTx response type.
-  ethermint.evm.v1.MsgUpdateParamsResponse:
-    type: object
-    description: |-
-      MsgUpdateParamsResponse defines the response structure for executing a
-      MsgUpdateParams message.
   ethermint.evm.v1.Params:
     type: object
     properties:
@@ -78634,7 +78414,7 @@ definitions:
         properties:
           homestead_block:
             type: string
-            title: homestead_block switch (nil no fork, 0 = already homestead)
+            title: 'homestead_block switch (nil no fork, 0 = already homestead)'
           dao_fork_block:
             type: string
             title: >-
@@ -78720,7 +78500,7 @@ definitions:
               shanghai)
           cancun_block:
             type: string
-            title: cancun_block switch block (nil = no fork, 0 = already on cancun)
+            title: 'cancun_block switch block (nil = no fork, 0 = already on cancun)'
         description: >-
           ChainConfig defines the Ethereum ChainConfig parameters using *sdk.Int
           values
@@ -78829,7 +78609,7 @@ definitions:
             properties:
               homestead_block:
                 type: string
-                title: homestead_block switch (nil no fork, 0 = already homestead)
+                title: 'homestead_block switch (nil no fork, 0 = already homestead)'
               dao_fork_block:
                 type: string
                 title: >-
@@ -79005,14 +78785,14 @@ definitions:
       limit:
         type: integer
         format: int32
-        title: limit defines the maximum length of output, but zero means unlimited
+        title: 'limit defines the maximum length of output, but zero means unlimited'
       overrides:
         title: overrides can be used to execute a trace using future fork rules
         type: object
         properties:
           homestead_block:
             type: string
-            title: homestead_block switch (nil no fork, 0 = already homestead)
+            title: 'homestead_block switch (nil no fork, 0 = already homestead)'
           dao_fork_block:
             type: string
             title: >-
@@ -79098,7 +78878,7 @@ definitions:
               shanghai)
           cancun_block:
             type: string
-            title: cancun_block switch block (nil = no fork, 0 = already on cancun)
+            title: 'cancun_block switch block (nil = no fork, 0 = already on cancun)'
         description: >-
           ChainConfig defines the Ethereum ChainConfig parameters using *sdk.Int
           values
@@ -79114,11 +78894,6 @@ definitions:
         type: string
         title: tracer_json_config configures the tracer using a JSON string
     description: TraceConfig holds extra parameters to trace functions.
-  ethermint.feemarket.v1.MsgUpdateParamsResponse:
-    type: object
-    description: |-
-      MsgUpdateParamsResponse defines the response structure for executing a
-      MsgUpdateParams message.
   ethermint.feemarket.v1.Params:
     type: object
     properties:
@@ -79296,11 +79071,6 @@ definitions:
     description: |-
       ClaimsRecordAddress is the claims metadata per address that is used at
       Genesis.
-  evmos.claims.v1.MsgUpdateParamsResponse:
-    type: object
-    description: |-
-      MsgUpdateParamsResponse defines the response structure for executing a
-      MsgUpdateParams message.
   evmos.claims.v1.Params:
     type: object
     properties:
@@ -79504,12 +79274,6 @@ definitions:
   evmos.erc20.v1.MsgConvertERC20Response:
     type: object
     title: MsgConvertERC20Response returns no fields
-  evmos.erc20.v1.MsgUpdateParamsResponse:
-    type: object
-    title: |-
-      MsgUpdateParamsResponse defines the response structure for executing a
-      MsgUpdateParams message.
-      Since: cosmos-sdk 0.47
   evmos.erc20.v1.Owner:
     type: string
     enum:
@@ -79696,11 +79460,6 @@ definitions:
       TokenPair defines an instance that records a pairing consisting of a
       native
        Cosmos Coin and an ERC20 token address.
-  evmos.recovery.v1.MsgUpdateParamsResponse:
-    type: object
-    description: |-
-      MsgUpdateParamsResponse defines the response structure for executing a
-      MsgUpdateParams message.
   evmos.recovery.v1.Params:
     type: object
     properties:
@@ -79730,6 +79489,28 @@ definitions:
               for balances recovered via IBC packets
         title: Params holds parameters for the recovery module
     description: QueryParamsResponse is the response type for the Query/Params RPC method.
+  cosmos.vesting.v1beta1.Period:
+    type: object
+    properties:
+      length:
+        type: string
+        format: int64
+        description: Period duration in seconds.
+      amount:
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            amount:
+              type: string
+          description: |-
+            Coin defines a token with a denomination and an amount.
+
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
+    description: Period defines a length of time and amount of coins that will vest.
   evmos.vesting.v1.MsgClawbackResponse:
     type: object
     description: MsgClawbackResponse defines the MsgClawback response type.
@@ -79799,21 +79580,6 @@ definitions:
     description: |-
       QueryBalancesResponse is the response type for the Query/Balances RPC
       method.
-  ibc.applications.interchain_accounts.controller.v1.MsgRegisterInterchainAccountResponse:
-    type: object
-    properties:
-      channel_id:
-        type: string
-    title: >-
-      MsgRegisterInterchainAccountResponse defines the response for
-      Msg/MsgRegisterInterchainAccountResponse
-  ibc.applications.interchain_accounts.controller.v1.MsgSendTxResponse:
-    type: object
-    properties:
-      sequence:
-        type: string
-        format: uint64
-    title: MsgSendTxResponse defines the response for MsgSendTx
   ibc.applications.interchain_accounts.controller.v1.Params:
     type: object
     properties:
@@ -79842,45 +79608,6 @@ definitions:
             type: boolean
             description: controller_enabled enables or disables the controller submodule.
     description: QueryParamsResponse is the response type for the Query/Params RPC method.
-  ibc.applications.interchain_accounts.v1.InterchainAccountPacketData:
-    type: object
-    properties:
-      type:
-        type: string
-        enum:
-          - TYPE_UNSPECIFIED
-          - TYPE_EXECUTE_TX
-        default: TYPE_UNSPECIFIED
-        description: |-
-          - TYPE_UNSPECIFIED: Default zero value enumeration
-           - TYPE_EXECUTE_TX: Execute a transaction on an interchain accounts host chain
-        title: >-
-          Type defines a classification of message issued from a controller
-          chain to its associated interchain accounts
-
-          host
-      data:
-        type: string
-        format: byte
-      memo:
-        type: string
-    description: >-
-      InterchainAccountPacketData is comprised of a raw transaction, type of
-      transaction and optional memo field.
-  ibc.applications.interchain_accounts.v1.Type:
-    type: string
-    enum:
-      - TYPE_UNSPECIFIED
-      - TYPE_EXECUTE_TX
-    default: TYPE_UNSPECIFIED
-    description: |-
-      - TYPE_UNSPECIFIED: Default zero value enumeration
-       - TYPE_EXECUTE_TX: Execute a transaction on an interchain accounts host chain
-    title: >-
-      Type defines a classification of message issued from a controller chain to
-      its associated interchain accounts
-
-      host
   ibc.applications.interchain_accounts.host.v1.Params:
     type: object
     properties:
@@ -79973,7 +79700,7 @@ definitions:
           this channel will travel
       version:
         type: string
-        title: opaque channel version, which is agreed upon during the handshake
+        title: 'opaque channel version, which is agreed upon during the handshake'
     description: |-
       Channel defines pipeline for exactly-once packet delivery between specific
       modules on separate blockchains, which has at least one end capable of
@@ -80048,7 +79775,7 @@ definitions:
           this channel will travel
       version:
         type: string
-        title: opaque channel version, which is agreed upon during the handshake
+        title: 'opaque channel version, which is agreed upon during the handshake'
       port_id:
         type: string
         title: port identifier
@@ -80058,112 +79785,6 @@ definitions:
     description: |-
       IdentifiedChannel defines a channel with additional port and channel
       identifier fields.
-  ibc.core.channel.v1.MsgAcknowledgementResponse:
-    type: object
-    properties:
-      result:
-        type: string
-        enum:
-          - RESPONSE_RESULT_TYPE_UNSPECIFIED
-          - RESPONSE_RESULT_TYPE_NOOP
-          - RESPONSE_RESULT_TYPE_SUCCESS
-        default: RESPONSE_RESULT_TYPE_UNSPECIFIED
-        description: |-
-          - RESPONSE_RESULT_TYPE_UNSPECIFIED: Default zero value enumeration
-           - RESPONSE_RESULT_TYPE_NOOP: The message did not call the IBC application callbacks (because, for example, the packet had already been relayed)
-           - RESPONSE_RESULT_TYPE_SUCCESS: The message was executed successfully
-        title: >-
-          ResponseResultType defines the possible outcomes of the execution of a
-          message
-    description: MsgAcknowledgementResponse defines the Msg/Acknowledgement response type.
-  ibc.core.channel.v1.MsgChannelCloseConfirmResponse:
-    type: object
-    description: >-
-      MsgChannelCloseConfirmResponse defines the Msg/ChannelCloseConfirm
-      response
-
-      type.
-  ibc.core.channel.v1.MsgChannelCloseInitResponse:
-    type: object
-    description: >-
-      MsgChannelCloseInitResponse defines the Msg/ChannelCloseInit response
-      type.
-  ibc.core.channel.v1.MsgChannelOpenAckResponse:
-    type: object
-    description: MsgChannelOpenAckResponse defines the Msg/ChannelOpenAck response type.
-  ibc.core.channel.v1.MsgChannelOpenConfirmResponse:
-    type: object
-    description: |-
-      MsgChannelOpenConfirmResponse defines the Msg/ChannelOpenConfirm response
-      type.
-  ibc.core.channel.v1.MsgChannelOpenInitResponse:
-    type: object
-    properties:
-      channel_id:
-        type: string
-      version:
-        type: string
-    description: MsgChannelOpenInitResponse defines the Msg/ChannelOpenInit response type.
-  ibc.core.channel.v1.MsgChannelOpenTryResponse:
-    type: object
-    properties:
-      version:
-        type: string
-    description: MsgChannelOpenTryResponse defines the Msg/ChannelOpenTry response type.
-  ibc.core.channel.v1.MsgRecvPacketResponse:
-    type: object
-    properties:
-      result:
-        type: string
-        enum:
-          - RESPONSE_RESULT_TYPE_UNSPECIFIED
-          - RESPONSE_RESULT_TYPE_NOOP
-          - RESPONSE_RESULT_TYPE_SUCCESS
-        default: RESPONSE_RESULT_TYPE_UNSPECIFIED
-        description: |-
-          - RESPONSE_RESULT_TYPE_UNSPECIFIED: Default zero value enumeration
-           - RESPONSE_RESULT_TYPE_NOOP: The message did not call the IBC application callbacks (because, for example, the packet had already been relayed)
-           - RESPONSE_RESULT_TYPE_SUCCESS: The message was executed successfully
-        title: >-
-          ResponseResultType defines the possible outcomes of the execution of a
-          message
-    description: MsgRecvPacketResponse defines the Msg/RecvPacket response type.
-  ibc.core.channel.v1.MsgTimeoutOnCloseResponse:
-    type: object
-    properties:
-      result:
-        type: string
-        enum:
-          - RESPONSE_RESULT_TYPE_UNSPECIFIED
-          - RESPONSE_RESULT_TYPE_NOOP
-          - RESPONSE_RESULT_TYPE_SUCCESS
-        default: RESPONSE_RESULT_TYPE_UNSPECIFIED
-        description: |-
-          - RESPONSE_RESULT_TYPE_UNSPECIFIED: Default zero value enumeration
-           - RESPONSE_RESULT_TYPE_NOOP: The message did not call the IBC application callbacks (because, for example, the packet had already been relayed)
-           - RESPONSE_RESULT_TYPE_SUCCESS: The message was executed successfully
-        title: >-
-          ResponseResultType defines the possible outcomes of the execution of a
-          message
-    description: MsgTimeoutOnCloseResponse defines the Msg/TimeoutOnClose response type.
-  ibc.core.channel.v1.MsgTimeoutResponse:
-    type: object
-    properties:
-      result:
-        type: string
-        enum:
-          - RESPONSE_RESULT_TYPE_UNSPECIFIED
-          - RESPONSE_RESULT_TYPE_NOOP
-          - RESPONSE_RESULT_TYPE_SUCCESS
-        default: RESPONSE_RESULT_TYPE_UNSPECIFIED
-        description: |-
-          - RESPONSE_RESULT_TYPE_UNSPECIFIED: Default zero value enumeration
-           - RESPONSE_RESULT_TYPE_NOOP: The message did not call the IBC application callbacks (because, for example, the packet had already been relayed)
-           - RESPONSE_RESULT_TYPE_SUCCESS: The message was executed successfully
-        title: >-
-          ResponseResultType defines the possible outcomes of the execution of a
-          message
-    description: MsgTimeoutResponse defines the Msg/Timeout response type.
   ibc.core.channel.v1.Order:
     type: string
     enum:
@@ -80177,70 +79798,6 @@ definitions:
       which they were sent.
        - ORDER_ORDERED: packets are delivered exactly in the order which they were sent
     title: Order defines if a channel is ORDERED or UNORDERED
-  ibc.core.channel.v1.Packet:
-    type: object
-    properties:
-      sequence:
-        type: string
-        format: uint64
-        description: >-
-          number corresponds to the order of sends and receives, where a Packet
-
-          with an earlier sequence number must be sent and received before a
-          Packet
-
-          with a later sequence number.
-      source_port:
-        type: string
-        description: identifies the port on the sending chain.
-      source_channel:
-        type: string
-        description: identifies the channel end on the sending chain.
-      destination_port:
-        type: string
-        description: identifies the port on the receiving chain.
-      destination_channel:
-        type: string
-        description: identifies the channel end on the receiving chain.
-      data:
-        type: string
-        format: byte
-        title: actual opaque bytes transferred directly to the application module
-      timeout_height:
-        title: block height after which the packet times out
-        type: object
-        properties:
-          revision_number:
-            type: string
-            format: uint64
-            title: the revision that the client is currently on
-          revision_height:
-            type: string
-            format: uint64
-            title: the height within the given revision
-        description: >-
-          Normally the RevisionHeight is incremented at each height while
-          keeping
-
-          RevisionNumber the same. However some consensus algorithms may choose
-          to
-
-          reset the height in certain conditions e.g. hard forks, state-machine
-
-          breaking changes In these cases, the RevisionNumber is incremented so
-          that
-
-          height continues to be monitonically increasing even as the
-          RevisionHeight
-
-          gets reset
-      timeout_timestamp:
-        type: string
-        format: uint64
-        title: block timestamp (in nanoseconds) after which the packet times out
-    title: >-
-      Packet defines a type that carries data across different chains through
-      IBC
   ibc.core.channel.v1.PacketState:
     type: object
     properties:
@@ -80738,7 +80295,7 @@ definitions:
               this channel will travel
           version:
             type: string
-            title: opaque channel version, which is agreed upon during the handshake
+            title: 'opaque channel version, which is agreed upon during the handshake'
         description: >-
           Channel defines pipeline for exactly-once packet delivery between
           specific
@@ -81491,20 +81048,6 @@ definitions:
     title: |-
       QueryUnreceivedPacketsResponse is the response type for the
       Query/UnreceivedPacketCommitments RPC method
-  ibc.core.channel.v1.ResponseResultType:
-    type: string
-    enum:
-      - RESPONSE_RESULT_TYPE_UNSPECIFIED
-      - RESPONSE_RESULT_TYPE_NOOP
-      - RESPONSE_RESULT_TYPE_SUCCESS
-    default: RESPONSE_RESULT_TYPE_UNSPECIFIED
-    description: |-
-      - RESPONSE_RESULT_TYPE_UNSPECIFIED: Default zero value enumeration
-       - RESPONSE_RESULT_TYPE_NOOP: The message did not call the IBC application callbacks (because, for example, the packet had already been relayed)
-       - RESPONSE_RESULT_TYPE_SUCCESS: The message was executed successfully
-    title: >-
-      ResponseResultType defines the possible outcomes of the execution of a
-      message
   ibc.core.channel.v1.State:
     type: string
     enum:
@@ -81911,20 +81454,6 @@ definitions:
       height
 
       field.
-  ibc.core.client.v1.MsgCreateClientResponse:
-    type: object
-    description: MsgCreateClientResponse defines the Msg/CreateClient response type.
-  ibc.core.client.v1.MsgSubmitMisbehaviourResponse:
-    type: object
-    description: |-
-      MsgSubmitMisbehaviourResponse defines the Msg/SubmitMisbehaviour response
-      type.
-  ibc.core.client.v1.MsgUpdateClientResponse:
-    type: object
-    description: MsgUpdateClientResponse defines the Msg/UpdateClient response type.
-  ibc.core.client.v1.MsgUpgradeClientResponse:
-    type: object
-    description: MsgUpgradeClientResponse defines the Msg/UpgradeClient response type.
   ibc.core.client.v1.Params:
     type: object
     properties:
@@ -83427,26 +82956,6 @@ definitions:
     description: |-
       IdentifiedConnection defines a connection with additional connection
       identifier field.
-  ibc.core.connection.v1.MsgConnectionOpenAckResponse:
-    type: object
-    description: >-
-      MsgConnectionOpenAckResponse defines the Msg/ConnectionOpenAck response
-      type.
-  ibc.core.connection.v1.MsgConnectionOpenConfirmResponse:
-    type: object
-    description: |-
-      MsgConnectionOpenConfirmResponse defines the Msg/ConnectionOpenConfirm
-      response type.
-  ibc.core.connection.v1.MsgConnectionOpenInitResponse:
-    type: object
-    description: |-
-      MsgConnectionOpenInitResponse defines the Msg/ConnectionOpenInit response
-      type.
-  ibc.core.connection.v1.MsgConnectionOpenTryResponse:
-    type: object
-    description: >-
-      MsgConnectionOpenTryResponse defines the Msg/ConnectionOpenTry response
-      type.
   ibc.core.connection.v1.Params:
     type: object
     properties:
