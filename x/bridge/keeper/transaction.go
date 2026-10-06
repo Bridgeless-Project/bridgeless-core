@@ -59,6 +59,11 @@ func (k Keeper) GetPaginatedTransactions(
 }
 
 func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submitter string) error {
+	_, ok := k.GetTxFromStopList(ctx, types.TransactionId(transaction))
+	if ok {
+		return types.ErrStopListTransaction
+	}
+
 	// Check whether tx has enough submissions to be added to core
 	threshold := k.GetParams(ctx).TssThreshold
 	txSubmissions, found := k.GetTransactionSubmissions(ctx, k.TxHash(transaction).String())
@@ -78,6 +83,10 @@ func (k Keeper) SubmitTx(ctx sdk.Context, transaction *types.Transaction, submit
 	// If tx has not been submitted yet or has not enough submissions (less than tss threshold param)
 	// it is not set to core
 	if len(txSubmissions.Submitters) != int(threshold+1) {
+		return nil
+	}
+	if _, ok = k.GetTransaction(ctx, types.TransactionId(transaction)); ok {
+		// Do not save transaction and silently return
 		return nil
 	}
 

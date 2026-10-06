@@ -69,6 +69,24 @@ func validateTokenInfo(info *TokenInfo, chainType *ChainType) error {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("min withdrawal cannot be negative: %s", info.MinWithdrawalAmount))
 	}
 
+	// validate max withdrawal amount, zero means there is no limit
+	maxWithdrawal, ok := big.NewInt(0).SetString(info.MaxWithdrawalAmount, 10)
+	if !ok {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("invalid max withdrawal: %s", info.MaxWithdrawalAmount))
+	}
+
+	if maxWithdrawal.Cmp(big.NewInt(0)) != 0 {
+		if maxWithdrawal.Sign() == -1 {
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("max withdrawal cannot be negative: %s", info.MaxWithdrawalAmount))
+		}
+
+		if maxWithdrawal.Cmp(minWithdrawal) != 1 {
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf(
+				"max withdrawal must be greater than min withdrawal: max %s, min %s", info.MaxWithdrawalAmount, info.MinWithdrawalAmount,
+			))
+		}
+	}
+
 	if chainType == nil {
 		return nil
 	}
