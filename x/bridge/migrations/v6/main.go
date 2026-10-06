@@ -1,4 +1,4 @@
-package v4
+package v6
 
 import (
 	"fmt"
@@ -18,7 +18,7 @@ type entry struct {
 }
 
 func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.BinaryCodec) error {
-	ctx.Logger().Info(fmt.Sprintf("Performing v12.2.0-rc14 %s module migrations", types.ModuleName))
+	ctx.Logger().Info(fmt.Sprintf("Performing v12.1.32 %s module migrations", types.ModuleName))
 
 	// token info is stored in three places: the token itself, the token info store and the token pairs store
 	migrateTokens(ctx, storeKey, cdc)
