@@ -5,7 +5,7 @@ go 1.26.0
 require (
 	cosmossdk.io/errors v1.0.0-beta.7
 	cosmossdk.io/math v1.0.0-rc.0
-	github.com/Zano-Execution-Layer/go-ethereum v1.10.26-0.20260907095722-df2f49ac8412
+	github.com/Zano-Execution-Layer/go-ethereum v1.10.26-0.20260907095722-1839506999d2
 	github.com/armon/go-metrics v0.4.1
 	github.com/btcsuite/btcd v0.22.2
 	github.com/btcsuite/btcutil v1.0.3-0.20201208143702-a53e38424cce
@@ -245,7 +245,7 @@ replace (
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.2.0
 
 	// use Bridgeless geth fork (its go.mod declares the Zano-Execution-Layer module path)
-	github.com/Zano-Execution-Layer/go-ethereum => github.com/Bridgeless-Project/go-ethereum v1.10.26-new-geth
+	github.com/Zano-Execution-Layer/go-ethereum => github.com/Bridgeless-Project/go-ethereum v1.10.26-new-geth-v2
 
 	github.com/coinbase/rosetta-sdk-go => github.com/coinbase/mesh-sdk-go v0.7.9
 	github.com/cosmos/cosmos-sdk => github.com/Bridgeless-Project/cosmos-sdk v0.46.41-rc3
