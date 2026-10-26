@@ -945,16 +945,16 @@ func NewBridge(
 		"v12.1.27",
 		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 			nftParams := nfttypes.Params{
-				ModuleAdmin:         "bridge15tzhpy6nz6vq5c3rhrzac2zc2sq67r4lj4077n",
-				BondDenom:           "abridge",
-				Prefix:              "bridge",
-				NftSequence:         0,
-				TotalVestingTime:    6307200,
-				VestingPeriod:       120,
-				VestingPeriodsLimit: 52560,
-				NftTokenAmount:      "64000000000000000000000",
-				BatchSize:           100,
-				BatchIndex:          0,
+				ModuleAdmin:      "bridge15tzhpy6nz6vq5c3rhrzac2zc2sq67r4lj4077n",
+				BondDenom:        "abridge",
+				Prefix:           "bridge",
+				NftSequence:      0,
+				TotalVestingTime: 6307200,
+				VestingPeriod:    120,
+				//VestingPeriodsLimit: 52560,
+				NftTokenAmount: "64000000000000000000000",
+				BatchSize:      100,
+				BatchIndex:     0,
 			}
 			app.NFTKeeper.SetParams(ctx, nftParams)
 
@@ -1106,6 +1106,13 @@ func NewBridge(
 
 	app.UpgradeKeeper.SetUpgradeHandler(
 		"v12.1.33",
+		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
+			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
+		},
+	)
+
+	app.UpgradeKeeper.SetUpgradeHandler(
+		"v12.1.34",
 		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
 		},
