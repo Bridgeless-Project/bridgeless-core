@@ -479,10 +479,6 @@ func NewBridge(
 		app.AccumulatorKeeper,
 	)
 
-	app.BankKeeper = app.BankKeeper.SetHooks(
-		banktypes.NewMultiBankHooks(app.NFTKeeper.Hooks()),
-	)
-
 	app.DistrKeeper = distrkeeper.NewKeeper(
 		appCodec, keys[distrtypes.StoreKey], app.GetSubspace(distrtypes.ModuleName), app.AccountKeeper, app.BankKeeper,
 		app.StakingKeeper, app.NFTKeeper, authtypes.FeeCollectorName,
@@ -588,7 +584,7 @@ func NewBridge(
 		app.BankKeeper,
 		app.Erc20Keeper,
 	)
-	
+
 	app.RevenueKeeper = revenuekeeper.NewKeeper(
 		keys[revenuetypes.StoreKey], appCodec, authtypes.NewModuleAddress(govtypes.ModuleName),
 		app.BankKeeper, app.EvmKeeper,
