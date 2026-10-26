@@ -29123,38 +29123,15 @@ paths:
                   uri:
                     type: string
                   reward_per_period:
+                    description: >-
+                      reward_per_period is the unlock step in tokens per vesting
+                      period.
                     type: object
                     properties:
                       denom:
                         type: string
                       amount:
                         type: string
-                    description: >-
-                      Coin defines a token with a denomination and an amount.
-
-
-                      NOTE: The amount field is an Int which implements the
-                      custom method
-
-                      signatures required by gogoproto.
-                  vesting_periods_count:
-                    type: string
-                    format: int64
-                  available_to_withdraw:
-                    type: object
-                    properties:
-                      denom:
-                        type: string
-                      amount:
-                        type: string
-                    description: >-
-                      Coin defines a token with a denomination and an amount.
-
-
-                      NOTE: The amount field is an Int which implements the
-                      custom method
-
-                      signatures required by gogoproto.
                   last_vesting_block:
                     type: string
                     format: int64
@@ -29163,29 +29140,36 @@ paths:
                   start_vesting_block:
                     type: string
                     format: int64
-                  vesting_periods_limit:
-                    type: string
-                    format: int64
-                  is_frozen:
-                    type: boolean
-                  total_vesting_time:
-                    type: string
-                    format: int64
                   token_amount:
+                    description: >-
+                      token_amount is the vesting entitlement (100%); only
+                      MsgTopUp changes it.
                     type: object
                     properties:
                       denom:
                         type: string
                       amount:
                         type: string
+                  unlocked_amount:
                     description: >-
-                      Coin defines a token with a denomination and an amount.
-
-
-                      NOTE: The amount field is an Int which implements the
-                      custom method
-
-                      signatures required by gogoproto.
+                      unlocked_amount is the cumulative amount unlocked so far
+                      (never decreases on withdrawal).
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                  withdrawn_amount:
+                    description: >-
+                      withdrawn_amount is the cumulative amount withdrawn by the
+                      owner before the full unlock.
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
                 description: NFT defines the NFT.
         default:
           description: An unexpected error response.
@@ -29260,7 +29244,7 @@ paths:
                         might be
 
                         used with implementation specific semantics.
-                  additionalProperties: {}
+                  additionalProperties: true
                   description: >-
                     `Any` contains an arbitrary serialized protocol buffer
                     message along with a
@@ -29401,38 +29385,15 @@ paths:
                     uri:
                       type: string
                     reward_per_period:
+                      description: >-
+                        reward_per_period is the unlock step in tokens per
+                        vesting period.
                       type: object
                       properties:
                         denom:
                           type: string
                         amount:
                           type: string
-                      description: >-
-                        Coin defines a token with a denomination and an amount.
-
-
-                        NOTE: The amount field is an Int which implements the
-                        custom method
-
-                        signatures required by gogoproto.
-                    vesting_periods_count:
-                      type: string
-                      format: int64
-                    available_to_withdraw:
-                      type: object
-                      properties:
-                        denom:
-                          type: string
-                        amount:
-                          type: string
-                      description: >-
-                        Coin defines a token with a denomination and an amount.
-
-
-                        NOTE: The amount field is an Int which implements the
-                        custom method
-
-                        signatures required by gogoproto.
                     last_vesting_block:
                       type: string
                       format: int64
@@ -29441,29 +29402,36 @@ paths:
                     start_vesting_block:
                       type: string
                       format: int64
-                    vesting_periods_limit:
-                      type: string
-                      format: int64
-                    is_frozen:
-                      type: boolean
-                    total_vesting_time:
-                      type: string
-                      format: int64
                     token_amount:
+                      description: >-
+                        token_amount is the vesting entitlement (100%); only
+                        MsgTopUp changes it.
                       type: object
                       properties:
                         denom:
                           type: string
                         amount:
                           type: string
+                    unlocked_amount:
                       description: >-
-                        Coin defines a token with a denomination and an amount.
-
-
-                        NOTE: The amount field is an Int which implements the
-                        custom method
-
-                        signatures required by gogoproto.
+                        unlocked_amount is the cumulative amount unlocked so far
+                        (never decreases on withdrawal).
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                    withdrawn_amount:
+                      description: >-
+                        withdrawn_amount is the cumulative amount withdrawn by
+                        the owner before the full unlock.
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
                   description: NFT defines the NFT.
               pagination:
                 type: object
@@ -29566,7 +29534,7 @@ paths:
                         might be
 
                         used with implementation specific semantics.
-                  additionalProperties: {}
+                  additionalProperties: true
                   description: >-
                     `Any` contains an arbitrary serialized protocol buffer
                     message along with a
@@ -29851,7 +29819,7 @@ paths:
                         might be
 
                         used with implementation specific semantics.
-                  additionalProperties: {}
+                  additionalProperties: true
                   description: >-
                     `Any` contains an arbitrary serialized protocol buffer
                     message along with a
@@ -30043,38 +30011,15 @@ paths:
                     uri:
                       type: string
                     reward_per_period:
+                      description: >-
+                        reward_per_period is the unlock step in tokens per
+                        vesting period.
                       type: object
                       properties:
                         denom:
                           type: string
                         amount:
                           type: string
-                      description: >-
-                        Coin defines a token with a denomination and an amount.
-
-
-                        NOTE: The amount field is an Int which implements the
-                        custom method
-
-                        signatures required by gogoproto.
-                    vesting_periods_count:
-                      type: string
-                      format: int64
-                    available_to_withdraw:
-                      type: object
-                      properties:
-                        denom:
-                          type: string
-                        amount:
-                          type: string
-                      description: >-
-                        Coin defines a token with a denomination and an amount.
-
-
-                        NOTE: The amount field is an Int which implements the
-                        custom method
-
-                        signatures required by gogoproto.
                     last_vesting_block:
                       type: string
                       format: int64
@@ -30083,29 +30028,36 @@ paths:
                     start_vesting_block:
                       type: string
                       format: int64
-                    vesting_periods_limit:
-                      type: string
-                      format: int64
-                    is_frozen:
-                      type: boolean
-                    total_vesting_time:
-                      type: string
-                      format: int64
                     token_amount:
+                      description: >-
+                        token_amount is the vesting entitlement (100%); only
+                        MsgTopUp changes it.
                       type: object
                       properties:
                         denom:
                           type: string
                         amount:
                           type: string
+                    unlocked_amount:
                       description: >-
-                        Coin defines a token with a denomination and an amount.
-
-
-                        NOTE: The amount field is an Int which implements the
-                        custom method
-
-                        signatures required by gogoproto.
+                        unlocked_amount is the cumulative amount unlocked so far
+                        (never decreases on withdrawal).
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                    withdrawn_amount:
+                      description: >-
+                        withdrawn_amount is the cumulative amount withdrawn by
+                        the owner before the full unlock.
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
                   description: NFT defines the NFT.
               pagination:
                 type: object
@@ -30208,7 +30160,7 @@ paths:
                         might be
 
                         used with implementation specific semantics.
-                  additionalProperties: {}
+                  additionalProperties: true
                   description: >-
                     `Any` contains an arbitrary serialized protocol buffer
                     message along with a
@@ -30412,9 +30364,6 @@ paths:
                   vesting_period:
                     type: string
                     format: int64
-                  vesting_periods_limit:
-                    type: string
-                    format: int64
                   nft_token_amount:
                     type: string
                   batch_size:
@@ -30499,7 +30448,7 @@ paths:
                         might be
 
                         used with implementation specific semantics.
-                  additionalProperties: {}
+                  additionalProperties: true
                   description: >-
                     `Any` contains an arbitrary serialized protocol buffer
                     message along with a
@@ -70522,32 +70471,13 @@ definitions:
       uri:
         type: string
       reward_per_period:
+        description: reward_per_period is the unlock step in tokens per vesting period.
         type: object
         properties:
           denom:
             type: string
           amount:
             type: string
-        description: |-
-          Coin defines a token with a denomination and an amount.
-
-          NOTE: The amount field is an Int which implements the custom method
-          signatures required by gogoproto.
-      vesting_periods_count:
-        type: string
-        format: int64
-      available_to_withdraw:
-        type: object
-        properties:
-          denom:
-            type: string
-          amount:
-            type: string
-        description: |-
-          Coin defines a token with a denomination and an amount.
-
-          NOTE: The amount field is an Int which implements the custom method
-          signatures required by gogoproto.
       last_vesting_block:
         type: string
         format: int64
@@ -70556,26 +70486,36 @@ definitions:
       start_vesting_block:
         type: string
         format: int64
-      vesting_periods_limit:
-        type: string
-        format: int64
-      is_frozen:
-        type: boolean
-      total_vesting_time:
-        type: string
-        format: int64
       token_amount:
+        description: >-
+          token_amount is the vesting entitlement (100%); only MsgTopUp changes
+          it.
         type: object
         properties:
           denom:
             type: string
           amount:
             type: string
-        description: |-
-          Coin defines a token with a denomination and an amount.
-
-          NOTE: The amount field is an Int which implements the custom method
-          signatures required by gogoproto.
+      unlocked_amount:
+        description: >-
+          unlocked_amount is the cumulative amount unlocked so far (never
+          decreases on withdrawal).
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+      withdrawn_amount:
+        description: >-
+          withdrawn_amount is the cumulative amount withdrawn by the owner
+          before the full unlock.
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
     description: NFT defines the NFT.
   cosmos.nft.Params:
     type: object
@@ -70593,9 +70533,6 @@ definitions:
         type: string
         format: int64
       vesting_period:
-        type: string
-        format: int64
-      vesting_periods_limit:
         type: string
         format: int64
       nft_token_amount:
@@ -70622,38 +70559,15 @@ definitions:
             uri:
               type: string
             reward_per_period:
+              description: >-
+                reward_per_period is the unlock step in tokens per vesting
+                period.
               type: object
               properties:
                 denom:
                   type: string
                 amount:
                   type: string
-              description: >-
-                Coin defines a token with a denomination and an amount.
-
-
-                NOTE: The amount field is an Int which implements the custom
-                method
-
-                signatures required by gogoproto.
-            vesting_periods_count:
-              type: string
-              format: int64
-            available_to_withdraw:
-              type: object
-              properties:
-                denom:
-                  type: string
-                amount:
-                  type: string
-              description: >-
-                Coin defines a token with a denomination and an amount.
-
-
-                NOTE: The amount field is an Int which implements the custom
-                method
-
-                signatures required by gogoproto.
             last_vesting_block:
               type: string
               format: int64
@@ -70662,29 +70576,36 @@ definitions:
             start_vesting_block:
               type: string
               format: int64
-            vesting_periods_limit:
-              type: string
-              format: int64
-            is_frozen:
-              type: boolean
-            total_vesting_time:
-              type: string
-              format: int64
             token_amount:
+              description: >-
+                token_amount is the vesting entitlement (100%); only MsgTopUp
+                changes it.
               type: object
               properties:
                 denom:
                   type: string
                 amount:
                   type: string
+            unlocked_amount:
               description: >-
-                Coin defines a token with a denomination and an amount.
-
-
-                NOTE: The amount field is an Int which implements the custom
-                method
-
-                signatures required by gogoproto.
+                unlocked_amount is the cumulative amount unlocked so far (never
+                decreases on withdrawal).
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+            withdrawn_amount:
+              description: >-
+                withdrawn_amount is the cumulative amount withdrawn by the owner
+                before the full unlock.
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
           description: NFT defines the NFT.
       pagination:
         type: object
@@ -70727,38 +70648,15 @@ definitions:
             uri:
               type: string
             reward_per_period:
+              description: >-
+                reward_per_period is the unlock step in tokens per vesting
+                period.
               type: object
               properties:
                 denom:
                   type: string
                 amount:
                   type: string
-              description: >-
-                Coin defines a token with a denomination and an amount.
-
-
-                NOTE: The amount field is an Int which implements the custom
-                method
-
-                signatures required by gogoproto.
-            vesting_periods_count:
-              type: string
-              format: int64
-            available_to_withdraw:
-              type: object
-              properties:
-                denom:
-                  type: string
-                amount:
-                  type: string
-              description: >-
-                Coin defines a token with a denomination and an amount.
-
-
-                NOTE: The amount field is an Int which implements the custom
-                method
-
-                signatures required by gogoproto.
             last_vesting_block:
               type: string
               format: int64
@@ -70767,29 +70665,36 @@ definitions:
             start_vesting_block:
               type: string
               format: int64
-            vesting_periods_limit:
-              type: string
-              format: int64
-            is_frozen:
-              type: boolean
-            total_vesting_time:
-              type: string
-              format: int64
             token_amount:
+              description: >-
+                token_amount is the vesting entitlement (100%); only MsgTopUp
+                changes it.
               type: object
               properties:
                 denom:
                   type: string
                 amount:
                   type: string
+            unlocked_amount:
               description: >-
-                Coin defines a token with a denomination and an amount.
-
-
-                NOTE: The amount field is an Int which implements the custom
-                method
-
-                signatures required by gogoproto.
+                unlocked_amount is the cumulative amount unlocked so far (never
+                decreases on withdrawal).
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+            withdrawn_amount:
+              description: >-
+                withdrawn_amount is the cumulative amount withdrawn by the owner
+                before the full unlock.
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
           description: NFT defines the NFT.
       pagination:
         type: object
@@ -70863,38 +70768,13 @@ definitions:
           uri:
             type: string
           reward_per_period:
+            description: reward_per_period is the unlock step in tokens per vesting period.
             type: object
             properties:
               denom:
                 type: string
               amount:
                 type: string
-            description: >-
-              Coin defines a token with a denomination and an amount.
-
-
-              NOTE: The amount field is an Int which implements the custom
-              method
-
-              signatures required by gogoproto.
-          vesting_periods_count:
-            type: string
-            format: int64
-          available_to_withdraw:
-            type: object
-            properties:
-              denom:
-                type: string
-              amount:
-                type: string
-            description: >-
-              Coin defines a token with a denomination and an amount.
-
-
-              NOTE: The amount field is an Int which implements the custom
-              method
-
-              signatures required by gogoproto.
           last_vesting_block:
             type: string
             format: int64
@@ -70903,29 +70783,36 @@ definitions:
           start_vesting_block:
             type: string
             format: int64
-          vesting_periods_limit:
-            type: string
-            format: int64
-          is_frozen:
-            type: boolean
-          total_vesting_time:
-            type: string
-            format: int64
           token_amount:
+            description: >-
+              token_amount is the vesting entitlement (100%); only MsgTopUp
+              changes it.
             type: object
             properties:
               denom:
                 type: string
               amount:
                 type: string
+          unlocked_amount:
             description: >-
-              Coin defines a token with a denomination and an amount.
-
-
-              NOTE: The amount field is an Int which implements the custom
-              method
-
-              signatures required by gogoproto.
+              unlocked_amount is the cumulative amount unlocked so far (never
+              decreases on withdrawal).
+            type: object
+            properties:
+              denom:
+                type: string
+              amount:
+                type: string
+          withdrawn_amount:
+            description: >-
+              withdrawn_amount is the cumulative amount withdrawn by the owner
+              before the full unlock.
+            type: object
+            properties:
+              denom:
+                type: string
+              amount:
+                type: string
         description: NFT defines the NFT.
   cosmos.nft.QueryParamsResponse:
     type: object
@@ -70947,9 +70834,6 @@ definitions:
             type: string
             format: int64
           vesting_period:
-            type: string
-            format: int64
-          vesting_periods_limit:
             type: string
             format: int64
           nft_token_amount:
